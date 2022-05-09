@@ -11,7 +11,7 @@ A pull request needs to be made before merging on dev and main.
 
 # Commit norm:
 Verbe conjugué en majuscule: action
-Examples -> ADDING: run function in Core.cpp
+Examples -> ADDING: run() function in Core.cpp
          -> MODIFYING: Entity class in Entity.hpp
 
 # Commits:
