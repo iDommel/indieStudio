@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ main ]
+    branches: [ feat-crossBuildAction ]
   pull_request:
-    branches: [ main ]
+    branches: [ feat-crossBuildAction ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
