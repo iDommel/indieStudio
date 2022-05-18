@@ -8,6 +8,7 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
+#include "Vector3D.hpp"
 #include <memory>
 
 class Camera {
@@ -73,13 +74,6 @@ class Camera {
         float _fovY = 45.0f;
         /** @brief _id, used to identify the camera */
         const int _id;
-};
-
-/** @brief Encapsualtion of vector3 from raylib */
-struct vector3D {
-    float x;
-    float y;
-    float z;
 };
 
 #endif /* !CAMERA_HPP_ */
