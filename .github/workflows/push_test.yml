@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    continue-on-failure: true
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ windows-latest, macos-latest]
     steps:
+    - continue-on-error: true
     - uses: actions/checkout@v3
     - name: build with cmake
       run: |
