@@ -7,8 +7,8 @@ on:
     branches: [ main, dev ]
 
 jobs:
+  continue-on-failure: true
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
