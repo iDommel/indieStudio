@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: build with cmake
-    - continue-on-error: true
+      continue-on-error: true
       run: |
         cmake -B build
         cmake --build build
