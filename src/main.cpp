@@ -11,6 +11,5 @@
 
 int main(void)
 {
-    test_raylib();
     return 0;
 }
