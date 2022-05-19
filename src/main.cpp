@@ -7,70 +7,89 @@
 #include <exception>
 #include <iostream>
 
+#include "../include/model.hpp"
 #include "raylib.h"
 
-void test_raylib()
+void test_raylib(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - models loading");
 
-    SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
+    // Define the camera to look into our 3d world
+    Camera camera = { 0 };
+    camera.position = (Vector3){ 50.0f, 50.0f, 50.0f }; // Camera position
+    camera.target = (Vector3){ 0.0f, 10.0f, 0.0f };     // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
+
+    model test("turret.obj");
+
+    // Model model = LoadModel("turret.obj");                 // Load model
+    // Texture2D texture = LoadTexture("turret_diffuse.png"); // Load model texture
+    // model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;            // Set map diffuse texture
+
+    Vector3 position = { 0.0f, 0.0f, 0.0f };                    // Set model position
+
+    // BoundingBox bounds = GetMeshBoundingBox(model.meshes[0]);   // Set model bounds
+
+    // NOTE: bounds are calculated from the original size of the model,
+    // if model is scaled on drawing, bounds must be also scaled
+
+    SetCameraMode(camera, CAMERA_FREE);     // Set a free camera mode
+
+    bool selected = false;          // Selected object flag
+
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())  // Detect window close button or ESC key
+    while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
+        UpdateCamera(&camera);
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+            ClearBackground(RAYWHITE);
 
-        DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY);
+            BeginMode3D(camera);
 
-        // Circle shapes and lines
-        DrawCircle(screenWidth / 5, 120, 35, DARKBLUE);
-        DrawCircleGradient(screenWidth / 5, 220, 60, GREEN, SKYBLUE);
-        DrawCircleLines(screenWidth / 5, 340, 80, DARKBLUE);
+                // DrawModel(model, position, 1.0f, WHITE);        // Draw 3d model with texture
 
-        // Rectangle shapes and ines
-        DrawRectangle(screenWidth / 4 * 2 - 60, 100, 120, 60, RED);
-        DrawRectangleGradientH(screenWidth / 4 * 2 - 90, 170, 180, 130, MAROON, GOLD);
-        DrawRectangleLines(screenWidth / 4 * 2 - 40, 320, 80, 60, ORANGE);  // NOTE: Uses QUADS internally, not lines
+                test.draw(position, 1.0f, WHITE);
 
-        // Triangle shapes and lines
-        DrawTriangle((Vector2){screenWidth / 4.0f * 3.0f, 80.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f - 60.0f, 150.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f + 60.0f, 150.0f}, VIOLET);
+                DrawGrid(20, 10.0f);         // Draw a grid
 
-        DrawTriangleLines((Vector2){screenWidth / 4.0f * 3.0f, 160.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f - 20.0f, 230.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f + 20.0f, 230.0f}, DARKBLUE);
+            EndMode3D();
 
-        // Polygon shapes and lines
-        DrawPoly((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, BROWN);
-        DrawPolyLinesEx((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, 6, BEIGE);
+            DrawText("Drag & drop model to load mesh/texture.", 10, GetScreenHeight() - 20, 10, DARKGRAY);
+            if (selected) DrawText("MODEL SELECTED", GetScreenWidth() - 110, 10, 10, GREEN);
 
-        // NOTE: We draw all LINES based shapes together to optimize internal drawing,
-        // this way, all LINES are rendered in a single draw pass
-        DrawLine(18, 42, screenWidth - 18, 42, BLACK);
+            DrawText("(c) Castle 3D model by Alberto Cano", screenWidth - 200, screenHeight - 20, 10, GRAY);
+
+            DrawFPS(10, 10);
+
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();  // Close window and OpenGL context
+    // UnloadTexture(texture);     // Unload texture
+    // UnloadModel(model);         // Unload model
+
+    CloseWindow();              // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+
+    return ;
 }
 
 int main(void)
