@@ -11,6 +11,11 @@
 #include <memory>
 
 struct Camera3D;
+struct Vector3 {
+    float x;
+    float y;
+    float z;
+};
 
 /// @brief raylib camera encapsulation class
 class CameraDevice {

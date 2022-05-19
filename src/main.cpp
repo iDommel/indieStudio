@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "raylib.h"
+#include "IndiCam.hpp"
 
 void test_raylib()
 {
@@ -16,60 +17,57 @@ void test_raylib()
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
 
-    SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
+    IndiCam camera(Vector3{ 10.0f, 10.0f, 10.0f }, Vector3{ 0.0f, 0.0f, 0.0f });
+
+    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
+
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())  // Detect window close button or ESC key
+    while (!WindowShouldClose())        // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        camera.update();          // Update camera
+
+        if (IsKeyDown('Z')) camera.setTarget((Vector3){ 0.0f, 0.0f, 0.0f });
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+            ClearBackground(RAYWHITE);
 
-        DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY);
+            camera.beginDraw();
 
-        // Circle shapes and lines
-        DrawCircle(screenWidth / 5, 120, 35, DARKBLUE);
-        DrawCircleGradient(screenWidth / 5, 220, 60, GREEN, SKYBLUE);
-        DrawCircleLines(screenWidth / 5, 340, 80, DARKBLUE);
+                DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
+                DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
 
-        // Rectangle shapes and ines
-        DrawRectangle(screenWidth / 4 * 2 - 60, 100, 120, 60, RED);
-        DrawRectangleGradientH(screenWidth / 4 * 2 - 90, 170, 180, 130, MAROON, GOLD);
-        DrawRectangleLines(screenWidth / 4 * 2 - 40, 320, 80, 60, ORANGE);  // NOTE: Uses QUADS internally, not lines
+                DrawGrid(10, 1.0f);
 
-        // Triangle shapes and lines
-        DrawTriangle((Vector2){screenWidth / 4.0f * 3.0f, 80.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f - 60.0f, 150.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f + 60.0f, 150.0f}, VIOLET);
+            camera.endDraw();
 
-        DrawTriangleLines((Vector2){screenWidth / 4.0f * 3.0f, 160.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f - 20.0f, 230.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f + 20.0f, 230.0f}, DARKBLUE);
+            DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
+            DrawRectangleLines( 10, 10, 320, 133, BLUE);
 
-        // Polygon shapes and lines
-        DrawPoly((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, BROWN);
-        DrawPolyLinesEx((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, 6, BEIGE);
+            DrawText("Free camera default controls:", 20, 20, 10, BLACK);
+            DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
+            DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
+            DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, DARKGRAY);
+            DrawText("- Alt + Ctrl + Mouse Wheel Pressed for Smooth Zoom", 40, 100, 10, DARKGRAY);
+            DrawText("- Z to zoom to (0, 0, 0)", 40, 120, 10, DARKGRAY);
 
-        // NOTE: We draw all LINES based shapes together to optimize internal drawing,
-        // this way, all LINES are rendered in a single draw pass
-        DrawLine(18, 42, screenWidth - 18, 42, BLACK);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();  // Close window and OpenGL context
+    CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 }
 
