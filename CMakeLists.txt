@@ -15,9 +15,10 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/CameraDevice.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/*)
 
 target_compile_options(${PROJECT_NAME}
     PRIVATE
