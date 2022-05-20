@@ -17,11 +17,12 @@ void test_raylib()
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
+    InitWindow(screenWidth, screenHeight, "3d camera encapsulation test");
 
-    IndiCam camera(Vector3{ 10.0f, 10.0f, 10.0f }, Vector3{ 0.0f, 0.0f, 0.0f });
+    std::shared_ptr<Vector3> cubePosition = std::make_shared<Vector3>((Vector3){0.0f, 0.0f, 0.0f});
+    std::shared_ptr<Vector3> cameraPosition = std::make_shared<Vector3>((Vector3){0.0f, 10.0f, 10.0f});
+    IndiCam camera(cubePosition, cameraPosition);
 
-    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
 
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -31,9 +32,23 @@ void test_raylib()
     {
         // Update
         //----------------------------------------------------------------------------------
-        camera.update();          // Update camera
 
-        if (IsKeyDown('Z')) camera.setTarget((Vector3){ 0.0f, 0.0f, 0.0f });
+        if (IsKeyDown('Z')) {
+            cubePosition->z += 0.1f;
+        } else if (IsKeyDown('S')) {
+            cubePosition->z -= 0.1f;
+        }
+        if (IsKeyDown('Q')) {
+            cubePosition->x += 0.1f;
+        } else if (IsKeyDown('D')) {
+            cubePosition->x -= 0.1f;
+        }
+        if (IsKeyDown('A')) {
+            cubePosition->y += 0.1f;
+        } else if (IsKeyDown('E')) {
+            cubePosition->y -= 0.1f;
+        }
+        camera.update();          // Update camera
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -42,14 +57,14 @@ void test_raylib()
 
             ClearBackground(RAYWHITE);
 
-            camera.beginDraw();
+            camera.beginDrawScope();
 
-                DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
-                DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
+                DrawCube(*cubePosition.get(), 2.0f, 2.0f, 2.0f, RED);
+                DrawCubeWires(*cubePosition.get(), 2.0f, 2.0f, 2.0f, MAROON);
 
                 DrawGrid(10, 1.0f);
 
-            camera.endDraw();
+            camera.endDrawScope();
 
             DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
             DrawRectangleLines( 10, 10, 320, 133, BLUE);

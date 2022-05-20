@@ -67,9 +67,18 @@ class IndiCam {
          */
         int getId(void) const;
 
+        /**
+         * @brief Update camera (target and position updated only if snap mode is on)
+         */
         void update(void);
-        void beginDraw(void);
-        void endDraw(void);
+        /**
+         * @brief Begin drawing scope (should be called before 3d drawing and after the clear)
+         */
+        void beginDrawScope(void);
+        /**
+         * @brief End drawing scope (should be called after 3d drawing)
+         */
+        void endDrawScope(void);
 
     protected:
     private:

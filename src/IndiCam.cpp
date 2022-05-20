@@ -22,13 +22,16 @@ static int getNewId(void)
     return (idCounter++);
 }
 
+#include <iostream>
+
 IndiCam::IndiCam(Vector3 target, Vector3 position)
 {
     _camera = std::make_shared <Camera3D>();
-    SetCameraMode(*(_camera.get()), CAMERA_FREE);
     _camera->target = target;
+    std::cout << "target: " << _camera->target.x << " " << _camera->target.y << " " << _camera->target.z << std::endl;
     _camera->position = position;
-    _camera->up = {0, 1, 0};
+    std::cout << "position: " << _camera->position.x << " " << _camera->position.y << " " << _camera->position.z << std::endl;
+    _camera->up = (Vector3){0.0f, 1.0f, 0.0f};
     _camera->fovy = 45.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
@@ -44,8 +47,8 @@ IndiCam::IndiCam(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> posit
     SetCameraMode(*(_camera.get()), CAMERA_FREE);
     _camera->target = *(_targetSnap.get());
     _camera->position = *(_positionSnap.get());
-    _camera->up = {0, 1, 0};
-    _camera->fovy = 45.0f;
+    _camera->up = (Vector3){0.0f, 1.0f, 0.0f};
+    _camera->fovy = 10.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
     #ifdef DEBUG
@@ -104,19 +107,19 @@ void IndiCam::update(void)
     #endif
 }
 
-void IndiCam::beginDraw(void)
+void IndiCam::beginDrawScope(void)
 {
     BeginMode3D(*(_camera.get()));
     #ifdef DEBUG
-        std::cerr << "\tIndiCam::beginDraw(void) called" << std::endl;
+        std::cerr << "\tIndiCam::beginDrawScope(void) called" << std::endl;
     #endif
 }
 
-void IndiCam::endDraw(void)
+void IndiCam::endDrawScope(void)
 {
     EndMode3D();
     #ifdef DEBUG
-        std::cerr << "\tIndiCam::endDraw(void) called" << std::endl;
+        std::cerr << "\tIndiCam::endDrawScope(void) called" << std::endl;
     #endif
 }
 
