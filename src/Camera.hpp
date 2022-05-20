@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2022
 ** indieStudio
 ** File description:
-** IndiCam
+** Camera
 */
 
 #ifndef CAMERA_HPP_
@@ -13,22 +13,23 @@
 struct Camera3D;
 struct Vector3;
 
+namespace indie {
 /// @brief raylib camera encapsulation class
-class IndiCam {
+class Camera {
     public:
         /**
-         * @brief Construct a new IndiCam object
+         * @brief Construct a new Camera object
          * @param target vector the cam point to
          * @param position vector where the cam is
          */
-        IndiCam(Vector3 target, Vector3 position);
+        Camera(Vector3 target, Vector3 position);
         /**
-         * @brief Construct a new IndiCam object with target and position snaped to another entity
+         * @brief Construct a new Camera object with target and position snaped to another entity
          * @param target vector the cam point to, owned by another entity
          * @param position vector where the cam is, owned by another entity
          */
-        IndiCam(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position);
-        ~IndiCam();
+        Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position);
+        ~Camera();
 
         /**
          * @brief Set if camera target and position are snapped to another entity
@@ -67,31 +68,26 @@ class IndiCam {
          */
         int getId(void) const;
 
-        /**
-         * @brief Update camera (target and position updated only if snap mode is on)
-         */
+        /// @brief Update camera (target and position updated only if snap mode is on)
         void update(void);
-        /**
-         * @brief Begin drawing scope (should be called before 3d drawing and after the clear)
-         */
+        /// @brief Begin drawing scope (should be called before 3d drawing and after the clear)
         void beginDrawScope(void);
-        /**
-         * @brief End drawing scope (should be called after 3d drawing)
-         */
+        /// @brief End drawing scope (should be called after 3d drawing)
         void endDrawScope(void);
 
     protected:
     private:
-        /** @brief _snaped target of the camera (as a shared_ptr), used if _snapMode == true */
+        /// @brief _snaped target of the camera (as a shared_ptr), used if _snapMode == true
         std::shared_ptr<Vector3> _targetSnap = nullptr;
-        /** @brief _snaped position of the camera (as a shared_ptr), used if _snapMode == true */
+        /// @brief _snaped position of the camera (as a shared_ptr), used if _snapMode == true
         std::shared_ptr<Vector3> _positionSnap = nullptr;
-        /** @brief _snapMode, set at true if you want to use extern values as position and target to auto update them */
+        /// @brief _snapMode, set at true if you want to use extern values as position and target to auto update them
         bool _snapMode = false;
-        /** @brief _id, used to identify the camera */
+        /// @brief _id, used to identify the camera
         int _id;
 
         std::shared_ptr<Camera3D> _camera = nullptr;
 };
+}
 
 #endif /* !CAMERA_HPP_ */

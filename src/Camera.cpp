@@ -2,13 +2,14 @@
 ** EPITECH PROJECT, 2022
 ** indieStudio
 ** File description:
-** IndiCam
+** Camera
 */
 
-#include "IndiCam.hpp"
+#include "Camera.hpp"
 
 #include "raylib.h"
 #include <memory>
+#include <iostream>
 
 /* #ifndef DEBUG
     #define DEBUG
@@ -22,9 +23,8 @@ static int getNewId(void)
     return (idCounter++);
 }
 
-#include <iostream>
-
-IndiCam::IndiCam(Vector3 target, Vector3 position)
+namespace indie {
+Camera::Camera(Vector3 target, Vector3 position)
 {
     _camera = std::make_shared <Camera3D>();
     _camera->target = target;
@@ -36,66 +36,66 @@ IndiCam::IndiCam(Vector3 target, Vector3 position)
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
     #ifdef DEBUG
-        std::cerr << "\tIndiCam::IndiCam(Vector3 target, Vector3 position) called" << std::endl;
+        std::cerr << "\tIndiCam::Camera(Vector3 target, Vector3 position) called" << std::endl;
     #endif
 }
 
-IndiCam::IndiCam(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position)
+Camera::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position)
 : _targetSnap(target), _positionSnap(position), _snapMode(true)
 {
     _camera = std::make_shared <Camera3D>();
     SetCameraMode(*(_camera.get()), CAMERA_CUSTOM);
     _camera->target = *(_targetSnap.get());
     _camera->position = *(_positionSnap.get());
-    _camera->up = (Vector3){0.0f, 3.0f, 0.0f};
-    _camera->fovy = 10.0f;
+    _camera->up = (Vector3){10.0f, 3.0f, 0.0f};
+    _camera->fovy = 100.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
     #ifdef DEBUG
-        std::cerr << "\tIndiCam::IndiCam(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position) called" << std::endl;
+        std::cerr << "\tIndiCam::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position) called" << std::endl;
     #endif
 }
 
-void IndiCam::setSnapMode(bool snapMode)
+void Camera::setSnapMode(bool snapMode)
 {
     _snapMode = snapMode;
 }
 
-void IndiCam::setPosition(Vector3 pos)
+void Camera::setPosition(Vector3 pos)
 {
     _camera->position = pos;
 }
 
-void IndiCam::setSnapedPosition(std::shared_ptr<Vector3> pos)
+void Camera::setSnapedPosition(std::shared_ptr<Vector3> pos)
 {
     _positionSnap = pos;
     _camera->position = *(_positionSnap.get());
 }
 
-void IndiCam::setTarget(Vector3 target)
+void Camera::setTarget(Vector3 target)
 {
     _camera->target = target;
 }
 
-void IndiCam::setSnapedTarget(std::shared_ptr<Vector3> target)
+void Camera::setSnapedTarget(std::shared_ptr<Vector3> target)
 {
     _targetSnap = target;
     _camera->target = *(_targetSnap.get());
 }
 
-void IndiCam::shiftPosition(Vector3 shift)
+void Camera::shiftPosition(Vector3 shift)
 {
     _camera->position.x += shift.x;
     _camera->position.y += shift.y;
     _camera->position.z += shift.z;
 }
 
-int IndiCam::getId(void) const
+int Camera::getId(void) const
 {
     return _id;
 }
 
-void IndiCam::update(void)
+void Camera::update(void)
 {
     if (_snapMode) {
         _camera->target = *_targetSnap;
@@ -107,7 +107,7 @@ void IndiCam::update(void)
     #endif
 }
 
-void IndiCam::beginDrawScope(void)
+void Camera::beginDrawScope(void)
 {
     BeginMode3D(*(_camera.get()));
     #ifdef DEBUG
@@ -115,7 +115,7 @@ void IndiCam::beginDrawScope(void)
     #endif
 }
 
-void IndiCam::endDrawScope(void)
+void Camera::endDrawScope(void)
 {
     EndMode3D();
     #ifdef DEBUG
@@ -123,6 +123,7 @@ void IndiCam::endDrawScope(void)
     #endif
 }
 
-IndiCam::~IndiCam()
+Camera::~Camera()
 {
+}
 }

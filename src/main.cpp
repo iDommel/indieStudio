@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "raylib.h"
-#include "IndiCam.hpp"
+#include "Camera.hpp"
 
 void test_raylib()
 {
@@ -21,7 +21,7 @@ void test_raylib()
 
     std::shared_ptr<Vector3> cubePosition = std::make_shared<Vector3>((Vector3){0.0f, 0.0f, 0.0f});
     std::shared_ptr<Vector3> cameraPosition = std::make_shared<Vector3>((Vector3){0.0f, 10.0f, 10.0f});
-    IndiCam camera(cubePosition, cameraPosition);
+    indie::Camera camera(cubePosition, cameraPosition);
 
 
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
@@ -74,12 +74,8 @@ void test_raylib()
             DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
             DrawRectangleLines( 10, 10, 320, 133, BLUE);
 
-            DrawText("Free camera default controls:", 20, 20, 10, BLACK);
-            DrawText("- Mouse Wheel to Zoom in-out", 40, 40, 10, DARKGRAY);
-            DrawText("- Mouse Wheel Pressed to Pan", 40, 60, 10, DARKGRAY);
-            DrawText("- Alt + Mouse Wheel Pressed to Rotate", 40, 80, 10, DARKGRAY);
-            DrawText("- Alt + Ctrl + Mouse Wheel Pressed for Smooth Zoom", 40, 100, 10, DARKGRAY);
-            DrawText("- Z to zoom to (0, 0, 0)", 40, 120, 10, DARKGRAY);
+            DrawText("- Use arrows, right-ctrl and right-shift to move the object", 40, 40, 10, DARKGRAY);
+            DrawText("- Use + and - to move the cam", 40, 60, 10, DARKGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
