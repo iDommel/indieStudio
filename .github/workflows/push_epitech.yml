@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
     container: pandoc/latex
     steps:
       - uses: actions/checkout@v2
