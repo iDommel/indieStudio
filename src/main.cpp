@@ -6,15 +6,16 @@
 */
 #include <exception>
 #include <iostream>
+#include "window.hpp"
 
 #include "raylib.h"
 
-void test_raylib()
+/*void test_raylib()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = GetMonitorWidth(0);
+    const int screenHeight = GetMonitorHeight(0);
 
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
 
@@ -71,10 +72,11 @@ void test_raylib()
     //--------------------------------------------------------------------------------------
     CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-}
+}*/
 
 int main(void)
 {
-    test_raylib();
+    window win; 
+    win.loop();
     return 0;
 }

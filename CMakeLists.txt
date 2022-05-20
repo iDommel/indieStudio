@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 
 project(bomberman VERSION 1.0.0 LANGUAGES CXX)
 
@@ -15,6 +15,7 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/window.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
