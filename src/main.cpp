@@ -33,20 +33,25 @@ void test_raylib()
         // Update
         //----------------------------------------------------------------------------------
 
-        if (IsKeyDown('Z')) {
+        if (IsKeyDown(KEY_RIGHT)) {
+            cubePosition->x -= 0.1f;
+        } else if (IsKeyDown(KEY_LEFT)) {
+            cubePosition->x += 0.1f;
+        }
+        if (IsKeyDown(KEY_UP)) {
+            cubePosition->y += 0.1f;
+        } else if (IsKeyDown(KEY_DOWN)) {
+            cubePosition->y -= 0.1f;
+        }
+        if (IsKeyDown(KEY_RIGHT_SHIFT)) {
             cubePosition->z += 0.1f;
-        } else if (IsKeyDown('S')) {
+        } else if (IsKeyDown(KEY_RIGHT_CONTROL)) {
             cubePosition->z -= 0.1f;
         }
-        if (IsKeyDown('Q')) {
-            cubePosition->x += 0.1f;
-        } else if (IsKeyDown('D')) {
-            cubePosition->x -= 0.1f;
-        }
-        if (IsKeyDown('A')) {
-            cubePosition->y += 0.1f;
-        } else if (IsKeyDown('E')) {
-            cubePosition->y -= 0.1f;
+        if (IsKeyDown(KEY_KP_ADD)) {
+            cameraPosition->y += 0.1f;
+        } else if (IsKeyDown(KEY_KP_SUBTRACT)) {
+            cameraPosition->y -= 0.1f;
         }
         camera.update();          // Update camera
         //----------------------------------------------------------------------------------

@@ -44,10 +44,10 @@ IndiCam::IndiCam(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> posit
 : _targetSnap(target), _positionSnap(position), _snapMode(true)
 {
     _camera = std::make_shared <Camera3D>();
-    SetCameraMode(*(_camera.get()), CAMERA_FREE);
+    SetCameraMode(*(_camera.get()), CAMERA_CUSTOM);
     _camera->target = *(_targetSnap.get());
     _camera->position = *(_positionSnap.get());
-    _camera->up = (Vector3){0.0f, 1.0f, 0.0f};
+    _camera->up = (Vector3){0.0f, 3.0f, 0.0f};
     _camera->fovy = 10.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
