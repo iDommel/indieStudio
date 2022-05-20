@@ -27,18 +27,9 @@ void test_raylib(void)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
 
-    model test("turret.obj");
-
-    // Model model = LoadModel("turret.obj");                 // Load model
-    // Texture2D texture = LoadTexture("turret_diffuse.png"); // Load model texture
-    // model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;            // Set map diffuse texture
+    indie::Model test("turret.obj");
 
     Vector3 position = { 0.0f, 0.0f, 0.0f };                    // Set model position
-
-    // BoundingBox bounds = GetMeshBoundingBox(model.meshes[0]);   // Set model bounds
-
-    // NOTE: bounds are calculated from the original size of the model,
-    // if model is scaled on drawing, bounds must be also scaled
 
     SetCameraMode(camera, CAMERA_FREE);     // Set a free camera mode
 
@@ -62,8 +53,6 @@ void test_raylib(void)
 
             BeginMode3D(camera);
 
-                // DrawModel(model, position, 1.0f, WHITE);        // Draw 3d model with texture
-
                 test.draw(position, 1.0f, WHITE);
 
                 DrawGrid(20, 10.0f);         // Draw a grid
@@ -80,16 +69,8 @@ void test_raylib(void)
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    // UnloadTexture(texture);     // Unload texture
-    // UnloadModel(model);         // Unload model
-
     CloseWindow();              // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-
-    return ;
 }
 
 int main(void)

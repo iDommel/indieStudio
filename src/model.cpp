@@ -2,21 +2,20 @@
 #include "raylib.h"
 #include <iostream>
 
-model::model(const char *fileName)
+indie::Model::Model(const char *fileName)
 {
-    Model model1 = LoadModel(fileName);
+    ::Model mode = LoadModel(fileName);
     Texture2D texture = LoadTexture("turret_diffuse.png");
-    model1.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
-
-    models = &model1;
+    mode.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    ptr = std::make_unique <::Model> (mode);
 }
 
-model::~model()
+indie::Model::~Model()
 {
-    UnloadModel(*models);
+    UnloadModel(*ptr.get());
 }
 
-void model::draw(Vector3 position, float scale, Color tint)
+void indie::Model::draw(Vector3 position, float scale, Color tint)
 {
-    DrawModel(*models, position, scale, tint);
+    DrawModel(*ptr.get(), position, scale, tint);
 }
