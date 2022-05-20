@@ -10,6 +10,10 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(raylib REQUIRED)
 target_link_libraries(${PROJECT_NAME} raylib -lstdc++fs)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    target_link_libraries(${PROJECT_NAME} -lstdc++fs)
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 set(CMAKE_CXX_STANDARD 17)
 
 target_sources(${PROJECT_NAME}
@@ -20,11 +24,15 @@ target_sources(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/*)
 
-target_compile_options(${PROJECT_NAME}
-    PRIVATE
-        -Wall
-        -Wextra
-)
+# Set default compile flags for GCC
+if(CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "GCC detected, adding compile flags")
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE
+            -Wall
+            -Wextra
+    )
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
