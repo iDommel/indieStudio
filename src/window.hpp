@@ -10,16 +10,16 @@
 #include <string>
 #include <iostream>
 
-
-class window
-{
-private:
-    /* data */
-public:
-    window();
-    ~window();
-    void loop();
-    void get_key_pressed(int key);
-};
+namespace indie {
+    class window
+    {
+    private:
+    public:
+        window();
+        ~window();
+        void loop();
+        int get_key_pressed();
+    };
+}
 
 #endif /* !WINDOW_HPP_ */
