@@ -10,7 +10,7 @@
 #include "raylib.h"
 #include "Camera.hpp"
 
-void test_raylib()
+void test_raylib_camera()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -89,6 +89,6 @@ void test_raylib()
 
 int main(void)
 {
-    test_raylib();
+    test_raylib_camera();
     return 0;
 }
