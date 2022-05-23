@@ -16,11 +16,14 @@ void test_raylib_camera()
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+    Vector3 cAmeraPosition = {0.0f, 10.0f, 10.0f};
+    Vector3 cUbePosition = {0.0f, 0.0f, 0.0f};
+
 
     InitWindow(screenWidth, screenHeight, "3d camera encapsulation test");
 
-    std::shared_ptr<Vector3> cubePosition = std::make_shared<Vector3>((Vector3){0.0f, 0.0f, 0.0f});
-    std::shared_ptr<Vector3> cameraPosition = std::make_shared<Vector3>((Vector3){0.0f, 10.0f, 10.0f});
+    std::shared_ptr<Vector3> cubePosition = std::make_shared<Vector3>(cUbePosition);
+    std::shared_ptr<Vector3> cameraPosition = std::make_shared<Vector3>(cAmeraPosition);
     indie::Camera camera(cubePosition, cameraPosition);
 
 

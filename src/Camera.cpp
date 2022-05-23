@@ -26,12 +26,13 @@ static int getNewId(void)
 namespace indie {
 Camera::Camera(Vector3 target, Vector3 position)
 {
+    Vector3 up = {0.0f, 1.0f, 0.0f};
     _camera = std::make_shared <Camera3D>();
     _camera->target = target;
     std::cout << "target: " << _camera->target.x << " " << _camera->target.y << " " << _camera->target.z << std::endl;
     _camera->position = position;
     std::cout << "position: " << _camera->position.x << " " << _camera->position.y << " " << _camera->position.z << std::endl;
-    _camera->up = (Vector3){0.0f, 1.0f, 0.0f};
+    _camera->up = up;
     _camera->fovy = 45.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
@@ -43,11 +44,12 @@ Camera::Camera(Vector3 target, Vector3 position)
 Camera::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position)
 : _targetSnap(target), _positionSnap(position), _snapMode(true)
 {
+    Vector3 up = {10.0f, 3.0f, 0.0f};
     _camera = std::make_shared <Camera3D>();
     SetCameraMode(*(_camera.get()), CAMERA_CUSTOM);
     _camera->target = *(_targetSnap.get());
     _camera->position = *(_positionSnap.get());
-    _camera->up = (Vector3){10.0f, 3.0f, 0.0f};
+    _camera->up = up;	
     _camera->fovy = 100.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
