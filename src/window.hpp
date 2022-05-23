@@ -15,9 +15,13 @@ namespace indie {
     {
     private:
     public:
+        /// @brief Construct a new window:: window object with the size of the screen
         window();
+        /// @brief Destruct the window:: close the windows
         ~window();
+        /// @brief game loop
         void loop();
+        /// @brief function that get the key pressed
         int get_key_pressed();
     };
 }
