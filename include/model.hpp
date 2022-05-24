@@ -27,7 +27,7 @@ namespace indie {
              */
             Model(const char *filename);
             /**
-             * @brief Unload / destroy the model object
+             * @brief destroy the model object
              */
             ~Model();
             /**
@@ -37,6 +37,10 @@ namespace indie {
              * @param tint Color of the model (WHITE = default)
              */
             void draw(Vector3 position, float scale, Color tint);
+            /**
+             * @brief unload the model object
+             */
+            void unload();
         private:
             /**
              * @brief Pointer to the model struct of raylib

@@ -12,6 +12,11 @@ indie::Model::Model(const char *fileName)
 
 indie::Model::~Model()
 {
+    
+}
+
+void indie::Model::unload()
+{
     UnloadModel(*ptr.get());
 }
 
