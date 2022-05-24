@@ -10,7 +10,7 @@
 #include "../include/model.hpp"
 #include "raylib.h"
 
-void test_raylib(void)
+void test_raylib_model(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -76,6 +76,6 @@ void test_raylib(void)
 
 int main(void)
 {
-    test_raylib();
+    test_raylib_model();
     return 0;
 }
