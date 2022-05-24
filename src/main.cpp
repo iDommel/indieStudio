@@ -8,15 +8,25 @@
 #include <iostream>
 
 #include "raylib.h"
+#include "shape3d.hpp"
 
-void test_raylib()
+void test_raylib_shape3D()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
+    shape3D shape3D;
+
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+
+    Camera camera = { 0 };
+    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f }; // Camera position
+    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };     // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
 
     SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -37,32 +47,14 @@ void test_raylib()
 
         DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY);
 
-        // Circle shapes and lines
-        DrawCircle(screenWidth / 5, 120, 35, DARKBLUE);
-        DrawCircleGradient(screenWidth / 5, 220, 60, GREEN, SKYBLUE);
-        DrawCircleLines(screenWidth / 5, 340, 80, DARKBLUE);
+        BeginMode3D(camera);
 
-        // Rectangle shapes and ines
-        DrawRectangle(screenWidth / 4 * 2 - 60, 100, 120, 60, RED);
-        DrawRectangleGradientH(screenWidth / 4 * 2 - 90, 170, 180, 130, MAROON, GOLD);
-        DrawRectangleLines(screenWidth / 4 * 2 - 40, 320, 80, 60, ORANGE);  // NOTE: Uses QUADS internally, not lines
+            shape3D.DrawSphere({4.0f, 0.0f, 0.0f}, 1.5f, BLACK);
+            shape3D.DrawCube({0.0f, 0.0f, 0.0f}, {1.5f, 1.5f, 1.5f}, BLACK);
+            shape3D.DrawGrid(10, 1.0f);
 
-        // Triangle shapes and lines
-        DrawTriangle((Vector2){screenWidth / 4.0f * 3.0f, 80.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f - 60.0f, 150.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f + 60.0f, 150.0f}, VIOLET);
+        EndMode3D();
 
-        DrawTriangleLines((Vector2){screenWidth / 4.0f * 3.0f, 160.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f - 20.0f, 230.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f + 20.0f, 230.0f}, DARKBLUE);
-
-        // Polygon shapes and lines
-        DrawPoly((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, BROWN);
-        DrawPolyLinesEx((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, 6, BEIGE);
-
-        // NOTE: We draw all LINES based shapes together to optimize internal drawing,
-        // this way, all LINES are rendered in a single draw pass
-        DrawLine(18, 42, screenWidth - 18, 42, BLACK);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
@@ -75,6 +67,6 @@ void test_raylib()
 
 int main(void)
 {
-    test_raylib();
+    test_raylib_shape3D();
     return 0;
 }
