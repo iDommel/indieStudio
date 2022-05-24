@@ -7,7 +7,7 @@
 #include <exception>
 #include <iostream>
 
-#include "raylib.h"
+/*#include "raylib.h"
 
 void test_raylib()
 {
@@ -71,10 +71,9 @@ void test_raylib()
     //--------------------------------------------------------------------------------------
     CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-}
+}*/
 
 int main(void)
 {
-    test_raylib();
     return 0;
 }

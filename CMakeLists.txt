@@ -15,6 +15,9 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/Core.cpp
+        src/Scene.cpp
+        src/SceneManager.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
