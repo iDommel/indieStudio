@@ -5,76 +5,98 @@
 ** main
 */
 #include <exception>
-#include <iostream>
 
 #include "raylib.h"
+#include "../include/modelAnimation.hpp"
 
-void test_raylib()
+void test_raylib_modelAnimation()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - model animation");
 
-    SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
+    // Define the camera to look into our 3d world
+    Camera camera = { 0 };
+    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f }; // Camera position
+    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
+
+    Model model = LoadModel("assets_test/guy.iqm");                    // Load the animated model mesh and basic data
+    Texture2D texture = LoadTexture("assets_test/guytex.png");         // Load model texture and set material
+    SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);     // Set model material map texture
+
+    Vector3 position = { 0.0f, 0.0f, 0.0f };            // Set model position
+
+    // Load animation data
+
+    unsigned int animsCount = 0;
+    indie::ModelAnimation anim("assets_test/guyanim.iqm", &animsCount);
+    int animFrameCounter = 0;
+
+    SetCameraMode(camera, CAMERA_FREE); // Set free camera mode
+
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())  // Detect window close button or ESC key
+    while (!WindowShouldClose())        // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        UpdateCamera(&camera);
+
+        // Play animation when spacebar is held down
+        if (IsKeyDown(KEY_SPACE))
+        {
+            animFrameCounter++;
+            anim.updateModelAnimation(model, animFrameCounter);
+            if (animFrameCounter >= anim.getFrameCount()) animFrameCounter = 0;
+        }
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+            ClearBackground(RAYWHITE);
 
-        DrawText("some basic shapes available on raylib", 20, 20, 20, DARKGRAY);
+            BeginMode3D(camera);
 
-        // Circle shapes and lines
-        DrawCircle(screenWidth / 5, 120, 35, DARKBLUE);
-        DrawCircleGradient(screenWidth / 5, 220, 60, GREEN, SKYBLUE);
-        DrawCircleLines(screenWidth / 5, 340, 80, DARKBLUE);
+                DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
 
-        // Rectangle shapes and ines
-        DrawRectangle(screenWidth / 4 * 2 - 60, 100, 120, 60, RED);
-        DrawRectangleGradientH(screenWidth / 4 * 2 - 90, 170, 180, 130, MAROON, GOLD);
-        DrawRectangleLines(screenWidth / 4 * 2 - 40, 320, 80, 60, ORANGE);  // NOTE: Uses QUADS internally, not lines
+                // for (int i = 0; i < model.boneCount; i++)
+                // {
+                //     DrawCube(anims[0].framePoses[animFrameCounter][i].translation, 0.2f, 0.2f, 0.2f, RED);
+                // }
 
-        // Triangle shapes and lines
-        DrawTriangle((Vector2){screenWidth / 4.0f * 3.0f, 80.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f - 60.0f, 150.0f},
-                     (Vector2){screenWidth / 4.0f * 3.0f + 60.0f, 150.0f}, VIOLET);
+                DrawGrid(10, 1.0f);         // Draw a grid
 
-        DrawTriangleLines((Vector2){screenWidth / 4.0f * 3.0f, 160.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f - 20.0f, 230.0f},
-                          (Vector2){screenWidth / 4.0f * 3.0f + 20.0f, 230.0f}, DARKBLUE);
+            EndMode3D();
 
-        // Polygon shapes and lines
-        DrawPoly((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, BROWN);
-        DrawPolyLinesEx((Vector2){screenWidth / 4.0f * 3, 320}, 6, 80, 0, 6, BEIGE);
-
-        // NOTE: We draw all LINES based shapes together to optimize internal drawing,
-        // this way, all LINES are rendered in a single draw pass
-        DrawLine(18, 42, screenWidth - 18, 42, BLACK);
         EndDrawing();
         //----------------------------------------------------------------------------------
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();  // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+    UnloadTexture(texture);     // Unload texture
+
+    // Unload model animations data
+    anim.unloadModelAnimation();
+    // RL_FREE(anims);
+
+    UnloadModel(model);         // Unload model
+
+    CloseWindow();              // Close window and OpenGL context
 }
 
 int main(void)
 {
-    test_raylib();
+    test_raylib_modelAnimation();
     return 0;
 }
