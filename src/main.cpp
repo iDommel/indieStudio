@@ -73,7 +73,12 @@ void test_raylib()
     //--------------------------------------------------------------------------------------
 }*/
 
+#include "Core.hpp"
+
 int main(void)
 {
+    indie::Core core;
+
+    core.mainLoop();
     return 0;
 }

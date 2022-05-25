@@ -10,18 +10,21 @@
 
 #include <map>
 
-#include "Systems/System.hpp"
+#include "Systems/ISystem.hpp"
 #include "SceneManager.hpp"
 
-namespace Indie {
+namespace indie {
     class Core
     {
     public:
 
+        /**
+         * @brief Types of systems: systems call are by ascending order
+         */
         enum class SystemType {
+            GAME,
             GRAPHIC,
-            AUDIO,
-            GAME
+            AUDIO
         };
 
         Core();

@@ -8,10 +8,10 @@
 #ifndef GRAPHIC_SYSTEM_HPP
 #define GRAPHIC_SYSTEM_HPP
 
-#include "System.hpp"
+#include "ISystem.hpp"
 #include "../Scene.hpp"
 
-namespace Indie {
+namespace indie {
 
     class GraphicSystem : public ISystem
     {

@@ -18,6 +18,10 @@ target_sources(${PROJECT_NAME}
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
+
+        src/Systems/AudioSystem.cpp
+        src/Systems/GraphicSystem.cpp
+        src/Systems/GameSystem.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

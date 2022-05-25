@@ -8,7 +8,7 @@
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
 
-namespace Indie {
+namespace indie {
 
     class SceneManager;
 

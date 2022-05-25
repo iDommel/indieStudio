@@ -13,7 +13,7 @@
 
 #include "Scene.hpp"
 
-namespace Indie {
+namespace indie {
     class SceneManager
     {
     public:

@@ -8,10 +8,10 @@
 #ifndef AUDIO_SYSTEM_HPP
 #define AUDIO_SYSTEM_HPP
 
-#include "System.hpp"
+#include "ISystem.hpp"
 #include "../Scene.hpp"
 
-namespace Indie {
+namespace indie {
 
     class AudioSystem : public ISystem
     {

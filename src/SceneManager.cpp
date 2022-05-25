@@ -9,7 +9,7 @@
 
 #include "SceneManager.hpp"
 
-namespace Indie
+namespace indie
 {
     void SceneManager::addScene(std::unique_ptr<Scene> scene, SceneType sceneType)
     {

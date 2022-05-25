@@ -11,16 +11,20 @@
 #include <vector>
 #include <memory>
 
-#include "Entity.hpp"
+#include "IScene.hpp"
+#include "IEntity.hpp"
 
-namespace Indie {
-    class Scene
+namespace indie {
+    class Scene : public IScene
     {
     public:
-        std::vector<std::shared_ptr<Entity>> &getEntities();
+        std::vector<std::shared_ptr<IEntity>> &getEntities();
 
-    private:
-        std::vector<std::shared_ptr<Entity>> _entities;
+        void addEntity(std::shared_ptr<IEntity> entity);
+        void removeEntity(std::shared_ptr<IEntity> entity);
+
+    protected:
+        std::vector<std::shared_ptr<IEntity>> _entities;
     };
 }
 

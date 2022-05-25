@@ -8,8 +8,10 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-namespace Indie {
-    class Entity
+#include "IEntity.hpp"
+
+namespace indie {
+    class Entity : public IEntity
     {
     public:
     private:

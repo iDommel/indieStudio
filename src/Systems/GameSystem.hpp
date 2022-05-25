@@ -8,10 +8,10 @@
 #ifndef GAME_SYSTEM_HPP
 #define GAME_SYSTEM_HPP
 
-#include "System.hpp"
+#include "ISystem.hpp"
 #include "../Scene.hpp"
 
-namespace Indie {
+namespace indie {
 
     class GameSystem : public ISystem
     {

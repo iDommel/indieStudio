@@ -10,7 +10,7 @@
 #include "Systems/AudioSystem.hpp"
 #include "Systems/GraphicSystem.hpp"
 
-namespace Indie {
+namespace indie {
 
     Core::Core()
     {
@@ -22,6 +22,15 @@ namespace Indie {
     void Core::mainLoop()
     {
 
+        for (auto &system : _systems)
+            system.second->init(_sceneManager);
+
+        for (int i = 0; i < 5; i++) {
+            for (auto &system : _systems)
+                system.second->update(_sceneManager);
+        }
+        for (auto &system : _systems)
+            system.second->destroy();
     }
 
 }
