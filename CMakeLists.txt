@@ -19,6 +19,9 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/EventListener.cpp
+        src/KeyboardEvent.cpp
+        src/KeyboardCallbacks.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
