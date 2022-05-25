@@ -21,7 +21,7 @@ void TestAnimations2D()
     InitWindow(screenWidth, screenHeight, "raylib [texture] example - texture rectangle");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    indie::Texture scarfy("resources/scarfy.png");        // Texture loading
+    indie::Texture scarfy("test_pictures/scarfy.png");        // Texture loading
 
     Vector2 position = { 350.0f, 280.0f };
     Rectangle frameRec = { 0.0f, 0.0f, (float) scarfy.getWidth() / 6, (float)scarfy.getHeight() };

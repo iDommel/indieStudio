@@ -18,7 +18,7 @@ void testTextures()
     InitWindow(screenWidth, screenHeight, "raylib [textures] example - texture loading and drawing");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    indie::Texture texture("/home/apenot/Tek2re/B-YEP-400/indieStudio/src/test.png"); // Texture loading
+    indie::Texture texture("test_pictures/raylib_logo.png"); // Texture loading
     //---------------------------------------------------------------------------------------
 
     // Main game loop
