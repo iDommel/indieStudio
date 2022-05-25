@@ -20,6 +20,7 @@ class Font {
 
         /**
          * @brief Get the default Font
+         * @return the default Font
          */
         ::Font GetFontDefault(void) const;
 
