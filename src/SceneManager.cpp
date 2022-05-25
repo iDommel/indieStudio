@@ -11,14 +11,14 @@
 
 namespace indie
 {
-    void SceneManager::addScene(std::unique_ptr<Scene> scene, SceneType sceneType)
+    void SceneManager::addScene(std::unique_ptr<IScene> scene, SceneType sceneType)
     {
         if (_scenes.find(sceneType) != _scenes.end())
             throw std::invalid_argument("SceneManager: Scene already exists");
         _scenes[sceneType] = std::move(scene);
     }
 
-    Scene &SceneManager::getCurrentScene()
+    IScene &SceneManager::getCurrentScene()
     {
         if (_scenes.find(_currentScene) == _scenes.end())
             throw std::runtime_error("SceneManager: Invalid current scene");

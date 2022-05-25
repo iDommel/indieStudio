@@ -16,9 +16,12 @@ namespace indie {
         std::cout << "GraphicSystem::init" << std::endl;
     }
 
-    void GraphicSystem::update(SceneManager &)
+    void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GraphicSystem::update" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
+            std::cout << e->getName() << std::endl;
+        }
     }
 
     void GraphicSystem::destroy()

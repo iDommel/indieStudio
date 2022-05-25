@@ -16,7 +16,7 @@ namespace indie {
     {
     public:
         virtual void init(SceneManager &manager) = 0;
-        virtual void update(SceneManager &manager) = 0;
+        virtual void update(SceneManager &manager, uint64_t deltaTime) = 0;
         virtual void destroy() = 0;
     };
 

@@ -19,6 +19,9 @@ namespace indie
         // virtual std::vector<AComponent> &getComponents() = 0;
         // virtual void addComponent(std::shared_ptr<AComponent> component) = 0;
 
+
+        virtual const std::string &getName() const = 0;
+
     };
 
 }

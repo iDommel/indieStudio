@@ -16,7 +16,7 @@ namespace indie {
         std::cout << "AudioSystem::init" << std::endl;
     }
 
-    void AudioSystem::update(SceneManager &)
+    void AudioSystem::update(SceneManager &, uint64_t)
     {
         std::cout << "AudioSystem::update" << std::endl;
     }

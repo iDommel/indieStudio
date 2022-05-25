@@ -13,6 +13,8 @@
 #include "Systems/ISystem.hpp"
 #include "SceneManager.hpp"
 
+#define UPDATE_DELTA     17
+
 namespace indie {
     class Core
     {
@@ -34,6 +36,7 @@ namespace indie {
     private:
         std::map<SystemType, std::unique_ptr<ISystem>> _systems;
         SceneManager _sceneManager;
+        bool _end = false;
     };
 }
 

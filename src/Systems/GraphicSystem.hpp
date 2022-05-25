@@ -9,7 +9,7 @@
 #define GRAPHIC_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "../Scene.hpp"
+#include "../SceneManager.hpp"
 
 namespace indie {
 
@@ -18,7 +18,7 @@ namespace indie {
     public:
 
         void init(SceneManager &manager) final override;
-        void update(SceneManager &manager) final override;
+        void update(SceneManager &manager, uint64_t deltaTime) final override;
         void destroy() final override;
 
     private:

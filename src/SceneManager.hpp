@@ -11,7 +11,7 @@
 #include <map>
 #include <memory>
 
-#include "Scene.hpp"
+#include "IScene.hpp"
 
 namespace indie {
     class SceneManager
@@ -30,13 +30,13 @@ namespace indie {
          * @param scene Scene to add
          * @param sceneType Type of the scene, needs to be unique for each scene
          */
-        void addScene(std::unique_ptr<Scene> scene, SceneType sceneType);
+        void addScene(std::unique_ptr<IScene> scene, SceneType sceneType);
 
         /**
          * @brief Returns the current scene
          * @return Reference of the current scene
          */
-        Scene &getCurrentScene();
+        IScene &getCurrentScene();
 
         /**
          * @brief Set the current scene to the scene corresponding to the given sceneType
@@ -45,7 +45,7 @@ namespace indie {
         void setCurrentScene(SceneType scene);
 
     private:
-        std::map<SceneType, std::unique_ptr<Scene>> _scenes;
+        std::map<SceneType, std::unique_ptr<IScene>> _scenes;
         SceneType _currentScene = SceneType::NONE;
     };
 }

@@ -5,6 +5,8 @@
 ** Core.cpp
 */
 
+#include <chrono>
+
 #include "Core.hpp"
 #include "Systems/GameSystem.hpp"
 #include "Systems/AudioSystem.hpp"
@@ -21,13 +23,19 @@ namespace indie {
 
     void Core::mainLoop()
     {
+        auto clock = std::chrono::high_resolution_clock::now();
 
         for (auto &system : _systems)
             system.second->init(_sceneManager);
 
-        for (int i = 0; i < 5; i++) {
+        while (!_end) {
+            auto time  = std::chrono::high_resolution_clock::now();
+            auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(time - clock).count();
+            if (deltaTime < UPDATE_DELTA)
+                continue;
             for (auto &system : _systems)
-                system.second->update(_sceneManager);
+                system.second->update(_sceneManager, deltaTime);
+            _end = true;
         }
         for (auto &system : _systems)
             system.second->destroy();
