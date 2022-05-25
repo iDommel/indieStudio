@@ -24,3 +24,8 @@ void indie::Model::draw(Vector3 position, float scale, Color tint)
 {
     DrawModel(*ptr.get(), position, scale, tint);
 }
+
+void indie::Model::drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
+{
+    DrawModelEx(*ptr.get(), position, rotationAxis, rotationAngle, scale, tint);
+}

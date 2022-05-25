@@ -41,6 +41,15 @@ namespace indie {
              * @brief unload the model object
              */
             void unload();
+            /**
+             * @brief Draw (with rotation) the model
+             * @param position vector 3d to draw the model
+             * @param rotationAxis position of the center of rotation
+             * @param rotationAngle rotation of the model
+             * @param scale vector of scaling ({1.0f, 1.0f, 1.0f} = default)
+             * @param tint Color of the model (WHITE = default)
+             */
+            void drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
         private:
             /**
              * @brief Pointer to the model struct of raylib

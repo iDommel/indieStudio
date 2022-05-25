@@ -31,6 +31,9 @@ void test_raylib_model(void)
 
     Vector3 position = { 0.0f, 0.0f, 0.0f };                    // Set model position
 
+    Vector3 rotation = { 10.0f, 0.0f, 0.0f };
+    Vector3 scale = { 1.0f, 1.0f, 1.0f };
+
     SetCameraMode(camera, CAMERA_FREE);     // Set a free camera mode
 
     bool selected = false;          // Selected object flag
@@ -53,7 +56,7 @@ void test_raylib_model(void)
 
             BeginMode3D(camera);
 
-                test.draw(position, 1.0f, WHITE);
+                test.drawRotate(position, rotation, 45.0f, scale, WHITE);
 
                 DrawGrid(20, 10.0f);         // Draw a grid
 
