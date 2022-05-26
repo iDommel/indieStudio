@@ -20,7 +20,9 @@ namespace indie {
     {
         std::cout << "GraphicSystem::update" << std::endl;
         for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            std::cout << e->getName() << std::endl;
+            for (auto &tag : e->getTags()) {
+                std::cout << (int)tag << std::endl;
+            }
         }
     }
 

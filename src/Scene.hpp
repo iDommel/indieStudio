@@ -18,9 +18,15 @@ namespace indie {
     class Scene : public IScene
     {
     public:
+        /**
+         * @brief Get the scene's entities
+         * @return Returns a reference of the scene's entities vector
+         */
         std::vector<std::shared_ptr<IEntity>> &getEntities();
 
+        /// @brief Add entity to scene
         void addEntity(std::shared_ptr<IEntity> entity);
+        /// @brief Removes the given entity from scene
         void removeEntity(std::shared_ptr<IEntity> entity);
 
     protected:
