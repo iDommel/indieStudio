@@ -39,6 +39,13 @@ namespace indie
          */
         virtual const std::vector<Tags> &getTags() const = 0;
 
+        /**
+         * @brief Search if entity has a tag
+         * @param tag Tag to search for
+         * @return Returns true if entity has the given tag, false otherwise
+         */
+        virtual bool hasTag(Tags tag) const = 0;
+
     };
 
 }

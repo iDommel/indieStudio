@@ -20,9 +20,10 @@ namespace indie {
     {
         std::cout << "GraphicSystem::update" << std::endl;
         for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            for (auto &tag : e->getTags()) {
-                std::cout << (int)tag << std::endl;
-            }
+            if (e->hasTag(IEntity::Tags::RENDERABLE_2D))
+                std::cout << "render 2D img" << std::endl;
+            else if (e->hasTag(IEntity::Tags::RENDERABLE_3D))
+                std::cout << "render 3D img" << std::endl;
         }
     }
 

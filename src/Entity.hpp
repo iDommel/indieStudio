@@ -36,6 +36,13 @@ namespace indie {
          */
         const std::vector<Tags> &getTags() const { return _tags; };
 
+        /**
+         * @brief Search if entity has a tag
+         * @param tag Tag to search for
+         * @return Returns true if entity has the given tag, false otherwise
+         */
+        bool hasTag(Tags tag) const;
+
     private:
         std::vector<Tags> _tags;
         std::vector<std::shared_ptr<Component>> _components;

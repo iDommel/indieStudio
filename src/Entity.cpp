@@ -71,4 +71,9 @@ namespace indie {
         return _components;
     }
 
+    bool Entity::hasTag(Tags tag) const
+    {
+        return (std::find(_tags.begin(), _tags.end(), tag) != _tags.end());
+    }
+
 }

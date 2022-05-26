@@ -36,13 +36,16 @@ namespace indie {
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>();
         std::unique_ptr<Entity> entity = std::make_unique<Entity>();
-        std::shared_ptr<String> component = std::make_shared<String>("vector");
+        std::shared_ptr<String> component = std::make_shared<String>("audio");
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
+        std::shared_ptr<String> component3 = std::make_shared<String>("vector");
 
         component->setTag(Component::Tags::SOUND);
-        // component2->setTag(Component::Tags::SPRITE);
+        component2->setTag(Component::Tags::SPRITE);
+        component3->setTag(Component::Tags::VECTOR);
         entity->addComponent(component);
-        // entity->addComponent(component2);
+        entity->addComponent(component2);
+        entity->addComponent(component3);
         scene->addEntity(std::move(entity));
         return scene;
     }

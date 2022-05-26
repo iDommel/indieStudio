@@ -16,9 +16,13 @@ namespace indie {
         std::cout << "AudioSystem::init" << std::endl;
     }
 
-    void AudioSystem::update(SceneManager &, uint64_t)
+    void AudioSystem::update(SceneManager &sceneManager, uint64_t)
     {
         std::cout << "AudioSystem::update" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
+            if (e->hasTag(IEntity::Tags::AUDIBLE))
+                std::cout << "play sound" << std::endl;
+        }
     }
 
     void AudioSystem::destroy()
