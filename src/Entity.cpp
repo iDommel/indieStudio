@@ -12,31 +12,31 @@
 
 namespace indie {
 
-    const std::map<Entity::Tags, std::vector<std::vector<Component::Tags>>> Entity::entityTags = {
+    const std::map<Entity::Tags, std::vector<std::vector<Component::Type>>> Entity::entityTags = {
         {
             Entity::Tags::RENDERABLE_2D,
             {
-                {Component::Tags::SPRITE, Component::Tags::VECTOR},
-                {Component::Tags::TEXT, Component::Tags::VECTOR}
+                {Component::Type::SPRITE, Component::Type::VECTOR},
+                {Component::Type::TEXT, Component::Type::VECTOR}
             }
         },
         {
             Entity::Tags::RENDERABLE_3D,
             {
-                {Component::Tags::VECTOR, Component::Tags::MODEL}
+                {Component::Type::VECTOR, Component::Type::MODEL}
             }
         },
         {
             Entity::Tags::AUDIBLE,
             {
-                {Component::Tags::MUSIC},
-                {Component::Tags::SOUND}
+                {Component::Type::MUSIC},
+                {Component::Type::SOUND}
             }
         },
         {
             Entity::Tags::COLLIDABLE,
             {
-                {Component::Tags::HITBOX}
+                {Component::Type::HITBOX}
             }
         }
     };
@@ -45,15 +45,15 @@ namespace indie {
     {
         bool notFound = false;
 
-        _componentsTags.push_back(component->getTag());
+        _componentsType.push_back(component->getType());
         _components.push_back(std::move(component));
         for (auto &tag : entityTags) {
-            if (std::find(_tags.begin(), _tags.end(), tag.first) != _tags.end())
+            if (this->hasTag(tag.first))
                 continue;
             for (auto &vec : tag.second) {
                 notFound = false;
                 for (auto &ctag : vec) {
-                    if (std::find(_componentsTags.begin(), _componentsTags.end(), ctag) == _componentsTags.end()) {
+                    if (std::find(_componentsType.begin(), _componentsType.end(), ctag) == _componentsType.end()) {
                         notFound = true;
                         break;
                     }

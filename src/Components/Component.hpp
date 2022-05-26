@@ -14,7 +14,7 @@ namespace indie {
     {
     public:
 
-        enum class Tags {
+        enum class Type {
             VECTOR,
             TEXT,
             SPRITE,
@@ -24,12 +24,12 @@ namespace indie {
             SOUND
         };
 
-        Tags getTag() const;
+        Type getType() const;
 
-        void setTag(Tags tag) { _tag = tag; };
+        void setType(Type type) { _type = type; };
 
     protected:
-        Tags _tag;
+        Type _type;
     };
 
 }

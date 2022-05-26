@@ -21,7 +21,7 @@ namespace indie {
     public:
 
         ///@brief Map between Entity tags and combinaisons of Components tags
-        static const std::map<Tags, std::vector<std::vector<Component::Tags>>> entityTags;
+        static const std::map<Tags, std::vector<std::vector<Component::Type>>> entityTags;
 
         ///@brief Add component to entity and update entity's tags accordingly
         void addComponent(std::shared_ptr<Component> component);
@@ -46,7 +46,7 @@ namespace indie {
     private:
         std::vector<Tags> _tags;
         std::vector<std::shared_ptr<Component>> _components;
-        std::vector<Component::Tags> _componentsTags;
+        std::vector<Component::Type> _componentsType;
     };
 }
 

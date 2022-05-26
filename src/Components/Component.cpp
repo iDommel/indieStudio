@@ -10,9 +10,9 @@
 namespace indie
 {
 
-    Component::Tags Component::getTag() const
+    Component::Type Component::getType() const
     {
-        return _tag;
+        return _type;
     }
 
 }

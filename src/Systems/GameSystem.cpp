@@ -40,9 +40,9 @@ namespace indie {
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
 
-        component->setTag(Component::Tags::SOUND);
-        component2->setTag(Component::Tags::SPRITE);
-        component3->setTag(Component::Tags::VECTOR);
+        component->setType(Component::Type::SOUND);
+        component2->setType(Component::Type::SPRITE);
+        component3->setType(Component::Type::VECTOR);
         entity->addComponent(component);
         entity->addComponent(component2);
         entity->addComponent(component3);
