@@ -17,7 +17,7 @@ void test_raylib_shape3D()
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    shape3D shape3D;
+    indie::Shape3D shape3D;
 
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
 
@@ -49,9 +49,9 @@ void test_raylib_shape3D()
 
         BeginMode3D(camera);
 
-            shape3D.DrawSphere({4.0f, 0.0f, 0.0f}, 1.5f, BLACK);
-            shape3D.DrawCube({0.0f, 0.0f, 0.0f}, {1.5f, 1.5f, 1.5f}, BLACK);
-            shape3D.DrawGrid(10, 1.0f);
+            shape3D.drawSphere({4.0f, 0.0f, 0.0f}, 1.5f, BLACK);
+            shape3D.drawCube({0.0f, 0.0f, 0.0f}, {1.5f, 1.5f, 1.5f}, BLACK);
+            shape3D.drawGrid(10, 1.0f);
 
         EndMode3D();
 
