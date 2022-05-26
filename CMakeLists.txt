@@ -23,6 +23,7 @@ target_sources(${PROJECT_NAME}
         src/Systems/AudioSystem.cpp
         src/Systems/GraphicSystem.cpp
         src/Systems/GameSystem.cpp
+        src/Systems/EventSystem.cpp
 
         src/Components/Component.cpp
 )

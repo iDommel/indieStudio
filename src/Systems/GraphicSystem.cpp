@@ -18,7 +18,6 @@ namespace indie {
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        std::cout << "GraphicSystem::update" << std::endl;
         for (auto &e : sceneManager.getCurrentScene().getEntities()) {
             if (e->hasTag(IEntity::Tags::RENDERABLE_2D))
                 std::cout << "render 2D img" << std::endl;

@@ -21,7 +21,8 @@ namespace indie {
             MODEL,
             HITBOX,
             MUSIC,
-            SOUND
+            SOUND,
+            EVT_LISTENER
         };
 
         Type getType() const;

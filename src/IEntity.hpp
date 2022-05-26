@@ -23,7 +23,8 @@ namespace indie
             RENDERABLE_3D,
             RENDERABLE_2D,
             COLLIDABLE,
-            AUDIBLE
+            AUDIBLE,
+            CALLABLE
         };
 
         ///@brief Add component to entity and update entity's tags accordingly

@@ -22,6 +22,7 @@ namespace indie
     {
         if (_scenes.find(_currentScene) == _scenes.end())
             throw std::runtime_error("SceneManager: Invalid current scene");
+        _sceneChanged = false;
         return *_scenes[_currentScene];
     }
 
@@ -30,5 +31,11 @@ namespace indie
         if (_scenes.find(sceneType) == _scenes.end())
             throw std::invalid_argument("SceneManager: Invalid scene type");
         _currentScene = sceneType;
+        _sceneChanged = true;
+    }
+
+    bool SceneManager::hasSceneChanged() const
+    {
+        return _sceneChanged;
     }
 }

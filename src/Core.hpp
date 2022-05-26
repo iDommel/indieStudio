@@ -21,10 +21,11 @@ namespace indie {
     public:
 
         /**
-         * @brief Types of systems: systems call are by ascending order
+         * @brief Types of systems: systems init and destroy calls are effectued by ascending order
          */
         enum class SystemType {
             GAME,
+            EVENT,
             GRAPHIC,
             AUDIO
         };

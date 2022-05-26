@@ -38,6 +38,12 @@ namespace indie {
             {
                 {Component::Type::HITBOX}
             }
+        },
+        {
+            Entity::Tags::CALLABLE,
+            {
+                {Component::Type::EVT_LISTENER}
+            }
         }
     };
 
