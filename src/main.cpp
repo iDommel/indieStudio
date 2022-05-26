@@ -19,6 +19,7 @@ void test_raylib_shape3D()
 
     indie::Shape3D shape3D;
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
 
     Camera camera = { 0 };
