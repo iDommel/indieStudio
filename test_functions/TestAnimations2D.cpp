@@ -13,7 +13,7 @@
 
 void TestAnimations2D()
 {
-        // Initialization
+    // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
@@ -23,8 +23,9 @@ void TestAnimations2D()
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
     indie::Texture scarfy("test_pictures/scarfy.png");        // Texture loading
 
+    scarfy.setRect(0.0f, 0.0f, (float)scarfy.getWidth() / 6, (float)scarfy.getHeight());
+
     Vector2 position = { 350.0f, 280.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, (float) scarfy.getWidth() / 6, (float)scarfy.getHeight() };
     int currentFrame = 0;
 
     int framesCounter = 0;
@@ -47,7 +48,7 @@ void TestAnimations2D()
 
             if (currentFrame > 5) currentFrame = 0;
 
-            frameRec.x = (float)currentFrame*(float)scarfy.getWidth() / 6;
+            scarfy.moveRect(currentFrame);
         }
 
         if (IsKeyPressed(KEY_RIGHT)) framesSpeed++;
@@ -62,10 +63,10 @@ void TestAnimations2D()
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-
-            scarfy.DrawTexture(15, 40, WHITE);
+            
+            scarfy.drawTexture(15, 40, WHITE);
             DrawRectangleLines(15, 40, scarfy.getWidth(), scarfy.getHeight(), LIME);
-            DrawRectangleLines(15 + (int)frameRec.x, 40 + (int)frameRec.y, (int)frameRec.width, (int)frameRec.height, RED);
+            DrawRectangleLines(15 + (int)scarfy.getRect().x, 40 + (int)scarfy.getRect().y, (int)scarfy.getRect().width, (int)scarfy.getRect().height, RED);
 
             DrawText("FRAME SPEED: ", 165, 210, 10, DARKGRAY);
             DrawText(TextFormat("%02i FPS", framesSpeed), 575, 210, 10, DARKGRAY);
@@ -77,7 +78,7 @@ void TestAnimations2D()
                 DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
             }
 
-            scarfy.DrawTextureRec(frameRec, position, WHITE);  // Draw part of the texture
+            scarfy.drawTextureRec(position, WHITE);  // Draw part of the texture
 
             DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
@@ -87,7 +88,7 @@ void TestAnimations2D()
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    scarfy.UnloadTexture();       // Texture unloading
+    scarfy.unloadTexture();       // Texture unloading
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

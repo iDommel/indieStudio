@@ -35,7 +35,7 @@ void testTextures()
 
         ClearBackground(RAYWHITE);
 
-        texture.DrawTexture(screenWidth / 2 - texture.getWidth() / 2, screenHeight / 2 - texture.getHeight() / 2, WHITE);
+        texture.drawTexture(screenWidth / 2 - texture.getWidth() / 2, screenHeight / 2 - texture.getHeight() / 2, WHITE);
 
         DrawText("this IS a texture!", 360, 370, 10, GRAY);
 
@@ -44,7 +44,7 @@ void testTextures()
     }
 
     // De-Initialization
-    texture.UnloadTexture(); // Texture unloading
+    texture.unloadTexture(); // Texture unloading
     //--------------------------------------------------------------------------------------
 
     CloseWindow(); // Close window and OpenGL context
