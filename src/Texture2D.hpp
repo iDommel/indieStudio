@@ -28,10 +28,10 @@ namespace indie {
              * @brief Load texture from file into GPU memory (VRAM)
              * @param fileName The file name
              */
-            void loadTexture(const std::string &fileName);
+            void load(const std::string &fileName);
 
             /// @brief Unload texture from GPU memory (VRAM)
-            void unloadTexture();
+            void unload();
 
             /// @brief Return the width of the loaded texture
             int getWidth() const;
@@ -45,14 +45,14 @@ namespace indie {
              * @param posY The vertical position
              * @param tint The color tint
              */
-            void drawTexture(int posX, int posY, Color tint);
+            void draw(int posX, int posY, Color tint);
 
             /**
              * @brief Draw a Texture2D
              * @param posX The horizontal position
              * @param posY The vertical position
              */
-            void drawTexture(int posX, int posY);
+            void draw(int posX, int posY);
 
             /**
              * @brief Set the params of the texture's rect
@@ -77,14 +77,14 @@ namespace indie {
              * @param position The position to draw the texture
              * @param tint The color tint
              */
-            void drawTextureRec(Vector2 position, Color tint);
+            void drawRec(Vector2 position, Color tint);
 
             /**
              * @brief Draw a part of a texture defined by a rectangle
              * @param source The rectangle defining the part of the texture to draw
              * @param position The position to draw the texture
              */
-            void drawTextureRec(Vector2 position);
+            void drawRec(Vector2 position);
 
             /// @brief Copy a texture
             void operator=(const Texture2D &other);

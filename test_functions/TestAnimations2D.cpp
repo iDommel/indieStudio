@@ -64,7 +64,7 @@ void TestAnimations2D()
 
             ClearBackground(RAYWHITE);
             
-            scarfy.drawTexture(15, 40, WHITE);
+            scarfy.draw(15, 40, WHITE);
             DrawRectangleLines(15, 40, scarfy.getWidth(), scarfy.getHeight(), LIME);
             DrawRectangleLines(15 + (int)scarfy.getRect().x, 40 + (int)scarfy.getRect().y, (int)scarfy.getRect().width, (int)scarfy.getRect().height, RED);
 
@@ -78,7 +78,7 @@ void TestAnimations2D()
                 DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
             }
 
-            scarfy.drawTextureRec(position, WHITE);  // Draw part of the texture
+            scarfy.drawRec(position, WHITE);  // Draw part of the texture
 
             DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
@@ -88,7 +88,7 @@ void TestAnimations2D()
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    scarfy.unloadTexture();       // Texture unloading
+    scarfy.unload();       // Texture unloading
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ namespace indie {
 Texture::Texture(const std::string &fileName)
 {
     _texture = std::make_unique<Texture2D>(::LoadTexture(fileName.c_str()));
-    if (!_texture)
+    if (_texture.get()->id == 0)
         throw TextureError("Texture constructor: Texture not loaded");
     _isLoaded = true;
 }
@@ -23,20 +23,20 @@ Texture::Texture(const std::string &fileName)
 Texture::~Texture()
 {
     if (_isLoaded)
-        unloadTexture();
+        unload();
 }
 
-void Texture::loadTexture(const std::string &fileName)
+void Texture::load(const std::string &fileName)
 {
     if (_isLoaded)
-        unloadTexture();
+        unload();
     _texture = std::make_unique<Texture2D>(::LoadTexture(fileName.c_str()));
-    if (!_texture)
+    if (_texture.get()->id == 0)
         throw TextureError("Texture failed to load");
     _isLoaded = true;
 }
 
-void Texture::unloadTexture()
+void Texture::unload()
 {
     if (_isLoaded) {
         ::UnloadTexture(*(_texture.get()));
@@ -46,29 +46,37 @@ void Texture::unloadTexture()
 
 int Texture::getWidth() const
 {
+    if (!_isLoaded)
+        throw TextureError("Texture getWidth: Texture not loaded");
     return _texture->width;
 }
 
 int Texture::getHeight() const
 {
+    if (!_isLoaded)
+        throw TextureError("Texture getHeight: Texture not loaded");
     return _texture->height;
 }
 
-void Texture::drawTexture(int posX, int posY, Color tint = WHITE)
+void Texture::draw(int posX, int posY, Color tint = WHITE)
 {
-    if (_isLoaded)
-        ::DrawTexture(*(_texture.get()), posX, posY, tint);
+    if (!_isLoaded)
+        throw TextureError("Texture draw: Texture not loaded");
+    ::DrawTexture(*(_texture.get()), posX, posY, tint);
 }
 
-void Texture::drawTexture(int posX, int posY)
+void Texture::draw(int posX, int posY)
 {
-    if (_isLoaded)
-        ::DrawTexture(*(_texture.get()), posX, posY, WHITE);
+    if (!_isLoaded)
+        throw TextureError("Texture draw: Texture not loaded");
+    ::DrawTexture(*(_texture.get()), posX, posY, WHITE);
 }
 
 void Texture::setRect(float x, float y, float width, float height)
 {
-    if (!_rect)
+    if (!_isLoaded)
+        throw TextureError("Texture setRect: Texture not loaded");
+    else if (!_rect)
         _rect = std::make_unique<Rectangle>();
     _rect.get()->x = x;
     _rect.get()->y = y;
@@ -78,34 +86,47 @@ void Texture::setRect(float x, float y, float width, float height)
 
 void Texture::moveRect(int frame)
 {
-    if (_rect)
-        _rect.get()->x = (float)frame * (float)getRect().width;
+    if (!_isLoaded)
+        throw TextureError("Texture moveRect: Texture not loaded");
+    else if (!_rect)
+        throw TextureError("Texture moveRect: Rectangle not set");
+    _rect.get()->x = (float)frame * (float)getRect().width;
 }
 
 ::Rectangle Texture::getRect()
 {
+    if (!_isLoaded)
+        throw TextureError("Texture getRect: Texture not loaded");
+    else if (!_rect)
+        throw TextureError("Texture getRect: Rectangle not set");
     return *(_rect.get());
 }
 
-void Texture::drawTextureRec(Vector2 position, Color tint = WHITE)
+void Texture::drawRec(Vector2 position, Color tint)
 {
-    if (_isLoaded)
-        ::DrawTextureRec(*(_texture.get()), *(_rect.get()), position, tint);
+    if (!_isLoaded)
+        throw TextureError("Texture drawRec: Texture not loaded");
+    else if (!_rect)
+        throw TextureError("Texture drawRec: Rectangle not set");
+    ::DrawTextureRec(*(_texture.get()), *(_rect.get()), position, tint);
 }
 
-void Texture::drawTextureRec(Vector2 position)
+void Texture::drawRec(Vector2 position)
 {
-    if (_isLoaded)
-        ::DrawTextureRec(*(_texture.get()), *(_rect.get()), position, WHITE);
+    if (!_isLoaded)
+        throw TextureError("Texture drawRec: Texture not loaded");
+    else if (!_rect)
+        throw TextureError("Texture drawRec: Rectangle not set");
+    ::DrawTextureRec(*(_texture.get()), *(_rect.get()), position, WHITE);
 }
 
 void Texture::operator=(const Texture2D &other)
 {
     if (_isLoaded)
-        unloadTexture();
+        unload();
     _texture = std::make_unique<Texture2D>(other);
-    if (!_texture)
-        throw TextureError("Texture failed to load");
+    if (_texture.get()->id == 0)
+        throw TextureError("Texture::operator=: Texture failed to load");
 }
 
 }
