@@ -122,6 +122,8 @@ void Texture::drawRec(Vector2 position)
 
 void Texture::operator=(const Texture2D &other)
 {
+    if (other.id == 0)
+        throw TextureError("Texture operator=: other Texture2D not loaded");
     if (_isLoaded)
         unload();
     _texture = std::make_unique<Texture2D>(other);
