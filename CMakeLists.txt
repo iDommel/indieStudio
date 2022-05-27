@@ -21,6 +21,8 @@ target_sources(${PROJECT_NAME}
         src/main.cpp
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
+        src/MouseCallbacks.cpp
+        src/GamepadStickCallbacks.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

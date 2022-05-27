@@ -5,27 +5,28 @@
 ** ButtonCallbacks
 */
 
-#ifndef KEYBOARDCALLBACKS_HPP_
-#define KEYBOARDCALLBACKS_HPP_
+#ifndef BUTTONCALLBACKS_HPP_
+#define BUTTONCALLBACKS_HPP_
 
 #include <functional>
 namespace indie
 {
-    /// @brief Class to group all three callbacks for a keyboard event
+    /// @brief Class to group all pressed, released and down callbacks for an event
     class ButtonCallbacks
     {
     public:
         ButtonCallbacks();
         /**
-         * @brief Construct a new Keyboard Callbacks object
+         * @brief Construct a new Button Callbacks object
          *
-         * @param pressed callback to be called when a key is pressed
-         * @param released callback to be called when a key is released
-         * @param down callack to be called when a key is down
+         * @param pressed callback to be called when a button is pressed
+         * @param released callback to be called when a button is released
+         * @param down callback to be called when a button is down
          */
-        ButtonCallbacks(std::function<void(void)> pressed,
-                        std::function<void(void)> released,
-                        std::function<void(void)> down);
+        ButtonCallbacks(
+            std::function<void(void)> pressed,
+            std::function<void(void)> released,
+            std::function<void(void)> down);
         ~ButtonCallbacks();
         std::function<void()> _pressed;
         std::function<void()> _released;
@@ -36,4 +37,4 @@ namespace indie
     };
 }  // namespace indie
 
-#endif /* !KEYBOARDCALLBACKS_HPP_ */
+#endif /* !BUTTONCALLBACKS_HPP_ */

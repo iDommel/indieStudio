@@ -26,6 +26,25 @@ void checkListenerEvents(indie::EventListener &listener)
             break;
         }
     }
+    for (auto &it : listener.getMouseMappings()) {
+        Vector2 pos = GetMousePosition();
+        if (IsMouseButtonPressed(it.first)) {
+            it.second._pressed(pos);
+            break;
+        }
+        if (IsMouseButtonDown(it.first)) {
+            it.second._down(pos);
+            break;
+        }
+        if (IsMouseButtonReleased(it.first)) {
+            it.second._released(pos);
+            break;
+        }
+        if (IsMouseButtonUp(it.first)) {
+            it.second._up(pos);
+            break;
+        }
+    }
 }
 
 int main(void)
@@ -53,6 +72,19 @@ int main(void)
                                       []() {
                                           std::cout << "E down" << std::endl;
                                       }});
+
+    listener.addMouseEvent(MOUSE_LEFT_BUTTON, {[](Vector2 pos) {
+                                                   std::cout << "Left mouse button pressed at x: " << pos.x << " y: " << pos.y << std::endl;
+                                               },
+                                               [](Vector2 pos) {
+                                                   std::cout << "Left mouse button released at x: " << pos.x << " y: " << pos.y << std::endl;
+                                               },
+                                               [](Vector2 pos) {
+                                                   std::cout << "Left mouse button down at x: " << pos.x << " y: " << pos.y << std::endl;
+                                               },
+                                               [](Vector2 pos) {
+                                                   std::cout << "Left mouse button up at x: " << pos.x << " y: " << pos.y << std::endl;
+                                               }});
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     while (!WindowShouldClose())  // Detect window close button or ESC key

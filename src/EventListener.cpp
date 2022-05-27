@@ -23,7 +23,7 @@ namespace indie
         _keyboardMap[key] = callbacks;
     }
 
-    void EventListener::addMouseEvent(MouseButton key, ButtonCallbacks func)
+    void EventListener::addMouseEvent(MouseButton key, MouseCallbacks func)
     {
         _mouseMap[key] = func;
     }
@@ -38,7 +38,7 @@ namespace indie
         return _keyboardMap;
     }
 
-    std::map<MouseButton, ButtonCallbacks> &EventListener::getMouseMappings()
+    std::map<MouseButton, MouseCallbacks> &EventListener::getMouseMappings()
     {
         return _mouseMap;
     }
