@@ -19,9 +19,10 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/Camera.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/*)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
