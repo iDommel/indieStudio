@@ -8,56 +8,55 @@
 #include <iostream>
 
 #include "raylib.h"
-#include "Texture2D.hpp"
+#include "Camera.hpp"
 
-#define MAX_FRAME_SPEED     15
-#define MIN_FRAME_SPEED      1
-
-int main(void)
+void test_raylib_camera()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+    Vector3 cAmeraPosition = {0.0f, 10.0f, 10.0f};
+    Vector3 cUbePosition = {0.0f, 0.0f, 0.0f};
 
-    InitWindow(screenWidth, screenHeight, "raylib [texture] example - texture rectangle");
 
-    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    indie::Texture scarfy("test_pictures/scarfy.png");        // Texture loading
+    InitWindow(screenWidth, screenHeight, "3d camera encapsulation test");
 
-    scarfy.setRect(0.0f, 0.0f, (float)scarfy.getWidth() / 6, (float)scarfy.getHeight());
+    std::shared_ptr<Vector3> cubePosition = std::make_shared<Vector3>(cUbePosition);
+    std::shared_ptr<Vector3> cameraPosition = std::make_shared<Vector3>(cAmeraPosition);
+    indie::Camera camera(cubePosition, cameraPosition);
 
-    Vector2 position = { 350.0f, 280.0f };
-    int currentFrame = 0;
 
-    int framesCounter = 0;
-    int framesSpeed = 8;            // Number of spritesheet frames shown by second
-
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose())        // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        framesCounter++;
 
-        if (framesCounter >= (60 / framesSpeed))
-        {
-            framesCounter = 0;
-            currentFrame++;
-
-            if (currentFrame > 5) currentFrame = 0;
-
-            scarfy.moveRect(currentFrame);
+        if (IsKeyDown(KEY_RIGHT)) {
+            cubePosition->x -= 0.1f;
+        } else if (IsKeyDown(KEY_LEFT)) {
+            cubePosition->x += 0.1f;
         }
-
-        if (IsKeyPressed(KEY_RIGHT)) framesSpeed++;
-        else if (IsKeyPressed(KEY_LEFT)) framesSpeed--;
-
-        if (framesSpeed > MAX_FRAME_SPEED) framesSpeed = MAX_FRAME_SPEED;
-        else if (framesSpeed < MIN_FRAME_SPEED) framesSpeed = MIN_FRAME_SPEED;
+        if (IsKeyDown(KEY_UP)) {
+            cubePosition->y += 0.1f;
+        } else if (IsKeyDown(KEY_DOWN)) {
+            cubePosition->y -= 0.1f;
+        }
+        if (IsKeyDown(KEY_RIGHT_SHIFT)) {
+            cubePosition->z += 0.1f;
+        } else if (IsKeyDown(KEY_RIGHT_CONTROL)) {
+            cubePosition->z -= 0.1f;
+        }
+        if (IsKeyDown(KEY_KP_ADD)) {
+            cameraPosition->y += 0.1f;
+        } else if (IsKeyDown(KEY_KP_SUBTRACT)) {
+            cameraPosition->y -= 0.1f;
+        }
+        camera.update();          // Update camera
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -65,24 +64,21 @@ int main(void)
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-            
-            scarfy.drawTexture(15, 40, WHITE);
-            DrawRectangleLines(15, 40, scarfy.getWidth(), scarfy.getHeight(), LIME);
-            DrawRectangleLines(15 + (int)scarfy.getRect().x, 40 + (int)scarfy.getRect().y, (int)scarfy.getRect().width, (int)scarfy.getRect().height, RED);
 
-            DrawText("FRAME SPEED: ", 165, 210, 10, DARKGRAY);
-            DrawText(TextFormat("%02i FPS", framesSpeed), 575, 210, 10, DARKGRAY);
-            DrawText("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, DARKGRAY);
+            camera.beginDrawScope();
 
-            for (int i = 0; i < MAX_FRAME_SPEED; i++)
-            {
-                if (i < framesSpeed) DrawRectangle(250 + 21*i, 205, 20, 20, RED);
-                DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
-            }
+                DrawCube(*cubePosition.get(), 2.0f, 2.0f, 2.0f, RED);
+                DrawCubeWires(*cubePosition.get(), 2.0f, 2.0f, 2.0f, MAROON);
 
-            scarfy.drawTextureRec(position, WHITE);  // Draw part of the texture
+                DrawGrid(10, 1.0f);
 
-            DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
+            camera.endDrawScope();
+
+            DrawRectangle( 10, 10, 320, 133, Fade(SKYBLUE, 0.5f));
+            DrawRectangleLines( 10, 10, 320, 133, BLUE);
+
+            DrawText("- Use arrows, right-ctrl and right-shift to move the object", 40, 40, 10, DARKGRAY);
+            DrawText("- Use + and - to move the cam", 40, 60, 10, DARKGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -90,9 +86,12 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    scarfy.unloadTexture();       // Texture unloading
-
-    CloseWindow();                // Close window and OpenGL context
+    CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-    return (0);
+}
+
+int main(void)
+{
+    test_raylib_camera();
+    return 0;
 }
