@@ -33,6 +33,11 @@ namespace indie
         _gamepadMap[gamepad][key] = func;
     }
 
+    void EventListener::addGamepadStickEvent(int gamepad, int axis, std::function<void(float)> func)
+    {
+        _gamepadStickMap[gamepad][axis] = func;
+    }
+
     std::map<KeyboardKey, ButtonCallbacks> &EventListener::getKeyboardMappings()
     {
         return _keyboardMap;
@@ -46,6 +51,11 @@ namespace indie
     std::map<GamepadButton, ButtonCallbacks> &EventListener::getGamepadMappings(int gamepad)
     {
         return _gamepadMap[gamepad];
+    }
+
+    std::map<int, std::function<void(float)>> &EventListener::getGamepadStickMappings(int gamepad)
+    {
+        return _gamepadStickMap[gamepad];
     }
 
 }  // namespace indie

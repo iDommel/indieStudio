@@ -10,6 +10,7 @@
 #include "EventListener.hpp"
 #include "raylib.h"
 
+#define GAMEPAD_NB 0
 void checkListenerEvents(indie::EventListener &listener)
 {
     for (auto &it : listener.getKeyboardMappings()) {
@@ -43,6 +44,27 @@ void checkListenerEvents(indie::EventListener &listener)
         if (IsMouseButtonUp(it.first)) {
             it.second._up(pos);
             break;
+        }
+    }
+
+    if (IsGamepadAvailable(GAMEPAD_NB)) {
+        for (auto &it : listener.getGamepadMappings(GAMEPAD_NB)) {
+            if (IsGamepadButtonPressed(GAMEPAD_NB, it.first)) {
+                it.second._pressed();
+                break;
+            }
+            if (IsGamepadButtonDown(GAMEPAD_NB, it.first)) {
+                it.second._down();
+                break;
+            }
+            if (IsGamepadButtonReleased(GAMEPAD_NB, it.first)) {
+                it.second._released();
+                break;
+            }
+        }
+
+        for (auto &it : listener.getGamepadStickMappings(GAMEPAD_NB)) {
+            it.second(GetGamepadAxisMovement(GAMEPAD_NB, it.first));
         }
     }
 }
@@ -85,6 +107,23 @@ int main(void)
                                                [](Vector2 pos) {
                                                    std::cout << "Left mouse button up at x: " << pos.x << " y: " << pos.y << std::endl;
                                                }});
+    if (IsGamepadAvailable(GAMEPAD_NB)) {
+        listener.addGamepadEvent(GAMEPAD_NB, GAMEPAD_BUTTON_LEFT_FACE_LEFT, {[]() {
+                                                                                 std::cout << "Left face left pressed" << std::endl;
+                                                                             },
+                                                                             []() {
+                                                                                 std::cout << "Left face left released" << std::endl;
+                                                                             },
+                                                                             []() {
+                                                                                 std::cout << "Left face left down" << std::endl;
+                                                                             }});
+
+        listener.addGamepadStickEvent(GAMEPAD_NB, GAMEPAD_AXIS_LEFT_X, [](float value) {
+            std::cout << "Left stick x: " << value << std::endl;
+        });
+    } else {
+        std::cout << "Gamepad " << std::to_string(GAMEPAD_NB) << " not available" << std::endl;
+    }
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     while (!WindowShouldClose())  // Detect window close button or ESC key

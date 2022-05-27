@@ -60,8 +60,8 @@ namespace indie
         std::map<MouseButton, MouseCallbacks> &getMouseMappings();
         /// @brief gets a reference to the gamepad mappings of a specified gamepad
         std::map<GamepadButton, ButtonCallbacks> &getGamepadMappings(int gamepad);
-        /// @brief gets a reference to the gamepad stick mappings of a specified gamepad and axis
-        std::map<int, std::function<void(float)>> &getGamepadStickMappings(int gamepad, int axis);
+        /// @brief gets a reference to the gamepad stick mappings of a specified gamepad
+        std::map<int, std::function<void(float)>> &getGamepadStickMappings(int gamepad);
 
     protected:
     private:
