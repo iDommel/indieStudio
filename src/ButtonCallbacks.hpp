@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2022
 ** indieStudio
 ** File description:
-** KeyboardCallbacks
+** ButtonCallbacks
 */
 
 #ifndef KEYBOARDCALLBACKS_HPP_
@@ -12,10 +12,10 @@
 namespace indie
 {
     /// @brief Class to group all three callbacks for a keyboard event
-    class KeyboardCallbacks
+    class ButtonCallbacks
     {
     public:
-        KeyboardCallbacks();
+        ButtonCallbacks();
         /**
          * @brief Construct a new Keyboard Callbacks object
          *
@@ -23,10 +23,10 @@ namespace indie
          * @param released callback to be called when a key is released
          * @param down callack to be called when a key is down
          */
-        KeyboardCallbacks(std::function<void(void)> pressed,
-                          std::function<void(void)> released,
-                          std::function<void(void)> down);
-        ~KeyboardCallbacks();
+        ButtonCallbacks(std::function<void(void)> pressed,
+                        std::function<void(void)> released,
+                        std::function<void(void)> down);
+        ~ButtonCallbacks();
         std::function<void()> _pressed;
         std::function<void()> _released;
         std::function<void()> _down;

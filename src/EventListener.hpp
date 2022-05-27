@@ -10,7 +10,7 @@
 #include <functional>
 #include <map>
 
-#include "KeyboardCallbacks.hpp"
+#include "ButtonCallbacks.hpp"
 #include "raylib.h"
 namespace indie
 {
@@ -26,14 +26,14 @@ namespace indie
          * @param key the key to listen to
          * @param callsbacks the callbacks to call when the key is interacted with
          */
-        void addKeyboardEvent(KeyboardKey key, KeyboardCallbacks callbacks);
+        void addKeyboardEvent(KeyboardKey key, ButtonCallbacks callbacks);
         /**
          * @brief Adds a mouse event to the listener
          *
          * @param key the key to listen to
          * @param func the function to call when the key is pressed
          */
-        void addMouseEvent(MouseButton key, std::function<void(void)> func);
+        void addMouseEvent(MouseButton key, ButtonCallbacks func);
         /**
          * @brief Adds a gamepad event to the listener
          *
@@ -41,20 +41,20 @@ namespace indie
          * @param key the key to listen to
          * @param func the function to call when the key is pressed
          */
-        void addGamepadEvent(int gamepad, GamepadButton key, std::function<void(void)> func);
+        void addGamepadEvent(int gamepad, GamepadButton key, ButtonCallbacks func);
         /// @brief gets a reference to the keyboard mappings
-        std::map<KeyboardKey, KeyboardCallbacks> &getKeyboardMappings();
+        std::map<KeyboardKey, ButtonCallbacks> &getKeyboardMappings();
         /// @brief gets a reference to the mouse mappings
-        std::map<MouseButton, std::function<void(void)>> &getMouseMappings();
+        std::map<MouseButton, ButtonCallbacks> &getMouseMappings();
         /// @brief gets a reference to the gamepad mappings of a specified gamepad
-        std::map<GamepadButton, std::function<void(void)>> &getGamepadMappings(int gamepad);
+        std::map<GamepadButton, ButtonCallbacks> &getGamepadMappings(int gamepad);
 
     protected:
     private:
-        std::map<KeyboardKey, KeyboardCallbacks> _keyboardMap;
-        std::map<KeyboardKey, std::function<void()>> _keyboardCharMap;
-        std::map<MouseButton, std::function<void()>> _mouseMap;
-        std::map<int, std::map<GamepadButton, std::function<void()>>> _gamepadMap;
+        std::map<KeyboardKey, ButtonCallbacks> _keyboardMap;
+        std::map<char, ButtonCallbacks> _keyboardCharMap;
+        std::map<MouseButton, ButtonCallbacks> _mouseMap;
+        std::map<int, std::map<GamepadButton, ButtonCallbacks>> _gamepadMap;
     };
 }  // namespace indie
 

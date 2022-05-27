@@ -18,32 +18,32 @@ namespace indie
     {
     }
 
-    void EventListener::addKeyboardEvent(KeyboardKey key, KeyboardCallbacks callbacks)
+    void EventListener::addKeyboardEvent(KeyboardKey key, ButtonCallbacks callbacks)
     {
         _keyboardMap[key] = callbacks;
     }
 
-    void EventListener::addMouseEvent(MouseButton key, std::function<void(void)> func)
+    void EventListener::addMouseEvent(MouseButton key, ButtonCallbacks func)
     {
         _mouseMap[key] = func;
     }
 
-    void EventListener::addGamepadEvent(int gamepad, GamepadButton key, std::function<void(void)> func)
+    void EventListener::addGamepadEvent(int gamepad, GamepadButton key, ButtonCallbacks func)
     {
         _gamepadMap[gamepad][key] = func;
     }
 
-    std::map<KeyboardKey, KeyboardCallbacks> &EventListener::getKeyboardMappings()
+    std::map<KeyboardKey, ButtonCallbacks> &EventListener::getKeyboardMappings()
     {
         return _keyboardMap;
     }
 
-    std::map<MouseButton, std::function<void(void)>> &EventListener::getMouseMappings()
+    std::map<MouseButton, ButtonCallbacks> &EventListener::getMouseMappings()
     {
         return _mouseMap;
     }
 
-    std::map<GamepadButton, std::function<void(void)>> &EventListener::getGamepadMappings(int gamepad)
+    std::map<GamepadButton, ButtonCallbacks> &EventListener::getGamepadMappings(int gamepad)
     {
         return _gamepadMap[gamepad];
     }
