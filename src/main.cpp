@@ -69,12 +69,8 @@ void checkListenerEvents(indie::EventListener &listener)
     }
 }
 
-int main(void)
+void init_listener(indie::EventListener &listener)
 {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
-    indie::EventListener listener;
-
     listener.addKeyboardEvent(KEY_A, {[]() {
                                           std::cout << "A pressed" << std::endl;
                                       },
@@ -105,36 +101,38 @@ int main(void)
                                                    std::cout << "Left mouse button down at x: " << pos.x << " y: " << pos.y << std::endl;
                                                },
                                                [](Vector2 pos) {
-                                                   std::cout << "Left mouse button up at x: " << pos.x << " y: " << pos.y << std::endl;
+                                                   //    std::cout << "Left mouse button up at x: " << pos.x << " y: " << pos.y << std::endl;
                                                }});
-    if (IsGamepadAvailable(GAMEPAD_NB)) {
-        listener.addGamepadEvent(GAMEPAD_NB, GAMEPAD_BUTTON_LEFT_FACE_LEFT, {[]() {
-                                                                                 std::cout << "Left face left pressed" << std::endl;
-                                                                             },
-                                                                             []() {
-                                                                                 std::cout << "Left face left released" << std::endl;
-                                                                             },
-                                                                             []() {
-                                                                                 std::cout << "Left face left down" << std::endl;
-                                                                             }});
+    listener.addGamepadEvent(GAMEPAD_NB, GAMEPAD_BUTTON_LEFT_FACE_LEFT, {[]() {
+                                                                             std::cout << "Left face left pressed" << std::endl;
+                                                                         },
+                                                                         []() {
+                                                                             std::cout << "Left face left released" << std::endl;
+                                                                         },
+                                                                         []() {
+                                                                             std::cout << "Left face left down" << std::endl;
+                                                                         }});
 
-        listener.addGamepadStickEvent(GAMEPAD_NB, GAMEPAD_AXIS_LEFT_X, [](float value) {
-            std::cout << "Left stick x: " << value << std::endl;
-        });
-    } else {
-        std::cout << "Gamepad " << std::to_string(GAMEPAD_NB) << " not available" << std::endl;
-    }
+    listener.addGamepadStickEvent(GAMEPAD_NB, GAMEPAD_AXIS_LEFT_X, [](float value) {
+        // std::cout << "Left stick x: " << value << std::endl;
+    });
+}
 
+int main(void)
+{
+    const int screenWidth = 800;
+    const int screenHeight = 450;
+    indie::EventListener listener;
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    init_listener(listener);
     while (!WindowShouldClose())  // Detect window close button or ESC key
     {
-        checkListenerEvents(listener);
-
         BeginDrawing();
+        if (IsGamepadAvailable(GAMEPAD_NB)) {
+            checkListenerEvents(listener);
+        }
 
         ClearBackground(RAYWHITE);
-
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();
     }
