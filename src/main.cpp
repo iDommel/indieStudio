@@ -6,6 +6,7 @@
 */
 #include <exception>
 #include <iostream>
+#include "window.hpp"
 
 #include "raylib.h"
 #include "Camera.hpp"
@@ -92,6 +93,5 @@ void test_raylib_camera()
 
 int main(void)
 {
-    test_raylib_camera();
     return 0;
 }

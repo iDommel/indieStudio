@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 
 project(bomberman VERSION 1.0.0 LANGUAGES CXX)
 
@@ -21,6 +21,7 @@ target_sources(${PROJECT_NAME}
         src/main.cpp
         src/Texture2D.cpp
         src/Camera.cpp
+        src/window.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/*)
