@@ -6,6 +6,7 @@
 */
 #include <exception>
 #include <iostream>
+#include "window.hpp"
 
 #include "raylib.h"
 #include "shape3d.hpp"
@@ -170,10 +171,5 @@ void test_raylib_camera()
 
 int main(void)
 {
-
-    test_raylib_shape3D();
-
-    test_raylib_camera();
-
     return 0;
 }

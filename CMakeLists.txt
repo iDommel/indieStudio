@@ -22,6 +22,7 @@ target_sources(${PROJECT_NAME}
         src/shape3d.cpp
         src/Texture2D.cpp
         src/Camera.cpp
+        src/window.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/*)
