@@ -13,14 +13,14 @@
 #include <raylib.h>
 
 namespace indie {
-    class window
+    class Window
     {
     private:
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0));
+        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), char *name = "test");
         /// @brief Destruct the window:: close the windows
-        ~window();
+        ~Window();
         /// @brief function that get the key pressed
         int getKeyPressed();
         void beginDraw();

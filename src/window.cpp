@@ -4,46 +4,46 @@
 ** File description:
 ** window
 */
-#include "window.hpp"
+#include "Window.hpp"
 
 
-indie::window::window(int screenWidth, int screenHeight) {
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - basic shapes drawing");
+indie::Window::Window(int screenWidth, int screenHeight, char *name) {
+    InitWindow(screenWidth, screenHeight, name);
 }
 
 
-indie::window::~window(){
+indie::Window::~Window(){
         CloseWindow();
 }
 
 
-int indie::window::getKeyPressed(){
+int indie::Window::getKeyPressed(){
     int key = GetKeyPressed();
     return(key);
 }
 
-void indie::window::beginDraw(){
+void indie::Window::beginDraw(){
         BeginDrawing();
 }
 
-void indie::window::clearBackground() {
+void indie::Window::clearBackground() {
     ClearBackground(LIGHTGRAY);
 }
 
-void indie::window::endDraw() {
+void indie::Window::endDraw() {
     EndDrawing();
 }
 
-Vector2 indie::window::getMousePosition() {
+Vector2 indie::Window::getMousePosition() {
     Vector2 mp = { 0,0 };
     mp = GetMousePosition();
     return (mp);
 }
 
-void indie::window::showCursor() {
+void indie::Window::showCursor() {
     ShowCursor();
 }
 
-void indie::window::hideCursor() {
+void indie::Window::hideCursor() {
     HideCursor();
 }

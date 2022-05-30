@@ -10,7 +10,7 @@
 
 int main(void)
 {
-    indie::window win;
+    indie::Window win;
 
     while (!WindowShouldClose())
     {
@@ -20,6 +20,7 @@ int main(void)
         win.clearBackground();
         key = win.getKeyPressed();
         mp = win.getMousePosition();
+        win.hideCursor();
         if (key != 0)
             std::cout << "key pressed : " << key << std::endl;
         win.endDraw();
