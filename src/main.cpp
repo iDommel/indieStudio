@@ -100,7 +100,7 @@ void init_listener(indie::EventListener &listener)
                                                [](Vector2 pos) {
                                                    std::cout << "Left mouse button down at x: " << pos.x << " y: " << pos.y << std::endl;
                                                },
-                                               [](Vector2 pos) {
+                                               [](Vector2) {
                                                    //    std::cout << "Left mouse button up at x: " << pos.x << " y: " << pos.y << std::endl;
                                                }});
     listener.addGamepadEvent(GAMEPAD_NB, GAMEPAD_BUTTON_LEFT_FACE_LEFT, {[]() {
@@ -113,7 +113,7 @@ void init_listener(indie::EventListener &listener)
                                                                              std::cout << "Left face left down" << std::endl;
                                                                          }});
 
-    listener.addGamepadStickEvent(GAMEPAD_NB, GAMEPAD_AXIS_LEFT_X, [](float value) {
+    listener.addGamepadStickEvent(GAMEPAD_NB, GAMEPAD_AXIS_LEFT_X, [](float) {
         // std::cout << "Left stick x: " << value << std::endl;
     });
 }
