@@ -9,6 +9,7 @@
 #define WINDOW_HPP_
 #include <string>
 #include <vector>
+#include <string>
 #include <iostream>
 #include <raylib.h>
 
@@ -18,11 +19,12 @@ namespace indie {
     private:
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), std::string name = "test");
+        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), const std::string &name = "test");
         /// @brief Destruct the window:: close the windows
         ~Window();
         /// @brief function that get the key pressed
         int getKeyPressed();
+        /// @brief Start window drawing state
         void beginDraw();
         /// @brief funcion that clear the background
         void clearBackground();

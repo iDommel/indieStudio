@@ -7,8 +7,10 @@
 #include "Window.hpp"
 
 
-indie::Window::Window(int screenWidth, int screenHeight, std::string name) {
-    InitWindow(screenWidth, screenHeight, name);
+indie::Window::Window(int screenWidth, int screenHeight, const std::string & name ) {
+    char* title = const_cast<char*>(name.c_str());
+
+    InitWindow(screenWidth, screenHeight, title);
 }
 
 
