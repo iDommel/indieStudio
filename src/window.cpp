@@ -8,9 +8,7 @@
 
 
 indie::Window::Window(int screenWidth, int screenHeight, const std::string & name ) {
-    char* title = const_cast<char*>(name.c_str());
-
-    InitWindow(screenWidth, screenHeight, title);
+    InitWindow(screenWidth, screenHeight, name.c_str());
 }
 
 
