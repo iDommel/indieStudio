@@ -11,52 +11,30 @@
 
 #define MAX_FONTS   8
 
-void TestText(void)
+void TestFont(void)
 {
-        // Initialization
+    // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [text] example - raylib fonts");
+    InitWindow(screenWidth, screenHeight, "raylib [text] example - font loading");
 
-    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    std::vector<indie::Font> fonts;
+    // Define characters to draw
+    // NOTE: raylib supports UTF-8 encoding, following list is actually codified as UTF8 internally
+    const char msg[256] = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHI\nJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmn\nopqrstuvwxyz{|}~¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓ\nÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷\nøùúûüýþÿ";
 
-    fonts[0].LoadFont("test_fonts/alagard.png");
-    fonts[1].LoadFont("test_fonts/pixelplay.png");
-    fonts[2].LoadFont("test_fonts/mecha.png");
-    fonts[3] = LoadFont("test_fonts/setback.png");
-    fonts[4] = LoadFont("test_fonts/romulus.png");
-    fonts[5] = LoadFont("test_fonts/pixantiqua.png");
-    fonts[6] = LoadFont("test_fonts/alpha_beta.png");
-    fonts[7] = LoadFont("test_fonts/jupiter_crash.png");
+    // NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
 
-    const char *messages[MAX_FONTS] = { "ALAGARD FONT designed by Hewett Tsoi",
-                                "PIXELPLAY FONT designed by Aleksander Shevchuk",
-                                "MECHA FONT designed by Captain Falcon",
-                                "SETBACK FONT designed by Brian Kent (AEnigma)",
-                                "ROMULUS FONT designed by Hewett Tsoi",
-                                "PIXANTIQUA FONT designed by Gerhard Grossmann",
-                                "ALPHA_BETA FONT designed by Brian Kent (AEnigma)",
-                                "JUPITER_CRASH FONT designed by Brian Kent (AEnigma)" };
+    // BMFont (AngelCode) : Font data and image atlas have been generated using external program
+    indie::Font fontBm;
+    fontBm.LoadFont("resources/pixantiqua.fnt");
 
-    const int spacings[MAX_FONTS] = { 2, 4, 8, 4, 3, 4, 4, 1 };
+    // TTF font : Font data and atlas are generated directly from TTF
+    // NOTE: We define a font base size of 32 pixels tall and up-to 250 characters
+    //Font fontTtf = LoadFontEx("resources/pixantiqua.ttf", 32, 0, 250);
 
-    Vector2 positions[MAX_FONTS] = { 0 };
-
-    for (int i = 0; i < MAX_FONTS; i++)
-    {
-        positions[i].x = screenWidth/2.0f - MeasureTextEx(fonts[i], messages[i], fonts[i].baseSize*2.0f, (float)spacings[i]).x/2.0f;
-        positions[i].y = 60.0f + fonts[i].baseSize + 45.0f*i;
-    }
-
-    // Small Y position corrections
-    positions[3].y += 8;
-    positions[4].y += 2;
-    positions[7].y -= 8;
-
-    Color colors[MAX_FONTS] = { MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, LIME, GOLD, RED };
+    bool useTtf = false;
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -66,7 +44,8 @@ void TestText(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
+        if (IsKeyDown(KEY_SPACE)) useTtf = true;
+        else useTtf = false;
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -75,12 +54,17 @@ void TestText(void)
 
             ClearBackground(RAYWHITE);
 
-            DrawText("free fonts included with raylib", 250, 20, 20, DARKGRAY);
-            DrawLine(220, 50, 590, 50, DARKGRAY);
+            DrawText("Hold SPACE to use TTF generated font", 20, 20, 20, LIGHTGRAY);
 
-            for (int i = 0; i < MAX_FONTS; i++)
+            if (!useTtf)
             {
-                DrawTextEx(fonts[i], messages[i], positions[i], fonts[i].baseSize*2.0f, (float)spacings[i], colors[i]);
+                DrawTextEx(fontBm, msg, (Vector2){ 20.0f, 100.0f }, (float)fontBm.baseSize, 2, MAROON);
+                DrawText("Using BMFont (Angelcode) imported", 20, GetScreenHeight() - 30, 20, GRAY);
+            }
+            else
+            {
+                DrawTextEx(fontTtf, msg, (Vector2){ 20.0f, 100.0f }, (float)fontTtf.baseSize, 2, LIME);
+                DrawText("Using TTF font generated", 20, GetScreenHeight() - 30, 20, GRAY);
             }
 
         EndDrawing();
@@ -89,11 +73,11 @@ void TestText(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    UnloadFont(fontBm);     // AngelCode Font unloading
+    UnloadFont(fontTtf);    // TTF Font unloading
 
-    // Fonts unloading
-    for (int i = 0; i < MAX_FONTS; i++) UnloadFont(fonts[i]);
-
-    CloseWindow();                 // Close window and OpenGL context
+    CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+
 
 }

@@ -16,6 +16,7 @@ namespace indie {
 class Font {
     public:
         Font();
+        Font(const std::string &fileName);
         ~Font();
 
         /**

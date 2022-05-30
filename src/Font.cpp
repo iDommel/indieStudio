@@ -12,7 +12,13 @@ namespace indie {
 
 Font::Font()
 {
-    _font = std::make_unique<::Font>(GetFontDefault());
+    _font = std::make_unique<::Font>(::GetFontDefault());
+    _isLoaded = true;
+}
+
+Font::Font(const std::string &fileName)
+{
+    _font = std::make_unique<::Font>(::LoadFont(fileName.c_str()));
     _isLoaded = true;
 }
 
