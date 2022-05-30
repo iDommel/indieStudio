@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include "Components/IComponent.hpp"
+#include "components/IComponent.hpp"
 
 namespace indie
 {
@@ -46,6 +46,13 @@ namespace indie
          * @return Returns true if entity has the given tag, false otherwise
          */
         virtual bool hasTag(Tags tag) const = 0;
+
+        /**
+         * @brief Get components of given types
+         * @param components Vector of components types to search for
+         * @return Returns a vector of components of the given types in the same order
+         */
+        virtual std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components) = 0;
 
     };
 

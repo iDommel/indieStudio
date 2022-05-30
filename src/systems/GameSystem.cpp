@@ -10,7 +10,7 @@
 #include "GameSystem.hpp"
 #include "../Scene.hpp"
 #include "../Entity.hpp"
-#include "../Components/String.hpp"
+#include "../components/String.hpp"
 #include "../Core.hpp"
 
 namespace indie {
@@ -23,9 +23,10 @@ namespace indie {
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
     }
 
-    void GameSystem::update(indie::SceneManager &, uint64_t)
+    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
+        sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
     }
 
     void GameSystem::destroy()
@@ -35,7 +36,7 @@ namespace indie {
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene, &Core::addEntityCallback);
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
         std::unique_ptr<Entity> entity = std::make_unique<Entity>();
         std::unique_ptr<Entity> entity2 = std::make_unique<Entity>();
         std::shared_ptr<String> component = std::make_shared<String>("audio");
@@ -56,9 +57,8 @@ namespace indie {
         return scene;
     }
 
-    void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    void GameSystem::loadEntity(std::shared_ptr<IEntity>)
     {
-        std::cout << "GameSystem::loadEntity"<< std::endl;
     }
 
 }

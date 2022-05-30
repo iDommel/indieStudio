@@ -13,7 +13,7 @@
 #include <map>
 
 #include "IEntity.hpp"
-#include "Components/IComponent.hpp"
+#include "components/IComponent.hpp"
 
 namespace indie {
     class Entity : public IEntity
@@ -42,6 +42,13 @@ namespace indie {
          * @return Returns true if entity has the given tag, false otherwise
          */
         bool hasTag(Tags tag) const;
+
+        /**
+         * @brief Get components of given types
+         * @param components Vector of components types to search for
+         * @return Returns a vector of components of the given types in the same order
+         */
+        std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components);
 
     private:
         std::vector<Tags> _tags;

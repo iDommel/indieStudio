@@ -35,4 +35,11 @@ namespace indie
         }
     }
 
+    void SceneManager::setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
+    {
+        for (auto &scene : _scenes) {
+            scene.second->setAddEntityCallback(callback);
+        }
+    }
+
 }

@@ -8,12 +8,12 @@
 #include <algorithm>
 
 #include "Scene.hpp"
+#include "Core.hpp"
 
 namespace indie
 {
 
-    Scene::Scene(std::function<std::unique_ptr<IScene>()> init, std::function<void(std::shared_ptr<IEntity>)> addEntityCallback)
-        : _initFunc(init), _addEntityCallback(addEntityCallback) {}
+    Scene::Scene(std::function<std::unique_ptr<IScene>()> init) : _initFunc(init) {}
 
     std::vector<std::shared_ptr<IEntity>> &Scene::getEntities()
     {
@@ -23,7 +23,8 @@ namespace indie
     void Scene::addEntity(std::shared_ptr<IEntity> entity)
     {
         _entities.push_back(entity);
-        _addEntityCallback(entity);
+        if (_addEntityCallback)
+            _addEntityCallback(entity);
     }
 
     void Scene::removeEntity(std::shared_ptr<IEntity> entity)
@@ -57,6 +58,11 @@ namespace indie
             taggedEntities.push_back(entity);
         }
         return taggedEntities;
+    }
+
+    void Scene::setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
+    {
+        _addEntityCallback = callback;
     }
 
 }

@@ -16,6 +16,9 @@
 #include "IEntity.hpp"
 
 namespace indie {
+
+    class Core;
+
     class Scene : public IScene
     {
     public:
@@ -23,9 +26,8 @@ namespace indie {
         /**
          * @brief Scene constructor
          * @param init Scene init function
-         * @param addEntityCallback Callback function when adding entity
          */
-        Scene(std::function<std::unique_ptr<IScene>()> init, std::function<void(std::shared_ptr<IEntity>)> addEntityCallback);
+        Scene(std::function<std::unique_ptr<IScene>()> init);
 
         /**
          * @brief Get the scene's entities
@@ -49,6 +51,12 @@ namespace indie {
          * @return Returns a vector of entities
          */
         std::vector<std::shared_ptr<IEntity>> getTaggedEntities(std::vector<IEntity::Tags> tags);
+
+        /**
+         * @brief Set the callback function to call when an entity is added
+         * @param callback Callback function
+         */
+        void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
 
     protected:
         std::vector<std::shared_ptr<IEntity>> _entities;

@@ -10,7 +10,7 @@
 
 #include <map>
 
-#include "Systems/ISystem.hpp"
+#include "systems/ISystem.hpp"
 #include "SceneManager.hpp"
 
 #define UPDATE_DELTA     17

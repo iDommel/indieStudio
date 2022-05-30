@@ -8,10 +8,10 @@
 #include <chrono>
 
 #include "Core.hpp"
-#include "Systems/GameSystem.hpp"
-#include "Systems/AudioSystem.hpp"
-#include "Systems/GraphicSystem.hpp"
-#include "Systems/EventSystem.hpp"
+#include "systems/GameSystem.hpp"
+#include "systems/AudioSystem.hpp"
+#include "systems/GraphicSystem.hpp"
+#include "systems/EventSystem.hpp"
 
 namespace indie {
 
@@ -29,6 +29,8 @@ namespace indie {
 
         for (auto &system : _systems)
             system.second->init(_sceneManager);
+
+        _sceneManager.setAddEntityCallback(std::bind(&Core::loadEntity, this, std::placeholders::_1));
 
         while (!_end) {
             auto time  = std::chrono::high_resolution_clock::now();

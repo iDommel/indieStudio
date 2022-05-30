@@ -82,4 +82,19 @@ namespace indie {
         return (std::find(_tags.begin(), _tags.end(), tag) != _tags.end());
     }
 
+    std::vector<std::shared_ptr<IComponent>> Entity::getComponents(std::vector<IComponent::Type> components)
+    {
+        std::vector<std::shared_ptr<IComponent>> res;
+
+        for (auto &c : components) {
+            for (auto &component : _components) {
+                if (component->getType() == c) {
+                    res.push_back(component);
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
 }

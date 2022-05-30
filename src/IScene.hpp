@@ -40,6 +40,12 @@ namespace indie {
          * @return Returns a vector of entities
          */
         virtual std::vector<std::shared_ptr<IEntity>> getTaggedEntities(std::vector<IEntity::Tags> tags) = 0;
+
+        /**
+         * @brief Set the callback function to call when an entity is added
+         * @param callback Callback function
+         */
+        virtual void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback) = 0;
     };
 }
 

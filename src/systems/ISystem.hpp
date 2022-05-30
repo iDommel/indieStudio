@@ -23,7 +23,7 @@ namespace indie {
         virtual void destroy() = 0;
 
         /**
-         * @brief Load entity dependency(ies) in cache if needed
+         * @brief Load entity's dependency(ies) in cache if needed
          */
         virtual void loadEntity(std::shared_ptr<IEntity> entity) = 0;
     };

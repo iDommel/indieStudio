@@ -24,15 +24,15 @@ target_sources(${PROJECT_NAME}
         src/SceneManager.cpp
         src/Entity.cpp
 
-        src/Systems/AudioSystem.cpp
-        src/Systems/GraphicSystem.cpp
-        src/Systems/GameSystem.cpp
-        src/Systems/EventSystem.cpp
+        src/systems/AudioSystem.cpp
+        src/systems/GraphicSystem.cpp
+        src/systems/GameSystem.cpp
+        src/systems/EventSystem.cpp
 
-        src/Components/Component.cpp
+        src/components/Component.cpp
         src/Texture2D.cpp
         src/Camera.cpp
-        src/window.cpp
+        src/Window.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/*)

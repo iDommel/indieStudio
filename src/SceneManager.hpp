@@ -10,6 +10,7 @@
 
 #include <map>
 #include <memory>
+#include <functional>
 
 #include "IScene.hpp"
 
@@ -44,6 +45,12 @@ namespace indie {
          * @param initScene Boolean to reinitialize the scene, set too false by default
          */
         void setCurrentScene(SceneType scene, bool initScene = false);
+
+        /**
+         * @brief Set callback as addEntityCallback for all scene
+         * @param callback Callback to set as addEntityCallback
+         */
+        void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;
