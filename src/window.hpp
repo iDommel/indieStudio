@@ -8,7 +8,9 @@
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
 #include <string>
+#include <vector>
 #include <iostream>
+#include <raylib.h>
 
 namespace indie {
     class window
@@ -16,13 +18,22 @@ namespace indie {
     private:
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        window();
+        window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0));
         /// @brief Destruct the window:: close the windows
         ~window();
-        /// @brief game loop
-        void loop();
         /// @brief function that get the key pressed
-        int get_key_pressed();
+        int getKeyPressed();
+        void beginDraw();
+        /// @brief funcion that clear the background
+        void clearBackground();
+        /// @brief final function of the loop, end the drawing
+        void endDraw();
+        /// @brief get the mouse position
+        Vector2 getMousePosition();
+        /// @brief Shows Cursor
+        void showCursor();
+        ///  @brief Hide Cursor
+        void hideCursor();
     };
 }
 

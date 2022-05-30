@@ -8,11 +8,21 @@
 #include <iostream>
 #include "window.hpp"
 
-#include "raylib.h"
-
 int main(void)
 {
-    window win;
-    win.loop();
+    indie::window win;
+
+    while (!WindowShouldClose())
+    {
+        Vector2 mp;
+        int key = 0;
+        win.beginDraw();
+        win.clearBackground();
+        key = win.getKeyPressed();
+        mp = win.getMousePosition();
+        if (key != 0)
+            std::cout << "key pressed : " << key << std::endl;
+        win.endDraw();
+    }
     return 0;
 }
