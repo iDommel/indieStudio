@@ -10,22 +10,70 @@
 
 namespace indie {
 
-Text::Text()
+Text::Text(const std::string &text, const std::string &fileName)
 {
+    if (fileName.empty())
+        _font = std::make_unique<::Font>(::GetFontDefault());
+    else
+        _font = std::make_unique<::Font>(::LoadFont(fileName.c_str()));
+    _text = text;
+    _isLoaded = true;
 }
 
 Text::~Text()
 {
+    if (_isLoaded)
+        ::UnloadFont(*(_font.get()));
 }
 
-void Text::DrawText(const std::string &text, int posX, int posY, int fontSize, Color color)
+Font Text::getFontDefault(void) const
 {
-    ::DrawText(text.c_str(), posX, posY, fontSize, color);
+    return ::GetFontDefault();
 }
 
-int Text::MeasureText(const std::string &text, int fontSize)
+Font Text::getFont(void) const
 {
-    return ::MeasureText(text.c_str(), fontSize);
+    return *(_font.get());
+}
+
+void Text::loadFont(const std::string &fileName)
+{
+    if (_isLoaded)
+        ::UnloadFont(*(_font.get()));
+    _font = std::make_unique<::Font>(::LoadFont(fileName.c_str()));
+    _isLoaded = true;
+}
+
+void Text::unloadFont(void)
+{
+    if (_isLoaded)
+        ::UnloadFont(*(_font.get()));
+    _isLoaded = false;
+}
+
+void Text::draw(int posX, int posY, int fontSize, Color color)
+{
+    ::DrawText(_text.c_str(), posX, posY, fontSize, color);
+}
+
+void Text::drawEx(Vector2 pos, float fontSize, float spacing, Color tint)
+{
+    ::DrawTextEx(*(_font.get()), _text.c_str(), pos, fontSize, spacing, tint);
+}
+
+void Text::drawPro(Vector2 pos, Vector2 origin, float rotation, float fontSize, float spacing, Color tint)
+{
+    ::DrawTextPro(*(_font.get()), _text.c_str(), pos, origin, rotation, fontSize, spacing, tint);
+}
+
+int Text::measure(int fontSize)
+{
+    return ::MeasureText(_text.c_str(), fontSize);
+}
+
+Vector2 Text::measureEx(float fontSize, float spacing)
+{
+    return ::MeasureTextEx(*(_font.get()), _text.c_str(), fontSize, spacing);
 }
 
 }
