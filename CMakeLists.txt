@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 
 project(bomberman VERSION 1.0.0 LANGUAGES CXX)
 
@@ -23,9 +23,13 @@ target_sources(${PROJECT_NAME}
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
+        src/Shape3D.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
+        src/Window.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/*)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
