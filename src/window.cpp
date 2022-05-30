@@ -47,3 +47,19 @@ void indie::Window::showCursor() {
 void indie::Window::hideCursor() {
     HideCursor();
 }
+
+void indie::Window::beginMode3D(Camera3D camera) {
+    BeginMode3D(camera);
+}
+
+void indie::Window::beginMode2D(Camera2D camera) {
+    BeginMode2D(camera);
+}
+
+void indie::Window::endMode3D() {
+    EndMode3D();
+}
+
+void indie::Window::endMode2D() {
+    EndMode2D();
+}

@@ -34,6 +34,20 @@ namespace indie {
         void showCursor();
         ///  @brief Hide Cursor
         void hideCursor();
+        /*
+        * @brief Begin 3D mode with custum camera
+        * @param camera
+        */
+        void beginMode3D(Camera3D camera);
+        /*
+        * @brief Begin 2D mode with custum camera
+        * @param camera
+        */
+        void beginMode2D(Camera2D camera);
+        // @brief End 3D mode.
+        void endMode3D();
+        // @brief End 2D mode.
+        void endMode2D();
     };
 }
 
