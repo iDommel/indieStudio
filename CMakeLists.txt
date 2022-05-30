@@ -8,7 +8,7 @@ add_executable(${PROJECT_NAME})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(raylib REQUIRED)
-target_link_libraries(${PROJECT_NAME} raylib -lstdc++fs)
+target_link_libraries(${PROJECT_NAME} raylib)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(${PROJECT_NAME} -lstdc++fs)
