@@ -19,6 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/shape3d.cpp
         src/Texture2D.cpp
         src/Camera.cpp
         src/window.cpp
