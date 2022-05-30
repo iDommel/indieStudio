@@ -7,7 +7,7 @@
 #include "Window.hpp"
 
 
-indie::Window::Window(int screenWidth, int screenHeight, char *name) {
+indie::Window::Window(int screenWidth, int screenHeight, std::string name) {
     InitWindow(screenWidth, screenHeight, name);
 }
 

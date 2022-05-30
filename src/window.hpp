@@ -18,7 +18,7 @@ namespace indie {
     private:
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), char *name = "test");
+        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), std::string name = "test");
         /// @brief Destruct the window:: close the windows
         ~Window();
         /// @brief function that get the key pressed
