@@ -79,6 +79,11 @@ int main(void)
 {
     indie::Core core;
 
-    core.mainLoop();
+    try {
+        core.mainLoop();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     return 0;
 }

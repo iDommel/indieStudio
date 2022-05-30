@@ -29,4 +29,9 @@ namespace indie {
         std::cout << "EventSystem destroy" << std::endl;
     }
 
+    void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    {
+        std::cout << "EventSystem::loadEntity" << std::endl;
+    }
+
 }

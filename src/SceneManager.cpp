@@ -22,20 +22,17 @@ namespace indie
     {
         if (_scenes.find(_currentScene) == _scenes.end())
             throw std::runtime_error("SceneManager: Invalid current scene");
-        _sceneChanged = false;
         return *_scenes[_currentScene];
     }
 
-    void SceneManager::setCurrentScene(SceneType sceneType)
+    void SceneManager::setCurrentScene(SceneType sceneType, bool initScene)
     {
         if (_scenes.find(sceneType) == _scenes.end())
             throw std::invalid_argument("SceneManager: Invalid scene type");
         _currentScene = sceneType;
-        _sceneChanged = true;
+        if (initScene) {
+            _scenes[_currentScene] = _scenes[_currentScene]->initScene();
+        }
     }
 
-    bool SceneManager::hasSceneChanged() const
-    {
-        return _sceneChanged;
-    }
 }

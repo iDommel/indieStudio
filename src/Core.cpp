@@ -45,4 +45,10 @@ namespace indie {
             system.second->destroy();
     }
 
+    void Core::loadEntity(std::shared_ptr<IEntity> entity)
+    {
+        for (auto &system : _systems)
+            system.second->loadEntity(entity);
+    }
+
 }

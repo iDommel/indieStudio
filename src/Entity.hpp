@@ -13,7 +13,7 @@
 #include <map>
 
 #include "IEntity.hpp"
-#include "Components/Component.hpp"
+#include "Components/IComponent.hpp"
 
 namespace indie {
     class Entity : public IEntity
@@ -21,15 +21,15 @@ namespace indie {
     public:
 
         ///@brief Map between Entity tags and combinaisons of Components tags
-        static const std::map<Tags, std::vector<std::vector<Component::Type>>> entityTags;
+        static const std::map<Tags, std::vector<std::vector<IComponent::Type>>> entityTags;
 
-        ///@brief Add component to entity and update entity's tags accordingly
-        void addComponent(std::shared_ptr<Component> component);
+        ///@brief Add component to entity and update entity's tags accordingly, mustn't be called after moving entity to scene
+        void addComponent(std::shared_ptr<IComponent> component);
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector
          */
-        std::vector<std::shared_ptr<Component>> &getComponents();
+        std::vector<std::shared_ptr<IComponent>> &getComponents();
         /**
          * @brief Get entity's tags
          * @return Returns a reference of the entity's tags vector
@@ -45,8 +45,8 @@ namespace indie {
 
     private:
         std::vector<Tags> _tags;
-        std::vector<std::shared_ptr<Component>> _components;
-        std::vector<Component::Type> _componentsType;
+        std::vector<std::shared_ptr<IComponent>> _components;
+        std::vector<IComponent::Type> _componentsType;
     };
 }
 

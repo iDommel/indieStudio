@@ -32,7 +32,16 @@ namespace indie {
 
         Core();
 
+        /// @brief Game loop
         void mainLoop();
+
+        /**
+         * @brief Call each loadEntity system function, set as addEntity callback
+         * @param entity Entity to load
+         */
+        void loadEntity(std::shared_ptr<IEntity> entity);
+
+        static void addEntityCallback(std::shared_ptr<IEntity>) {};
 
     private:
         std::map<SystemType, std::unique_ptr<ISystem>> _systems;

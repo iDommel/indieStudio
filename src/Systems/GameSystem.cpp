@@ -11,6 +11,7 @@
 #include "../Scene.hpp"
 #include "../Entity.hpp"
 #include "../Components/String.hpp"
+#include "../Core.hpp"
 
 namespace indie {
 
@@ -34,7 +35,7 @@ namespace indie {
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>();
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene, &Core::addEntityCallback);
         std::unique_ptr<Entity> entity = std::make_unique<Entity>();
         std::unique_ptr<Entity> entity2 = std::make_unique<Entity>();
         std::shared_ptr<String> component = std::make_shared<String>("audio");
@@ -53,6 +54,11 @@ namespace indie {
         scene->addEntity(std::move(entity));
         scene->addEntity(std::move(entity2));
         return scene;
+    }
+
+    void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    {
+        std::cout << "GameSystem::loadEntity"<< std::endl;
     }
 
 }

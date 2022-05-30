@@ -8,22 +8,13 @@
 #ifndef COMPONENT_HPP
 #define COMPONENT_HPP
 
+#include "IComponent.hpp"
+
 namespace indie {
 
-    class Component
+    class Component : public IComponent
     {
     public:
-
-        enum class Type {
-            VECTOR,
-            TEXT,
-            SPRITE,
-            MODEL,
-            HITBOX,
-            MUSIC,
-            SOUND,
-            EVT_LISTENER
-        };
 
         Type getType() const;
 

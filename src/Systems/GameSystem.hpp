@@ -13,6 +13,8 @@
 
 namespace indie {
 
+    class IEntity;
+
     class GameSystem : public ISystem
     {
     public:
@@ -21,8 +23,13 @@ namespace indie {
         void update(SceneManager &manager, uint64_t deltaTime) final override;
         void destroy() final override;
 
+        /**
+         * @brief Load entity dependency(ies) in cache if needed
+         */
+        void loadEntity(std::shared_ptr<IEntity> entity) final override;
+
     private:
-        std::unique_ptr<IScene> createScene();
+        static std::unique_ptr<IScene> createScene();
     };
 
 }

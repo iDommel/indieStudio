@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include "Components/Component.hpp"
+#include "Components/IComponent.hpp"
 
 namespace indie
 {
@@ -28,12 +28,12 @@ namespace indie
         };
 
         ///@brief Add component to entity and update entity's tags accordingly
-        virtual void addComponent(std::shared_ptr<Component> component) = 0;
+        virtual void addComponent(std::shared_ptr<IComponent> component) = 0;
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector
          */
-        virtual std::vector<std::shared_ptr<Component>> &getComponents() = 0;
+        virtual std::vector<std::shared_ptr<IComponent>> &getComponents() = 0;
         /**
          * @brief Get entity's tags
          * @return Returns a reference of the entity's tags vector

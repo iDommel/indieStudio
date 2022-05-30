@@ -12,42 +12,42 @@
 
 namespace indie {
 
-    const std::map<Entity::Tags, std::vector<std::vector<Component::Type>>> Entity::entityTags = {
+    const std::map<Entity::Tags, std::vector<std::vector<IComponent::Type>>> Entity::entityTags = {
         {
             Entity::Tags::RENDERABLE_2D,
             {
-                {Component::Type::SPRITE, Component::Type::VECTOR},
-                {Component::Type::TEXT, Component::Type::VECTOR}
+                {IComponent::Type::SPRITE, IComponent::Type::VECTOR},
+                {IComponent::Type::TEXT, IComponent::Type::VECTOR}
             }
         },
         {
             Entity::Tags::RENDERABLE_3D,
             {
-                {Component::Type::VECTOR, Component::Type::MODEL}
+                {IComponent::Type::VECTOR, IComponent::Type::MODEL}
             }
         },
         {
             Entity::Tags::AUDIBLE,
             {
-                {Component::Type::MUSIC},
-                {Component::Type::SOUND}
+                {IComponent::Type::MUSIC},
+                {IComponent::Type::SOUND}
             }
         },
         {
             Entity::Tags::COLLIDABLE,
             {
-                {Component::Type::HITBOX}
+                {IComponent::Type::HITBOX}
             }
         },
         {
             Entity::Tags::CALLABLE,
             {
-                {Component::Type::EVT_LISTENER}
+                {IComponent::Type::EVT_LISTENER}
             }
         }
     };
 
-    void Entity::addComponent(std::shared_ptr<Component> component)
+    void Entity::addComponent(std::shared_ptr<IComponent> component)
     {
         bool notFound = false;
 
@@ -72,7 +72,7 @@ namespace indie {
         }
     }
 
-    std::vector<std::shared_ptr<Component>> &Entity::getComponents()
+    std::vector<std::shared_ptr<IComponent>> &Entity::getComponents()
     {
         return _components;
     }

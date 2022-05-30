@@ -33,27 +33,21 @@ namespace indie {
         void addScene(std::unique_ptr<IScene> scene, SceneType sceneType);
 
         /**
-         * @brief Returns the current scene, set _sceneChanged at false
+         * @brief Returns the current scene
          * @return Reference of the current scene
          */
         IScene &getCurrentScene();
 
         /**
-         * @brief Set the current scene to the scene corresponding to the given sceneType, set _sceneChanged at true
+         * @brief Set the current scene to the scene corresponding to the given sceneType
          * @param sceneType Type of the scene to set as the current scene
+         * @param initScene Boolean to reinitialize the scene, set too false by default
          */
-        void setCurrentScene(SceneType scene);
-
-        /**
-         * @brief Check if scene has changed
-         * @return Returns true if scene has changed, false otherwise
-         */
-        bool hasSceneChanged() const;
+        void setCurrentScene(SceneType scene, bool initScene = false);
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;
         SceneType _currentScene = SceneType::NONE;
-        bool _sceneChanged = false;
     };
 }
 
