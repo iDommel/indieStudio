@@ -9,9 +9,7 @@
 
 #include "../src/Text.hpp"
 
-#define MAX_FONTS   8
-
-void testFont(void)
+void testText(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
