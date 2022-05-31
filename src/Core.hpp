@@ -13,6 +13,8 @@
 #include "systems/ISystem.hpp"
 #include "SceneManager.hpp"
 
+#include <iostream>
+
 #define UPDATE_DELTA     17
 
 namespace indie {
@@ -31,6 +33,7 @@ namespace indie {
         };
 
         Core();
+        ~Core() { std::cout << "Core destructor" << std::endl;};
 
         /// @brief Game loop
         void mainLoop();
@@ -40,6 +43,12 @@ namespace indie {
          * @param entity Entity to load
          */
         void loadEntity(std::shared_ptr<IEntity> entity);
+
+        /**
+         * @brief Call each unloadEntity system function, set as removeEntity callback
+         * @param entity Entity to unload
+         */
+        void unloadEntity(std::shared_ptr<IEntity> entity);
 
     private:
         std::map<SystemType, std::unique_ptr<ISystem>> _systems;

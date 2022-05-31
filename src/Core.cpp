@@ -31,6 +31,7 @@ namespace indie {
             system.second->init(_sceneManager);
 
         _sceneManager.setAddEntityCallback(std::bind(&Core::loadEntity, this, std::placeholders::_1));
+        _sceneManager.setRemoveEntityCallback(std::bind(&Core::unloadEntity, this, std::placeholders::_1));
 
         while (!_end) {
             auto time  = std::chrono::high_resolution_clock::now();
@@ -53,4 +54,9 @@ namespace indie {
             system.second->loadEntity(entity);
     }
 
+    void Core::unloadEntity(std::shared_ptr<IEntity> entity)
+    {
+        for (auto &system : _systems)
+            system.second->unloadEntity(entity);
+    }
 }

@@ -27,6 +27,8 @@ namespace indie
             CALLABLE
         };
 
+        virtual ~IEntity() = default;
+
         ///@brief Add component to entity and update entity's tags accordingly
         virtual void addComponent(std::shared_ptr<IComponent> component) = 0;
         /**

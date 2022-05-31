@@ -19,7 +19,7 @@ namespace indie {
     {
         std::cout << "GameSystem::init" << std::endl;
 
-        sceneManager.addScene(std::move(createScene()), SceneManager::SceneType::GAME);
+        sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
     }
 
@@ -37,8 +37,8 @@ namespace indie {
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
-        std::unique_ptr<Entity> entity = std::make_unique<Entity>();
-        std::unique_ptr<Entity> entity2 = std::make_unique<Entity>();
+        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<String> component = std::make_shared<String>("audio");
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
@@ -52,12 +52,16 @@ namespace indie {
         entity->addComponent(component2);
         entity->addComponent(component3);
         entity2->addComponent(component4);
-        scene->addEntity(std::move(entity));
-        scene->addEntity(std::move(entity2));
+        scene->addEntity(entity);
+        scene->addEntity(entity2);
         return scene;
     }
 
     void GameSystem::loadEntity(std::shared_ptr<IEntity>)
+    {
+    }
+
+    void GameSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
     }
 

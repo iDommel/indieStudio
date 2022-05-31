@@ -15,10 +15,14 @@
 #include "IEntity.hpp"
 #include "components/IComponent.hpp"
 
+#include <iostream>
+
 namespace indie {
     class Entity : public IEntity
     {
     public:
+        Entity() { std::cout << "Entity created" << std::endl; };
+        ~Entity() { std::cout << "Entity destroyed" << std::endl; };
 
         ///@brief Map between Entity tags and combinaisons of Components tags
         static const std::map<Tags, std::vector<std::vector<IComponent::Type>>> entityTags;

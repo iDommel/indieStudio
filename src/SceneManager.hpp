@@ -14,6 +14,8 @@
 
 #include "IScene.hpp"
 
+#include <iostream>
+
 namespace indie {
     class SceneManager
     {
@@ -25,6 +27,8 @@ namespace indie {
             PAUSE,
             OPTION
         };
+
+        ~SceneManager() { std::cout << "SceneManager destructor" << std::endl; };
 
         /**
          * @brief Add a scene to the scene manager
@@ -51,6 +55,12 @@ namespace indie {
          * @param callback Callback to set as addEntityCallback
          */
         void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+
+        /**
+         * @brief Set callback as removeEntityCallback for all scene
+         * @param callback Callback to set as removeEntityCallback
+         */
+        void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;
