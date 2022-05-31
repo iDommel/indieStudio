@@ -8,6 +8,8 @@
 #ifndef COMPONENT_HPP
 #define COMPONENT_HPP
 
+#include <memory>
+
 #include "IComponent.hpp"
 
 namespace indie {
@@ -23,6 +25,9 @@ namespace indie {
     protected:
         Type _type;
     };
+
+    template <typename T>
+    std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> component);
 
 }
 

@@ -17,14 +17,15 @@ namespace indie {
     {
     public:
 
-        void init(SceneManager &manager) final override;
-        void update(SceneManager &manager, uint64_t deltaTime) final override;
-        void destroy() final override;
+        void init(SceneManager &manager) final;
+        void update(SceneManager &manager, uint64_t deltaTime) final;
+        void destroy() final;
 
         /**
-         * @brief Load entity dependency(ies) in cache if needed
+         * @brief The callback to be called when an entity is added to a scene
+         * @param entity The Entity that was added
          */
-        void loadEntity(std::shared_ptr<IEntity> entity) final override;
+        void loadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
     };

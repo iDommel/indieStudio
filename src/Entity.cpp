@@ -93,6 +93,7 @@ namespace indie {
                     break;
                 }
             }
+            throw std::invalid_argument("Entity: Component type not found");
         }
         return res;
     }

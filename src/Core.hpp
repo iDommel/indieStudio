@@ -41,8 +41,6 @@ namespace indie {
          */
         void loadEntity(std::shared_ptr<IEntity> entity);
 
-        static void addEntityCallback(std::shared_ptr<IEntity>) {};
-
     private:
         std::map<SystemType, std::unique_ptr<ISystem>> _systems;
         SceneManager _sceneManager;

@@ -18,12 +18,26 @@ namespace indie {
     class ISystem
     {
     public:
+
+        /**
+         * @brief Initialize the system before the game loop
+         * @param manager The scene manager
+         */
         virtual void init(SceneManager &manager) = 0;
+        /**
+         * @brief Update the system called every time deltaTime >= UPDATE_DELTA
+         * @param manager The scene manager
+         * @param deltaTime The time since the last update
+         */
         virtual void update(SceneManager &manager, uint64_t deltaTime) = 0;
+        /**
+         * @brief Destroy the system at the end of the game loop
+         */
         virtual void destroy() = 0;
 
         /**
-         * @brief Load entity's dependency(ies) in cache if needed
+         * @brief The callback to be called when an entity is added to a scene
+         * @param entity The Entity that was added
          */
         virtual void loadEntity(std::shared_ptr<IEntity> entity) = 0;
     };

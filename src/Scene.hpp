@@ -46,7 +46,7 @@ namespace indie {
         std::unique_ptr<IScene> initScene();
 
         /**
-         * @brief Get entities with correcponding tags
+         * @brief Get entities with all correcponding tags
          * @param tags Tags to search for
          * @return Returns a vector of entities
          */
