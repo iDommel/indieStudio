@@ -39,9 +39,7 @@ class Text {
          */
         void loadFont(const std::string &fileName);
 
-        /**
-         * @brief Unload Font from GPU memory (VRAM)
-         */
+        ///@brief Unload Font from GPU memory (VRAM)
         void unloadFont(void);
 
         /**
