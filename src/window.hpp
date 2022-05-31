@@ -78,6 +78,16 @@ namespace indie {
         float getGamepadAxisMovement(int gamepad, int axis);  
         /// @brief Set internal gamepad mappings (SDL_GameControllerDB)
         int setGamepadMappings(const char* mappings);
+        /// @brief Check if a key has been pressed once
+        bool isKeyPressed(int key);
+        /// @brief Check if a key is being pressed
+        bool isKeyDown(int key);
+        /// @brief Check if a key has been released once
+        bool isKeyReleased(int key);
+        /// @brief Check if a key is NOT being pressed
+        bool isKeyUp(int key);
+        ///  @brief Set a custom key to exit program(default is ESC)
+        void setExitKey(int key);
     };
 }
 

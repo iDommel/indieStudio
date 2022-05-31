@@ -119,3 +119,19 @@ float indie::Window::getGamepadAxisMovement(int gamepad, int axis) {
 int indie::Window::setGamepadMappings(const char* mappings) {
     SetGamepadMappings(mappings)
 }
+
+bool indie::Window::isKeyPressed(int key) {
+    IsKeyPressed(key);
+}
+bool indie::Window::isKeyDown(int key) {
+    IsKeyDown(key);
+}
+bool indie::Window::isKeyReleased(int key) {
+    IsKeyReleased(key);
+}
+bool indie::Window::isKeyUp(int key) {
+    IsKeyUp(key);
+}
+void indie::Window::setExitKey(int key) {
+    SetExitKey(key);
+}
