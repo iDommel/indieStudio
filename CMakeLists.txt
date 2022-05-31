@@ -30,12 +30,27 @@ target_sources(${PROJECT_NAME}
         src/systems/EventSystem.cpp
 
         src/components/Component.cpp
+
+        src/Texture2D.cpp
+        src/Window.cpp
+        src/Shape3D.cpp
         src/Texture2D.cpp
         src/Camera.cpp
-        src/Window.cpp
+        src/EventListener.cpp
+        src/ButtonCallbacks.cpp
+        src/MouseCallbacks.cpp
+        src/GamepadStickCallbacks.cpp
+
+        test_functions/TestAnimations2D.cpp
+        test_functions/TestCamera.cpp
+        test_functions/TestEventListener.cpp
+        test_functions/TestTextures.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/*)
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        src/**
+)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
