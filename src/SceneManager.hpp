@@ -28,8 +28,6 @@ namespace indie {
             OPTION
         };
 
-        ~SceneManager() { std::cout << "SceneManager destructor" << std::endl; };
-
         /**
          * @brief Add a scene to the scene manager
          * @param scene Scene to add

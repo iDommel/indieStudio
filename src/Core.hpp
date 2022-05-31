@@ -33,7 +33,6 @@ namespace indie {
         };
 
         Core();
-        ~Core() { std::cout << "Core destructor" << std::endl;};
 
         /// @brief Game loop
         void mainLoop();
