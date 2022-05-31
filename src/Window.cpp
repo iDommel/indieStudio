@@ -63,3 +63,75 @@ void indie::Window::endMode3D() {
 void indie::Window::endMode2D() {
     EndMode2D();
 }
+
+bool indie::Window::isMouseButtonPressed(int button) {
+    IsMouseButtonPressed(button);
+}
+
+bool indie::Window::isMouseButtonDown(int button) {
+    IsMouseButtonDown(button);
+}
+
+bool indie::Window::isMouseButtonReleased(int button) {
+    IsMouseButtonReleased(button);
+}
+
+bool indie::Window::isMouseButtonUp(int button) {
+    IsMouseButtonUp(button);
+}
+
+bool indie::Window::isGamepadAvailable(int gamepad) {
+    IsGamepadAvailable(gamepad);
+}
+
+const char* indie::Window::getGamepadName(int gamepad) {
+    GetGamepadName(gamepad);
+}
+
+bool indie::Window::isGamepadButtonPressed(int gamepad, int button) {
+    IsGamepadButtonPressed(gamepad, button);
+}
+
+bool indie::Window::isGamepadButtonDown(int gamepad, int button) {
+    IsGamepadButtonDown(gamepad, button);
+}
+
+bool indie::Window::isGamepadButtonReleased(int gamepad, int button) {
+    IsGamepadButtonReleased(gamepad, button);
+}
+
+bool indie::Window::isGamepadButtonUp(int gamepad, int button) {
+    IsGamepadButtonUp(gamepad, button);
+}
+
+int indie::Window::getGamepadButtonPressed(void) {
+    GetGamepadButtonPressed();
+}
+
+int indie::Window::getGamepadAxisCount(int gamepad) {
+    GetGamepadAxisCount(gamepad);
+}
+
+float indie::Window::getGamepadAxisMovement(int gamepad, int axis) {
+    GetGamepadAxisMovement(gamepad, axis);
+}
+
+int indie::Window::setGamepadMappings(const char* mappings) {
+    SetGamepadMappings(mappings)
+}
+
+bool indie::Window::isKeyPressed(int key) {
+    IsKeyPressed(key);
+}
+bool indie::Window::isKeyDown(int key) {
+    IsKeyDown(key);
+}
+bool indie::Window::isKeyReleased(int key) {
+    IsKeyReleased(key);
+}
+bool indie::Window::isKeyUp(int key) {
+    IsKeyUp(key);
+}
+void indie::Window::setExitKey(int key) {
+    SetExitKey(key);
+}
