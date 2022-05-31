@@ -20,7 +20,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
         src/Model.cpp
-        src/shape3d.cpp
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
