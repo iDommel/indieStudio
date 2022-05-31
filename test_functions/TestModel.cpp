@@ -1,12 +1,3 @@
-/*
-** EPITECH PROJECT, 2022
-** B-YEP-400-TLS-4-1-indiestudio-iona.dommel-prioux
-** File description:
-** main
-*/
-#include <exception>
-#include <iostream>
-
 #include "Model.hpp"
 #include "raylib.h"
 
@@ -27,7 +18,7 @@ void test_raylib_model(void)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
 
-    indie::Model test("test_models/turret.obj", "test_models/turret_diffuse.png");
+    indie::Model test("test_models/turret.obj", "test_models/turret.png");
 
     Vector3 position = { 0.0f, 0.0f, 0.0f };                    // Set model position
 
@@ -75,10 +66,4 @@ void test_raylib_model(void)
     test.unload();
     CloseWindow();              // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-}
-
-int main(void)
-{
-    test_raylib_model();
-    return 0;
 }
