@@ -1,14 +1,13 @@
+#include "Shape3D.hpp"
+
 #include "raylib.h"
-#include "shape3d.hpp"
 
 indie::Shape3D::Shape3D()
 {
-
 }
 
 indie::Shape3D::~Shape3D()
 {
-
 }
 
 void indie::Shape3D::drawSphere(Vector3 centerPos, float radius, Color color)
