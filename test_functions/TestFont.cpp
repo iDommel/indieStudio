@@ -7,11 +7,11 @@
 
 #include <raylib.h>
 
-#include "Text.hpp"
+#include "../src/Text.hpp"
 
 #define MAX_FONTS   8
 
-void TestFont(void)
+void testFont(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
