@@ -8,10 +8,10 @@
 #include <exception>
 #include <iostream>
 
-#include "Camera.hpp"
-#include "EventListener.hpp"
-#include "Shape3D.hpp"
-#include "Window.hpp"
+#include "../src/Camera.hpp"
+#include "../src/EventListener.hpp"
+#include "../src/Shape3D.hpp"
+#include "../src/Window.hpp"
 #include "raylib.h"
 
 #define GAMEPAD_NB 0
@@ -126,20 +126,18 @@ int test_event_listener(void)
 {
     const int screenWidth = 800;
     const int screenHeight = 450;
+    indie::Window window(screenWidth, screenHeight, "Test Event Listener");
     indie::EventListener listener;
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     init_listener(listener);
-    while (!WindowShouldClose())  // Detect window close button or ESC key
+    while (!window.shouldClose())  // Detect window close button or ESC key
     {
-        BeginDrawing();
+        window.beginDraw();
         checkListenerEvents(listener);
 
-        ClearBackground(RAYWHITE);
+        window.clearBackground(RAYWHITE);
 
-        EndDrawing();
+        window.endDraw();
     }
-
-    CloseWindow();  // Close window and OpenGL context
 
     return 0;
 }

@@ -27,9 +27,16 @@ target_sources(${PROJECT_NAME}
         src/Texture2D.cpp
         src/Camera.cpp
         src/Window.cpp
+        test_functions/TestAnimations2D.cpp
+        test_functions/TestCamera.cpp
+        test_functions/TestEventListener.cpp
+        test_functions/TestTextures.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/*)
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        src/**
+)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)

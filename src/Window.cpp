@@ -6,132 +6,172 @@
 */
 #include "Window.hpp"
 
+#include <raylib.h>
 
-indie::Window::Window(int screenWidth, int screenHeight, const std::string & name ) {
-    InitWindow(screenWidth, screenHeight, name.c_str());
-}
+namespace indie
+{
 
+    Window::Window(int screenWidth, int screenHeight, const std::string& name)
+    {
+        InitWindow(screenWidth, screenHeight, name.c_str());
+    }
 
-indie::Window::~Window(){
+    Window::~Window()
+    {
         CloseWindow();
-}
+    }
 
+    int Window::getKeyPressed()
+    {
+        int key = GetKeyPressed();
+        return (key);
+    }
 
-int indie::Window::getKeyPressed(){
-    int key = GetKeyPressed();
-    return(key);
-}
+    bool Window::shouldClose()
+    {
+        return (WindowShouldClose());
+    }
 
-void indie::Window::beginDraw(){
+    void Window::beginDraw()
+    {
         BeginDrawing();
-}
+    }
 
-void indie::Window::clearBackground() {
-    ClearBackground(LIGHTGRAY);
-}
+    void Window::clearBackground(Color color)
+    {
+        ClearBackground(color);
+    }
 
-void indie::Window::endDraw() {
-    EndDrawing();
-}
+    void Window::endDraw()
+    {
+        EndDrawing();
+    }
 
-Vector2 indie::Window::getMousePosition() {
-    Vector2 mp = { 0,0 };
-    mp = GetMousePosition();
-    return (mp);
-}
+    Vector2 Window::getMousePosition()
+    {
+        Vector2 mp = {0, 0};
+        mp = GetMousePosition();
+        return (mp);
+    }
 
-void indie::Window::showCursor() {
-    ShowCursor();
-}
+    void Window::showCursor()
+    {
+        ShowCursor();
+    }
 
-void indie::Window::hideCursor() {
-    HideCursor();
-}
+    void Window::hideCursor()
+    {
+        HideCursor();
+    }
 
-void indie::Window::beginMode3D(Camera3D camera) {
-    BeginMode3D(camera);
-}
+    void Window::beginMode3D(Camera3D camera)
+    {
+        BeginMode3D(camera);
+    }
 
-void indie::Window::beginMode2D(Camera2D camera) {
-    BeginMode2D(camera);
-}
+    void Window::beginMode2D(Camera2D camera)
+    {
+        BeginMode2D(camera);
+    }
 
-void indie::Window::endMode3D() {
-    EndMode3D();
-}
+    void Window::endMode3D()
+    {
+        EndMode3D();
+    }
 
-void indie::Window::endMode2D() {
-    EndMode2D();
-}
+    void Window::endMode2D()
+    {
+        EndMode2D();
+    }
 
-bool indie::Window::isMouseButtonPressed(int button) {
-    IsMouseButtonPressed(button);
-}
+    bool Window::isMouseButtonPressed(int button)
+    {
+        return IsMouseButtonPressed(button);
+    }
 
-bool indie::Window::isMouseButtonDown(int button) {
-    IsMouseButtonDown(button);
-}
+    bool Window::isMouseButtonDown(int button)
+    {
+        return IsMouseButtonDown(button);
+    }
 
-bool indie::Window::isMouseButtonReleased(int button) {
-    IsMouseButtonReleased(button);
-}
+    bool Window::isMouseButtonReleased(int button)
+    {
+        return IsMouseButtonReleased(button);
+    }
 
-bool indie::Window::isMouseButtonUp(int button) {
-    IsMouseButtonUp(button);
-}
+    bool Window::isMouseButtonUp(int button)
+    {
+        return IsMouseButtonUp(button);
+    }
 
-bool indie::Window::isGamepadAvailable(int gamepad) {
-    IsGamepadAvailable(gamepad);
-}
+    bool Window::isGamepadAvailable(int gamepad)
+    {
+        return IsGamepadAvailable(gamepad);
+    }
 
-const char* indie::Window::getGamepadName(int gamepad) {
-    GetGamepadName(gamepad);
-}
+    const char* Window::getGamepadName(int gamepad)
+    {
+        return GetGamepadName(gamepad);
+    }
 
-bool indie::Window::isGamepadButtonPressed(int gamepad, int button) {
-    IsGamepadButtonPressed(gamepad, button);
-}
+    bool Window::isGamepadButtonPressed(int gamepad, int button)
+    {
+        return IsGamepadButtonPressed(gamepad, button);
+    }
 
-bool indie::Window::isGamepadButtonDown(int gamepad, int button) {
-    IsGamepadButtonDown(gamepad, button);
-}
+    bool Window::isGamepadButtonDown(int gamepad, int button)
+    {
+        return IsGamepadButtonDown(gamepad, button);
+    }
 
-bool indie::Window::isGamepadButtonReleased(int gamepad, int button) {
-    IsGamepadButtonReleased(gamepad, button);
-}
+    bool Window::isGamepadButtonReleased(int gamepad, int button)
+    {
+        return IsGamepadButtonReleased(gamepad, button);
+    }
 
-bool indie::Window::isGamepadButtonUp(int gamepad, int button) {
-    IsGamepadButtonUp(gamepad, button);
-}
+    bool Window::isGamepadButtonUp(int gamepad, int button)
+    {
+        return IsGamepadButtonUp(gamepad, button);
+    }
 
-int indie::Window::getGamepadButtonPressed(void) {
-    GetGamepadButtonPressed();
-}
+    int Window::getGamepadButtonPressed(void)
+    {
+        return GetGamepadButtonPressed();
+    }
 
-int indie::Window::getGamepadAxisCount(int gamepad) {
-    GetGamepadAxisCount(gamepad);
-}
+    int Window::getGamepadAxisCount(int gamepad)
+    {
+        return GetGamepadAxisCount(gamepad);
+    }
 
-float indie::Window::getGamepadAxisMovement(int gamepad, int axis) {
-    GetGamepadAxisMovement(gamepad, axis);
-}
+    float Window::getGamepadAxisMovement(int gamepad, int axis)
+    {
+        return GetGamepadAxisMovement(gamepad, axis);
+    }
 
-int indie::Window::setGamepadMappings(const char* mappings) {
-    SetGamepadMappings(mappings)
-}
+    int Window::setGamepadMappings(const char* mappings)
+    {
+        return SetGamepadMappings(mappings);
+    }
 
-bool indie::Window::isKeyPressed(int key) {
-    IsKeyPressed(key);
-}
-bool indie::Window::isKeyDown(int key) {
-    IsKeyDown(key);
-}
-bool indie::Window::isKeyReleased(int key) {
-    IsKeyReleased(key);
-}
-bool indie::Window::isKeyUp(int key) {
-    IsKeyUp(key);
-}
-void indie::Window::setExitKey(int key) {
-    SetExitKey(key);
+    bool Window::isKeyPressed(int key)
+    {
+        return IsKeyPressed(key);
+    }
+    bool Window::isKeyDown(int key)
+    {
+        return IsKeyDown(key);
+    }
+    bool Window::isKeyReleased(int key)
+    {
+        return IsKeyReleased(key);
+    }
+    bool Window::isKeyUp(int key)
+    {
+        return IsKeyUp(key);
+    }
+    void Window::setExitKey(int key)
+    {
+        SetExitKey(key);
+    }
 }

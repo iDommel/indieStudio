@@ -7,27 +7,36 @@
 
 #ifndef WINDOW_HPP_
 #define WINDOW_HPP_
+
+#include <iostream>
 #include <string>
 #include <vector>
-#include <string>
-#include <iostream>
-#include <raylib.h>
 
-namespace indie {
+struct Color;
+struct Camera2D;
+struct Camera3D;
+struct Vector2;
+namespace indie
+{
     class Window
     {
-    private:
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        Window(int screenWidth = GetMonitorWidth(0), int screenHeight = GetMonitorHeight(0), const std::string &name = "test");
+        Window(int screenWidth, int screenHeight, const std::string& name = "test");
         /// @brief Destruct the window:: close the windows
         ~Window();
+        /**
+         * @brief asks if the window has received a closing event
+         *
+         * @return true if it should close, false if it shouldn't
+         */
+        bool shouldClose();
         /// @brief function that get the key pressed
         int getKeyPressed();
         /// @brief Start window drawing state
         void beginDraw();
         /// @brief funcion that clear the background
-        void clearBackground();
+        void clearBackground(Color color);
         /// @brief final function of the loop, end the drawing
         void endDraw();
         /// @brief get the mouse position
@@ -36,15 +45,15 @@ namespace indie {
         void showCursor();
         ///  @brief Hide Cursor
         void hideCursor();
-        /*
-        * @brief Begin 3D mode with custum camera
-        * @param camera
-        */
+        /**
+         * @brief Begin 3D mode with custom camera
+         * @param camera the camera to be used
+         */
         void beginMode3D(Camera3D camera);
-        /*
-        * @brief Begin 2D mode with custum camera
-        * @param camera
-        */
+        /**
+         * @brief Begin 2D mode with custom camera
+         * @param camera the camera to be used
+         */
         void beginMode2D(Camera2D camera);
         /// @brief End 3D mode.
         void endMode3D();
@@ -75,7 +84,7 @@ namespace indie {
         /// @brief  Get gamepad axis count for a gamepad
         int getGamepadAxisCount(int gamepad);
         /// @brief  Get axis movement value for a gamepad axis
-        float getGamepadAxisMovement(int gamepad, int axis);  
+        float getGamepadAxisMovement(int gamepad, int axis);
         /// @brief Set internal gamepad mappings (SDL_GameControllerDB)
         int setGamepadMappings(const char* mappings);
         /// @brief Check if a key has been pressed once
@@ -88,6 +97,8 @@ namespace indie {
         bool isKeyUp(int key);
         ///  @brief Set a custom key to exit program(default is ESC)
         void setExitKey(int key);
+
+    private:
     };
 }
 
