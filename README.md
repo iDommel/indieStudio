@@ -2,7 +2,6 @@
 This project aims to be a bomberman clone using the raylib graphical library.
 
 # Compilation:
-
     cmake -B build
     cmake --build build
 
@@ -37,3 +36,6 @@ To undo X last commits:
     git reset (--hard) HEAD~X
 Be careful, the following command deletes all your local commits on the current branch:
     git reset (--hard)
+
+# Namespace and Class nomenclature
+When encapsulating Class of raylib don't forget to use "indi" namespace
