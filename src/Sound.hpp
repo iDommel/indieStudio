@@ -46,6 +46,12 @@ namespace indie
         /// @brief Get the state of the sound
         SoundState getState() const;
 
+        /**
+         * @brief Set sound volume
+         * @param volume Volume value
+         */
+        void setVolume(float volume);
+
     private:
         std::unique_ptr<::Sound> _sound;
         SoundState _state = SoundState::STOPPED;

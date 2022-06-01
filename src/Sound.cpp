@@ -8,6 +8,7 @@
 #include "raylib.h"
 
 #include "Sound.hpp"
+#include "exceptions/SoundError.hpp"
 
 namespace indie
 {
@@ -16,6 +17,8 @@ namespace indie
     {
         _sound = std::make_unique<::Sound>();
         *_sound = LoadSound(filename.c_str());
+        if (_sound->frameCount == 0)
+            throw SoundError("Sound file not found");
     }
 
     Sound::~Sound()
@@ -32,7 +35,7 @@ namespace indie
             _state = SoundState::STOPPED;
         if (_state == SoundState::PLAYING)
             return;
-        PlaySound(*_sound);
+        PlaySoundMulti(*_sound);
         _state = SoundState::PLAYING;
     }
 
@@ -63,6 +66,11 @@ namespace indie
     Sound::SoundState Sound::getState() const
     {
         return _state;
+    }
+
+    void Sound::setVolume(float volume)
+    {
+        SetSoundVolume(*_sound, volume);
     }
 
 }
