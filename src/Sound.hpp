@@ -34,7 +34,7 @@ namespace indie
             PAUSED
         };
 
-        /// @brief Play the sound
+        /// @brief Play the sound (multiple playing allowed)
         void play();
         /// @brief Stop the sound
         void stop();

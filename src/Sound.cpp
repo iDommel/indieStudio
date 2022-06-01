@@ -33,8 +33,6 @@ namespace indie
     {
         if (IsSoundPlaying(*_sound) == false)
             _state = SoundState::STOPPED;
-        if (_state == SoundState::PLAYING)
-            return;
         PlaySoundMulti(*_sound);
         _state = SoundState::PLAYING;
     }
