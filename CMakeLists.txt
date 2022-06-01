@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 
 project(bomberman VERSION 1.0.0 LANGUAGES CXX)
 
@@ -8,7 +8,7 @@ add_executable(${PROJECT_NAME})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(raylib REQUIRED)
-target_link_libraries(${PROJECT_NAME} raylib -lstdc++fs)
+target_link_libraries(${PROJECT_NAME} raylib)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     target_link_libraries(${PROJECT_NAME} -lstdc++fs)
@@ -20,10 +20,17 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
         src/Music.cpp
+
+        src/Texture2D.cpp
+        src/window.cpp
+        src/Camera.cpp
+
+        test_functions/TestAnimations2D.cpp
+        test_functions/TestTextures.cpp
         test_functions/TestMusic.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/*)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
