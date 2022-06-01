@@ -8,15 +8,15 @@
 #ifndef EVENT_SYSTEM_HPP
 #define EVENT_SYSTEM_HPP
 
-#include "ISystem.hpp"
 #include "../SceneManager.hpp"
+#include "ISystem.hpp"
 
-namespace indie {
-
+namespace indie
+{
+    class EventListener;
     class EventSystem : public ISystem
     {
     public:
-
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -33,6 +33,10 @@ namespace indie {
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        void handleKeyboard(std::shared_ptr<EventListener> listener);
+        void handleMouse(std::shared_ptr<EventListener> listener);
+        void handleGamepad(std::shared_ptr<EventListener> listener, int nb);
+        void handleGamepadSticks(std::shared_ptr<EventListener> listener, int nb);
     };
 
 }

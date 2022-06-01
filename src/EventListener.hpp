@@ -11,6 +11,7 @@
 #include <map>
 
 #include "ButtonCallbacks.hpp"
+#include "Component.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "MouseCallbacks.hpp"
 #include "raylib.h"
@@ -19,7 +20,7 @@ namespace indie
 
     /// @brief EventListener is a class to describe what to do when an event is detected.
     /// you can add a callback to an event by using the different add<>Event methods.
-    class EventListener
+    class EventListener : public Component
     {
     public:
         EventListener();

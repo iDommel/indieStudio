@@ -5,47 +5,27 @@
 ** Entity.cpp
 */
 
-#include <iostream>
-#include <algorithm>
-
 #include "Entity.hpp"
 
-namespace indie {
+#include <algorithm>
+#include <iostream>
+
+namespace indie
+{
 
     const std::map<Entity::Tags, std::vector<std::vector<IComponent::Type>>> Entity::entityTags = {
-        {
-            Entity::Tags::RENDERABLE_2D,
-            {
-                {IComponent::Type::SPRITE, IComponent::Type::VECTOR},
-                {IComponent::Type::TEXT, IComponent::Type::VECTOR}
-            }
-        },
-        {
-            Entity::Tags::RENDERABLE_3D,
-            {
-                {IComponent::Type::VECTOR, IComponent::Type::MODEL}
-            }
-        },
-        {
-            Entity::Tags::AUDIBLE,
-            {
-                {IComponent::Type::MUSIC},
-                {IComponent::Type::SOUND}
-            }
-        },
-        {
-            Entity::Tags::COLLIDABLE,
-            {
-                {IComponent::Type::HITBOX}
-            }
-        },
-        {
-            Entity::Tags::CALLABLE,
-            {
-                {IComponent::Type::EVT_LISTENER}
-            }
-        }
-    };
+        {Entity::Tags::RENDERABLE_2D,
+         {{IComponent::Type::SPRITE, IComponent::Type::VECTOR},
+          {IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
+        {Entity::Tags::RENDERABLE_3D,
+         {{IComponent::Type::VECTOR, IComponent::Type::MODEL}}},
+        {Entity::Tags::AUDIBLE,
+         {{IComponent::Type::MUSIC},
+          {IComponent::Type::SOUND}}},
+        {Entity::Tags::COLLIDABLE,
+         {{IComponent::Type::HITBOX}}},
+        {Entity::Tags::CALLABLE,
+         {{IComponent::Type::EVT_LISTENER}}}};
 
     void Entity::addComponent(std::shared_ptr<IComponent> component)
     {
@@ -93,7 +73,7 @@ namespace indie {
                     break;
                 }
             }
-            throw std::invalid_argument("Entity: Component type not found");
+            // throw std::invalid_argument("Entity: Component type not found");
         }
         return res;
     }

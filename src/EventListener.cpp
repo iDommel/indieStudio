@@ -7,11 +7,13 @@
 
 #include "EventListener.hpp"
 
+#include "raylib.h"
 namespace indie
 {
 
-    EventListener::EventListener()
+    EventListener::EventListener() : Component()
     {
+        _type = Type::EVT_LISTENER;
     }
 
     EventListener::~EventListener()
