@@ -16,7 +16,7 @@
 
 namespace indie {
 
-    /// @brief Model 3D object
+    ///@brief Model 3D object
     class Model {
         public:
             /**
@@ -46,7 +46,7 @@ namespace indie {
              */
             void drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
         private:
-            /// @brief Pointer to the model struct of raylib
+            ///@brief Pointer to the model struct of raylib
             std::unique_ptr <::Model> ptr;
     };
 }
