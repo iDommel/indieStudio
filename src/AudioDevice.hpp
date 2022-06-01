@@ -8,8 +8,6 @@
 #ifndef AUDIODEVICE_HPP_
 #define AUDIODEVICE_HPP_
 
-#include <raylib.h>
-
 namespace indie {
     class AudioDevice {
         public:
