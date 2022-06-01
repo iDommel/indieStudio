@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 
 project(bomberman VERSION 1.0.0 LANGUAGES CXX)
 
@@ -19,10 +19,29 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/Model.cpp
+        src/Text.cpp
+        src/EventListener.cpp
+        src/ButtonCallbacks.cpp
+        src/MouseCallbacks.cpp
+        src/GamepadStickCallbacks.cpp
+        src/Shape3D.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
+        src/Window.cpp
         src/systems/collideSystem.cpp
+        test_functions/TestAnimations2D.cpp
+        test_functions/TestCamera.cpp
+        test_functions/TestEventListener.cpp
+        test_functions/TestTextures.cpp
+        test_functions/TestCollisions.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC src src/systems)
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        src/**
+        src/systems
+)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
