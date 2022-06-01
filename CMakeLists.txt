@@ -36,6 +36,9 @@ target_sources(${PROJECT_NAME}
         src/Shape3D.cpp
         src/Texture2D.cpp
         src/Camera.cpp
+        src/Model.cpp
+        src/Text.cpp
+
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp

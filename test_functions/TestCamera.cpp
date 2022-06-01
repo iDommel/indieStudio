@@ -12,7 +12,7 @@
 #include "../src/Shape3D.hpp"
 #include "../src/Window.hpp"
 
-void test_raylib_camera()
+void testRaylibCamera()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
