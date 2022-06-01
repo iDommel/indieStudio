@@ -31,7 +31,7 @@ void testMusic(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [audio] example - module playing (streaming)");
 
-    //InitAudioDevice();                  // Initialize audio device
+    indie::AudioDevice audioDevice; // Initialize audio device
 
     Color colors[14] = { ORANGE, RED, GOLD, LIME, BLUE, VIOLET, BROWN, LIGHTGRAY, PINK,
                          YELLOW, GREEN, SKYBLUE, PURPLE, BEIGE };
@@ -135,8 +135,6 @@ void testMusic(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadMusicStream(music);          // Unload music stream buffers from RAM
-
-    //CloseAudioDevice();     // Close audio device (music streaming is automatically stopped)
 
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
