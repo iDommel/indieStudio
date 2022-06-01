@@ -19,16 +19,31 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/Core.cpp
+        src/Scene.cpp
+        src/SceneManager.cpp
+        src/Entity.cpp
+
+        src/systems/AudioSystem.cpp
+        src/systems/GraphicSystem.cpp
+        src/systems/GameSystem.cpp
+        src/systems/EventSystem.cpp
+
+        src/components/Component.cpp
+
+        src/Texture2D.cpp
+        src/Window.cpp
+        src/Shape3D.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
         src/Model.cpp
         src/Text.cpp
+
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
-        src/Shape3D.cpp
-        src/Texture2D.cpp
-        src/Camera.cpp
-        src/Window.cpp
+
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestEventListener.cpp
@@ -37,7 +52,10 @@ target_sources(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        src/**
+        src/components
+        src/exceptions
+        src/systems
+        src
 )
 
 # Set default compile flags for GCC

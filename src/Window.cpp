@@ -16,6 +16,12 @@ namespace indie
         InitWindow(screenWidth, screenHeight, name.c_str());
     }
 
+    Window::Window(int screenWidth, int screenHeight, unsigned int flags, const std::string& name)
+    {
+        SetConfigFlags(flags);
+        InitWindow(screenWidth, screenHeight, name.c_str());
+    }
+
     Window::~Window()
     {
         CloseWindow();
