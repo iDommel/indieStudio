@@ -17,7 +17,7 @@ struct Rectangle;
 struct Image;
 
 namespace indie {
-    namespace collide {
+    namespace collideSystem {
         /// ------- 3D -------
 
         /**

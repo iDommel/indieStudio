@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "raylib.h"
-#include "collide.hpp"
+#include "collideSystem.hpp"
 
 int test_collide_raylib(void)
 {
@@ -74,7 +74,7 @@ int test_collide_raylib(void)
         collision2d = false;
 
         // Check collisions player vs enemy-box
-        if (indie::collide::check3DCollision(
+        if (indie::collideSystem::check3DCollision(
             (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
                                      playerPosition.y - playerSize.y/2,
                                      playerPosition.z - playerSize.z/2 },
@@ -90,7 +90,7 @@ int test_collide_raylib(void)
             collision = true;
 
         // Check collisions player vs enemy-sphere
-        if (indie::collide::check3DCollision(
+        if (indie::collideSystem::check3DCollision(
             (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
                                      playerPosition.y - playerSize.y/2,
                                      playerPosition.z - playerSize.z/2 },
@@ -101,12 +101,12 @@ int test_collide_raylib(void)
                 collision = true;
 
          // Check collisions player vs rectangle
-        if (indie::collide::check2DCollision(
+        if (indie::collideSystem::check2DCollision(
          playerPosition2d, playerSize2d, rect))
             collision2d = true;
 
         // Check collisions player vs circle
-        if (CheckCollisionCircles(
+        if (indie::collideSystem::check2DCollision(
          playerPosition2d, playerSize2d, circlePos, circleRadius))
             collision2d = true;
 
@@ -139,12 +139,10 @@ int test_collide_raylib(void)
 
             EndMode3D();
 
-            DrawCircle(circlePos.x, circlePos.y, circleRadius, GREEN);
-            DrawRectangle(rect.x, rect.y, rect.width, rect.height, RED);
+            DrawCircle(circlePos.x, circlePos.y, circleRadius, GRAY);
+            DrawRectangle(rect.x, rect.y, rect.width, rect.height, GRAY);
             DrawCircle(playerPosition2d.x, playerPosition2d.y, playerSize2d, playerColor2d);
             DrawText("Move player with arrows to collide", 220, 40, 20, GRAY);
-
-            DrawFPS(10, 10);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

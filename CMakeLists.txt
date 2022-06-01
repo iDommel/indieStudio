@@ -19,10 +19,10 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
-        src/collide.cpp
+        src/systems/collideSystem.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC src)
+target_include_directories(${PROJECT_NAME} PUBLIC src src/systems)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)

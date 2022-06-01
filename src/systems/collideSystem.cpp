@@ -2,15 +2,15 @@
 ** EPITECH PROJECT, 2022
 ** indieStudio
 ** File description:
-** collide
+** collideSystem
 */
 
-#include "collide.hpp"
+#include "collideSystem.hpp"
 #include <raylib.h>
 
 namespace indie {
 
-    namespace collide {
+    namespace collideSystem {
         /// ------- 3D -------
 
         BoundingBox getBoundingBoxOf(const Model &model)
