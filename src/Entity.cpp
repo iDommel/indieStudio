@@ -85,15 +85,19 @@ namespace indie {
     std::vector<std::shared_ptr<IComponent>> Entity::getComponents(std::vector<IComponent::Type> components)
     {
         std::vector<std::shared_ptr<IComponent>> res;
+        bool found = false;
 
         for (auto &c : components) {
             for (auto &component : _components) {
                 if (component->getType() == c) {
                     res.push_back(component);
+                    found = true;
                     break;
                 }
             }
-            throw std::invalid_argument("Entity: Component type not found");
+            if (!found)
+                throw std::invalid_argument("Entity: Component type not found");
+            found = false;
         }
         return res;
     }

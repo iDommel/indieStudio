@@ -44,6 +44,8 @@ target_sources(${PROJECT_NAME}
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
 
+        src/generateMap.cpp
+
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestEventListener.cpp

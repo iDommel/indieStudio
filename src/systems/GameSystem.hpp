@@ -38,6 +38,8 @@ namespace indie {
         static std::unique_ptr<IScene> createScene();
     };
 
+    void generateMap(const std::string &filename, IScene &scene);
+
 }
 
 #endif /* GAME_SYSTEM_HPP */

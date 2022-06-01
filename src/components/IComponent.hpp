@@ -8,6 +8,8 @@
 #ifndef ICOMPONENT_HPP
 #define ICOMPONENT_HPP
 
+#include <any>
+
 namespace indie
 {
 
@@ -27,6 +29,8 @@ namespace indie
         };
 
         virtual Type getType() const = 0;
+
+        virtual std::any getComponent() const = 0;
     };
 
 }

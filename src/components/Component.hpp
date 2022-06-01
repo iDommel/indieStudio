@@ -26,9 +26,6 @@ namespace indie {
         Type _type;
     };
 
-    template <typename T>
-    std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> component);
-
 }
 
 #endif /* COMPONENT_HPP */

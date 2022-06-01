@@ -5,11 +5,13 @@
 ** GraphicSystem.cpp
 */
 
-#include "GraphicSystem.hpp"
-
 #include <iostream>
-
 #include "raylib.h"
+
+#include "GraphicSystem.hpp"
+#include "components/Position.hpp"
+#include "components/Sprite.hpp"
+
 namespace indie
 {
 
@@ -30,12 +32,15 @@ namespace indie
         }
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::RENDERABLE_2D))
-                std::cout << "render 2D img" << std::endl;
-            else if (e->hasTag(IEntity::Tags::RENDERABLE_3D))
-                std::cout << "render 3D img" << std::endl;
-        }
+        auto render2D = sceneManager.getCurrentScene().getTaggedEntities({IEntity::Tags::RENDERABLE_2D});
+
+        displaySprite(render2D);
+        // for (auto &e : sceneManager.getCurrentScene().getEntities()) {
+        //     if (e->hasTag(IEntity::Tags::RENDERABLE_2D))
+        //         std::cout << "render 2D img" << std::endl;
+        //     else if (e->hasTag(IEntity::Tags::RENDERABLE_3D))
+        //         std::cout << "render 3D img" << std::endl;
+        // }
         _window->endDraw();
     }
 
@@ -52,6 +57,18 @@ namespace indie
     void GraphicSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
         std::cout << "GraphicSystem::unloadEntity" << std::endl;
+    }
+
+    void GraphicSystem::displaySprite(std::vector<std::shared_ptr<IEntity>> &entities)
+    {
+        std::vector<IComponent::Type> types = {IComponent::Type::SPRITE, IComponent::Type::VECTOR};
+        for (auto &e : entities) {
+            auto com = e->getComponents(types);
+            auto s = std::dynamic_pointer_cast<Sprite>(com[0]);
+            auto pos = std::dynamic_pointer_cast<Position>(com[1]);
+
+            std::cout << s->getValue() << ": x=" << pos->getPosition().first << " y=" << pos->getPosition().second << std::endl;
+        }
     }
 
 }

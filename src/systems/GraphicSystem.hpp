@@ -34,6 +34,8 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        void displaySprite(std::vector<std::shared_ptr<IEntity>> &entities);
+
         std::unique_ptr<Window> _window;
     };
 
