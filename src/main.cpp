@@ -10,16 +10,6 @@
 #include "raylib.h"
 #include "collide.hpp"
 
-struct Sphere {
-        Vector3 center;
-        float radius;
-    };
-
-    struct Circle {
-        Vector2 center;
-        float radius;
-    };
-
 int test_collide_raylib(void)
 {
     // Initialization
@@ -85,7 +75,7 @@ int test_collide_raylib(void)
                           (Vector3){ playerPosition.x + playerSize.x/2,
                                      playerPosition.y + playerSize.y/2,
                                      playerPosition.z + playerSize.z/2 }},
-            (Sphere){enemySpherePos, enemySphereSize}))
+            enemySpherePos, enemySphereSize))
                 collision = true;
 
         if (collision) playerColor = RED;

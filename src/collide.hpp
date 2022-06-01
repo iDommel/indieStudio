@@ -12,11 +12,10 @@ struct BoundingBox;
 struct Model;
 struct Mesh;
 struct Vector2;
+struct Vector3;
 struct Rectangle;
 struct Image;
 
-    struct Sphere;
-    struct Circle;
 namespace indie {
     namespace collide {
         /// ------- 3D -------
@@ -30,12 +29,12 @@ namespace indie {
         bool check3DCollision(const BoundingBox &box1, const BoundingBox &box2);
 
         /// @brief Check if a box is colliding with a sphere
-        bool check3DCollision(const BoundingBox &box, const Sphere &sphere);
+        bool check3DCollision(const BoundingBox &box, Vector3 center, float radius);
         /// @brief Check if a sphere is colliding with a box
-        bool check3DCollision(const Sphere &sphere, const BoundingBox &box);
+        bool check3DCollision(Vector3 center, float radius, const BoundingBox &box);
 
         /// @brief Check if two sphere are colliding
-        bool check3DCollision(const Sphere &sphere, const Sphere &sphere2);
+        bool check3DCollision(Vector3 center1, float radius1, Vector3 center2, float radius2);
 
         /// ------- 2D -------
 
@@ -51,12 +50,12 @@ namespace indie {
         bool check2DCollision(const Rectangle &rect1, const Rectangle &rect2);
 
         /// @brief Check if a rectangle is colliding with a circle
-        bool check2DCollision(const Rectangle &rect, const Circle &circle);
+        bool check2DCollision(const Rectangle &rect, Vector2 center, float radius);
         /// @brief Check if a circle is colliding with a rectangle
-        bool check2DCollision(const Circle &circle, const Rectangle &rect);
+        bool check2DCollision(Vector2 center, float radius, const Rectangle &rect);
 
         /// @brief Check if two circles are colliding
-        bool check2DCollision(const Circle &circle1, const Circle &circle2);
+        bool check2DCollision(Vector2 center1, float radius1, Vector2 center2, float radius2);
 
         /// @brief Check if a point is inside a rectangle
         bool check2DCollision(const Vector2 &point, const Rectangle &rect);
@@ -64,9 +63,9 @@ namespace indie {
         bool check2DCollision(const Rectangle &rect, const Vector2 &point);
 
         /// @brief Check if a point is inside a circle
-        bool check2DCollision(const Vector2 &point, const Circle &circle);
+        bool check2DCollision(const Vector2 &point, Vector2 center, float radius);
         /// @brief Check if a circle is on a point
-        bool check2DCollision(const Circle &circle, const Vector2 &point);
+        bool check2DCollision(Vector2 center, float radius, const Vector2 &point);
     }
 }
 

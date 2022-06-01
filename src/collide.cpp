@@ -8,15 +8,6 @@
 #include "collide.hpp"
 #include <raylib.h>
 
-    struct Sphere {
-        Vector3 center;
-        float radius;
-    };
-
-    struct Circle {
-        Vector2 center;
-        float radius;
-    };
 namespace indie {
 
     namespace collide {
@@ -37,19 +28,19 @@ namespace indie {
             return CheckCollisionBoxes(box1, box2);
         }
 
-        bool check3DCollision(const BoundingBox &box, const Sphere &sphere)
+        bool check3DCollision(const BoundingBox &box, Vector3 center, float radius)
         {
-            return CheckCollisionBoxSphere(box, sphere.center, sphere.radius);
+            return CheckCollisionBoxSphere(box, center, radius);
         }
 
-        bool check3DCollision(const Sphere &sphere, const BoundingBox &box)
+        bool check3DCollision(Vector3 center, float radius, const BoundingBox &box)
         {
-            return CheckCollisionBoxSphere(box, sphere.center, sphere.radius);
+            return CheckCollisionBoxSphere(box, center, radius);
         }
 
-        bool check3DCollision(const Sphere &sphere, const Sphere &sphere2)
+        bool check3DCollision(Vector3 center, float radius, Vector3 center2, float radius2)
         {
-            return CheckCollisionSpheres(sphere.center, sphere.radius, sphere2.center, sphere2.radius);
+            return CheckCollisionSpheres(center, radius, center2, radius2);
         }
 
         /// ------- 2D -------
@@ -64,19 +55,19 @@ namespace indie {
             return CheckCollisionRecs(rect1, rect2);
         }
 
-        bool check2DCollision(const Rectangle &rect, const Circle &circle)
+        bool check2DCollision(const Rectangle &rect, Vector2 center, float radius)
         {
-            return CheckCollisionCircleRec(circle.center, circle.radius, rect);
+            return CheckCollisionCircleRec(center, radius, rect);
         }
 
-        bool check2DCollision(const Circle &circle, const Rectangle &rect)
+        bool check2DCollision(Vector2 center, float radius, const Rectangle &rect)
         {
-            return CheckCollisionCircleRec(circle.center, circle.radius, rect);
+            return CheckCollisionCircleRec(center, radius, rect);
         }
 
-        bool check2DCollision(const Circle &circle1, const Circle &circle2)
+        bool check2DCollision(Vector2 center1, float radius1, Vector2 center2, float radius2)
         {
-            return CheckCollisionCircles(circle1.center, circle1.radius, circle2.center, circle2.radius);
+            return CheckCollisionCircles(center1, radius1, center2, radius2);
         }
 
         bool check2DCollision(const Vector2 &point, const Rectangle &rect)
@@ -89,14 +80,14 @@ namespace indie {
             return CheckCollisionPointRec(point, rect);
         }
 
-        bool check2DCollision(const Vector2 &point, const Circle &circle)
+        bool check2DCollision(const Vector2 &point, Vector2 center, float radius)
         {
-            return CheckCollisionPointCircle(point, circle.center, circle.radius);
+            return CheckCollisionPointCircle(point, center, radius);
         }
 
-        bool check2DCollision(const Circle &circle, const Vector2 &point)
+        bool check2DCollision(Vector2 center, float radius, const Vector2 &point)
         {
-            return CheckCollisionPointCircle(point, circle.center, circle.radius);
+            return CheckCollisionPointCircle(point, center, radius);
         }
     }
 }
