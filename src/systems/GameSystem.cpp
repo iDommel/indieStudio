@@ -5,15 +5,17 @@
 ** GameSystem.cpp
 */
 
+#include "GameSystem.hpp"
+
 #include <iostream>
 
-#include "GameSystem.hpp"
-#include "../Scene.hpp"
-#include "../Entity.hpp"
-#include "../components/String.hpp"
 #include "../Core.hpp"
+#include "../Entity.hpp"
+#include "../Scene.hpp"
+#include "../components/String.hpp"
 
-namespace indie {
+namespace indie
+{
 
     void GameSystem::init(indie::SceneManager &sceneManager)
     {
@@ -26,7 +28,7 @@ namespace indie {
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
-        sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
     }
 
     void GameSystem::destroy()

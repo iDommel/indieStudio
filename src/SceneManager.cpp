@@ -5,10 +5,10 @@
 ** SceneManager.cpp
 */
 
-#include <stdexcept>
-
 #include "SceneManager.hpp"
 
+#include <iostream>
+#include <stdexcept>
 namespace indie
 {
     void SceneManager::addScene(std::unique_ptr<IScene> scene, SceneType sceneType)
@@ -40,6 +40,16 @@ namespace indie
         for (auto &scene : _scenes) {
             scene.second->setAddEntityCallback(callback);
         }
+    }
+
+    void SceneManager::setShouldClose(bool shouldClose)
+    {
+        _shouldClose = shouldClose;
+    }
+
+    bool SceneManager::getShouldClose()
+    {
+        return _shouldClose;
     }
 
 }

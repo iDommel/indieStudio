@@ -8,13 +8,14 @@
 #ifndef SCENE_MANAGER_HPP
 #define SCENE_MANAGER_HPP
 
+#include <functional>
 #include <map>
 #include <memory>
-#include <functional>
 
 #include "IScene.hpp"
 
-namespace indie {
+namespace indie
+{
     class SceneManager
     {
     public:
@@ -51,10 +52,15 @@ namespace indie {
          * @param callback Callback to set as addEntityCallback
          */
         void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+        /// @brief this will be read by the core to stop the main loop and close the program
+        void setShouldClose(bool shouldClose);
+        /// @brief Tells you if you should close the window
+        bool getShouldClose();
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;
         SceneType _currentScene = SceneType::NONE;
+        bool _shouldClose = false;
     };
 }
 

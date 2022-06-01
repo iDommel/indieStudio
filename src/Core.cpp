@@ -5,15 +5,17 @@
 ** Core.cpp
 */
 
+#include "Core.hpp"
+
 #include <chrono>
 
-#include "Core.hpp"
-#include "systems/GameSystem.hpp"
+#include "raylib.h"
 #include "systems/AudioSystem.hpp"
-#include "systems/GraphicSystem.hpp"
 #include "systems/EventSystem.hpp"
-
-namespace indie {
+#include "systems/GameSystem.hpp"
+#include "systems/GraphicSystem.hpp"
+namespace indie
+{
 
     Core::Core()
     {
@@ -31,9 +33,8 @@ namespace indie {
             system.second->init(_sceneManager);
 
         _sceneManager.setAddEntityCallback(std::bind(&Core::loadEntity, this, std::placeholders::_1));
-
-        while (!_end) {
-            auto time  = std::chrono::high_resolution_clock::now();
+        while (!_sceneManager.getShouldClose()) {
+            auto time = std::chrono::high_resolution_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(time - clock).count();
             if (deltaTime < UPDATE_DELTA)
                 continue;
@@ -41,7 +42,7 @@ namespace indie {
             _systems[SystemType::GAME]->update(_sceneManager, deltaTime);
             _systems[SystemType::GRAPHIC]->update(_sceneManager, deltaTime);
             _systems[SystemType::AUDIO]->update(_sceneManager, deltaTime);
-            _end = true;
+            clock = time;
         }
         for (auto &system : _systems)
             system.second->destroy();

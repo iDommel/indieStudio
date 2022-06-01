@@ -9,14 +9,15 @@
 #define GRAPHIC_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "../SceneManager.hpp"
-
-namespace indie {
+#include "SceneManager.hpp"
+#include "Window.hpp"
+namespace indie
+{
 
     class GraphicSystem : public ISystem
     {
     public:
-
+        GraphicSystem();
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -28,6 +29,7 @@ namespace indie {
         void loadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        std::unique_ptr<Window> _window;
     };
 
 }
