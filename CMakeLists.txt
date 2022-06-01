@@ -19,8 +19,8 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
-        src/AudioDevice.cpp
-        test_functions/TestAudioDevice.cpp
+        src/Music.cpp
+        test_functions/TestMusic.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
