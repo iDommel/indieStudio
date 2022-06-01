@@ -40,6 +40,12 @@ namespace indie {
          * @param entity The Entity that was added
          */
         virtual void loadEntity(std::shared_ptr<IEntity> entity) = 0;
+        /**
+         * @brief The callback to be called when an entity is removed from a scene
+         * @param entity The Entity that was removed
+         */
+        virtual void unloadEntity(std::shared_ptr<IEntity> entity) = 0;
+
     };
 
 }

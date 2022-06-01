@@ -44,9 +44,14 @@ namespace indie
         std::cout << "GraphicSystem::destroy" << std::endl;
     }
 
-    void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    void GraphicSystem::loadEntity(std::shared_ptr<IEntity>)
     {
         std::cout << "GraphicSystem::loadEntity" << std::endl;
+    }
+
+    void GraphicSystem::unloadEntity(std::shared_ptr<IEntity>)
+    {
+        std::cout << "GraphicSystem::unloadEntity" << std::endl;
     }
 
 }

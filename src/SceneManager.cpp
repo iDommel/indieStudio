@@ -52,4 +52,10 @@ namespace indie
         return _shouldClose;
     }
 
+    void SceneManager::setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
+    {
+        for (auto &scene : _scenes) {
+            scene.second->setRemoveEntityCallback(callback);
+        }
+    }
 }

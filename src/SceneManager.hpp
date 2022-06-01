@@ -9,6 +9,7 @@
 #define SCENE_MANAGER_HPP
 
 #include <functional>
+#include <iostream>
 #include <map>
 #include <memory>
 
@@ -56,6 +57,12 @@ namespace indie
         void setShouldClose(bool shouldClose);
         /// @brief Tells you if you should close the window
         bool getShouldClose();
+
+        /**
+         * @brief Set callback as removeEntityCallback for all scene
+         * @param callback Callback to set as removeEntityCallback
+         */
+        void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;

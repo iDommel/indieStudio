@@ -33,6 +33,8 @@ namespace indie
 
         if (it == _entities.end())
             return;
+        if (_removeEntityCallback)
+            _removeEntityCallback(entity);
         _entities.erase(it);
     }
 
@@ -63,6 +65,11 @@ namespace indie
     void Scene::setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
     {
         _addEntityCallback = callback;
+    }
+
+    void Scene::setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
+    {
+        _removeEntityCallback = callback;
     }
 
 }

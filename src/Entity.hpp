@@ -15,6 +15,8 @@
 #include "IEntity.hpp"
 #include "components/IComponent.hpp"
 
+#include <iostream>
+
 namespace indie {
     class Entity : public IEntity
     {

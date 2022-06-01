@@ -15,6 +15,8 @@
 #include "IScene.hpp"
 #include "IEntity.hpp"
 
+#include <iostream>
+
 namespace indie {
 
     class Core;
@@ -58,12 +60,20 @@ namespace indie {
          */
         void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
 
+        /**
+         * @brief Set the callback function to call when an entity is removed
+         * @param callback Callback function
+         */
+        void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+
     protected:
         std::vector<std::shared_ptr<IEntity>> _entities;
         /// @brief Scene's init function; called by GameSystem::init & Scene::reloadScene
         std::function<std::unique_ptr<IScene>()> _initFunc;
         /// @brief Callback when an entity is added to the scene
         std::function<void(std::shared_ptr<IEntity>)> _addEntityCallback;
+        /// @brief Callback when an entity is removed from the scene
+        std::function<void(std::shared_ptr<IEntity>)> _removeEntityCallback;
     };
 }
 

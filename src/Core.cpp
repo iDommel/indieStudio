@@ -54,4 +54,9 @@ namespace indie
             system.second->loadEntity(entity);
     }
 
+    void Core::unloadEntity(std::shared_ptr<IEntity> entity)
+    {
+        for (auto &system : _systems)
+            system.second->unloadEntity(entity);
+    }
 }

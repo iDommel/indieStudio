@@ -17,6 +17,8 @@ namespace indie {
     class IScene
     {
     public:
+        virtual ~IScene() = default;
+
         /**
          * @brief Get the scene's entities
          * @return Returns a reference of the scene's entities vector
@@ -46,6 +48,12 @@ namespace indie {
          * @param callback Callback function
          */
         virtual void setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback) = 0;
+
+        /**
+         * @brief Set the callback function to call when an entity is removed
+         * @param callback Callback function
+         */
+        virtual void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback) = 0;
     };
 }
 
