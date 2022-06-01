@@ -12,7 +12,7 @@
 #define MAX_FRAME_SPEED 15
 #define MIN_FRAME_SPEED 1
 
-void TestAnimations2D()
+void testAnimations2D()
 {
     // Initialization
     //--------------------------------------------------------------------------------------
