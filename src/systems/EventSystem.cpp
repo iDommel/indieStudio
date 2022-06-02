@@ -31,7 +31,6 @@ namespace indie
                 std::shared_ptr<EventListener> listener = castComponent<EventListener>(tmp);
                 handleKeyboard(listener);
                 handleMouse(listener);
-                // TODO: multiple gamepad support
                 for (int i = 0; i < maxGamepads; i++) {
                     if (Window::isGamepadAvailable(i)) {
                         handleGamepad(listener, i);
