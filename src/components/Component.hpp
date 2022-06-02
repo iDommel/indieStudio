@@ -24,7 +24,7 @@ namespace indie
         void setType(Type type) { _type = type; };
 
         template <typename T>
-        static std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> component)
+        static std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> &component)
         {
             std::shared_ptr<T> res = std::dynamic_pointer_cast<T>(component);
 
