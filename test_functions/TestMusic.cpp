@@ -47,7 +47,7 @@ void testMusic(void)
             else music.ResumeMusic();
         }
 
-        timePlayed = music.MusicTimePlayed()/music.MusicTimeLength()*400;
+        timePlayed = music.getTimePlayedMusic()/music.getTimeLengthMusic()*400;
 
         if (timePlayed > 400) music.StopMusic();
 

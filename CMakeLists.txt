@@ -20,17 +20,45 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
         src/Music.cpp
-
         src/Texture2D.cpp
-        src/window.cpp
         src/Camera.cpp
+        src/AudioDevice.cpp
+        src/Core.cpp
+        src/Scene.cpp
+        src/SceneManager.cpp
+        src/Entity.cpp
+        src/Window.cpp
+        src/Shape3D.cpp
+        src/Model.cpp
+        src/Text.cpp
+        src/EventListener.cpp
+        src/ButtonCallbacks.cpp
+        src/MouseCallbacks.cpp
+        src/GamepadStickCallbacks.cpp
+
+        src/systems/AudioSystem.cpp
+        src/systems/GraphicSystem.cpp
+        src/systems/GameSystem.cpp
+        src/systems/EventSystem.cpp
+
+        src/components/Component.cpp
 
         test_functions/TestAnimations2D.cpp
+        test_functions/TestCamera.cpp
+        test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
         test_functions/TestMusic.cpp
+        test_functions/TestAudioDevice.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/*)
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        src/**
+        src/components
+        src/exceptions
+        src/systems
+        src
+)
 
 # Set default compile flags for GCC
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -46,4 +74,3 @@ set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "../"
 )
-

@@ -36,13 +36,13 @@ namespace indie {
             ///  @brief Resume playing paused music
             void ResumeMusic();
             ///  @brief Set volume for music (1.0 is max level)
-            void MusicVolume(float volume);
+            void setVolumeMusic(float volume);
             ///  @brief Updates buffers for music
             void UpdateMusic();
             ///  @brief Get music time length (in seconds)
-            float MusicTimeLength();
+            float getTimeLengthMusic();
             ///  @brief Get current music time played (in seconds)
-            float MusicTimePlayed();
+            float getTimePlayedMusic();
 
         protected:
         private:

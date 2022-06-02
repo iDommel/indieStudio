@@ -59,7 +59,7 @@ namespace indie {
         _state = MusicState::PLAY;
     }
 
-    void Music::MusicVolume(float volume)
+    void Music::setVolumeMusic(float volume)
     {
         SetMusicVolume(*_music, volume);
     }
@@ -69,12 +69,12 @@ namespace indie {
         UpdateMusicStream(*_music);
     }
 
-    float Music::MusicTimeLength()
+    float Music::getTimeLengthMusic()
     {
         return GetMusicTimeLength(*_music);
     }
 
-    float Music::MusicTimePlayed()
+    float Music::getTimePlayedMusic()
     {
         return GetMusicTimePlayed(*_music);
     }

@@ -6,7 +6,8 @@
 */
 
 #include <raylib.h>
-#include "Texture2D.hpp"
+
+#include "../src/Texture2D.hpp"
 
 void testTextures()
 {
@@ -18,11 +19,11 @@ void testTextures()
     InitWindow(screenWidth, screenHeight, "raylib [textures] example - texture loading and drawing");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-    indie::Texture texture("test_pictures/raylib_logo.png"); // Texture loading
+    indie::Texture texture("test_pictures/raylib_logo.png");  // Texture loading
     //---------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose()) // Detect window close button or ESC key
+    while (!WindowShouldClose())  // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -44,10 +45,9 @@ void testTextures()
     }
 
     // De-Initialization
-    texture.unload(); // Texture unloading
+    texture.unload();  // Texture unloading
     //--------------------------------------------------------------------------------------
 
-    CloseWindow(); // Close window and OpenGL context
+    CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-
 }
