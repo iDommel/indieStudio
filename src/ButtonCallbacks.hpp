@@ -9,6 +9,8 @@
 #define BUTTONCALLBACKS_HPP_
 
 #include <functional>
+#include "SceneManager.hpp"
+
 namespace indie
 {
     /// @brief Class to group all pressed, released and down callbacks for an event
@@ -24,13 +26,13 @@ namespace indie
          * @param down callback to be called when a button is down
          */
         ButtonCallbacks(
-            std::function<void(void)> pressed,
-            std::function<void(void)> released,
-            std::function<void(void)> down);
+            std::function<void(SceneManager &)> pressed,
+            std::function<void(SceneManager &)> released,
+            std::function<void(SceneManager &)> down);
         ~ButtonCallbacks();
-        std::function<void()> _pressed;
-        std::function<void()> _released;
-        std::function<void()> _down;
+        std::function<void(SceneManager &)> _pressed;
+        std::function<void(SceneManager &)> _released;
+        std::function<void(SceneManager &)> _down;
 
     protected:
     private:

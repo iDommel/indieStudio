@@ -24,7 +24,8 @@ namespace indie
             RENDERABLE_2D,
             COLLIDABLE,
             AUDIBLE,
-            CALLABLE
+            CALLABLE,
+            BOMB
         };
 
         virtual ~IEntity() = default;

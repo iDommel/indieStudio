@@ -13,6 +13,7 @@
 #include "../Entity.hpp"
 #include "../Scene.hpp"
 #include "../components/String.hpp"
+#include "Bomb.hpp"
 
 namespace indie
 {
@@ -25,9 +26,24 @@ namespace indie
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
     }
 
-    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
+    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t deltaTime)
     {
+        std::vector<std::shared_ptr<indie::IComponent>> components;
+
         std::cout << "GameSystem::update" << std::endl;
+
+        for (auto &bomb : _bombs) {
+            components = bomb->getComponents();
+            for (auto &component : components) {
+                if (component->getType() == IComponent::Type::BOMB) {
+                    auto bombComponent = Component::castComponent<Bomb>(component);
+                    bombComponent->setTimer(bombComponent->getTimer() - deltaTime);
+                    if (bombComponent->getTimer() <= 0) {
+                        bombComponent->explode();
+                    }
+                }
+            }
+        }
         // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
     }
 
@@ -59,8 +75,10 @@ namespace indie
         return scene;
     }
 
-    void GameSystem::loadEntity(std::shared_ptr<IEntity>)
+    void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
+        if (entity->hasTag(IEntity::Tags::BOMB))
+            _bombs.push_back(entity);
     }
 
     void GameSystem::unloadEntity(std::shared_ptr<IEntity>)

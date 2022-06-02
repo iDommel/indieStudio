@@ -17,12 +17,16 @@ class Bomb: public Component{
         Bomb(int blastPower = 1);
         ~Bomb();
 
+        
+        ///@brief Explode the bomb after a certain amount of time
         void explode();
+        void setTimer(uint64_t time);
+        uint64_t getTimer() const;
     protected:
     private:
-        int _seconds;
+        uint64_t _countdown;
         int _blastPower;
-        bool _isActive;
+        Type _type;
 };
 
 }

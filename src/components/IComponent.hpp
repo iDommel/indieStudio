@@ -23,7 +23,9 @@ namespace indie
             HITBOX,
             MUSIC,
             SOUND,
-            EVT_LISTENER
+            EVT_LISTENER,
+            BOMB,
+            PLAYER
         };
 
         virtual Type getType() const = 0;

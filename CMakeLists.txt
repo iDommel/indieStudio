@@ -21,7 +21,6 @@ target_sources(${PROJECT_NAME}
         src/main.cpp
         src/AudioDevice.cpp
 
-        test_functions/TestAudioDevice.cpp
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
@@ -31,9 +30,11 @@ target_sources(${PROJECT_NAME}
         src/systems/GraphicSystem.cpp
         src/systems/GameSystem.cpp
         src/systems/EventSystem.cpp
-
+        
         src/components/Component.cpp
-
+        src/components/Bomb.cpp
+        src/components/Player.cpp
+        
         src/Texture2D.cpp
         src/Window.cpp
         src/Shape3D.cpp
@@ -41,15 +42,15 @@ target_sources(${PROJECT_NAME}
         src/Camera.cpp
         src/Model.cpp
         src/Text.cpp
-
+        
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
-
+        
         test_functions/TestAnimations2D.cpp
+        test_functions/TestAudioDevice.cpp
         test_functions/TestCamera.cpp
-        test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
 )
 

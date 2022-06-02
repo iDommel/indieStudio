@@ -25,7 +25,9 @@ namespace indie
         {Entity::Tags::COLLIDABLE,
          {{IComponent::Type::HITBOX}}},
         {Entity::Tags::CALLABLE,
-         {{IComponent::Type::EVT_LISTENER}}}};
+         {{IComponent::Type::EVT_LISTENER}}},
+        {Entity::Tags::BOMB,
+         {{IComponent::Type::BOMB, IComponent::Type::VECTOR}}}};
 
     void Entity::addComponent(std::shared_ptr<IComponent> component)
     {
