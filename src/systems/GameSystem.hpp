@@ -8,8 +8,8 @@
 #ifndef GAME_SYSTEM_HPP
 #define GAME_SYSTEM_HPP
 
-#include "../SceneManager.hpp"
 #include "ISystem.hpp"
+#include "SceneManager.hpp"
 
 namespace indie
 {

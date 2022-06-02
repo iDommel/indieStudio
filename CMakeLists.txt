@@ -30,6 +30,7 @@ target_sources(${PROJECT_NAME}
         src/systems/EventSystem.cpp
 
         src/components/Component.cpp
+        src/components/EventListener.cpp
 
         src/Texture2D.cpp
         src/Window.cpp
@@ -39,7 +40,6 @@ target_sources(${PROJECT_NAME}
         src/Model.cpp
         src/Text.cpp
 
-        src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp

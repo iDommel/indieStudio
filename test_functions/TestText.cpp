@@ -7,7 +7,7 @@
 
 #include <raylib.h>
 
-#include "../src/Text.hpp"
+#include "Text.hpp"
 
 void testText(void)
 {
@@ -32,11 +32,11 @@ void testText(void)
     // TTF font : Font data and atlas are generated directly from TTF
     // NOTE: We define a font base size of 32 pixels tall and up-to 250 characters
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose())  // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -46,12 +46,12 @@ void testText(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+        ClearBackground(RAYWHITE);
 
-            textSpace.draw(20, 20, 20, LIGHTGRAY);
+        textSpace.draw(20, 20, 20, LIGHTGRAY);
 
-            textMsg.drawEx((Vector2){ 20.0f, 100.0f }, (float)textMsg.getFont().baseSize, 2, MAROON);
-            textBm.draw(20, GetScreenHeight() - 30, 20, GRAY);
+        textMsg.drawEx((Vector2){20.0f, 100.0f}, (float)textMsg.getFont().baseSize, 2, MAROON);
+        textBm.draw(20, GetScreenHeight() - 30, 20, GRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -59,8 +59,8 @@ void testText(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    textMsg.unloadFont();     // AngelCode Font unloading
+    textMsg.unloadFont();  // AngelCode Font unloading
 
-    CloseWindow();          // Close window and OpenGL context
+    CloseWindow();  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 }

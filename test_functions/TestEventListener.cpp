@@ -8,10 +8,10 @@
 #include <exception>
 #include <iostream>
 
-#include "../src/Camera.hpp"
-#include "../src/EventListener.hpp"
-#include "../src/Shape3D.hpp"
-#include "../src/Window.hpp"
+#include "Camera.hpp"
+#include "EventListener.hpp"
+#include "Shape3D.hpp"
+#include "Window.hpp"
 #include "raylib.h"
 
 #define GAMEPAD_NB 0

@@ -8,8 +8,8 @@
 #ifndef EVENT_SYSTEM_HPP
 #define EVENT_SYSTEM_HPP
 
-#include "../SceneManager.hpp"
 #include "ISystem.hpp"
+#include "SceneManager.hpp"
 
 namespace indie
 {
