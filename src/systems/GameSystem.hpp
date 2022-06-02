@@ -36,6 +36,7 @@ namespace indie {
 
     private:
         static std::unique_ptr<IScene> createScene();
+        std::unique_ptr<IScene> createMainMenu();
     };
 
 }

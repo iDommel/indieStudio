@@ -1,4 +1,4 @@
-#include "../include/Model.hpp"
+#include "Model.hpp"
 #include "raylib.h"
 #include <iostream>
 

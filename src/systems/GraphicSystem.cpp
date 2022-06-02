@@ -6,6 +6,9 @@
 */
 
 #include "GraphicSystem.hpp"
+#include "String.hpp"
+#include "Texture2D.hpp"
+#include "Vector.hpp"
 
 #include <iostream>
 
@@ -31,8 +34,9 @@ namespace indie
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
         for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::RENDERABLE_2D))
-                std::cout << "render 2D img" << std::endl;
+            if (e->hasTag(IEntity::Tags::RENDERABLE_2D)) {
+                std::cout << castComponent<String>(e->getComponents()[0])->getValue() << std::endl;
+            }
             else if (e->hasTag(IEntity::Tags::RENDERABLE_3D))
                 std::cout << "render 3D img" << std::endl;
         }
