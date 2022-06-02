@@ -30,8 +30,42 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
+        ButtonCallbacks enterCallbacks(
+            []() {
+                std::cout << "---------- enter pressed" << std::endl;
+            },
+            []() {
+                std::cout << "---------- enter released" << std::endl;
+            },
+            []() {
+                std::cout << "---------- enter down" << std::endl;
+            });
+
         std::cout << "GameSystem::update" << std::endl;
-        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+
+        static int i = 2;
+        if (i > 1) {
+            std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+            listener->addKeyboardEvent(KEY_ENTER, enterCallbacks);
+            std::shared_ptr<String> string = std::make_shared<String>("Hello world");
+            string->setType(String::Type::TEXT);
+            entity->addComponent(listener);
+            entity->addComponent(string);
+
+            sceneManager.getCurrentScene().addEntity(entity);
+            i--;
+            return;
+        }
+        if (i > 0) {
+            std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+            auto tmp1 = sceneManager.getCurrentScene().getTaggedEntities({Entity::Tags::CALLABLE})[0];
+            sceneManager.getCurrentScene().removeEntity(tmp1);
+
+            i--;
+            return;
+        }
     }
 
     void GameSystem::destroy()

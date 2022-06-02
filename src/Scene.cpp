@@ -5,9 +5,10 @@
 ** Scene.cpp
 */
 
+#include "Scene.hpp"
+
 #include <algorithm>
 
-#include "Scene.hpp"
 #include "Core.hpp"
 
 namespace indie
@@ -55,8 +56,10 @@ namespace indie
                     break;
                 }
             }
-            if (!hasTags)
+            if (!hasTags) {
+                hasTags = true;
                 continue;
+            }
             taggedEntities.push_back(entity);
         }
         return taggedEntities;

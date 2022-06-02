@@ -7,6 +7,7 @@
 
 #include "EventSystem.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 #include "Component.hpp"
@@ -15,27 +16,27 @@
 namespace indie
 {
 
-    void EventSystem::init(SceneManager &)
+    void EventSystem::init(SceneManager &sceneManager)
     {
         std::cout << "EventSystem init" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
+            if (e->hasTag(IEntity::Tags::CALLABLE)) {
+                std::shared_ptr<IComponent> tmp = e->getComponents({Component::Type::EVT_LISTENER})[0];
+                std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+                _listeners.push_back(listener);
+            }
+        }
     }
 
     void EventSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        // this number is from looking into the source files from the raylib
-        const int maxGamepads = 4;
-
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::CALLABLE)) {
-                std::shared_ptr<IComponent> tmp = e->getComponents({Component::Type::EVT_LISTENER})[0];
-                std::shared_ptr<EventListener> listener = castComponent<EventListener>(tmp);
-                handleKeyboard(listener);
-                handleMouse(listener);
-                for (int i = 0; i < maxGamepads; i++) {
-                    if (Window::isGamepadAvailable(i)) {
-                        handleGamepad(listener, i);
-                        handleGamepadSticks(listener, i);
-                    }
+        for (auto &listener : _listeners) {
+            handleKeyboard(listener);
+            handleMouse(listener);
+            for (int i = 0; i < _maxGamepads; i++) {
+                if (Window::isGamepadAvailable(i)) {
+                    handleGamepad(listener, i);
+                    handleGamepadSticks(listener, i);
                 }
             }
         }
@@ -114,12 +115,23 @@ namespace indie
 
     void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cout << "EventSystem::loadEntity" << std::endl;
+        if (entity->hasTag(IEntity::Tags::CALLABLE)) {
+            std::shared_ptr<IComponent> tmp = entity->getComponents({Component::Type::EVT_LISTENER})[0];
+            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+            _listeners.push_back(listener);
+        }
     }
 
-    void EventSystem::unloadEntity(std::shared_ptr<IEntity>)
+    void EventSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cout << "EventSystem::unloadEntity" << std::endl;
+        if (entity->hasTag(IEntity::Tags::CALLABLE)) {
+            std::shared_ptr<IComponent> tmp = entity->getComponents({Component::Type::EVT_LISTENER})[0];
+            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+            auto it = std::find(_listeners.begin(), _listeners.end(), listener);
+            if (it != _listeners.end()) {
+                _listeners.erase(it);
+            }
+        }
     }
 
 }

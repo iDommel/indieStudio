@@ -33,10 +33,13 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        /// @brief this number is from looking into the source files from the raylib
+        const int _maxGamepads = 4;
         void handleKeyboard(std::shared_ptr<EventListener> listener);
         void handleMouse(std::shared_ptr<EventListener> listener);
         void handleGamepad(std::shared_ptr<EventListener> listener, int nb);
         void handleGamepadSticks(std::shared_ptr<EventListener> listener, int nb);
+        std::vector<std::shared_ptr<EventListener>> _listeners;
     };
 
 }
