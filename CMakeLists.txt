@@ -19,6 +19,9 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/AudioDevice.cpp
+
+        test_functions/TestAudioDevice.cpp
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
@@ -52,6 +55,7 @@ target_sources(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
+        src/**
         src/components
         src/exceptions
         src/systems
@@ -72,4 +76,3 @@ set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "../"
 )
-
