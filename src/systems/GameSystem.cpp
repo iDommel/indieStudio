@@ -28,7 +28,8 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
-        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+        auto e = sceneManager.getCurrentScene().getEntities()[0];
+        auto comp = (*e)[Component::Type::SPRITE];
     }
 
     void GameSystem::destroy()
