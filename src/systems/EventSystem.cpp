@@ -46,15 +46,15 @@ namespace indie
     {
         for (auto &it : listener->getKeyboardMappings()) {
             if (Window::isKeyPressed(it.first)) {
-                it.second._pressed();
+                it.second.pressed();
                 break;
             }
             if (Window::isKeyDown(it.first)) {
-                it.second._down();
+                it.second.down();
                 break;
             }
             if (Window::isKeyReleased(it.first)) {
-                it.second._released();
+                it.second.released();
                 break;
             }
         }
@@ -83,15 +83,15 @@ namespace indie
     {
         for (auto &it : listener->getGamepadMappings(nb)) {
             if (Window::isGamepadButtonPressed(nb, it.first)) {
-                it.second._pressed();
+                it.second.pressed();
                 break;
             }
             if (Window::isGamepadButtonDown(nb, it.first)) {
-                it.second._down();
+                it.second.down();
                 break;
             }
             if (Window::isGamepadButtonReleased(nb, it.first)) {
-                it.second._released();
+                it.second.released();
                 break;
             }
         }
