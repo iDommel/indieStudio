@@ -5,6 +5,8 @@ This project aims to be a bomberman clone using the raylib graphical library.
     cmake -B build
     cmake --build build
 
+    For debugging:
+    cmake -DCMAKE_BUILD_TYPE=Debug build
 # Language:
 Use english EVERYWHERE !
 
@@ -38,4 +40,4 @@ Be careful, the following command deletes all your local commits on the current 
     git reset (--hard)
 
 # Namespace and Class nomenclature
-When encapsulating Class of raylib don't forget to use "indi" namespace
+When encapsulating Class of raylib don't forget to use "indie" namespace
