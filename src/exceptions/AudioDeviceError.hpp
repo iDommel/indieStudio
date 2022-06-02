@@ -10,12 +10,14 @@
 
 #include <string>
 
-class AudioDeviceError {
-    public:
-        AudioDeviceError(const std::string &msg): _msg(msg) {}
-        virtual const char *what() const throw() { return _msg.c_str(); }
-    private:
-        std::string _msg;
-};
+namespace indie {
+    class AudioDeviceError {
+        public:
+            AudioDeviceError(const std::string &msg): _msg(msg) {}
+            virtual const char *what() const throw() { return _msg.c_str(); }
+        private:
+            std::string _msg;
+    };
+}
 
 #endif /* !AUDIODEVICEERROR_HPP_ */

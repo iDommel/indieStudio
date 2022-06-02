@@ -13,7 +13,7 @@
 indie::AudioDevice::AudioDevice()
 {
     InitAudioDevice();
-    if (Ready() != true)
+    if (isReady() != true)
         throw AudioDeviceError("AudioDevice already initialized");
 }
 
@@ -22,12 +22,12 @@ indie::AudioDevice::~AudioDevice()
     CloseAudioDevice();
 }
 
-bool indie::AudioDevice::Ready()
+bool indie::AudioDevice::isReady()
 {
     return IsAudioDeviceReady();
 }
 
-void indie::AudioDevice::Volume(float volume)
+void indie::AudioDevice::setVolume(float volume)
 {
     SetMasterVolume(volume);
 }

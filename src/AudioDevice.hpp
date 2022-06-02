@@ -15,10 +15,10 @@ namespace indie {
             AudioDevice();
             ///  @brief Destruct the audio device:: close the audio device
             ~AudioDevice();
-            ///  @brief Check if the audio device is playing
-            bool Ready();
-            ///  @brief Set the volume of the audio device
-            void Volume(float volume);
+            ///  @brief isReady:: Check if the audio device is playing
+            bool isReady();
+            ///  @brief Set music volume
+            void setVolume(float volume);
 
         protected:
         private:
