@@ -24,10 +24,9 @@ namespace indie {
         if (!_music)
             return;
         UnloadMusicStream(*_music);
-        delete _music.release();
     }
 
-    void Music::PlayMusic()
+    void Music::playMusic()
     {
         if (IsMusicStreamPlaying(*_music) == false)
             _state = MusicState::STOP;
@@ -35,7 +34,7 @@ namespace indie {
         _state = MusicState::PLAY;
     }
 
-    void Music::StopMusic()
+    void Music::stopMusic()
     {
         if (_state == MusicState::STOP)
             return;
@@ -43,7 +42,7 @@ namespace indie {
         _state = MusicState::STOP;
     }
 
-    void Music::PauseMusic()
+    void Music::pauseMusic()
     {
         if (_state == MusicState::PAUSE)
             return;
@@ -51,7 +50,7 @@ namespace indie {
         _state = MusicState::PAUSE;
     }
 
-    void Music::ResumeMusic()
+    void Music::resumeMusic()
     {
         if (_state != MusicState::PAUSE)
             return;
@@ -64,7 +63,7 @@ namespace indie {
         SetMusicVolume(*_music, volume);
     }
 
-    void Music::UpdateMusic()
+    void Music::updateMusic()
     {
         UpdateMusicStream(*_music);
     }

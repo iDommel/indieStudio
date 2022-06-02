@@ -21,7 +21,7 @@ void testMusic(void)
 
     indie::Music music("test_pictures/music.ogg");
 
-    music.PlayMusic();
+    music.playMusic();
 
     float timePlayed = 0.0f;
     bool pause = false;
@@ -31,25 +31,25 @@ void testMusic(void)
 
     while (!WindowShouldClose())
     {
-        music.UpdateMusic();
+        music.updateMusic();
 
         if (IsKeyPressed(KEY_SPACE))
         {
-            music.StopMusic();
-            music.PlayMusic();
+            music.stopMusic();
+            music.playMusic();
         }
 
         if (IsKeyPressed(KEY_P))
         {
             pause = !pause;
 
-            if (pause) music.PauseMusic();
-            else music.ResumeMusic();
+            if (pause) music.pauseMusic();
+            else music.resumeMusic();
         }
 
         timePlayed = music.getTimePlayedMusic()/music.getTimeLengthMusic()*400;
 
-        if (timePlayed > 400) music.StopMusic();
+        if (timePlayed > 400) music.stopMusic();
 
 
         BeginDrawing();

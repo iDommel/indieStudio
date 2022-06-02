@@ -28,17 +28,17 @@ namespace indie {
             };
 
             ///  @brief Start music
-            void PlayMusic();
+            void playMusic();
             ///  @brief Stop music
-            void StopMusic();
+            void stopMusic();
             ///  @brief Pause music
-            void PauseMusic();
+            void pauseMusic();
             ///  @brief Resume playing paused music
-            void ResumeMusic();
+            void resumeMusic();
             ///  @brief Set volume for music (1.0 is max level)
             void setVolumeMusic(float volume);
             ///  @brief Updates buffers for music
-            void UpdateMusic();
+            void updateMusic();
             ///  @brief Get music time length (in seconds)
             float getTimeLengthMusic();
             ///  @brief Get current music time played (in seconds)
