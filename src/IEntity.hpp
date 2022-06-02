@@ -56,6 +56,13 @@ namespace indie
          */
         virtual std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components) = 0;
 
+        /**
+         * @brief Get component of given type
+         * @param type Type of component to search for
+         * @return Returns a component of the given type
+         */
+        virtual std::shared_ptr<IComponent> &getComponent(IComponent::Type type) = 0;
+
     };
 
 }

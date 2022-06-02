@@ -82,4 +82,13 @@ namespace indie
         return res;
     }
 
+    std::shared_ptr<IComponent> &Entity::getComponent(IComponent::Type type)
+    {
+        for (auto &component : _components) {
+            if (component->getType() == type)
+                return component;
+        }
+        throw std::invalid_argument("Entity: Component type not found");
+    }
+
 }
