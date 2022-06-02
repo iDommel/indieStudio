@@ -43,8 +43,8 @@ namespace indie
 
         std::cout << "GameSystem::update" << std::endl;
 
-        static int i = 2;
-        if (i > 1) {
+        static int i = 3;
+        if (i > 2) {
             std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
             std::shared_ptr<Entity> entity = std::make_shared<Entity>();
             listener->addKeyboardEvent(KEY_ENTER, enterCallbacks);
@@ -57,12 +57,21 @@ namespace indie
             i--;
             return;
         }
-        if (i > 0) {
+        if (i > 1) {
             std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
             std::shared_ptr<Entity> entity = std::make_shared<Entity>();
             auto tmp1 = sceneManager.getCurrentScene().getTaggedEntities({Entity::Tags::CALLABLE})[0];
-            sceneManager.getCurrentScene().removeEntity(tmp1);
+            // sceneManager.getCurrentScene().removeEntity(tmp1);
 
+            i--;
+            return;
+        }
+
+        if (i > 0) {
+            auto entity = sceneManager.getCurrentScene().getTaggedEntities({Entity::Tags::CALLABLE})[1];
+
+            auto listener = Component::castComponent<EventListener>(entity->getComponents({Component::Type::EVT_LISTENER})[0]);
+            listener->replaceKeyboardEvent(KEY_ENTER, KEY_SPACE);
             i--;
             return;
         }
