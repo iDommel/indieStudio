@@ -24,7 +24,7 @@ class Player: public Component {
             BOMB
         };
 
-        Player(std::map<Keys, KeyboardKey> binds);
+        Player(/*std::map<Keys, KeyboardKey> binds*/);
         ~Player();
 
         ///@brief Handle the various bonuses

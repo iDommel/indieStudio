@@ -33,7 +33,7 @@ uint64_t Bomb::getTimer() const
 
 void Bomb::explode()
 {
-    std::cout << "---------------------------Bomb exploded" << std::endl;
+    std::cout << "---------------------------BOMB EXPLODEEEEEEEEEEEEEEEEEEEED" << std::endl;
 }
 
 }

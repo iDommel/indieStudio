@@ -38,7 +38,6 @@ namespace indie
 
     private:
         std::unique_ptr<IScene> createScene();
-        std::vector<std::shared_ptr<IEntity>> _bombs;
     };
 
 }

@@ -18,6 +18,7 @@
 #include "SceneManager.hpp"
 #include "String.hpp"
 #include "Bomb.hpp"
+#include "Player.hpp"
 
 namespace indie
 {
@@ -67,24 +68,25 @@ namespace indie
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        std::shared_ptr<Entity> player1 = std::make_shared<Entity>();
+        std::shared_ptr<Player> playerComp = std::make_shared<Player>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
         component->setType(Component::Type::SOUND);
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
 
+        player1->addComponent(playerComp);
         entity2->addComponent(component)
             .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);
 
-        scene->addEntities({entity, entity2});
+        scene->addEntities({entity, entity2, player1});
         return scene;
     }
 
     void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        if (entity->hasTag(IEntity::Tags::BOMB))
-            _bombs.push_back(entity);
     }
 
     void GameSystem::unloadEntity(std::shared_ptr<IEntity>)

@@ -15,13 +15,13 @@
 
 namespace indie {
 
-Player::Player(std::map<Keys, KeyboardKey> binds)
+Player::Player(/*std::map<Keys, KeyboardKey>*/)
 {
     ButtonCallbacks bombCB(std::bind(&Player::generateBomb, this, std::placeholders::_1), [](SceneManager &){}, [](SceneManager &){});
 
     _type = Type::PLAYER;
     _nbBomb = 1;
-    _eventListener.addKeyboardEvent(binds[Keys::BOMB], bombCB);
+    _eventListener.addKeyboardEvent(KeyboardKey::KEY_E, bombCB);
 }
 
 Player::~Player()
@@ -42,6 +42,7 @@ void Player::generateBomb(SceneManager &manager)
     
     bomb->addComponent(std::make_shared<Bomb>(_blastPower));
     manager.getCurrentScene().addEntity(bomb);
+    std::cout << "--------------------------------BOMB" << std::endl;
 }
 
 }
