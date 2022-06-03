@@ -1,5 +1,5 @@
-#ifndef SHAPE3DH
-#define SHAPE3DH
+#ifndef SHAPE2DH
+#define SHAPE2DH
 
 struct Vector2;
 struct Color;
