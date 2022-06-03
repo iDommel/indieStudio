@@ -147,13 +147,13 @@ namespace indie {
              * @param point Point
              * @param rect Rectangle
             **/
-            bool check2DCollision(const const Vector2 &&point, const Rectangle &rect);
+            bool check2DCollision(const Vector2 &point, const Rectangle &rect);
             /**
              * @brief Check if a rectangle is on a point
              * @param rect Rectangle
              * @param point Point
             **/
-            bool check2DCollision(const Rectangle &rect, const const Vector2 &&point);
+            bool check2DCollision(const Rectangle &rect, const Vector2 &point);
 
             /**
              * @brief Check if a point is inside a circle
@@ -162,7 +162,7 @@ namespace indie {
              * @param radius Circle radius
              * @return True if collision, false otherwise
             **/
-            bool check2DCollision(const const Vector2 &&point, const Vector2 &center, float radius);
+            bool check2DCollision(const Vector2 &point, const Vector2 &center, float radius);
             /**
              * @brief Check if a circle is on a point
              * @param center Circle center
@@ -170,7 +170,7 @@ namespace indie {
              * @param point Point
              * @return True if collision, false otherwise
             **/
-            bool check2DCollision(const Vector2 &center, float radius, const const Vector2 &&point);
+            bool check2DCollision(const Vector2 &center, float radius, const Vector2 &point);
         private:
     };
 }

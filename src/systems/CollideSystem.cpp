@@ -112,22 +112,22 @@ namespace indie {
         return CheckCollisionCircles(center1, radius1, center2, radius2);
     }
 
-    bool CollideSystem::check2DCollision(const const Vector2 &&point, const Rectangle &rect)
+    bool CollideSystem::check2DCollision(const Vector2 &point, const Rectangle &rect)
     {
         return CheckCollisionPointRec(point, rect);
     }
 
-    bool CollideSystem::check2DCollision(const Rectangle &rect, const const Vector2 &&point)
+    bool CollideSystem::check2DCollision(const Rectangle &rect, const Vector2 &point)
     {
         return CheckCollisionPointRec(point, rect);
     }
 
-    bool CollideSystem::check2DCollision(const const Vector2 &&point, const Vector2 &center, float radius)
+    bool CollideSystem::check2DCollision(const Vector2 &point, const Vector2 &center, float radius)
     {
         return CheckCollisionPointCircle(point, center, radius);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const const Vector2 &&point)
+    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Vector2 &point)
     {
         return CheckCollisionPointCircle(point, center, radius);
     }
