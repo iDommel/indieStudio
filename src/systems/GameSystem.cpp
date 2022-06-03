@@ -63,8 +63,7 @@ namespace indie
         component3->setType(Component::Type::VECTOR);
 
         entity2->addComponent(component)
-            .addComponent(component4);
-
+            .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);
 

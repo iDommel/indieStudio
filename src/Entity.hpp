@@ -54,12 +54,12 @@ namespace indie
          */
         std::vector<std::shared_ptr<IComponent>> getFilteredComponents(std::vector<IComponent::Type> components);
         /**
-         * @brief Allows the access to an entity's component via a Tag.
+         * @brief Allows the access to an entity's component via a Tag. Throws a std::runtime_error if the component is not found.
          *
          * @param tag The tag to acces
-         * @return A pointer to the component or nullptr if it didn't find it
+         * @return A pointer to the component
          */
-        std::shared_ptr<IComponent> operator[](IComponent::Type type);
+        std::shared_ptr<IComponent> &operator[](IComponent::Type type);
 
     private:
         std::vector<Tags> _tags;

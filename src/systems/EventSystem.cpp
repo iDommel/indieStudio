@@ -10,20 +10,19 @@
 #include "Component.hpp"
 #include "EventListener.hpp"
 #include "Window.hpp"
+namespace indie
 {
-    void EventSystem::init(SceneManager & sceneManager)
+    void EventSystem::init(SceneManager &sceneManager)
     {
         std::cout << "EventSystem init" << std::endl;
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::CALLABLE)) {
-                std::shared_ptr<IComponent> tmp = e->getComponents({Component::Type::EVT_LISTENER})[0];
-                std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CALLABLE]) {
+            auto listener = Component::castComponent<EventListener>((*e)[IComponent::Type::EVT_LISTENER]);
+            if (listener)
                 _listeners.push_back(listener);
-            }
         }
     }
 
-    void EventSystem::update(SceneManager & sceneManager, uint64_t)
+    void EventSystem::update(SceneManager &sceneManager, uint64_t)
     {
         for (auto &listener : _listeners) {
             handleKeyboard(listener);
@@ -111,8 +110,7 @@
     void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
         if (entity->hasTag(IEntity::Tags::CALLABLE)) {
-            std::shared_ptr<IComponent> tmp = entity->getComponents({Component::Type::EVT_LISTENER})[0];
-            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>((*entity)[Component::Type::EVT_LISTENER]);
             _listeners.push_back(listener);
         }
     }
@@ -120,8 +118,7 @@
     void EventSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
         if (entity->hasTag(IEntity::Tags::CALLABLE)) {
-            std::shared_ptr<IComponent> tmp = entity->getComponents({Component::Type::EVT_LISTENER})[0];
-            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>(tmp);
+            std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>((*entity)[Component::Type::EVT_LISTENER]);
             auto it = std::find(_listeners.begin(), _listeners.end(), listener);
             if (it != _listeners.end()) {
                 _listeners.erase(it);
