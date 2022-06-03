@@ -30,51 +30,10 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        ButtonCallbacks enterCallbacks(
-            []() {
-                std::cout << "---------- enter pressed" << std::endl;
-            },
-            []() {
-                std::cout << "---------- enter released" << std::endl;
-            },
-            []() {
-                std::cout << "---------- enter down" << std::endl;
-            });
-
         std::cout << "GameSystem::update" << std::endl;
 
-        static int i = 3;
-        if (i > 2) {
-            std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-            listener->addKeyboardEvent(KEY_ENTER, enterCallbacks);
-            std::shared_ptr<String> string = std::make_shared<String>("Hello world");
-            string->setType(String::Type::TEXT);
-            entity->addComponent(listener);
-            entity->addComponent(string);
-
-            sceneManager.getCurrentScene().addEntity(entity);
-            i--;
-            return;
-        }
-        if (i > 1) {
-            std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-            auto tmp1 = sceneManager.getCurrentScene().getTaggedEntities({Entity::Tags::CALLABLE})[0];
-            // sceneManager.getCurrentScene().removeEntity(tmp1);
-
-            i--;
-            return;
-        }
-
-        if (i > 0) {
-            auto entity = sceneManager.getCurrentScene().getTaggedEntities({Entity::Tags::CALLABLE})[1];
-
-            auto listener = Component::castComponent<EventListener>(entity->getComponents({Component::Type::EVT_LISTENER})[0]);
-            listener->replaceKeyboardEvent(KEY_ENTER, KEY_SPACE);
-            i--;
-            return;
-        }
+        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
+        auto comp = (*e)[Component::Type::SPRITE];
     }
 
     void GameSystem::destroy()
@@ -102,11 +61,14 @@ namespace indie
         component->setType(Component::Type::SOUND);
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
-        entity2->addComponent(listener);
-        entity->addComponent(component2);
-        entity->addComponent(component3);
-        scene->addEntity(entity);
-        scene->addEntity(entity2);
+
+        entity2->addComponent(component)
+            .addComponent(component4);
+
+        entity->addComponent(component2)
+            .addComponent(component3);
+
+        scene->addEntities({entity, entity2});
         return scene;
     }
 

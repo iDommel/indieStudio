@@ -7,16 +7,11 @@
 
 #include "EventSystem.hpp"
 
-#include <algorithm>
-#include <iostream>
-
 #include "Component.hpp"
 #include "EventListener.hpp"
 #include "Window.hpp"
-namespace indie
 {
-
-    void EventSystem::init(SceneManager &sceneManager)
+    void EventSystem::init(SceneManager & sceneManager)
     {
         std::cout << "EventSystem init" << std::endl;
         for (auto &e : sceneManager.getCurrentScene().getEntities()) {
@@ -28,7 +23,7 @@ namespace indie
         }
     }
 
-    void EventSystem::update(SceneManager &sceneManager, uint64_t)
+    void EventSystem::update(SceneManager & sceneManager, uint64_t)
     {
         for (auto &listener : _listeners) {
             handleKeyboard(listener);
@@ -133,5 +128,4 @@ namespace indie
             }
         }
     }
-
 }
