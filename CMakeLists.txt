@@ -19,13 +19,12 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
-        src/AudioDevice.cpp
-
+        
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
         src/Entity.cpp
-
+        
         src/systems/AudioSystem.cpp
         src/systems/GraphicSystem.cpp
         src/systems/GameSystem.cpp
@@ -35,13 +34,14 @@ target_sources(${PROJECT_NAME}
         src/components/Bomb.cpp
         src/components/Player.cpp
         
-        src/Texture2D.cpp
+        src/AudioDevice.cpp
         src/Window.cpp
         src/Shape3D.cpp
         src/Texture2D.cpp
         src/Camera.cpp
         src/Model.cpp
         src/Text.cpp
+        src/Sound.cpp
         
         src/EventListener.cpp
         src/ButtonCallbacks.cpp
@@ -52,6 +52,7 @@ target_sources(${PROJECT_NAME}
         test_functions/TestAudioDevice.cpp
         test_functions/TestCamera.cpp
         test_functions/TestTextures.cpp
+        test_functions/TestSound.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
