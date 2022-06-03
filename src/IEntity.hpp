@@ -18,7 +18,6 @@ namespace indie
     class IEntity
     {
     public:
-
         enum class Tags {
             RENDERABLE_3D,
             RENDERABLE_2D,
@@ -30,7 +29,7 @@ namespace indie
         virtual ~IEntity() = default;
 
         ///@brief Add component to entity and update entity's tags accordingly
-        virtual void addComponent(std::shared_ptr<IComponent> component) = 0;
+        virtual IEntity &addComponent(std::shared_ptr<IComponent> component) = 0;
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector
@@ -55,7 +54,6 @@ namespace indie
          * @return Returns a vector of components of the given types in the same order
          */
         virtual std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components) = 0;
-
     };
 
 }

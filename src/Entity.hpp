@@ -25,7 +25,7 @@ namespace indie
         static const std::map<Tags, std::vector<std::vector<IComponent::Type>>> entityTags;
 
         ///@brief Add component to entity and update entity's tags accordingly, mustn't be called after moving entity to scene
-        void addComponent(std::shared_ptr<IComponent> component);
+        IEntity &addComponent(std::shared_ptr<IComponent> component);
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector

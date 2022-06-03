@@ -50,12 +50,15 @@ namespace indie
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
         component4->setType(Component::Type::EVT_LISTENER);
-        entity2->addComponent(component);
-        entity->addComponent(component2);
-        entity->addComponent(component3);
-        entity2->addComponent(component4);
-        scene->addEntity(entity);
-        scene->addEntity(entity2);
+
+        entity2->addComponent(component)
+            .addComponent(component4);
+
+        entity->addComponent(component2)
+            .addComponent(component3);
+
+        scene->addEntity(entity)
+            .addEntity(entity2);
         return scene;
     }
 

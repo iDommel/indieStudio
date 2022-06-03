@@ -16,13 +16,14 @@ namespace indie
 
     Scene::Scene(std::function<std::unique_ptr<IScene>()> init) : _initFunc(init) {}
 
-    void Scene::addEntity(std::shared_ptr<IEntity> entity)
+    IScene &Scene::addEntity(std::shared_ptr<IEntity> entity)
     {
         for (auto &tag : entity->getTags()) {
             _taggedEntities[tag].push_back(entity);
         }
         if (_addEntityCallback)
             _addEntityCallback(entity);
+        return *this;
     }
 
     void Scene::removeEntity(std::shared_ptr<IEntity> entity)
@@ -44,7 +45,6 @@ namespace indie
     std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> Scene::getTaggedEntities(std::vector<IEntity::Tags> tags)
     {
         std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> taggedEntities;
-        bool hasTags = true;
 
         for (auto &tag : tags) {
             taggedEntities[tag] = _taggedEntities[tag];

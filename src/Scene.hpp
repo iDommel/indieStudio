@@ -31,7 +31,7 @@ namespace indie
         Scene(std::function<std::unique_ptr<IScene>()> init);
 
         /// @brief Add entity to scene
-        void addEntity(std::shared_ptr<IEntity> entity);
+        IScene &addEntity(std::shared_ptr<IEntity> entity);
         /// @brief Removes the given entity from scene
         void removeEntity(std::shared_ptr<IEntity> entity);
         /**

@@ -22,7 +22,7 @@ namespace indie
         virtual ~IScene() = default;
 
         /// @brief Add entity to scene, you MUST call this function AFTER adding all the components to an entity
-        virtual void addEntity(std::shared_ptr<IEntity> entity) = 0;
+        virtual IScene &addEntity(std::shared_ptr<IEntity> entity) = 0;
         /// @brief Removes the given entity from scene
         virtual void removeEntity(std::shared_ptr<IEntity> entity) = 0;
 
