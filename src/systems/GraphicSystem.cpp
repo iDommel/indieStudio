@@ -33,14 +33,11 @@ namespace indie
         }
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::RENDERABLE_2D)) {
-                std::cout << castComponent<Sprite>(e->getComponents()[0])->getValue() << std::endl;
-                std::cout << std::get<1>(castComponent<Position>(e->getComponents()[1])->getPosition()) << std::endl;
-                std::cout << std::get<0>(castComponent<Position>(e->getComponents()[1])->getPosition()) << std::endl;
-            }
-            else if (e->hasTag(IEntity::Tags::RENDERABLE_3D))
-                std::cout << "render 3D img" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D]) {
+            std::cout << "render 2D img" << std::endl;
+        }
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D]) {
+            std::cout << "render 3D img" << std::endl;
         }
         _window->endDraw();
     }

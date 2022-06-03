@@ -19,6 +19,9 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/AudioDevice.cpp
+
+        test_functions/TestAudioDevice.cpp
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
@@ -43,15 +46,22 @@ target_sources(${PROJECT_NAME}
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
+        src/Shape3D.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
+        src/Window.cpp
+        src/Sound.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
+        test_functions/TestSound.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
+        src/**
         src/components
         src/exceptions
         src/systems
@@ -72,4 +82,3 @@ set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "../"
 )
-

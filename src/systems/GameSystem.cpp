@@ -30,9 +30,9 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        // std::cout << "GameSystem::update" << std::endl
-        
-        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+        std::cout << "GameSystem::update" << std::endl;
+        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
+        auto comp = (*e)[Component::Type::SPRITE];
     }
 
     void GameSystem::destroy()
@@ -54,12 +54,14 @@ namespace indie
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
         component4->setType(Component::Type::EVT_LISTENER);
-        entity2->addComponent(component);
-        entity->addComponent(component2);
-        entity->addComponent(component3);
-        entity2->addComponent(component4);
-        scene->addEntity(entity);
-        scene->addEntity(entity2);
+
+        entity2->addComponent(component)
+            .addComponent(component4);
+
+        entity->addComponent(component2)
+            .addComponent(component3);
+
+        scene->addEntities({entity, entity2});
         return scene;
     }
 
@@ -79,14 +81,16 @@ namespace indie
         std::shared_ptr<Sprite> component7 = std::make_shared<Sprite>("assets/MainMenu/quit_unpressed.png");
         std::shared_ptr<Position> component8 = std::make_shared<Position>(0, 0);
 
-        entity1->addComponent(component);
-        entity1->addComponent(component2);
-        entity2->addComponent(component3);
-        entity2->addComponent(component4);
-        entity3->addComponent(component5);
-        entity3->addComponent(component6);
-        entity4->addComponent(component7);
-        entity4->addComponent(component8);
+
+        entity1->addComponent(component)
+            .addComponent(component2);
+        entity2->addComponent(component3)
+            .addComponent(component4);
+        entity3->addComponent(component5)
+            .addComponent(component6);
+        entity4->addComponent(component7)
+            .addComponent(component8);
+    
         scene->addEntity(entity1);
         scene->addEntity(entity2);
         scene->addEntity(entity3);

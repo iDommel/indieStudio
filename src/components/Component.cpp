@@ -5,7 +5,6 @@
 ** AComponent.cpp
 */
 
-#include <stdexcept>
 #include "Component.hpp"
 
 namespace indie
