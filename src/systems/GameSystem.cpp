@@ -28,23 +28,16 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t deltaTime)
     {
-        std::vector<std::shared_ptr<indie::IComponent>> components;
-
         std::cout << "GameSystem::update" << std::endl;
 
-        for (auto &bomb : _bombs) {
-            components = bomb->getComponents();
-            for (auto &component : components) {
-                if (component->getType() == IComponent::Type::BOMB) {
-                    auto bombComponent = Component::castComponent<Bomb>(component);
-                    bombComponent->setTimer(bombComponent->getTimer() - deltaTime);
-                    if (bombComponent->getTimer() <= 0) {
-                        bombComponent->explode();
-                    }
-                }
+        for (auto &bomb : sceneManager.getCurrentScene()[IEntity::Tags::BOMB]) {
+            auto comp = Component::castComponent<Bomb>((*bomb)[IComponent::Type::BOMB]);
+            comp->setTimer(comp->getTimer() - deltaTime);
+            if (comp->getTimer() <= 0) {
+                comp->explode();
             }
         }
-        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+
         auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
         auto comp = (*e)[Component::Type::SPRITE];
     }

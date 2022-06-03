@@ -59,7 +59,7 @@ namespace indie
          * @param tag The tag to acces
          * @return A pointer to the component or nullptr if it didn't find it
          */
-        std::shared_ptr<IComponent> operator[](IComponent::Type type);
+        std::shared_ptr<IComponent> &operator[](IComponent::Type type);
 
     private:
         std::vector<Tags> _tags;
