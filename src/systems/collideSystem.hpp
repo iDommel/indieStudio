@@ -21,25 +21,38 @@ namespace indie {
         /// ------- 3D -------
 
         /**
-         * @brief Retrieve bounding box of a model
-         * @param model Model to retrieve bounding box from
-         * @return Bounding box of the model
+         * @brief Make a bounding box from a size and a position
+         * @param size size of the bounding box (vector3){width, height, depth}
+         * @param position position of the bounding box corner used as origin
+         * @return newly created BoundingBox (offseted)
         **/
-        BoundingBox getBoundingBoxOf(const Model &model);
-        /**
-         * @brief Retrieve bounding box of a mesh
-         * @param mesh Mesh to retrieve bounding box from
-         * @return Bounding box of the mesh
-        **/
-        BoundingBox getBoundingBoxOf(const Mesh &mesh);
+        BoundingBox getBBoxFromSizePos(Vector3 size, Vector3 pos);
 
         /**
-         * @brief Check collision between two bounding boxes
+         * @brief Update a bounding box from a model with his position
+         * @param box bounding box to update
+         * @param pos position of the model
+         * @return updated BoundingBox
+        **/
+        BoundingBox updateBBoxFromModel(BoundingBox box, Vector3 pos);
+
+        /**
+         * @brief Check collision between two offseted bounding boxes
          * @param box1 First bounding box
          * @param box2 Second bounding box
          * @return True if collision, false otherwise
         **/
         bool check3DCollision(const BoundingBox &box1, const BoundingBox &box2);
+
+        /**
+         * @brief Check collision between two bouding boxes using their positions as offset
+         * @param box1 First bounding box
+         * @param pos1 First bounding box position (used as offset)
+         * @param box2 Second bounding box
+         * @param pos2 Second bounding box position (used as offset)
+         * @return True if collision, false otherwise
+        **/
+        bool check3DCollision(const BoundingBox &box1, Vector3 pos1, const BoundingBox &box2, Vector3 pos2);
 
         /**
          * @brief Check collision between a bounding box and a sphere
@@ -49,6 +62,15 @@ namespace indie {
          * @return True if collision, false otherwise
         **/
         bool check3DCollision(const BoundingBox &box, Vector3 center, float radius);
+        /**
+         * @brief Check collision between a sphere and a bounding box using their positions as offset
+         * @param box Bounding box
+         * @param pos Bounding box position (used as offset)
+         * @param center Sphere center
+         * @param radius Sphere radius
+         * @return True if collision, false otherwise
+        **/
+        bool check3DCollision(const BoundingBox &box, Vector3 pos, Vector3 center, float radius);
         /**
          * @brief Check collision between a sphere and a bounding box
          * @param center Sphere center

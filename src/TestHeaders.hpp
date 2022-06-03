@@ -13,5 +13,6 @@ void test_raylib_camera(void);
 void testTextures(void);
 void TestAnimations2D(void);
 void testRaylibCollisions(void);
+void testModelsCollision(void);
 
 #endif /* !TESTHEADERS_HPP_ */

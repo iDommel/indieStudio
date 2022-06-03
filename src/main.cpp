@@ -5,7 +5,10 @@
 ** main
 */
 
+#include "TestHeaders.hpp"
+
 int main(void)
 {
+    testModelsCollision();
     return 0;
 }

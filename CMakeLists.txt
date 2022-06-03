@@ -35,11 +35,12 @@ target_sources(${PROJECT_NAME}
         test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
         test_functions/TestCollisions.cpp
+        test_functions/TestModelsCollision.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        src/**
+        src
         src/systems
 )
 
