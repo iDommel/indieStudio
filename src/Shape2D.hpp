@@ -6,19 +6,14 @@ struct Color;
 
 namespace indie
 {
-    /**struct Shape2D;
-     * @brief Shape2D object
-     */
+    struct Shape2D;
+     /// @brief Shape2D object
     class Shape2D
     {
     public:
-        /**
-         * @brief Construct a new Shape2D object
-         */
+        /// @brief Construct a new Shape2D object
         Shape2D();
-        /**
-         * @brief Destroy Shape2D object
-         */
+        /// @brief Destroy Shape2D object
         ~Shape2D();
 
         /**
@@ -28,7 +23,7 @@ namespace indie
          * @param radius radius of the circle
          * @param color Color of the circle
          */
-        void drawCircle(int centerX, int centerY, float radius, Color color);
+        static void drawCircle(int centerX, int centerY, float radius, Color color);
         /**
          * @brief Draw rectangle
          * @param posX position X of the center of the rectangle
@@ -37,7 +32,7 @@ namespace indie
          * @param height height of the rectangle
          * @param color Color of the rectangle
          */
-        void drawRectangle(int posX, int posY, int width, int height, Color color);
+        static void drawRectangle(int posX, int posY, int width, int height, Color color);
     };
 }
 
