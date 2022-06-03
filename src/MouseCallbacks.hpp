@@ -9,6 +9,8 @@
 #define MOUSECALLBACKS_HPP_
 
 #include <functional>
+
+#include "SceneManager.hpp"
 struct Vector2;
 namespace indie
 {
@@ -26,15 +28,15 @@ namespace indie
          * @param up callack to be called when a mousebutton is up
          */
         MouseCallbacks(
-            std::function<void(Vector2)> pressed,
-            std::function<void(Vector2)> released,
-            std::function<void(Vector2)> down,
-            std::function<void(Vector2)> up);
+            std::function<void(SceneManager &, Vector2)> pressed,
+            std::function<void(SceneManager &, Vector2)> released,
+            std::function<void(SceneManager &, Vector2)> down,
+            std::function<void(SceneManager &, Vector2)> up);
         ~MouseCallbacks();
-        std::function<void(Vector2)> _pressed;
-        std::function<void(Vector2)> _released;
-        std::function<void(Vector2)> _down;
-        std::function<void(Vector2)> _up;
+        std::function<void(SceneManager &, Vector2)> _pressed;
+        std::function<void(SceneManager &, Vector2)> _released;
+        std::function<void(SceneManager &, Vector2)> _down;
+        std::function<void(SceneManager &, Vector2)> _up;
 
     protected:
     private:

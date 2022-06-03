@@ -54,7 +54,6 @@ target_sources(${PROJECT_NAME}
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
-        test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
         test_functions/TestSound.cpp
 )
