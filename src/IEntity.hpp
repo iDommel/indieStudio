@@ -8,17 +8,16 @@
 #ifndef IENTITY_HPP
 #define IENTITY_HPP
 
+#include <map>
 #include <vector>
 
 #include "components/IComponent.hpp"
-
 namespace indie
 {
 
     class IEntity
     {
     public:
-
         enum class Tags {
             RENDERABLE_3D,
             RENDERABLE_2D,
@@ -35,7 +34,7 @@ namespace indie
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector
          */
-        virtual std::vector<std::shared_ptr<IComponent>> &getComponents() = 0;
+        virtual std::map<IComponent::Type, std::shared_ptr<IComponent>> &getComponents() = 0;
         /**
          * @brief Get entity's tags
          * @return Returns a reference of the entity's tags vector
@@ -54,8 +53,14 @@ namespace indie
          * @param components Vector of components types to search for
          * @return Returns a vector of components of the given types in the same order
          */
-        virtual std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components) = 0;
-
+        virtual std::vector<std::shared_ptr<IComponent>> getFilteredComponents(std::vector<IComponent::Type> components) = 0;
+        /**
+         * @brief [] Operator overload that returns a pointer to a component or null
+         *
+         * @param type the type to search for
+         * @return std::shared_ptr<IComponent> to that component or nullptr
+         */
+        virtual std::shared_ptr<IComponent> operator[](IComponent::Type type) = 0;
     };
 
 }
