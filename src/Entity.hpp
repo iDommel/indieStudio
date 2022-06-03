@@ -8,20 +8,19 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include <vector>
-#include <memory>
+#include <iostream>
 #include <map>
+#include <memory>
+#include <vector>
 
 #include "IEntity.hpp"
 #include "components/IComponent.hpp"
 
-#include <iostream>
-
-namespace indie {
+namespace indie
+{
     class Entity : public IEntity
     {
     public:
-
         ///@brief Map between Entity tags and combinaisons of Components tags
         static const std::map<Tags, std::vector<std::vector<IComponent::Type>>> entityTags;
 
@@ -59,4 +58,4 @@ namespace indie {
     };
 }
 
-#endif // ENTITY_HPP
+#endif  // ENTITY_HPP

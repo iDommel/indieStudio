@@ -8,24 +8,20 @@
 #ifndef ISCENE_HPP
 #define ISCENE_HPP
 
-#include <vector>
+#include <map>
 #include <memory>
+#include <vector>
 
 #include "IEntity.hpp"
 
-namespace indie {
+namespace indie
+{
     class IScene
     {
     public:
         virtual ~IScene() = default;
 
-        /**
-         * @brief Get the scene's entities
-         * @return Returns a reference of the scene's entities vector
-         */
-        virtual std::vector<std::shared_ptr<IEntity>> &getEntities() = 0;
-
-        /// @brief Add entity to scene
+        /// @brief Add entity to scene, you MUST call this function AFTER adding all the components to an entity
         virtual void addEntity(std::shared_ptr<IEntity> entity) = 0;
         /// @brief Removes the given entity from scene
         virtual void removeEntity(std::shared_ptr<IEntity> entity) = 0;
@@ -41,7 +37,7 @@ namespace indie {
          * @param tags Tags to search for
          * @return Returns a vector of entities
          */
-        virtual std::vector<std::shared_ptr<IEntity>> getTaggedEntities(std::vector<IEntity::Tags> tags) = 0;
+        virtual std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> getTaggedEntities(std::vector<IEntity::Tags> tags) = 0;
 
         /**
          * @brief Set the callback function to call when an entity is added
@@ -54,6 +50,13 @@ namespace indie {
          * @param callback Callback function
          */
         virtual void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback) = 0;
+        /**
+         * @brief retrieves the entities for a given tag
+         *
+         * @param tag to filter by
+         * @return std::vector<std::shared_ptr<IEntity>>&
+         */
+        virtual std::vector<std::shared_ptr<IEntity>> &operator[](IEntity::Tags tag) = 0;
     };
 }
 

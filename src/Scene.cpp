@@ -5,9 +5,10 @@
 ** Scene.cpp
 */
 
+#include "Scene.hpp"
+
 #include <algorithm>
 
-#include "Scene.hpp"
 #include "Core.hpp"
 
 namespace indie
@@ -15,27 +16,24 @@ namespace indie
 
     Scene::Scene(std::function<std::unique_ptr<IScene>()> init) : _initFunc(init) {}
 
-    std::vector<std::shared_ptr<IEntity>> &Scene::getEntities()
-    {
-        return _entities;
-    }
-
     void Scene::addEntity(std::shared_ptr<IEntity> entity)
     {
-        _entities.push_back(entity);
+        for (auto &tag : entity->getTags()) {
+            _taggedEntities[tag].push_back(entity);
+        }
         if (_addEntityCallback)
             _addEntityCallback(entity);
     }
 
     void Scene::removeEntity(std::shared_ptr<IEntity> entity)
     {
-        auto it = std::find(_entities.begin(), _entities.end(), entity);
-
-        if (it == _entities.end())
-            return;
+        for (auto &tag : entity->getTags()) {
+            auto it = std::find(_taggedEntities[tag].begin(), _taggedEntities[tag].end(), entity);
+            if (it != _taggedEntities[tag].end())
+                _taggedEntities[tag].erase(it);
+        }
         if (_removeEntityCallback)
             _removeEntityCallback(entity);
-        _entities.erase(it);
     }
 
     std::unique_ptr<IScene> Scene::initScene()
@@ -43,21 +41,13 @@ namespace indie
         return _initFunc();
     }
 
-    std::vector<std::shared_ptr<IEntity>> Scene::getTaggedEntities(std::vector<IEntity::Tags> tags)
+    std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> Scene::getTaggedEntities(std::vector<IEntity::Tags> tags)
     {
-        std::vector<std::shared_ptr<IEntity>> taggedEntities;
+        std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> taggedEntities;
         bool hasTags = true;
 
-        for (auto &entity : _entities) {
-            for (auto &tag : tags) {
-                if (!entity->hasTag(tag)) {
-                    hasTags = false;
-                    break;
-                }
-            }
-            if (!hasTags)
-                continue;
-            taggedEntities.push_back(entity);
+        for (auto &tag : tags) {
+            taggedEntities[tag] = _taggedEntities[tag];
         }
         return taggedEntities;
     }
@@ -72,4 +62,8 @@ namespace indie
         _removeEntityCallback = callback;
     }
 
+    std::vector<std::shared_ptr<IEntity>> &Scene::operator[](IEntity::Tags tag)
+    {
+        return _taggedEntities[tag];
+    }
 }
