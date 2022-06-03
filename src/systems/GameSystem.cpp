@@ -28,7 +28,7 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
-        auto e = sceneManager.getCurrentScene().getEntities()[0];
+        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
         auto comp = (*e)[Component::Type::SPRITE];
     }
 
