@@ -5,11 +5,12 @@
 ** EventSystem.cpp
 */
 
-#include <iostream>
-
 #include "EventSystem.hpp"
 
-namespace indie {
+#include <iostream>
+
+namespace indie
+{
 
     void EventSystem::init(SceneManager &)
     {
@@ -18,9 +19,8 @@ namespace indie {
 
     void EventSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::CALLABLE))
-                std::cout << "call event handler" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CALLABLE]) {
+            std::cout << "call event handler" << std::endl;
         }
     }
 

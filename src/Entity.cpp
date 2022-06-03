@@ -27,7 +27,7 @@ namespace indie
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}}};
 
-    void Entity::addComponent(std::shared_ptr<IComponent> component)
+    IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {
         bool notFound = false;
 
@@ -52,6 +52,14 @@ namespace indie
                 break;
             }
         }
+        return *this;
+    }
+
+    IEntity &Entity::addComponents(std::vector<std::shared_ptr<IComponent>> components)
+    {
+        for (auto &component : components)
+            this->addComponent(component);
+        return *this;
     }
 
     bool Entity::hasTag(Tags tag) const

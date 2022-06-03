@@ -5,11 +5,12 @@
 ** AudioSystem.cpp
 */
 
-#include <iostream>
-
 #include "AudioSystem.hpp"
 
-namespace indie {
+#include <iostream>
+
+namespace indie
+{
 
     void AudioSystem::init(SceneManager &)
     {
@@ -18,9 +19,8 @@ namespace indie {
 
     void AudioSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &e : sceneManager.getCurrentScene().getEntities()) {
-            if (e->hasTag(IEntity::Tags::AUDIBLE))
-                std::cout << "play audio" << std::endl;
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AUDIBLE]) {
+            std::cout << "play audio" << std::endl;
         }
     }
 
