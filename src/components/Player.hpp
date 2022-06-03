@@ -30,8 +30,12 @@ class Player: public Component {
         ///@brief Handle the various bonuses
         void handleBonus();
 
-        ///@brief Generate a bomb and add it to the entities list
+        /**
+         * @brief Generate a bomb and add it to the entities list
+         * @param manager The scene manager
+         */
         void generateBomb(SceneManager &manager);
+
     protected:
     private:
         int _nbBomb;
@@ -41,4 +45,5 @@ class Player: public Component {
 };
 
 }
+
 #endif /* !PLAYER_HPP_ */

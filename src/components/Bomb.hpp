@@ -20,7 +20,17 @@ class Bomb: public Component{
         
         ///@brief Explode the bomb after a certain amount of time
         void explode();
+
+        /**
+         * @brief Set the timer of the bomb
+         * @param time The time in seconds
+         */
         void setTimer(uint64_t time);
+
+        /**
+         * @brief Get the timer of the bomb
+         * @return The time in seconds
+         */
         uint64_t getTimer() const;
     protected:
     private:
@@ -30,4 +40,5 @@ class Bomb: public Component{
 };
 
 }
+
 #endif /* !BOMB_HPP_ */
