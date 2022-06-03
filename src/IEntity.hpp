@@ -20,7 +20,8 @@ namespace indie
     public:
         enum class Tags {
             RENDERABLE_3D,
-            RENDERABLE_2D,
+            SPRITE_2D,
+            TEXT,
             COLLIDABLE,
             AUDIBLE,
             CALLABLE
