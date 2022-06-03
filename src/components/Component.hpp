@@ -36,7 +36,6 @@ namespace indie
     protected:
         Type _type;
     };
-
 }
 
 #endif /* COMPONENT_HPP */

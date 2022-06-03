@@ -7,14 +7,17 @@
 
 #include "GameSystem.hpp"
 
+#include <functional>
 #include <iostream>
 
-#include "../Core.hpp"
-#include "../Entity.hpp"
-#include "../Scene.hpp"
-#include "../components/String.hpp"
 #include "Position.hpp"
 #include "Sprite.hpp"
+#include "Core.hpp"
+#include "Entity.hpp"
+#include "EventListener.hpp"
+#include "Scene.hpp"
+#include "String.hpp"
+#include "raylib.h"
 
 namespace indie
 {
@@ -52,7 +55,14 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
+        ButtonCallbacks spaceCallbacks(
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
+            [](SceneManager &) {
+                std::cout << "---------- space released" << std::endl;
+            },
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
+
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
@@ -62,10 +72,11 @@ namespace indie
 
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
+        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
         entity2->addComponent(component)
             .addComponent(component4);
-
         entity->addComponent(component2)
             .addComponent(component3);
 
@@ -81,4 +92,8 @@ namespace indie
     {
     }
 
+    void GameSystem::printStuff(SceneManager &)
+    {
+        std::cout << "GameSystem::printStuff" << std::endl;
+    }
 }

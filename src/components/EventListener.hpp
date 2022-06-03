@@ -11,6 +11,7 @@
 #include <map>
 
 #include "ButtonCallbacks.hpp"
+#include "Component.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "MouseCallbacks.hpp"
 #include "raylib.h"
@@ -19,7 +20,7 @@ namespace indie
 
     /// @brief EventListener is a class to describe what to do when an event is detected.
     /// you can add a callback to an event by using the different add<>Event methods.
-    class EventListener
+    class EventListener : public Component
     {
     public:
         EventListener();
@@ -32,12 +33,38 @@ namespace indie
          */
         void addKeyboardEvent(KeyboardKey key, ButtonCallbacks callbacks);
         /**
+         * @brief unbinds a key
+         *
+         * @param key The key to unbind
+         */
+        void removeKeyboardEvent(KeyboardKey key);
+        /**
+         * @brief updates the key for a listener
+         *
+         * @param oldKey the old key to take the callbacks from
+         * @param newKey the new key that will receive the callbacks
+         */
+        void replaceKeyboardEvent(KeyboardKey oldKey, KeyboardKey newKey);
+        /**
          * @brief Adds a mouse event to the listener
          *
          * @param key the key to listen to
          * @param func the function to call when the key is pressed
          */
         void addMouseEvent(MouseButton key, MouseCallbacks func);
+        /**
+         * @brief unbinds a mouseButton
+         *
+         * @param button The mouseButton to unbind
+         */
+        void removeMouseEvent(MouseButton button);
+        /**
+         * @brief replaces the key for a listener
+         *
+         * @param oldKey the old key to take the callbacks from
+         * @param newKey the new key that will receive the callbacks
+         */
+        void replaceMouseEvent(MouseButton oldKey, MouseButton newKey);
         /**
          * @brief Adds a gamepad event to the listener
          *
@@ -47,6 +74,19 @@ namespace indie
          */
         void addGamepadEvent(int gamepad, GamepadButton key, ButtonCallbacks func);
         /**
+         * @brief unbinds a GamepadButton
+         *
+         * @param button The GamepadButton to unbind
+         */
+        void removeGamepadEvent(int gamepad, GamepadButton key);
+        /**
+         * @brief replaces the key for a listener
+         *
+         * @param oldKey the old key to take the callbacks from
+         * @param newKey the new key that will receive the callbacks
+         */
+        void replaceGamepadEvent(int gamepad, GamepadButton oldKey, GamepadButton newKey);
+        /**
          * @brief Adds a gamepad stick event to the listener
          *
          * @param gamepad the gamepad fow which the events are listened to
@@ -54,6 +94,19 @@ namespace indie
          * @param func a function that will be called on every update to react to the stick position
          */
         void addGamepadStickEvent(int gamepad, int axis, std::function<void(float)> func);
+        /**
+         * @brief unbinds a GamepadStickAxis
+         *
+         * @param axis The GamepadStickAxis to unbind
+         */
+        void removeGamepadStickEvent(int gamepad, int axis);
+        /**
+         * @brief updates the key for a listener
+         *
+         * @param oldKey the old key to take the callbacks from
+         * @param newKey the new key that will receive the callbacks
+         */
+        void removeAllGamepadEvents(int gamepad);
         /// @brief gets a reference to the keyboard mappings
         std::map<KeyboardKey, ButtonCallbacks> &getKeyboardMappings();
         /// @brief gets a reference to the mouse mappings
