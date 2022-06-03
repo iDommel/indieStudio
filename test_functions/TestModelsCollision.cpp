@@ -5,7 +5,7 @@
 ** TestModelsCollision
 */
 
-#include "collideSystem.hpp"
+#include "CollideSystem.hpp"
 #include "../src/Model.hpp"
 
 #include "raylib.h"
@@ -16,11 +16,12 @@ void testModelsCollision(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+    indie::CollideSystem collideSystem;
 
     InitWindow(screenWidth, screenHeight, "raylib [models] example - models loading");
 
     // Define the camera to look into our 3d world
-    Camera camera = { 0 };
+    Camera camera = { { 0.0f, 10.0f, 10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
     camera.position = (Vector3){ 50.0f, 50.0f, 50.0f }; // Camera position
     camera.target = (Vector3){ 0.0f, 10.0f, 0.0f };     // Camera looking at point
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
@@ -60,9 +61,9 @@ void testModelsCollision(void)
         }
         colliding = false;
 
-        if (indie::collideSystem::check3DCollision(
-            test.getBoundingBox(), position,
-            test2.getBoundingBox(), position2))
+        if (collideSystem.check3DCollision(
+            collideSystem.makeUpdatedBBox(test.getBoundingBox(), position),
+            collideSystem.makeUpdatedBBox(test2.getBoundingBox(), position2)))
             colliding = true;
 
         UpdateCamera(&camera);
@@ -77,8 +78,8 @@ void testModelsCollision(void)
 
                 test.drawRotate(position, rotation, 45.0f, scale, WHITE);
                 test2.drawRotate(position2, rotation2, 45.0f, scale, WHITE);
-                DrawBoundingBox(indie::collideSystem::updateBBoxFromModel(test.getBoundingBox(), position), GREEN);
-                DrawBoundingBox(indie::collideSystem::updateBBoxFromModel
+                DrawBoundingBox(collideSystem.makeUpdatedBBox(test.getBoundingBox(), position), GREEN);
+                DrawBoundingBox(collideSystem.makeUpdatedBBox
                 (test2.getBoundingBox(), position2), GREEN);
 
                 DrawGrid(20, 10.0f);         // Draw a grid

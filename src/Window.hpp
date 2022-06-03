@@ -22,7 +22,9 @@ namespace indie
     {
     public:
         /// @brief Construct a new window:: window object with the size of the screen
-        Window(int screenWidth, int screenHeight, const std::string& name = "test");
+        Window(int screenWidth, int screenHeight, const std::string& name = "Indie Studio");
+        /// @brief Construct a new window:: window object with the size of the screen, pass configuration flags as parameter
+        Window(int screenWidth, int screenHeight, unsigned int flags, const std::string& name = "Indie Studio");
         /// @brief Destruct the window:: close the windows
         ~Window();
         /**
@@ -46,15 +48,16 @@ namespace indie
         ///  @brief Hide Cursor
         void hideCursor();
         /**
-         * @brief Begin 3D mode with custom camera
-         * @param camera the camera to be used
-         */
-        void beginMode3D(Camera3D camera);
-        /**
          * @brief Begin 2D mode with custom camera
          * @param camera the camera to be used
          */
         void beginMode2D(Camera2D camera);
+        /**
+         * @brief Begin 3D mode with custom camera
+         * @param camera the camera to be used
+         */
+        void beginMode3D(Camera3D camera);
+        void setConfigFlags(unsigned int flags);
         /// @brief End 3D mode.
         void endMode3D();
         /// @brief End 2D mode.
@@ -101,5 +104,4 @@ namespace indie
     private:
     };
 }
-
 #endif /* !WINDOW_HPP_ */

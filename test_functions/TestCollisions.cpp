@@ -8,14 +8,15 @@
 #include <iostream>
 
 #include "raylib.h"
-#include "collideSystem.hpp"
+#include "CollideSystem.hpp"
 
-void testRaylibCollisions(void)
+void testBasicCollisions(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
+    indie::CollideSystem collideSystem;
 
     InitWindow(screenWidth, screenHeight, "raylib [models] example - box collisions");
 
@@ -74,7 +75,7 @@ void testRaylibCollisions(void)
         collision2d = false;
 
         // Check collisions player vs enemy-box
-        if (indie::collideSystem::check3DCollision(
+        if (collideSystem.check3DCollision(
             (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
                                      playerPosition.y - playerSize.y/2,
                                      playerPosition.z - playerSize.z/2 },
@@ -90,7 +91,7 @@ void testRaylibCollisions(void)
             collision = true;
 
         // Check collisions player vs enemy-sphere
-        if (indie::collideSystem::check3DCollision(
+        if (collideSystem.check3DCollision(
             (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
                                      playerPosition.y - playerSize.y/2,
                                      playerPosition.z - playerSize.z/2 },
@@ -101,12 +102,12 @@ void testRaylibCollisions(void)
                 collision = true;
 
          // Check collisions player vs rectangle
-        if (indie::collideSystem::check2DCollision(
+        if (collideSystem.check2DCollision(
          playerPosition2d, playerSize2d, rect))
             collision2d = true;
 
         // Check collisions player vs circle
-        if (indie::collideSystem::check2DCollision(
+        if (collideSystem.check2DCollision(
          playerPosition2d, playerSize2d, circlePos, circleRadius))
             collision2d = true;
 

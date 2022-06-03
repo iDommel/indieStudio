@@ -12,7 +12,7 @@ int test_event_listener(void);
 void test_raylib_camera(void);
 void testTextures(void);
 void TestAnimations2D(void);
-void testRaylibCollisions(void);
+void testBasicCollisions(void);
 void testModelsCollision(void);
 
 #endif /* !TESTHEADERS_HPP_ */
