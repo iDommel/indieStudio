@@ -33,7 +33,7 @@ namespace indie
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector
          */
-        std::vector<std::shared_ptr<IComponent>> &getComponents();
+        std::map<IComponent::Type, std::shared_ptr<IComponent>> &getComponents();
         /**
          * @brief Get entity's tags
          * @return Returns a reference of the entity's tags vector
@@ -52,11 +52,18 @@ namespace indie
          * @param components Vector of components types to search for
          * @return Returns a vector of components of the given types in the same order
          */
-        std::vector<std::shared_ptr<IComponent>> getComponents(std::vector<IComponent::Type> components);
+        std::vector<std::shared_ptr<IComponent>> getFilteredComponents(std::vector<IComponent::Type> components);
+        /**
+         * @brief Allows the access to an entity's component via a Tag.
+         *
+         * @param tag The tag to acces
+         * @return A pointer to the component or nullptr if it didn't find it
+         */
+        std::shared_ptr<IComponent> operator[](IComponent::Type type);
 
     private:
         std::vector<Tags> _tags;
-        std::vector<std::shared_ptr<IComponent>> _components;
+        std::map<IComponent::Type, std::shared_ptr<IComponent>> _components;
         std::vector<IComponent::Type> _componentsType;
     };
 }
