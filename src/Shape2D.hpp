@@ -23,7 +23,7 @@ namespace indie
          * @param radius radius of the circle
          * @param color Color of the circle
          */
-        static void drawCircle(int centerX, int centerY, float radius, Color color);
+        static void drawCircle(int centerX, int centerY, float radius, Color color = WHITE);
         /**
          * @brief Draw rectangle
          * @param posX position X of the center of the rectangle
@@ -32,7 +32,7 @@ namespace indie
          * @param height height of the rectangle
          * @param color Color of the rectangle
          */
-        static void drawRectangle(int posX, int posY, int width, int height, Color color);
+        static void drawRectangle(int posX, int posY, int width, int height, Color color = WHITE);
     };
 }
 
