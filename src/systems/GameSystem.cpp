@@ -28,6 +28,7 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
+        // TODO : search for COLLIDABLE entities with _collider subsystem functions, WAITING FOR EXTERNAL PR
         // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
     }
 
