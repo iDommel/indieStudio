@@ -33,6 +33,7 @@ namespace indie
             system.second->init(_sceneManager);
 
         _sceneManager.setAddEntityCallback(std::bind(&Core::loadEntity, this, std::placeholders::_1));
+        _sceneManager.setRemoveEntityCallback(std::bind(&Core::unloadEntity, this, std::placeholders::_1));
         while (!_sceneManager.getShouldClose()) {
             auto time = std::chrono::high_resolution_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(time - clock).count();

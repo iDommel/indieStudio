@@ -33,17 +33,17 @@ target_sources(${PROJECT_NAME}
         src/components/Component.cpp
         src/components/Bomb.cpp
         src/components/Player.cpp
+        src/components/EventListener.cpp
         
-        src/AudioDevice.cpp
         src/Window.cpp
-        src/Shape3D.cpp
-        src/Texture2D.cpp
         src/Camera.cpp
-        src/Model.cpp
+        src/Texture2D.cpp
         src/Text.cpp
+        src/Shape3D.cpp
+        src/Model.cpp
+        src/AudioDevice.cpp
         src/Sound.cpp
-        
-        src/EventListener.cpp
+
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp

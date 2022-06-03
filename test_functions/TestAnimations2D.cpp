@@ -7,7 +7,7 @@
 
 #include <raylib.h>
 
-#include "../src/Texture2D.hpp"
+#include "Texture2D.hpp"
 
 #define MAX_FRAME_SPEED 15
 #define MIN_FRAME_SPEED 1

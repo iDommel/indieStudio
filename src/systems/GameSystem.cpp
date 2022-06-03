@@ -7,12 +7,16 @@
 
 #include "GameSystem.hpp"
 
+#include <functional>
 #include <iostream>
+#include <raylib.h>
 
-#include "../Core.hpp"
-#include "../Entity.hpp"
-#include "../Scene.hpp"
-#include "../components/String.hpp"
+#include "Core.hpp"
+#include "Entity.hpp"
+#include "EventListener.hpp"
+#include "Scene.hpp"
+#include "SceneManager.hpp"
+#include "String.hpp"
 #include "Bomb.hpp"
 
 namespace indie
@@ -49,22 +53,27 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
+        ButtonCallbacks spaceCallbacks(
+            std::bind(&GameSystem::printStuff, this),
+            [](SceneManager &) {
+                std::cout << "---------- space released" << std::endl;
+            },
+            std::bind(&GameSystem::printStuff, this));
+
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<String> component = std::make_shared<String>("audio");
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
-        std::shared_ptr<String> component4 = std::make_shared<String>("evt");
-
+        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
         component->setType(Component::Type::SOUND);
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
-        component4->setType(Component::Type::EVT_LISTENER);
 
         entity2->addComponent(component)
-            .addComponent(component4);
-
+            .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);
 
@@ -82,4 +91,8 @@ namespace indie
     {
     }
 
+    void GameSystem::printStuff()
+    {
+        std::cout << "GameSystem::printStuff" << std::endl;
+    }
 }
