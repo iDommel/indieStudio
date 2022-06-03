@@ -7,8 +7,8 @@
 
 #ifndef BUTTONCALLBACKS_HPP_
 #define BUTTONCALLBACKS_HPP_
-
 #include <functional>
+
 #include "SceneManager.hpp"
 
 namespace indie
@@ -30,9 +30,9 @@ namespace indie
             std::function<void(SceneManager &)> released,
             std::function<void(SceneManager &)> down);
         ~ButtonCallbacks();
-        std::function<void(SceneManager &)> _pressed;
-        std::function<void(SceneManager &)> _released;
-        std::function<void(SceneManager &)> _down;
+        std::function<void(SceneManager &)> pressed;
+        std::function<void(SceneManager &)> released;
+        std::function<void(SceneManager &)> down;
 
     protected:
     private:

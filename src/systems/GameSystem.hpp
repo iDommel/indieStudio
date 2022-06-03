@@ -34,7 +34,7 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void printStuff();
+        void printStuff(SceneManager &);
 
     private:
         std::unique_ptr<IScene> createScene();

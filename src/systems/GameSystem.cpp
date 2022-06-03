@@ -54,11 +54,11 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
         ButtonCallbacks spaceCallbacks(
-            std::bind(&GameSystem::printStuff, this),
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
             [](SceneManager &) {
                 std::cout << "---------- space released" << std::endl;
             },
-            std::bind(&GameSystem::printStuff, this));
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
@@ -91,7 +91,7 @@ namespace indie
     {
     }
 
-    void GameSystem::printStuff()
+    void GameSystem::printStuff(SceneManager &)
     {
         std::cout << "GameSystem::printStuff" << std::endl;
     }
