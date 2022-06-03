@@ -53,6 +53,13 @@ namespace indie
         return *this;
     }
 
+    IEntity &Entity::addComponents(std::vector<std::shared_ptr<IComponent>> components)
+    {
+        for (auto &component : components)
+            this->addComponent(component);
+        return *this;
+    }
+
     std::vector<std::shared_ptr<IComponent>> &Entity::getComponents()
     {
         return _components;

@@ -26,6 +26,18 @@ namespace indie
         return *this;
     }
 
+    IScene &Scene::addEntities(std::vector<std::shared_ptr<IEntity>> entities)
+    {
+        for (auto &entity : entities) {
+            for (auto &tag : entity->getTags()) {
+                _taggedEntities[tag].push_back(entity);
+            }
+            if (_addEntityCallback)
+                _addEntityCallback(entity);
+        }
+        return *this;
+    }
+
     void Scene::removeEntity(std::shared_ptr<IEntity> entity)
     {
         for (auto &tag : entity->getTags()) {

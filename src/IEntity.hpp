@@ -30,6 +30,9 @@ namespace indie
 
         ///@brief Add component to entity and update entity's tags accordingly
         virtual IEntity &addComponent(std::shared_ptr<IComponent> component) = 0;
+        ///@brief Add component to entity and update entity's tags accordingly
+        virtual IEntity &addComponents(std::vector<std::shared_ptr<IComponent>> components) = 0;
+
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector

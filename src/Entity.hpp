@@ -26,6 +26,9 @@ namespace indie
 
         ///@brief Add component to entity and update entity's tags accordingly, mustn't be called after moving entity to scene
         IEntity &addComponent(std::shared_ptr<IComponent> component);
+        ///@brief Add component to entity and update entity's tags accordingly
+        IEntity &addComponents(std::vector<std::shared_ptr<IComponent>> components);
+
         /**
          * @brief Get entity's components
          * @return Returns a reference of the entity's components vector

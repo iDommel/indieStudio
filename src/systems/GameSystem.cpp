@@ -57,8 +57,7 @@ namespace indie
         entity->addComponent(component2)
             .addComponent(component3);
 
-        scene->addEntity(entity)
-            .addEntity(entity2);
+        scene->addEntities({entity, entity2});
         return scene;
     }
 

@@ -23,9 +23,10 @@ namespace indie
 
         /// @brief Add entity to scene, you MUST call this function AFTER adding all the components to an entity
         virtual IScene &addEntity(std::shared_ptr<IEntity> entity) = 0;
+        /// @brief add several entities at once to a scene
+        virtual IScene &addEntities(std::vector<std::shared_ptr<IEntity>> entity) = 0;
         /// @brief Removes the given entity from scene
         virtual void removeEntity(std::shared_ptr<IEntity> entity) = 0;
-
         /**
          * @brief Inits the scene by calling its init function
          * @return Returns the new scene's ptr
