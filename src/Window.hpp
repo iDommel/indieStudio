@@ -100,6 +100,10 @@ namespace indie
         bool isKeyUp(int key);
         ///  @brief Set a custom key to exit program(default is ESC)
         void setExitKey(int key);
+        /// @brief Get the screen width
+        static int getScreenWidth();
+        /// @brief Get the screen height
+        static int getScreenHeight();
 
     private:
     };

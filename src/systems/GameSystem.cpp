@@ -13,7 +13,8 @@
 #include "../Entity.hpp"
 #include "../Scene.hpp"
 #include "String.hpp"
-#include "Vector.hpp"
+#include "Position.hpp"
+#include "Window.hpp"
 
 namespace indie
 {
@@ -29,7 +30,7 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        // std::cout << "GameSystem::update" << std::endl;
+        // std::cout << "GameSystem::update" << std::endl
         
         // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
     }
@@ -44,10 +45,10 @@ namespace indie
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<String> component = std::make_shared<String>("audio");
-        std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
-        std::shared_ptr<String> component3 = std::make_shared<String>("vector");
-        std::shared_ptr<String> component4 = std::make_shared<String>("evt");
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("audio");
+        std::shared_ptr<Sprite> component2 = std::make_shared<Sprite>("sprite");
+        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("vector");
+        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("evt");
 
         component->setType(Component::Type::SOUND);
         component2->setType(Component::Type::SPRITE);
@@ -66,26 +67,18 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<String> component = std::make_shared<String>("assets/MainMenu/menu.png");
-        std::shared_ptr<Vector2> component2 = std::make_shared<Vector2>(0, 0);
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
+        std::shared_ptr<Position> component2 = std::make_shared<Position>(0, 0);
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<String> component3 = std::make_shared<String>("assets/MainMenu/play_unpressed.png");
-        std::shared_ptr<Vector2> component4 = std::make_shared<Vector2>(0, 0);
+        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("assets/MainMenu/play_unpressed.png");
+        std::shared_ptr<Position> component4 = std::make_shared<Position>(0, 0);
         std::shared_ptr<Entity> entity3 = std::make_shared<Entity>();
-        std::shared_ptr<String> component5 = std::make_shared<String>("assets/MainMenu/option_unpressed.png");
-        std::shared_ptr<Vector2> component6 = std::make_shared<Vector2>(0, 0);
+        std::shared_ptr<Sprite> component5 = std::make_shared<Sprite>("assets/MainMenu/option_unpressed.png");
+        std::shared_ptr<Position> component6 = std::make_shared<Position>(0, 0);
         std::shared_ptr<Entity> entity4 = std::make_shared<Entity>();
-        std::shared_ptr<String> component7 = std::make_shared<String>("assets/MainMenu/quit_unpressed.png");
-        std::shared_ptr<Vector2> component8 = std::make_shared<Vector2>(0, 0);
+        std::shared_ptr<Sprite> component7 = std::make_shared<Sprite>("assets/MainMenu/quit_unpressed.png");
+        std::shared_ptr<Position> component8 = std::make_shared<Position>(0, 0);
 
-        component->setType(Component::Type::SPRITE);
-        component2->setType(Component::Type::VECTOR);
-        component3->setType(Component::Type::SPRITE);
-        component4->setType(Component::Type::VECTOR);
-        component5->setType(Component::Type::SPRITE);
-        component6->setType(Component::Type::VECTOR);
-        component7->setType(Component::Type::SPRITE);
-        component8->setType(Component::Type::VECTOR);
         entity1->addComponent(component);
         entity1->addComponent(component2);
         entity2->addComponent(component3);

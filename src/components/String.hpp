@@ -5,7 +5,8 @@
 ** String.hpp
 */
 
-#pragma once
+#ifndef SPRITEHPP
+#define SPRITEHPP
 
 #include <string>
 #include "Component.hpp"
@@ -13,10 +14,10 @@
 namespace indie
 {
 
-    class String : public Component
+    class Sprite : public Component
     {
     public:
-        String(std::string str) : _value(str) {}
+        Sprite(std::string str) : _value(str) { _type = IComponent::Type::SPRITE; }
 
         std::string getValue() const { return _value; }
 
@@ -25,3 +26,5 @@ namespace indie
     };
 
 }
+
+#endif /* !SPRITEHPP */
