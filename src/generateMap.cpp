@@ -25,6 +25,17 @@ namespace indie {
         return wall;
     }
 
+    static std::shared_ptr<IEntity> createSpawn(int x, int y)
+    {
+        static unsigned int nb = 0;
+        std::shared_ptr<Entity> spawn = std::make_shared<Entity>();
+
+        nb++;
+        spawn->addComponent(std::make_shared<Position>(x, y));
+        spawn->addComponent(std::make_shared<Sprite>("o"));
+        return spawn;
+    }
+
     void generateMap(const std::string &filename, IScene &scene)
     {
         std::ifstream file(filename);
@@ -40,6 +51,8 @@ namespace indie {
             for (size_t i = 0; i < line.size(); i++) {
                 if (line[i] == '#')
                     scene.addEntity(createWall(i, y));
+                else if (line[i] == 'o')
+                    scene.addEntity(createSpawn(i, y));
             }
         }
         file.close();

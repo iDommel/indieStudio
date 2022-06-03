@@ -21,8 +21,6 @@ namespace indie
 
         std::string getValue() const { return _value; }
 
-        std::any getComponent() const { return *this; }
-
     private:
         std::string _value;
     };

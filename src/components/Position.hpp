@@ -8,6 +8,8 @@
 #ifndef POSITION_HPP_
 #define POSITION_HPP_
 
+#include <tuple>
+
 #include "Component.hpp"
 
 namespace indie
@@ -16,18 +18,17 @@ namespace indie
     class Position : public Component
     {
     public:
-        Position(double x, double y) : _x(x), _y(y) { _type = IComponent::Type::VECTOR; }
+        Position(double x, double y, double z = 0) : _x(x), _y(y), _z(z) { _type = IComponent::Type::VECTOR; }
 
-        std::pair<double, double> getPosition() const { return std::make_pair(_x, _y); }
-        void setPosition(double x, double y) { _x = x; _y = y; }
+        std::tuple<double, double, double> getPosition() const { return std::make_tuple(_x, _y, _z); }
+        void setPosition(double x, double y, double z) { _x = x; _y = y; _z = z; }
         void setOrdinate(double y) { _y = y; }
         void setAbscissa(double x) { _x = x; }
-
-        std::any getComponent() const { return *this; }
 
     private:
         double _x;
         double _y;
+        double _z;
     };
 
 }

@@ -30,7 +30,6 @@ namespace indie
 
         virtual Type getType() const = 0;
 
-        virtual std::any getComponent() const = 0;
     };
 
 }

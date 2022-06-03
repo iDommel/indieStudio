@@ -67,7 +67,7 @@ namespace indie
             auto s = std::dynamic_pointer_cast<Sprite>(com[0]);
             auto pos = std::dynamic_pointer_cast<Position>(com[1]);
 
-            std::cout << s->getValue() << ": x=" << pos->getPosition().first << " y=" << pos->getPosition().second << std::endl;
+            std::cout << s->getValue() << ": x=" << std::get<0>(pos->getPosition()) << " y=" << std::get<1>(pos->getPosition()) << std::endl;
         }
     }
 
