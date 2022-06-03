@@ -14,5 +14,4 @@ namespace indie
     {
         return _type;
     }
-
 }

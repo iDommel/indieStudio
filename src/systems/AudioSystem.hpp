@@ -9,14 +9,14 @@
 #define AUDIO_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "../SceneManager.hpp"
+#include "SceneManager.hpp"
 
-namespace indie {
+namespace indie
+{
 
     class AudioSystem : public ISystem
     {
     public:
-
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;

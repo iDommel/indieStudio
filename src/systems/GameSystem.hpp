@@ -9,16 +9,16 @@
 #define GAME_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "../SceneManager.hpp"
+#include "SceneManager.hpp"
 
-namespace indie {
+namespace indie
+{
 
     class IEntity;
 
     class GameSystem : public ISystem
     {
     public:
-
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -34,8 +34,10 @@ namespace indie {
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
+        void printStuff();
+
     private:
-        static std::unique_ptr<IScene> createScene();
+        std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createMainMenu();
     };
 

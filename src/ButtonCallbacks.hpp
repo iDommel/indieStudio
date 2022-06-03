@@ -28,9 +28,9 @@ namespace indie
             std::function<void(void)> released,
             std::function<void(void)> down);
         ~ButtonCallbacks();
-        std::function<void()> _pressed;
-        std::function<void()> _released;
-        std::function<void()> _down;
+        std::function<void()> pressed;
+        std::function<void()> released;
+        std::function<void()> down;
 
     protected:
     private:

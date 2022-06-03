@@ -7,7 +7,7 @@
 
 #include <raylib.h>
 
-#include "../src/Texture2D.hpp"
+#include "Texture2D.hpp"
 
 void testTextures()
 {

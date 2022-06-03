@@ -8,10 +8,10 @@
 #include <exception>
 #include <iostream>
 
-#include "../src/Camera.hpp"
-#include "../src/EventListener.hpp"
-#include "../src/Shape3D.hpp"
-#include "../src/Window.hpp"
+#include "Camera.hpp"
+#include "EventListener.hpp"
+#include "Shape3D.hpp"
+#include "Window.hpp"
 #include "raylib.h"
 
 #define GAMEPAD_NB 0
@@ -19,15 +19,15 @@ void checkListenerEvents(indie::EventListener &listener)
 {
     for (auto &it : listener.getKeyboardMappings()) {
         if (IsKeyPressed(it.first)) {
-            it.second._pressed();
+            it.second.pressed();
             break;
         }
         if (IsKeyDown(it.first)) {
-            it.second._down();
+            it.second.down();
             break;
         }
         if (IsKeyReleased(it.first)) {
-            it.second._released();
+            it.second.released();
             break;
         }
     }
@@ -54,15 +54,15 @@ void checkListenerEvents(indie::EventListener &listener)
     if (IsGamepadAvailable(GAMEPAD_NB)) {
         for (auto &it : listener.getGamepadMappings(GAMEPAD_NB)) {
             if (IsGamepadButtonPressed(GAMEPAD_NB, it.first)) {
-                it.second._pressed();
+                it.second.pressed();
                 break;
             }
             if (IsGamepadButtonDown(GAMEPAD_NB, it.first)) {
-                it.second._down();
+                it.second.down();
                 break;
             }
             if (IsGamepadButtonReleased(GAMEPAD_NB, it.first)) {
-                it.second._released();
+                it.second.released();
                 break;
             }
         }

@@ -7,12 +7,15 @@
 
 #include "GameSystem.hpp"
 
+#include <functional>
 #include <iostream>
 
-#include "../Core.hpp"
-#include "../Entity.hpp"
-#include "../Scene.hpp"
+#include "Core.hpp"
+#include "Entity.hpp"
+#include "EventListener.hpp"
+#include "Scene.hpp"
 #include "String.hpp"
+#include "raylib.h"
 #include "Position.hpp"
 #include "Window.hpp"
 
@@ -31,6 +34,7 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
+
         auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
         auto comp = (*e)[Component::Type::SPRITE];
     }
@@ -42,22 +46,27 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
+        ButtonCallbacks spaceCallbacks(
+            std::bind(&GameSystem::printStuff, this),
+            []() {
+                std::cout << "---------- space released" << std::endl;
+            },
+            std::bind(&GameSystem::printStuff, this));
+
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>("audio");
         std::shared_ptr<Sprite> component2 = std::make_shared<Sprite>("sprite");
         std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("vector");
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("evt");
-
+        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
         component->setType(Component::Type::SOUND);
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
-        component4->setType(Component::Type::EVT_LISTENER);
 
         entity2->addComponent(component)
-            .addComponent(component4);
-
+            .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);
 
@@ -67,7 +76,7 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createMainMenu()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createMainMenu, this));
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
         std::shared_ptr<Position> component2 = std::make_shared<Position>(0, 0);
@@ -80,7 +89,6 @@ namespace indie
         std::shared_ptr<Entity> entity4 = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component7 = std::make_shared<Sprite>("assets/MainMenu/quit_unpressed.png");
         std::shared_ptr<Position> component8 = std::make_shared<Position>(0, 0);
-
 
         entity1->addComponent(component)
             .addComponent(component2);
@@ -106,4 +114,8 @@ namespace indie
     {
     }
 
+    void GameSystem::printStuff()
+    {
+        std::cout << "GameSystem::printStuff" << std::endl;
+    }
 }
