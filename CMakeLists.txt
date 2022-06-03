@@ -46,11 +46,17 @@ target_sources(${PROJECT_NAME}
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
+        src/Shape3D.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
+        src/Window.cpp
+        src/Sound.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
+        test_functions/TestSound.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
