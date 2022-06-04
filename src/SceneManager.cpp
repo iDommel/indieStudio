@@ -35,6 +35,11 @@ namespace indie
         }
     }
 
+    std::map<SceneManager::SceneType, std::unique_ptr<IScene>> &SceneManager::getScenes()
+    {
+        return _scenes;
+    }
+
     void SceneManager::setAddEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback)
     {
         for (auto &scene : _scenes) {

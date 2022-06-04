@@ -14,9 +14,10 @@ namespace indie
 {
 
     const std::map<Entity::Tags, std::vector<std::vector<IComponent::Type>>> Entity::entityTags = {
-        {Entity::Tags::RENDERABLE_2D,
-         {{IComponent::Type::SPRITE, IComponent::Type::VECTOR},
-          {IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
+        {IEntity::Tags::SPRITE_2D,
+        {{IComponent::Type::SPRITE, IComponent::Type::VECTOR}}},
+        {Entity::Tags::TEXT,
+         {{IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
         {Entity::Tags::RENDERABLE_3D,
          {{IComponent::Type::VECTOR, IComponent::Type::MODEL}}},
         {Entity::Tags::AUDIBLE,
