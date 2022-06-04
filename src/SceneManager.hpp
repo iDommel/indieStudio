@@ -49,6 +49,12 @@ namespace indie
         void setCurrentScene(SceneType scene, bool initScene = false);
 
         /**
+         * @brief Get all scenes contained in sceneManager
+         * @return Returns a reference to the scenes's map
+         */
+        std::map<SceneType, std::unique_ptr<IScene>> &getScenes();
+
+        /**
          * @brief Set callback as addEntityCallback for all scene
          * @param callback Callback to set as addEntityCallback
          */

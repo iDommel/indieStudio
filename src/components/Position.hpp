@@ -5,8 +5,8 @@
 ** Position.hpp
 */
 
-#ifndef POSITIONHPP
-#define POSITIONHPP
+#ifndef POSITION_HPP
+#define POSITION_HPP
 
 #include <tuple>
 
@@ -33,4 +33,4 @@ namespace indie
 
 }
 
-#endif /* !POSITIONHPP */
+#endif /* !POSITION_HPP */
