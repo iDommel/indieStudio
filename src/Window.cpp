@@ -183,17 +183,13 @@ namespace indie
 
     int Window::getScreenWidth()
     {
-        Vector2 position = {0, 0};
-        if (position.x == 0)
-            return (800);
-        return (position.x);
+        int position = GetScreenWidth();
+        return (position);
     }
 
     int Window::getScreenHeight()
     {
-        Vector2 position = {0, 0};
-        if (position.x == 0)
-            return (600);
-        return (position.y);
+        int position = GetScreenHeight();
+        return (position);
     }
 }

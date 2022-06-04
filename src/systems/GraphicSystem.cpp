@@ -36,7 +36,7 @@ namespace indie
             return;
         }
         _window->beginDraw();
-        _window->clearBackground(RAYWHITE);
+        _window->clearBackground(BLACK);
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
             displaySprite(e);
         }
