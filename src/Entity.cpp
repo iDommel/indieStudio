@@ -27,7 +27,7 @@ namespace indie
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}},
         {Entity::Tags::BOMB,
-         {{IComponent::Type::BOMB, IComponent::Type::VECTOR}}}};
+         {{IComponent::Type::BOMB}}}}; // TODO: vector
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {

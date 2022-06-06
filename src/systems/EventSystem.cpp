@@ -26,6 +26,7 @@ namespace indie
 
     void EventSystem::update(SceneManager &sceneManager, uint64_t)
     {
+        std::cout << _listeners.size() << std::endl;
         for (auto &listener : _listeners) {
             handleKeyboard(sceneManager, listener);
             handleMouse(sceneManager, listener);

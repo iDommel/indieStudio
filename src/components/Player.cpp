@@ -10,18 +10,14 @@
 
 #include "Player.hpp"
 #include "Bomb.hpp"
-#include "IEntity.hpp"
+#include "Entity.hpp"
 #include "ButtonCallbacks.hpp"
 
 namespace indie {
 
-Player::Player(/*std::map<Keys, KeyboardKey>*/)
+Player::Player(/*std::map<Keys, KeyboardKey>*/): Component(Type::PLAYER)
 {
-    ButtonCallbacks bombCB(std::bind(&Player::generateBomb, this, std::placeholders::_1), [](SceneManager &){}, [](SceneManager &){});
-
-    _type = Type::PLAYER;
     _nbBomb = 1;
-    _eventListener.addKeyboardEvent(KeyboardKey::KEY_E, bombCB);
 }
 
 Player::~Player()
@@ -38,11 +34,11 @@ void Player::handleBonus(/*bonus*/)
 
 void Player::generateBomb(SceneManager &manager)
 {
-    std::shared_ptr<IEntity> bomb;
-    
-    bomb->addComponent(std::make_shared<Bomb>(_blastPower));
+    std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+
+    if (bomb)
+        bomb->addComponent(std::make_shared<Bomb>(_blastPower));
     manager.getCurrentScene().addEntity(bomb);
-    std::cout << "--------------------------------BOMB" << std::endl;
 }
 
 }

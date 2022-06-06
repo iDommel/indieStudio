@@ -40,11 +40,9 @@ namespace indie
             comp->setTimer(comp->getTimer() - deltaTime);
             if (comp->getTimer() <= 0) {
                 comp->explode();
+                sceneManager.getCurrentScene().removeEntity(bomb);
             }
         }
-
-        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
-        auto comp = (*e)[Component::Type::SPRITE];
     }
 
     void GameSystem::destroy()
@@ -68,14 +66,17 @@ namespace indie
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        std::shared_ptr<EventListener> listener2 = std::make_shared<EventListener>();
         std::shared_ptr<Entity> player1 = std::make_shared<Entity>();
         std::shared_ptr<Player> playerComp = std::make_shared<Player>();
-        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
-        component->setType(Component::Type::SOUND);
-        component2->setType(Component::Type::SPRITE);
-        component3->setType(Component::Type::VECTOR);
 
-        player1->addComponent(playerComp);
+        ButtonCallbacks bombCB(std::bind(&Player::generateBomb, playerComp, std::placeholders::_1), [](SceneManager &){}, [](SceneManager &){});
+
+        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
+        listener2->addKeyboardEvent(KEY_E, bombCB);
+
+        player1->addComponent(playerComp)
+            .addComponent(listener2);
         entity2->addComponent(component)
             .addComponent(listener);
         entity->addComponent(component2)

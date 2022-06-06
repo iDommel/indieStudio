@@ -36,7 +36,6 @@ class Bomb: public Component{
     private:
         uint64_t _countdown;
         int _blastPower;
-        Type _type;
 };
 
 }

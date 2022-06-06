@@ -40,8 +40,6 @@ class Player: public Component {
     private:
         int _nbBomb;
         int _blastPower;
-        EventListener _eventListener;
-        Type _type;
 };
 
 }

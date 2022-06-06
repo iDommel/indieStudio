@@ -8,13 +8,14 @@
 #include <iostream>
 #include "Bomb.hpp"
 
+#define BOMB_TIMER 2000
+
 namespace indie {
 
-Bomb::Bomb(int blastPower)
+Bomb::Bomb(int blastPower): Component(Type::BOMB)
 {
-    _type = Type::BOMB;
+    _countdown = BOMB_TIMER;
     _blastPower = blastPower;
-    _countdown = 2;
 }
 
 Bomb::~Bomb()
@@ -23,7 +24,10 @@ Bomb::~Bomb()
 
 void Bomb::setTimer(uint64_t seconds)
 {
-    _countdown = seconds;
+    if (seconds > _countdown)
+        _countdown = 0;
+    else
+        _countdown = seconds;
 }
 
 uint64_t Bomb::getTimer() const

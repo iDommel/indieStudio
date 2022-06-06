@@ -16,7 +16,7 @@ namespace indie
     class String : public Component
     {
     public:
-        String(std::string str) : _value(str) {}
+        String(std::string str) : Component(Type::VECTOR), _value(str) {}
 
         std::string getValue() const { return _value; }
 
