@@ -31,10 +31,10 @@ target_sources(${PROJECT_NAME}
         src/Shape3D.cpp
         src/Model.cpp
         src/Text.cpp
-        src/EventListener.cpp
         src/ButtonCallbacks.cpp
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
+        src/Sound.cpp
 
         src/systems/AudioSystem.cpp
         src/systems/GraphicSystem.cpp
@@ -42,13 +42,14 @@ target_sources(${PROJECT_NAME}
         src/systems/EventSystem.cpp
 
         src/components/Component.cpp
+        src/components/EventListener.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
-        test_functions/TestEventListener.cpp
         test_functions/TestTextures.cpp
         test_functions/TestMusic.cpp
         test_functions/TestAudioDevice.cpp
+        test_functions/TestSound.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

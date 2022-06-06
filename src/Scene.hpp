@@ -8,37 +8,33 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
-#include <vector>
-#include <memory>
 #include <functional>
-
-#include "IScene.hpp"
-#include "IEntity.hpp"
-
 #include <iostream>
+#include <memory>
+#include <vector>
 
-namespace indie {
+#include "IEntity.hpp"
+#include "IScene.hpp"
+
+namespace indie
+{
 
     class Core;
 
     class Scene : public IScene
     {
     public:
-
         /**
          * @brief Scene constructor
          * @param init Scene init function
          */
         Scene(std::function<std::unique_ptr<IScene>()> init);
 
-        /**
-         * @brief Get the scene's entities
-         * @return Returns a reference of the scene's entities vector
-         */
-        std::vector<std::shared_ptr<IEntity>> &getEntities();
-
         /// @brief Add entity to scene
-        void addEntity(std::shared_ptr<IEntity> entity);
+        IScene &addEntity(std::shared_ptr<IEntity> entity);
+        /// @brief add several entities at once to a scene
+        IScene &addEntities(std::vector<std::shared_ptr<IEntity>> entity);
+
         /// @brief Removes the given entity from scene
         void removeEntity(std::shared_ptr<IEntity> entity);
         /**
@@ -52,7 +48,7 @@ namespace indie {
          * @param tags Tags to search for
          * @return Returns a vector of entities
          */
-        std::vector<std::shared_ptr<IEntity>> getTaggedEntities(std::vector<IEntity::Tags> tags);
+        std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> getTaggedEntities(std::vector<IEntity::Tags> tags);
 
         /**
          * @brief Set the callback function to call when an entity is added
@@ -65,9 +61,17 @@ namespace indie {
          * @param callback Callback function
          */
         void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+        /**
+         * @brief retrieves the entities for a given tag
+         *
+         * @param tag to filter by
+         * @return std::vector<std::shared_ptr<IEntity>>&
+         */
+        std::vector<std::shared_ptr<IEntity>> &operator[](IEntity::Tags tag);
 
     protected:
-        std::vector<std::shared_ptr<IEntity>> _entities;
+        /// @brief Entities sorted by tags
+        std::map<IEntity::Tags, std::vector<std::shared_ptr<IEntity>>> _taggedEntities;
         /// @brief Scene's init function; called by GameSystem::init & Scene::reloadScene
         std::function<std::unique_ptr<IScene>()> _initFunc;
         /// @brief Callback when an entity is added to the scene

@@ -9,6 +9,7 @@
 #define GAMEPADCALLBACKS_HPP_
 #include <functional>
 
+#include "SceneManager.hpp"
 namespace indie
 {
     /// @brief Class to group the gamepad events related to a gamepad's stick movements
@@ -24,13 +25,13 @@ namespace indie
          * @param positive callack to be called when a gamepad is positive
          */
         GamepadStickCallbacks(
-            std::function<void(float)> negative,
-            std::function<void()> null,
-            std::function<void(float)> positive);
+            std::function<void(SceneManager &, float)> negative,
+            std::function<void(SceneManager &)> null,
+            std::function<void(SceneManager &, float)> positive);
         ~GamepadStickCallbacks();
-        std::function<void(float)> _negative;
-        std::function<void()> _null;
-        std::function<void(float)> _positive;
+        std::function<void(SceneManager &, float)> _negative;
+        std::function<void(SceneManager &)> _null;
+        std::function<void(SceneManager &, float)> _positive;
 
     protected:
     private:

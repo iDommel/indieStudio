@@ -13,12 +13,12 @@ namespace indie
     ButtonCallbacks::ButtonCallbacks()
     {
     }
-    ButtonCallbacks::ButtonCallbacks(std::function<void(void)> pressed,
-                                     std::function<void(void)> released,
-                                     std::function<void(void)> down)
-        : _pressed(pressed),
-          _released(released),
-          _down(down)
+    ButtonCallbacks::ButtonCallbacks(std::function<void(SceneManager &)> pressed,
+                                     std::function<void(SceneManager &)> released,
+                                     std::function<void(SceneManager &)> down)
+        : pressed(pressed),
+          released(released),
+          down(down)
     {
     }
 
