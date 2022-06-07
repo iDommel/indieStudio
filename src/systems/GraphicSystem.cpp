@@ -107,7 +107,7 @@ namespace indie
             throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite & Vector from entity");
 
         auto sprite = Component::castComponent<Sprite>(components[0]);
-        auto pos = Component::castComponent<Position>(components[1])->getPosition();
+        auto pos = Component::castComponent<Position>(components[1])->getVector();
 
         _textures.at(sprite->getValue()).first->draw(std::get<0>(pos), std::get<1>(pos));
     }

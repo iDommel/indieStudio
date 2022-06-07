@@ -10,12 +10,8 @@
 namespace indie
 {
     Position::Position(float x, float y, float z)
-        : Component(Component::Type::POSITION), x(x), y(y), z(z)
+        : AVector(Component::Type::POSITION, x, y, z)
     {
     }
 
-    std::tuple<float, float, float> Position::getPosition() const
-    {
-        return std::make_tuple(x, y, z);
-    }
 }  // namespace indie

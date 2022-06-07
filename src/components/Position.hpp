@@ -10,26 +10,15 @@
 
 #include <tuple>
 
-#include "Component.hpp"
+#include "AVector.hpp"
 
 namespace indie
 {
 
-    class Position : public Component
+    class Position : public AVector
     {
     public:
         Position(float x, float y, float z = 0);
-        std::tuple<float, float, float> getPosition() const;
-        void setPosition(float newX, float newY, float newZ)
-        {
-            x = newX;
-            y = newY;
-            z = newZ;
-        }
-
-        float x;
-        float y;
-        float z;
     };
 
 }
