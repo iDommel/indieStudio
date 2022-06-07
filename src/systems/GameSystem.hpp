@@ -10,6 +10,9 @@
 
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
+#include "Scene.hpp"
+#include "Position.hpp"
+#include "Entity.hpp"
 
 namespace indie
 {
@@ -39,6 +42,9 @@ namespace indie
     private:
         std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createMainMenu();
+        std::unique_ptr<IScene> createSoundMenu();
+        void createEventListener(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
+        std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
     };
 
 }

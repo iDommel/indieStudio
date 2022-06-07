@@ -73,6 +73,10 @@ namespace indie
                 it.second._released(manager, pos);
                 break;
             }
+            if (Window::isMouseButtonUp(it.first)) {
+                it.second._up(manager, pos);
+                break;
+            }
         }
     }
 

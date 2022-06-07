@@ -24,6 +24,8 @@ namespace indie
         void setPosition(double x, double y, double z) { _x = x; _y = y; _z = z; }
         void setOrdinate(double y) { _y = y; }
         void setAbscissa(double x) { _x = x; }
+        double getOrdinate() const { return _y; }
+        double getAbscissa() const { return _x; }
 
     private:
         double _x;

@@ -25,7 +25,7 @@ namespace indie
             GAME,
             MAIN_MENU,
             PAUSE,
-            OPTION
+            SOUND
         };
 
         /**

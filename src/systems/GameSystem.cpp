@@ -29,39 +29,79 @@ namespace indie
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.addScene(createMainMenu(), SceneManager::SceneType::MAIN_MENU);
+        sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        int count = 0;
-        // std::cout << "GameSystem::update" << std::endl;
-        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
-            if (count == 0) {
-                auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-                Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 333);
-                Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() / 2 - 187);
-            } else if (count == 1) {
-                auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-                Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
-                Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() - 100) / 2 - 18);
-            } else if (count == 2) {
-                auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-                Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
-                Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() / 2 - 18);
-            } else if (count == 3) {
-                auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-                Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
-                Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() + 100) / 2 - 18);
-            }
-            count++;
-        }
+        // int count = 0;
+        // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
+        //     if (count == 0) {
+        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 333);
+        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() / 2 - 187);
+        //     } else if (count == 1) {
+        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
+        //         Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() - 100) / 2 - 18);
+        //     } else if (count == 2) {
+        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() - 80);
+        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() - 80);
+        //     } else if (count == 3) {
+        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //         Component::castComponent<Position>(components[1])->setAbscissa(0);
+        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() - 80);
+        //     } else if (count == 4) {
+        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
+        //         Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() + 100) / 2 - 18);
+        //     }
+        //     count++;
+        // }
 
     }
 
     void GameSystem::destroy()
     {
         std::cout << "GameSystem::destroy" << std::endl;
+    }
+
+    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
+    {
+        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path, heigh, width);
+        std::shared_ptr<Position> component2 = std::make_shared<Position>(position);
+
+        entity->addComponent(component)
+            .addComponent(component2);
+        
+        return (entity);
+    }
+
+    void GameSystem::createEventListener(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
+    {
+        MouseCallbacks mouseCallbacks(
+            [scenetype, entity](SceneManager &sceneManger, Vector2 mousePosition) {
+                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+                auto pos = Component::castComponent<Position>(comp[1]);
+                auto sprite = Component::castComponent<Sprite>(comp[0]);
+
+                if (mousePosition.x > pos->getAbscissa() && mousePosition.x < pos->getAbscissa() + sprite->getX() &&
+                    mousePosition.y > pos->getOrdinate() && mousePosition.y < pos->getOrdinate() + sprite->getY()) {
+                    sceneManger.setCurrentScene(scenetype);
+                }
+            },
+            [](SceneManager &, Vector2 mousePosition) {},
+            [](SceneManager &, Vector2 mousePosition) {},
+            [](SceneManager &, Vector2 mousePosition) {});
+        
+        std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
+
+        eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
+        
+        entity->addComponent(eventListener);
     }
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
@@ -77,9 +117,9 @@ namespace indie
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<Sprite> component2 = std::make_shared<Sprite>("sprite");
-        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("vector");
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<Sprite> component2 = std::make_shared<Sprite>("sprite", 0, 0);
+        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("vector", 0, 0);
+        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png", 0, 0);
 
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
@@ -99,94 +139,42 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createMainMenu, this));
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
-        std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - 333, 600 / 2 - 187);
-
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("assets/MainMenu/play_unpressed.png");
-        std::shared_ptr<Position> component4 = std::make_shared<Position>(800 / 2 - 60, 500 / 2 - 18);
-        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-
-        listener->addMouseEvent(MOUSE_BUTTON_LEFT, MouseCallbacks(
-            [](SceneManager &sceneManager, Vector2 mousePosition) {
-                if (mousePosition.x < 800 / 2 + 60 && mousePosition.x > 800 / 2 - 60 &&
-                    mousePosition.y < 500 / 2 + 18 && mousePosition.y > 500 / 2 - 18) {
-                    sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
-                }
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                
-                // std::cout << "---------- mouse released" << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            }));
-
-        std::shared_ptr<Entity> entity3 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component5 = std::make_shared<Sprite>("assets/MainMenu/option_unpressed.png");
-        std::shared_ptr<Position> component6 = std::make_shared<Position>(800 / 2 - 60, 600 / 2 - 18);
-        std::shared_ptr<EventListener> listener2 = std::make_shared<EventListener>();
-
-        listener2->addMouseEvent(MOUSE_BUTTON_LEFT, MouseCallbacks(
-            [](SceneManager &sceneManager, Vector2 mousePosition) {
-                if (mousePosition.x < 800 / 2 + 60 && mousePosition.x > 800 / 2 - 60 &&
-                    mousePosition.y < 600 / 2 + 18 && mousePosition.y > 600 / 2 - 18) {
-                    sceneManager.setCurrentScene(SceneManager::SceneType::OPTION);
-                }
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                
-                // std::cout << "---------- mouse released" << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            }));
-
-        std::shared_ptr<Entity> entity4 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component7 = std::make_shared<Sprite>("assets/MainMenu/quit_unpressed.png");
-        std::shared_ptr<Position> component8 = std::make_shared<Position>(800 / 2 - 60, 700 / 2 - 18);
-        std::shared_ptr<EventListener> listener3 = std::make_shared<EventListener>();
-
-        listener3->addMouseEvent(MOUSE_BUTTON_LEFT, MouseCallbacks(
-            [](SceneManager &sceneManager, Vector2 mousePosition) {
-                if (mousePosition.x < 800 / 2 + 60 && mousePosition.x > 800 / 2 - 60 &&
-                    mousePosition.y < 700 / 2 + 18 && mousePosition.y > 700 / 2 - 18) {
-                    sceneManager.setCurrentScene(SceneManager::SceneType::NONE);
-                }
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                
-                // std::cout << "---------- mouse released" << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            },
-            [](SceneManager &, Vector2 mousePosition) {
-                // std::cout << mousePosition.x << " " << mousePosition.y << std::endl;
-            }));
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
+        std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
 
         entity1->addComponent(component)
             .addComponent(component2);
-        entity2->addComponent(component3)
-            .addComponent(component4)
-            .addComponent(listener);
-        entity3->addComponent(component5)
-            .addComponent(component6)
-            .addComponent(listener2);
-        entity4->addComponent(component7)
-            .addComponent(component8)
-            .addComponent(listener3);
     
         scene->addEntity(entity1);
+        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 500 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
+
+        createEventListener(entity2, SceneManager::SceneType::GAME);
+        createEventListener(entity3, SceneManager::SceneType::SOUND);
+        createEventListener(entity4, SceneManager::SceneType::NONE);
+        createEventListener(entity5, SceneManager::SceneType::NONE);
         scene->addEntity(entity2);
         scene->addEntity(entity3);
         scene->addEntity(entity4);
+        scene->addEntity(entity5);
+        return scene;
+    }
+
+    std::unique_ptr<indie::IScene> GameSystem::createSoundMenu()
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSoundMenu, this));
+        std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
+        std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
+
+        entity1->addComponent(component)
+            .addComponent(component2);
+    
+        scene->addEntity(entity1);
+        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        scene->addEntity(entity2);
         return scene;
     }
 
