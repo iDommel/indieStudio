@@ -13,6 +13,7 @@
 #include "Texture2D.hpp"
 #include "Sprite.hpp"
 #include "Position.hpp"
+#include "Rect.hpp"
 
 namespace indie
 {
@@ -107,9 +108,17 @@ namespace indie
             throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite & Vector from entity");
 
         auto sprite = Component::castComponent<Sprite>(components[0]);
-        auto pos = Component::castComponent<Position>(components[1])->getPosition();
+        auto pos = Component::castComponent<Position>(components[1]);
 
-        _textures.at(sprite->getValue()).first->draw(std::get<0>(pos), std::get<1>(pos));
+        try {
+            auto rect = entity->getFilteredComponents({ IComponent::Type::RECT });
+            auto r = Component::castComponent<Rect>(rect[0]);
+            Vector2 p = {pos->x, pos->y};
+            _textures.at(sprite->getValue()).first->setRect(r->left, r->top, r->width, r->height);
+            _textures.at(sprite->getValue()).first->drawRec(p);
+        } catch (std::invalid_argument &) {
+            _textures.at(sprite->getValue()).first->draw(pos->x, pos->y);
+        }
     }
 
 }

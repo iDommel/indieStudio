@@ -12,6 +12,7 @@
 
 #include "Position.hpp"
 #include "Sprite.hpp"
+#include "Rect.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
@@ -33,10 +34,16 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         static int i = 0;
-        // std::cout << "GameSystem::update" << std::endl;
-        // auto e = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][0];
-        // auto comp = (*e)[Component::Type::SPRITE];
+        static int j = -1;
+
         i++;
+        if (i % 3 == 0) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
+            auto r = Component::castComponent<Rect>(components[0]);
+            r->left = 100 * (j++);
+            if (j  > 5)
+                j = -1;
+        }
         if (i == 100) {
             std::shared_ptr<Entity> entity = std::make_shared<Entity>();
             std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
@@ -44,7 +51,7 @@ namespace indie
             entity->addComponent(component).addComponent(component4);
             sceneManager.getCurrentScene().addEntity(entity);
         } else if (i == 200) {
-            sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]);
+            sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
         }
     }
 
@@ -70,6 +77,11 @@ namespace indie
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
+        std::shared_ptr<Entity> e = std::make_shared<Entity>();
+        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 100, 100);
+        std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
+        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png");
+
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
@@ -80,7 +92,11 @@ namespace indie
         entity->addComponent(component2)
             .addComponent(component3);
 
-        scene->addEntities({entity, entity2});
+        e->addComponent(rect)
+            .addComponent(pos)
+            .addComponent(sprite);
+
+        scene->addEntities({entity, entity2, e});
         return scene;
     }
 
