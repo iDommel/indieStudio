@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+
 #include "Component.hpp"
 
 namespace indie
@@ -16,7 +17,7 @@ namespace indie
     class String : public Component
     {
     public:
-        String(std::string str) : _value(str) {}
+        String(std::string str) : Component(Type::SPRITE), _value(str) {}
 
         std::string getValue() const { return _value; }
 

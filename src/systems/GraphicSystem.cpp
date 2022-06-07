@@ -5,14 +5,14 @@
 ** GraphicSystem.cpp
 */
 
+#include "GraphicSystem.hpp"
 
 #include <iostream>
-#include "raylib.h"
 
-#include "GraphicSystem.hpp"
-#include "Texture2D.hpp"
-#include "Sprite.hpp"
 #include "Position.hpp"
+#include "Sprite.hpp"
+#include "Texture2D.hpp"
+#include "raylib.h"
 
 namespace indie
 {
@@ -71,7 +71,7 @@ namespace indie
 
     void GraphicSystem::loadSprite(std::shared_ptr<IEntity> &entity)
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::SPRITE });
+        auto components = entity->getFilteredComponents({IComponent::Type::SPRITE});
 
         if (components.size() != 1)
             throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite from entity");
@@ -87,7 +87,7 @@ namespace indie
 
     void GraphicSystem::unloadSprite(std::shared_ptr<IEntity> &entity)
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::SPRITE });
+        auto components = entity->getFilteredComponents({IComponent::Type::SPRITE});
 
         if (components.size() != 1)
             throw std::runtime_error("GraphicSystem::unloadSprite could not get sprite component from entity");
@@ -101,7 +101,7 @@ namespace indie
 
     void GraphicSystem::displaySprite(std::shared_ptr<IEntity> &entity) const
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::SPRITE, IComponent::Type::POSITION});
 
         if (components.size() != 2)
             throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite & Vector from entity");

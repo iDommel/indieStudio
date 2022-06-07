@@ -15,18 +15,21 @@ namespace indie
 
     const std::map<Entity::Tags, std::vector<std::vector<IComponent::Type>>> Entity::entityTags = {
         {IEntity::Tags::SPRITE_2D,
-        {{IComponent::Type::SPRITE, IComponent::Type::VECTOR}}},
+         {{IComponent::Type::SPRITE, IComponent::Type::POSITION}}},
         {Entity::Tags::TEXT,
-         {{IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
+         {{IComponent::Type::TEXT, IComponent::Type::POSITION}}},
         {Entity::Tags::RENDERABLE_3D,
-         {{IComponent::Type::VECTOR, IComponent::Type::MODEL}}},
+         {{IComponent::Type::POSITION, IComponent::Type::MODEL}}},
         {Entity::Tags::AUDIBLE,
          {{IComponent::Type::MUSIC},
           {IComponent::Type::SOUND}}},
         {Entity::Tags::COLLIDABLE,
          {{IComponent::Type::HITBOX}}},
         {Entity::Tags::CALLABLE,
-         {{IComponent::Type::EVT_LISTENER}}}};
+         {{IComponent::Type::EVT_LISTENER}}},
+        {Entity::Tags::PLAYER,
+         {{IComponent::Type::PLAYER}}},
+    };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {
@@ -34,8 +37,8 @@ namespace indie
 
         IComponent::Type type = component->getType();
         _componentsType.push_back(type);
+        component->setParent(std::make_shared<Entity>(*this));
         _components[type] = component;
-        // _components.insert(std::make_pair(component->getType(), std::move(component)));
         for (auto &tag : entityTags) {
             if (this->hasTag(tag.first))
                 continue;

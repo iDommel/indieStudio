@@ -10,12 +10,13 @@
 #include <functional>
 #include <iostream>
 
-#include "Position.hpp"
-#include "Sprite.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
+#include "Player.hpp"
+#include "Position.hpp"
 #include "Scene.hpp"
+#include "Sprite.hpp"
 #include "String.hpp"
 #include "raylib.h"
 
@@ -55,32 +56,48 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        ButtonCallbacks spaceCallbacks(
-            std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
-            [](SceneManager &) {
-                std::cout << "---------- space released" << std::endl;
-            },
-            std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
-
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
-        std::shared_ptr<String> component3 = std::make_shared<String>("vector");
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<Entity> spriteEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos = std::make_shared<Position>(10, 10);
+        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
-        component2->setType(Component::Type::TEXT);
-        component3->setType(Component::Type::HITBOX);
-        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
+        spriteEntity->addComponent(pos)
+            .addComponent(sprite);
 
-        entity2->addComponent(component)
-            .addComponent(component4);
-        entity->addComponent(component2)
-            .addComponent(component3);
-
-        scene->addEntities({entity, entity2});
+        std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 10);
+        std::shared_ptr<Player> player = std::make_shared<Player>(std::map<Player::Keys, KeyboardKey>());
+        std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
+        ButtonCallbacks moveRightCallbacks(
+            std::bind(&Player::moveRight, *player, std::placeholders::_1, playerEntity, 17),
+            [](SceneManager &, std::shared_ptr<IEntity>) {},
+            [](SceneManager &, std::shared_ptr<IEntity>) {});
+        ButtonCallbacks moveLeftCallbacks(
+            std::bind(&Player::moveLeft, *player, std::placeholders::_1, playerEntity, 17),
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            },
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            });
+        ButtonCallbacks moveUpCallbacks(
+            std::bind(&Player::moveUp, *player, std::placeholders::_1, playerEntity, 17),
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            },
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            });
+        ButtonCallbacks moveDownCallbacks(
+            std::bind(&Player::moveDown, *player, std::placeholders::_1, playerEntity, 17),
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            },
+            [](SceneManager &, std::shared_ptr<IEntity>) {
+            });
+        playerListener->addKeyboardEvent(KEY_RIGHT, moveRightCallbacks);
+        playerListener->addKeyboardEvent(KEY_LEFT, moveLeftCallbacks);
+        playerListener->addKeyboardEvent(KEY_DOWN, moveDownCallbacks);
+        playerListener->addKeyboardEvent(KEY_UP, moveUpCallbacks);
+        playerEntity->addComponent(playerPos)
+            .addComponent(player)
+            .addComponent(playerListener);
+        scene->addEntities({spriteEntity, playerEntity});
         return scene;
     }
 

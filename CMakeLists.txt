@@ -43,6 +43,8 @@ target_sources(${PROJECT_NAME}
 
         src/components/Component.cpp
         src/components/EventListener.cpp
+        src/components/Player.cpp
+        src/components/Position.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp

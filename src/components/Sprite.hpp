@@ -9,6 +9,7 @@
 #define SPRITE_HPP
 
 #include <string>
+
 #include "Component.hpp"
 
 namespace indie
@@ -17,7 +18,7 @@ namespace indie
     class Sprite : public Component
     {
     public:
-        Sprite(std::string str) : _value(str) { _type = IComponent::Type::SPRITE; }
+        Sprite(std::string str) : Component(IComponent::Type::SPRITE), _value(str) {}
 
         std::string getValue() const { return _value; }
 
