@@ -19,7 +19,7 @@
 namespace indie
 {
 
-    Player::Player(std::map<Keys, KeyboardKey>) : Component(Type::PLAYER)
+    Player::Player(std::map<Keys, KeyboardKey>, int id) : Component(Type::PLAYER), _id(id)
     {
         _nbBomb = 1;
     }
@@ -40,6 +40,7 @@ namespace indie
     {
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         pos->x += dT * 0.1;
+        std::cout << "Player :" << _id << std::endl;
         std::cout << "Player::moveRight" << std::endl;
         std::cout << "pos->x = " << pos->x << std::endl;
         std::cout << "pos->y = " << pos->y << std::endl;
@@ -50,6 +51,7 @@ namespace indie
     {
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         pos->x -= dT * 0.1;
+        std::cout << "Player :" << _id << std::endl;
         std::cout << "Player::moveLeft" << std::endl;
         std::cout << "pos->x = " << pos->x << std::endl;
         std::cout << "pos->y = " << pos->y << std::endl;
@@ -60,6 +62,7 @@ namespace indie
     {
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         pos->y -= dT * 0.1;
+        std::cout << "Player :" << _id << std::endl;
         std::cout << "Player::moveUp" << std::endl;
         std::cout << "pos->x = " << pos->x << std::endl;
         std::cout << "pos->y = " << pos->y << std::endl;
@@ -71,6 +74,7 @@ namespace indie
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
 
         pos->y += dT * 0.1;
+        std::cout << "Player :" << _id << std::endl;
         std::cout << "Player::moveDown" << std::endl;
         std::cout << "pos->x = " << pos->x << std::endl;
         std::cout << "pos->y = " << pos->y << std::endl;

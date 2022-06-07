@@ -15,6 +15,7 @@ namespace indie
 {
 
     class IEntity;
+    class Scene;
 
     class GameSystem : public ISystem
     {
@@ -38,6 +39,7 @@ namespace indie
 
     private:
         std::unique_ptr<IScene> createScene();
+        void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id);
     };
 
 }

@@ -18,8 +18,8 @@
 #include "Scene.hpp"
 #include "Sprite.hpp"
 #include "String.hpp"
+#include "Velocity.hpp"
 #include "raylib.h"
-
 namespace indie
 {
 
@@ -63,42 +63,46 @@ namespace indie
 
         spriteEntity->addComponent(pos)
             .addComponent(sprite);
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1);
+        createPlayer(*scene, KEY_A, KEY_D, KEY_W, KEY_S, 2);
+        scene->addEntities({spriteEntity});
+        return scene;
+    }
 
+    void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id)
+    {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 10);
-        std::shared_ptr<Player> player = std::make_shared<Player>(std::map<Player::Keys, KeyboardKey>());
+        std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
+        std::shared_ptr<Player> player = std::make_shared<Player>(std::map<Player::Keys, KeyboardKey>(), id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
+
         ButtonCallbacks moveRightCallbacks(
             std::bind(&Player::moveRight, *player, std::placeholders::_1, playerEntity, 17),
-            [](SceneManager &, std::shared_ptr<IEntity>) {},
-            [](SceneManager &, std::shared_ptr<IEntity>) {});
+            nullptr,
+            nullptr);
         ButtonCallbacks moveLeftCallbacks(
             std::bind(&Player::moveLeft, *player, std::placeholders::_1, playerEntity, 17),
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            },
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            });
+            nullptr,
+            nullptr);
         ButtonCallbacks moveUpCallbacks(
             std::bind(&Player::moveUp, *player, std::placeholders::_1, playerEntity, 17),
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            },
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            });
+            nullptr,
+            nullptr);
         ButtonCallbacks moveDownCallbacks(
             std::bind(&Player::moveDown, *player, std::placeholders::_1, playerEntity, 17),
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            },
-            [](SceneManager &, std::shared_ptr<IEntity>) {
-            });
-        playerListener->addKeyboardEvent(KEY_RIGHT, moveRightCallbacks);
-        playerListener->addKeyboardEvent(KEY_LEFT, moveLeftCallbacks);
-        playerListener->addKeyboardEvent(KEY_DOWN, moveDownCallbacks);
-        playerListener->addKeyboardEvent(KEY_UP, moveUpCallbacks);
-        playerEntity->addComponent(playerPos)
-            .addComponent(player)
+            nullptr,
+            nullptr);
+        playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
+
+        playerEntity->addComponent(player)
+            .addComponent(playerPos)
+            .addComponent(playerVel)
             .addComponent(playerListener);
-        scene->addEntities({spriteEntity, playerEntity});
-        return scene;
+        scene.addEntity(playerEntity);
     }
 
     void GameSystem::loadEntity(std::shared_ptr<IEntity>)

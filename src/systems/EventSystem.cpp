@@ -41,15 +41,15 @@ namespace indie
     void EventSystem::handleKeyboard(SceneManager &manager, std::shared_ptr<EventListener> listener)
     {
         for (auto &it : listener->getKeyboardMappings()) {
-            if (Window::isKeyPressed(it.first)) {
+            if (it.second.pressed && Window::isKeyPressed(it.first)) {
                 it.second.pressed(manager, listener->getParent());
                 break;
             }
-            if (Window::isKeyDown(it.first)) {
+            if (it.second.down && Window::isKeyDown(it.first)) {
                 it.second.down(manager, listener->getParent());
                 break;
             }
-            if (Window::isKeyReleased(it.first)) {
+            if (it.second.released && Window::isKeyReleased(it.first)) {
                 it.second.released(manager, listener->getParent());
                 break;
             }
@@ -60,15 +60,15 @@ namespace indie
     {
         for (auto &it : listener->getMouseMappings()) {
             Vector2 pos = Window::getMousePosition();
-            if (Window::isMouseButtonPressed(it.first)) {
+            if (it.second._pressed && Window::isMouseButtonPressed(it.first)) {
                 it.second._pressed(manager, pos);
                 break;
             }
-            if (Window::isMouseButtonDown(it.first)) {
+            if (it.second._down && Window::isMouseButtonDown(it.first)) {
                 it.second._down(manager, pos);
                 break;
             }
-            if (Window::isMouseButtonReleased(it.first)) {
+            if (it.second._released && Window::isMouseButtonReleased(it.first)) {
                 it.second._released(manager, pos);
                 break;
             }
@@ -78,29 +78,26 @@ namespace indie
     void EventSystem::handleGamepad(SceneManager &manager, std::shared_ptr<EventListener> listener, int nb)
     {
         for (auto &it : listener->getGamepadMappings(nb)) {
-            if (Window::isGamepadButtonPressed(nb, it.first)) {
+            if (it.second.pressed && Window::isGamepadButtonPressed(nb, it.first)) {
                 it.second.pressed(manager, listener->getParent());
                 break;
             }
-            if (Window::isGamepadButtonDown(nb, it.first)) {
+            if (it.second.down && Window::isGamepadButtonDown(nb, it.first)) {
                 it.second.down(manager, listener->getParent());
                 break;
             }
-            if (Window::isGamepadButtonReleased(nb, it.first)) {
+            if (it.second.released && Window::isGamepadButtonReleased(nb, it.first)) {
                 it.second.released(manager, listener->getParent());
                 break;
             }
-        }
-
-        for (auto &it : listener->getGamepadStickMappings(nb)) {
-            it.second(Window::getGamepadAxisMovement(nb, it.first));
         }
     }
 
     void EventSystem::handleGamepadSticks(SceneManager &manager, std::shared_ptr<EventListener> listener, int nb)
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
-            it.second(Window::getGamepadAxisMovement(nb, it.first));
+            if (it.second)
+                it.second(Window::getGamepadAxisMovement(nb, it.first));
         }
     }
 
