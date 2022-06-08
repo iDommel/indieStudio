@@ -20,7 +20,8 @@ namespace indie
     public:
         enum class Tags {
             RENDERABLE_3D,
-            RENDERABLE_2D,
+            SPRITE_2D,
+            TEXT,
             COLLIDABLE,
             AUDIBLE,
             CALLABLE
@@ -63,7 +64,7 @@ namespace indie
          * @param type the type to search for
          * @return std::shared_ptr<IComponent> to that component or nullptr
          */
-        virtual std::shared_ptr<IComponent> operator[](IComponent::Type type) = 0;
+        virtual std::shared_ptr<IComponent> &operator[](IComponent::Type type) = 0;
     };
 
 }

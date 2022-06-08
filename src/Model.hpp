@@ -47,7 +47,7 @@ namespace indie {
              */
             void drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
             /**
-             * @brief Get the boudning box of the model
+             * @brief Get the boudning box of the model (should be updated with a pos to make an hitbox)
              * @return The bounding box of the model
              */
             BoundingBox getBoundingBox(void);

@@ -1,20 +1,21 @@
 #include "Model.hpp"
-#include "raylib.h"
 #include <iostream>
 
-namespace indie {
+#include "raylib.h"
+
+namespace indie
+{
 
     Model::Model(const std::string &modelFile, const std::string &textureFile)
     {
         ::Model mode = LoadModel(modelFile.c_str());
         Texture2D texture = LoadTexture(textureFile.c_str());
         mode.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
-        ptr = std::make_unique <::Model> (mode);
+        ptr = std::make_unique<::Model>(mode);
     }
 
     Model::~Model()
     {
-
     }
 
     void Model::unload()

@@ -7,12 +7,17 @@
 
 #include "GameSystem.hpp"
 
+#include <functional>
 #include <iostream>
 
-#include "../Core.hpp"
-#include "../Entity.hpp"
-#include "../Scene.hpp"
-#include "../components/String.hpp"
+#include "Position.hpp"
+#include "Sprite.hpp"
+#include "Core.hpp"
+#include "Entity.hpp"
+#include "EventListener.hpp"
+#include "Scene.hpp"
+#include "String.hpp"
+#include "raylib.h"
 
 namespace indie
 {
@@ -27,9 +32,20 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        std::cout << "GameSystem::update" << std::endl;
-        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
-        auto comp = (*e)[Component::Type::SPRITE];
+        static int i = 0;
+        // std::cout << "GameSystem::update" << std::endl;
+        // auto e = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][0];
+        // auto comp = (*e)[Component::Type::SPRITE];
+        i++;
+        if (i == 100) {
+            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+            std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
+            std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+            entity->addComponent(component).addComponent(component4);
+            sceneManager.getCurrentScene().addEntity(entity);
+        } else if (i == 200) {
+            sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]);
+        }
     }
 
     void GameSystem::destroy()
@@ -39,22 +55,28 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(&createScene);
+        ButtonCallbacks spaceCallbacks(
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
+            [](SceneManager &) {
+                std::cout << "---------- space released" << std::endl;
+            },
+            std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
+
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<String> component = std::make_shared<String>("audio");
+        std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
-        std::shared_ptr<String> component4 = std::make_shared<String>("evt");
+        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
-        component->setType(Component::Type::SOUND);
-        component2->setType(Component::Type::SPRITE);
-        component3->setType(Component::Type::VECTOR);
-        component4->setType(Component::Type::EVT_LISTENER);
+        component2->setType(Component::Type::TEXT);
+        component3->setType(Component::Type::HITBOX);
+        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
         entity2->addComponent(component)
             .addComponent(component4);
-
         entity->addComponent(component2)
             .addComponent(component3);
 
@@ -70,4 +92,8 @@ namespace indie
     {
     }
 
+    void GameSystem::printStuff(SceneManager &)
+    {
+        std::cout << "GameSystem::printStuff" << std::endl;
+    }
 }
