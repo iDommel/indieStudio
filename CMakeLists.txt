@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
-        src/modelAnimation.cpp
+        src/ModelAnimation.cpp
         src/Music.cpp
         src/Texture2D.cpp
         src/Camera.cpp

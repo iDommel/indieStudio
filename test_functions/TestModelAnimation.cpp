@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "../src/modelAnimation.hpp"
+#include "../src/ModelAnimation.hpp"
 
 void test_raylib_modelAnimation()
 {

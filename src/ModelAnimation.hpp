@@ -54,6 +54,8 @@
                  * @brief List of animation object
                  */
                 ::ModelAnimation *anims;
+                /// @brief Boolean to see if the animation is loaded or not
+                bool _isLoaded;
         };
     }
 
