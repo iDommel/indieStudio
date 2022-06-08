@@ -28,8 +28,8 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         std::cout << "GameSystem::update" << std::endl;
-        // TODO : search for COLLIDABLE entities with _collider subsystem functions, WAITING FOR EXTERNAL PR
-        // sceneManager.getCurrentScene().addEntity(std::make_shared<Entity>());
+        auto e = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_2D][0];
+        auto comp = (*e)[Component::Type::SPRITE];
     }
 
     void GameSystem::destroy()
@@ -51,12 +51,14 @@ namespace indie
         component2->setType(Component::Type::SPRITE);
         component3->setType(Component::Type::VECTOR);
         component4->setType(Component::Type::EVT_LISTENER);
-        entity2->addComponent(component);
-        entity->addComponent(component2);
-        entity->addComponent(component3);
-        entity2->addComponent(component4);
-        scene->addEntity(entity);
-        scene->addEntity(entity2);
+
+        entity2->addComponent(component)
+            .addComponent(component4);
+
+        entity->addComponent(component2)
+            .addComponent(component3);
+
+        scene->addEntities({entity, entity2});
         return scene;
     }
 

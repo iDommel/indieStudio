@@ -9,7 +9,6 @@
 #define GAME_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "CollideSystem.hpp"
 #include "../SceneManager.hpp"
 
 namespace indie {
@@ -37,7 +36,6 @@ namespace indie {
 
     private:
         static std::unique_ptr<IScene> createScene();
-        static CollideSystem _collider;
     };
 
 }

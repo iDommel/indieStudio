@@ -6,12 +6,67 @@
 */
 
 #include "CollideSystem.hpp"
-#include "Model.hpp"
 #include <raylib.h>
 
 #include <iostream>
 
 namespace indie {
+    void CollideSystem::init(SceneManager &sceneManager)
+    {
+        auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
+
+        std::cout << "CollideSystem::init" << std::endl;
+        for (auto &collidable : collidables) {
+            auto hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
+            if (hitbox->is3D())
+                _collidables3D.push_back(std::make_pair(collidable, hitbox));
+            else
+                _collidables2D.push_back(std::make_pair(collidable, hitbox));
+        }
+    }
+
+    void CollideSystem::destroy()
+    {
+        std::cout << "CollideSystem::destroy" << std::endl;
+        _collidables3D.clear();
+        _collidables2D.clear();
+    }
+
+    void CollideSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    {
+        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        if (hitbox->is3D())
+            _collidables3D.push_back(std::make_pair(entity, hitbox));
+        else
+            _collidables2D.push_back(std::make_pair(entity, hitbox));
+    }
+
+    void CollideSystem::unloadEntity(std::shared_ptr<IEntity> entity)
+    {
+        for (auto it = _collidables3D.begin(); it != _collidables3D.end(); ++it)
+            if (it->first == entity) {
+                _collidables3D.erase(it);
+                return;
+            }
+        for (auto it = _collidables2D.begin(); it != _collidables2D.end(); ++it)
+            if (it->first == entity) {
+                _collidables2D.erase(it);
+                return;
+            }
+    }
+
+    std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity)
+    {
+        std::shared_ptr<Hitbox> hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        std::vector<std::shared_ptr<IEntity>> colliders;
+        
+        for (auto &collidable : _collidables3D)
+            if (collidable.first != entity)
+                if (check3DCollision(collidable.second, hitbox))
+                    colliders.push_back(collidable.first);
+        return colliders;
+    }
+
     /// ------- 3D -------
 
     BoundingBox CollideSystem::makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos)
@@ -44,6 +99,11 @@ namespace indie {
             };
 
         return updatedBox;
+    }
+
+    bool CollideSystem::check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2)
+    {
+        return (check3DCollision(box1->getBBox(), box2->getBBox()));
     }
 
     bool CollideSystem::check3DCollision(const BoundingBox &box1, const BoundingBox &box2)
@@ -90,6 +150,11 @@ namespace indie {
     Rectangle CollideSystem::getRectangleOf(const Image &image, float threshold)
     {
         return GetImageAlphaBorder(image, threshold);
+    }
+
+    bool CollideSystem::check2DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2)
+    {
+        return (check2DCollision(box1->getRect(), box2->getRect()));
     }
 
     bool CollideSystem::check2DCollision(const Rectangle &rect1, const Rectangle &rect2)

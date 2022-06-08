@@ -29,7 +29,8 @@ namespace indie {
             GAME,
             EVENT,
             GRAPHIC,
-            AUDIO
+            AUDIO,
+            COLLIDE
         };
 
         Core();

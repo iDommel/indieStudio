@@ -8,6 +8,12 @@
 #ifndef COLLIDE_HPP_
 #define COLLIDE_HPP_
 
+#include "SceneManager.hpp"
+#include "HitboxComponent.hpp"
+#include "Model.hpp"
+
+#include "ISystem.hpp"
+
 struct BoundingBox;
 struct Model;
 struct Mesh;
@@ -18,8 +24,29 @@ struct Image;
 
 namespace indie {
     /// @brief CollideSystem class provide collision detection functions for 2D and 3D shapes. (does not handle collision between 3D and 2D)
-    class CollideSystem {
+    class CollideSystem : public ISystem {
         public:
+            void init(SceneManager &manager) final;
+            void update(SceneManager &manager, uint64_t deltaTime) final {};
+            void destroy(void) final;
+
+            /**
+             * @brief The callback to be called when an entity is added to a scene
+             * @param entity The Entity that was added
+             */
+            void loadEntity(std::shared_ptr<IEntity> entity) final;
+            /**
+             * @brief The callback to be called when an entity is removed from a scene
+             * @param entity The Entity that was removed
+             */
+            void unloadEntity(std::shared_ptr<IEntity> entity) final;
+
+            /**
+             * @brief Search for every collisions between the given entity and all the other entities in the scene
+             * @param entity The Entity to check
+             * @return List of entities that collide with the entity
+             */
+            std::vector<std::shared_ptr<IEntity>> getColliders(std::shared_ptr<IEntity> entity);
             /// ------- 3D -------
 
             /**
@@ -45,6 +72,13 @@ namespace indie {
              * @return New updated BoundingBox
             **/
             BoundingBox makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos);
+
+            /** brief Check if an hitbox is colliding with another one
+             * @param box1 First hitbox
+             * @param box2 Second hitbox
+             * @return True if the bounding boxes are colliding, false otherwise
+            **/
+            bool check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2);
 
             /**
              * @brief Check collision between two bounding boxes
@@ -106,6 +140,14 @@ namespace indie {
              * @return Rectangle bounding the image
             **/
             Rectangle getRectangleOf(const Image &image, float threshold);
+
+            /**
+             * @brief Check collision between two hitboxes
+             * @param rect1 First hibox
+             * @param rect2 Second hitbox
+             * @return True if collision, false otherwise
+            **/
+            bool check2DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2);
 
             /**
              * @brief Check if two rectangles are colliding
@@ -172,6 +214,8 @@ namespace indie {
             **/
             bool check2DCollision(const Vector2 &center, float radius, const Vector2 &point);
         private:
+            std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
+            std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;
     };
 }
 
