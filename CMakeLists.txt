@@ -34,6 +34,7 @@ target_sources(${PROJECT_NAME}
 
         src/components/Component.cpp
         src/components/EventListener.cpp
+        src/components/CameraComponent.cpp
 
         src/Texture2D.cpp
         src/Window.cpp

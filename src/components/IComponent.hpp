@@ -24,7 +24,8 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
-            RECT
+            RECT,
+            CAMERA
         };
 
         virtual Type getType() const = 0;

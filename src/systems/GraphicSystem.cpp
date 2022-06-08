@@ -14,6 +14,8 @@
 #include "Sprite.hpp"
 #include "Position.hpp"
 #include "Rect.hpp"
+#include "Model3D.hpp"
+#include "CameraComponent.hpp"
 
 namespace indie
 {
@@ -29,6 +31,8 @@ namespace indie
         for (auto &scene : sceneManager.getScenes()) {
             for (auto &entity : (*scene.second)[IEntity::Tags::SPRITE_2D])
                 loadSprite(entity);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
+                loadModel(e);
         }
     }
 
@@ -40,12 +44,19 @@ namespace indie
         }
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
-        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
+
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CAMERA]) {
+            auto camComponents = e->getFilteredComponents({ IComponent::Type::CAMERA });
+            if (camComponents.size() == 0)
+                continue;
+            auto cam = Component::castComponent<CameraComponent>(camComponents[0]);
+            cam->getCamera().beginDrawScope();
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
+                displayModel(e);
+            cam->getCamera().endDrawScope();
+        }
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
             displaySprite(e);
-        }
-        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D]) {
-            std::cout << "render 3D img" << std::endl;
-        }
         _window->endDraw();
     }
 
@@ -61,13 +72,18 @@ namespace indie
             std::cout << "loadSprite" << std::endl;
             loadSprite(entity);
         }
+        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
+            std::cout << "loadModel" << std::endl;
+            loadModel(entity);
+        }
     }
 
     void GraphicSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
-        if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
+        if (entity->hasTag(IEntity::Tags::SPRITE_2D))
             unloadSprite(entity);
-        }
+        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D))
+            unloadModel(entity);
     }
 
     void GraphicSystem::loadSprite(std::shared_ptr<IEntity> &entity)
@@ -78,12 +94,10 @@ namespace indie
             throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite from entity");
 
         auto sprite = Component::castComponent<Sprite>(components[0]);
-        if (_textures.find(sprite->getValue()) != _textures.end()) {
+        if (_textures.find(sprite->getValue()) != _textures.end())
             _textures[sprite->getValue()].second++;
-            std::cout << "Sprite " << sprite->getValue() << std::endl;
-        } else {
+        else
             _textures[sprite->getValue()] = std::make_pair<std::unique_ptr<Texture>, int>(std::make_unique<Texture>(sprite->getValue()), 1);
-        }
     }
 
     void GraphicSystem::unloadSprite(std::shared_ptr<IEntity> &entity)
@@ -119,6 +133,48 @@ namespace indie
         } catch (std::invalid_argument &) {
             _textures.at(sprite->getValue()).first->draw(pos->x, pos->y);
         }
+    }
+
+    void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity) const
+    {
+        auto components = entity->getFilteredComponents({ IComponent::Type::MODEL, IComponent::Type::VECTOR });
+
+        if (components.size() != 2)
+            throw std::runtime_error("GraphicSystem::loadSprite could not get component Sprite & Vector from entity");
+
+        auto model = Component::castComponent<Model3D>(components[0]);
+        auto pos = Component::castComponent<Position>(components[1]);
+        Vector3 position = {pos->x, pos->y, pos->z};
+
+        _models.at(model->getModelPath()).first->draw(position, WHITE);
+    }
+
+    void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
+    {
+        auto components = entity->getFilteredComponents({ IComponent::Type::MODEL });
+
+        if (components.size() != 1)
+            throw std::runtime_error("GraphicSystem::loadModel could not get component Model from entity");
+
+        auto model = Component::castComponent<Model3D>(components[0]);
+        if (_models.find(model->getModelPath()) != _models.end())
+            _models[model->getModelPath()].second++;
+        else
+            _models[model->getModelPath()] = std::make_pair<std::unique_ptr<Model>, int>(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
+    }
+
+    void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)
+    {
+        auto components = entity->getFilteredComponents({ IComponent::Type::MODEL });
+
+        if (components.size() != 1)
+            throw std::runtime_error("GraphicSystem::unloadModel could not get component Model from entity");
+
+        auto model = Component::castComponent<Model3D>(components[0]);
+        if (_models[model->getModelPath()].second != 1)
+            _models[model->getModelPath()].second--;
+        else
+            _models.erase(model->getModelPath());
     }
 
 }

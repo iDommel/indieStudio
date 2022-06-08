@@ -18,6 +18,8 @@
 #include "EventListener.hpp"
 #include "Scene.hpp"
 #include "String.hpp"
+#include "Model3D.hpp"
+#include "CameraComponent.hpp"
 #include "raylib.h"
 
 namespace indie
@@ -70,11 +72,8 @@ namespace indie
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
-        std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
         std::shared_ptr<Entity> e = std::make_shared<Entity>();
@@ -82,21 +81,31 @@ namespace indie
         std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
         std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png");
 
-        component2->setType(Component::Type::TEXT);
-        component3->setType(Component::Type::HITBOX);
+        std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+
+        std::shared_ptr<Entity> cam = std::make_shared<Entity>();
+        Vector3 camPos = {50.0f, 50.0f, 50.0f};
+        Vector3 camTarget = {0.0f, 10.0f, 0.0f};
+        std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
+
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
         entity2->addComponent(component)
             .addComponent(component4);
-        entity->addComponent(component2)
-            .addComponent(component3);
 
         e->addComponent(rect)
             .addComponent(pos)
             .addComponent(sprite);
 
-        scene->addEntities({entity, entity2, e});
+        e2->addComponent(pos2)
+            .addComponent(model);
+
+        cam->addComponent(camera);
+
+        scene->addEntities({entity2, e, e2, cam});
         return scene;
     }
 

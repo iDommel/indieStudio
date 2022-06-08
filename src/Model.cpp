@@ -17,6 +17,8 @@ namespace indie
 
     Model::~Model()
     {
+        if (ptr != nullptr)
+            unload();
     }
 
     void Model::unload()

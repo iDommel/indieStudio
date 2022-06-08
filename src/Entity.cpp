@@ -25,6 +25,8 @@ namespace indie
           {IComponent::Type::SOUND}}},
         {Entity::Tags::COLLIDABLE,
          {{IComponent::Type::HITBOX}}},
+        {Entity::Tags::CAMERA,
+         {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}}};
 
