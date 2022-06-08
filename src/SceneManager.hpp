@@ -24,8 +24,12 @@ namespace indie
             NONE = -1,
             GAME,
             MAIN_MENU,
+            CONTROLLER,
+            HELP,
             PAUSE,
-            SOUND
+            SOUND,
+            MINUS,
+            PLUS
         };
 
         /**

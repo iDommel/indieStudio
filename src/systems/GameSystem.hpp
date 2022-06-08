@@ -22,15 +22,6 @@ namespace indie
     class GameSystem : public ISystem
     {
     public:
-        enum class EventType {
-            NONE = -1,
-            GAME,
-            MAIN_MENU,
-            PAUSE,
-            SOUND,
-            MINUS,
-            PLUS
-        };
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -52,7 +43,9 @@ namespace indie
         std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createMainMenu();
         std::unique_ptr<IScene> createSoundMenu();
-        void createEventListener(std::shared_ptr<Entity> &scene, EventType event);
+        std::unique_ptr<IScene> createHelpMenu();
+        std::unique_ptr<IScene> createControllerMenu();
+        void createEventListener(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
     };
 
