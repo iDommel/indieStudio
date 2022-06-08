@@ -33,6 +33,11 @@ _is3D(false), _rect(std::make_unique<Rectangle>(rect))
 {
 }
 
+bool Hitbox::is3D(void) const
+{
+    return _is3D;
+}
+
 BoundingBox Hitbox::getBBox(void) const
 {
     if (_is3D)

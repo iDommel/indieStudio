@@ -55,7 +55,7 @@ namespace indie {
             }
     }
 
-    std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity)
+    std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity) const
     {
         std::shared_ptr<Hitbox> hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
         std::vector<std::shared_ptr<IEntity>> colliders;
@@ -69,7 +69,7 @@ namespace indie {
 
     /// ------- 3D -------
 
-    BoundingBox CollideSystem::makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos)
+    BoundingBox CollideSystem::makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos) const
     {
         const Vector3 &min = {pos.x, pos.y, pos.z};
         const Vector3 &max = {pos.x + size.x, pos.y + size.y, pos.z + size.z};
@@ -78,14 +78,14 @@ namespace indie {
         return box;
     }
 
-    BoundingBox &CollideSystem::UpdateBBox(BoundingBox &box, const Vector3 &pos)
+    BoundingBox &CollideSystem::UpdateBBox(BoundingBox &box, const Vector3 &pos) const
     {
         box.min = {pos.x + box.min.x, pos.y + box.min.y, pos.z + box.min.z};
         box.max = {pos.x + box.max.x, pos.y + box.max.y, pos.z + box.max.z};
         return box;
     }
 
-    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos)
+    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos) const
     {
         BoundingBox updatedBox = {
             (Vector3) {
@@ -101,41 +101,41 @@ namespace indie {
         return updatedBox;
     }
 
-    bool CollideSystem::check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2)
+    bool CollideSystem::check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2) const
     {
         return (check3DCollision(box1->getBBox(), box2->getBBox()));
     }
 
-    bool CollideSystem::check3DCollision(const BoundingBox &box1, const BoundingBox &box2)
+    bool CollideSystem::check3DCollision(const BoundingBox &box1, const BoundingBox &box2) const
     {
         return CheckCollisionBoxes(box1, box2);
     }
 
-    bool CollideSystem::check3DCollision(const BoundingBox &box, const Vector3 &center, float radius)
+    bool CollideSystem::check3DCollision(const BoundingBox &box, const Vector3 &center, float radius) const
     {
         return CheckCollisionBoxSphere(box, center, radius);
     }
 
-    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const BoundingBox &box)
+    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const BoundingBox &box) const
     {
         return CheckCollisionBoxSphere(box, center, radius);
     }
 
-    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const Vector3 &center2, float radius2)
+    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const Vector3 &center2, float radius2) const
     {
         return CheckCollisionSpheres(center, radius, center2, radius2);
     }
 
     /// ------- 2D -------
 
-    Rectangle &CollideSystem::updateRect(Rectangle &rect, const Vector2 &pos)
+    Rectangle &CollideSystem::updateRect(Rectangle &rect, const Vector2 &pos) const
     {
         rect.x = pos.x;
         rect.y = pos.y;
         return rect;
     }
 
-    Rectangle CollideSystem::makeUpdatedRect(const Rectangle &rect, const Vector2 &pos)
+    Rectangle CollideSystem::makeUpdatedRect(const Rectangle &rect, const Vector2 &pos) const
     {
         Rectangle updatedRect = {
             (int) pos.x + rect.x,
@@ -147,52 +147,52 @@ namespace indie {
         return updatedRect;
     }
 
-    Rectangle CollideSystem::getRectangleOf(const Image &image, float threshold)
+    Rectangle CollideSystem::getRectangleOf(const Image &image, float threshold) const
     {
         return GetImageAlphaBorder(image, threshold);
     }
 
-    bool CollideSystem::check2DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2)
+    bool CollideSystem::check2DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2) const
     {
         return (check2DCollision(box1->getRect(), box2->getRect()));
     }
 
-    bool CollideSystem::check2DCollision(const Rectangle &rect1, const Rectangle &rect2)
+    bool CollideSystem::check2DCollision(const Rectangle &rect1, const Rectangle &rect2) const
     {
         return CheckCollisionRecs(rect1, rect2);
     }
 
-    bool CollideSystem::check2DCollision(const Rectangle &rect, const Vector2 &center, float radius)
+    bool CollideSystem::check2DCollision(const Rectangle &rect, const Vector2 &center, float radius) const
     {
         return CheckCollisionCircleRec(center, radius, rect);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Rectangle &rect)
+    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Rectangle &rect) const
     {
         return CheckCollisionCircleRec(center, radius, rect);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &center1, float radius1, const Vector2 &center2, float radius2)
+    bool CollideSystem::check2DCollision(const Vector2 &center1, float radius1, const Vector2 &center2, float radius2) const
     {
         return CheckCollisionCircles(center1, radius1, center2, radius2);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &point, const Rectangle &rect)
+    bool CollideSystem::check2DCollision(const Vector2 &point, const Rectangle &rect) const
     {
         return CheckCollisionPointRec(point, rect);
     }
 
-    bool CollideSystem::check2DCollision(const Rectangle &rect, const Vector2 &point)
+    bool CollideSystem::check2DCollision(const Rectangle &rect, const Vector2 &point) const
     {
         return CheckCollisionPointRec(point, rect);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &point, const Vector2 &center, float radius)
+    bool CollideSystem::check2DCollision(const Vector2 &point, const Vector2 &center, float radius) const
     {
         return CheckCollisionPointCircle(point, center, radius);
     }
 
-    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Vector2 &point)
+    bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Vector2 &point) const
     {
         return CheckCollisionPointCircle(point, center, radius);
     }
