@@ -19,9 +19,9 @@ namespace indie
     class Component : public IComponent
     {
     public:
+        Component(const Type &type): _type(type) {};
+        
         Type getType() const;
-
-        void setType(Type type) { _type = type; };
 
         template <typename T>
         static std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> &component)

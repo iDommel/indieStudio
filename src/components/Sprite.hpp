@@ -17,7 +17,7 @@ namespace indie
     class Sprite : public Component
     {
     public:
-        Sprite(std::string str) : _value(str) { _type = IComponent::Type::SPRITE; }
+        Sprite(std::string str) : Component(Type::SPRITE), _value(str) {}
 
         std::string getValue() const { return _value; }
 

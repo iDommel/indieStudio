@@ -24,7 +24,8 @@ namespace indie
             TEXT,
             COLLIDABLE,
             AUDIBLE,
-            CALLABLE
+            CALLABLE,
+            BONUS
         };
 
         virtual ~IEntity() = default;

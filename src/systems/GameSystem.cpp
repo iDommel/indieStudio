@@ -17,6 +17,7 @@
 #include "EventListener.hpp"
 #include "Scene.hpp"
 #include "String.hpp"
+#include "Bonus.hpp"
 #include "raylib.h"
 
 namespace indie
@@ -63,24 +64,28 @@ namespace indie
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
+        /*std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();*/
+        std::shared_ptr<Entity> bonus = std::make_shared<Entity>();
+        /*std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");*/
+        std::shared_ptr<Bonus> bonusComp = std::make_shared<Bonus>(Bonus::Type::BOMB);
+        std::shared_ptr<Position> bonusPos = std::make_shared<Position>(10, 10);
 
-        component2->setType(Component::Type::TEXT);
-        component3->setType(Component::Type::HITBOX);
+        //component2->setType(Component::Type::TEXT);
+        //component3->setType(Component::Type::HITBOX);
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
-        entity2->addComponent(component)
+        bonus->addComponent(bonusComp).addComponent(bonusPos);
+        /*entity2->addComponent(component)
             .addComponent(component4);
         entity->addComponent(component2)
-            .addComponent(component3);
+            .addComponent(component3);*/
 
-        scene->addEntities({entity, entity2});
+        scene->addEntities({/*entity, entity2*/bonus});
         return scene;
     }
 
