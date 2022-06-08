@@ -33,7 +33,7 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        static int i = 0;
+        /*static int i = 0;
         // std::cout << "GameSystem::update" << std::endl;
         // auto e = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][0];
         // auto comp = (*e)[Component::Type::SPRITE];
@@ -46,6 +46,12 @@ namespace indie
             sceneManager.getCurrentScene().addEntity(entity);
         } else if (i == 200) {
             sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]);
+        }*/
+
+        //Check if there is any bonus
+        for (auto &bonus : sceneManager.getCurrentScene()[IEntity::Tags::BONUS]) {
+            auto comp = Component::castComponent<Bonus>((*bonus)[IComponent::Type::BONUS]);
+            std::cout << "Bonuuuuuuuss !!!!!" << std::endl;
         }
     }
 

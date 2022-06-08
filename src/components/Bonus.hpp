@@ -21,7 +21,6 @@ class Bonus: public Component {
         };
 
         Bonus(const Type &type): Component(IComponent::Type::BONUS), _type(type) {};
-        ~Bonus();
 
         /**
          * @brief Get bonus type
