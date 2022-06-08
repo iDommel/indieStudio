@@ -13,9 +13,9 @@ namespace indie
     ButtonCallbacks::ButtonCallbacks()
     {
     }
-    ButtonCallbacks::ButtonCallbacks(std::function<void(SceneManager &, std::shared_ptr<IEntity>)> pressed,
-                                     std::function<void(SceneManager &, std::shared_ptr<IEntity>)> released,
-                                     std::function<void(SceneManager &, std::shared_ptr<IEntity>)> down)
+    ButtonCallbacks::ButtonCallbacks(std::function<void(SceneManager &)> pressed,
+                                     std::function<void(SceneManager &)> released,
+                                     std::function<void(SceneManager &)> down)
         : pressed(pressed),
           released(released),
           down(down)

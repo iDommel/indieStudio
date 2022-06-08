@@ -37,7 +37,6 @@ namespace indie
 
         IComponent::Type type = component->getType();
         _componentsType.push_back(type);
-        component->setParent(std::make_shared<Entity>(*this));
         _components[type] = component;
         for (auto &tag : entityTags) {
             if (this->hasTag(tag.first))

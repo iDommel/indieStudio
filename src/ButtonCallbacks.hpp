@@ -27,13 +27,13 @@ namespace indie
          * @param down callback to be called when a button is down
          */
         ButtonCallbacks(
-            std::function<void(SceneManager &, std::shared_ptr<IEntity>)> pressed,
-            std::function<void(SceneManager &, std::shared_ptr<IEntity>)> released,
-            std::function<void(SceneManager &, std::shared_ptr<IEntity>)> down);
+            std::function<void(SceneManager &)> pressed,
+            std::function<void(SceneManager &)> released,
+            std::function<void(SceneManager &)> down);
         ~ButtonCallbacks();
-        std::function<void(SceneManager &, std::shared_ptr<IEntity>)> pressed;
-        std::function<void(SceneManager &, std::shared_ptr<IEntity>)> released;
-        std::function<void(SceneManager &, std::shared_ptr<IEntity>)> down;
+        std::function<void(SceneManager &)> pressed;
+        std::function<void(SceneManager &)> released;
+        std::function<void(SceneManager &)> down;
 
     protected:
     private:

@@ -42,15 +42,15 @@ namespace indie
     {
         for (auto &it : listener->getKeyboardMappings()) {
             if (it.second.pressed && Window::isKeyPressed(it.first)) {
-                it.second.pressed(manager, listener->getParent());
+                it.second.pressed(manager);
                 break;
             }
             if (it.second.down && Window::isKeyDown(it.first)) {
-                it.second.down(manager, listener->getParent());
+                it.second.down(manager);
                 break;
             }
             if (it.second.released && Window::isKeyReleased(it.first)) {
-                it.second.released(manager, listener->getParent());
+                it.second.released(manager);
                 break;
             }
         }
@@ -79,15 +79,15 @@ namespace indie
     {
         for (auto &it : listener->getGamepadMappings(nb)) {
             if (it.second.pressed && Window::isGamepadButtonPressed(nb, it.first)) {
-                it.second.pressed(manager, listener->getParent());
+                it.second.pressed(manager);
                 break;
             }
             if (it.second.down && Window::isGamepadButtonDown(nb, it.first)) {
-                it.second.down(manager, listener->getParent());
+                it.second.down(manager);
                 break;
             }
             if (it.second.released && Window::isGamepadButtonReleased(nb, it.first)) {
-                it.second.released(manager, listener->getParent());
+                it.second.released(manager);
                 break;
             }
         }

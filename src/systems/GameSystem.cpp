@@ -74,24 +74,40 @@ namespace indie
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 10);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
-        std::shared_ptr<Player> player = std::make_shared<Player>(std::map<Player::Keys, KeyboardKey>(), id);
+        std::shared_ptr<Player> player = std::make_shared<Player>(id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
 
         ButtonCallbacks moveRightCallbacks(
-            std::bind(&Player::moveRight, *player, std::placeholders::_1, playerEntity, 17),
-            nullptr,
+            [player, playerEntity](SceneManager &manager) {
+                player->moveRight(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopRight(manager, playerEntity, 1);
+            },
             nullptr);
         ButtonCallbacks moveLeftCallbacks(
-            std::bind(&Player::moveLeft, *player, std::placeholders::_1, playerEntity, 17),
-            nullptr,
+            [player, playerEntity](SceneManager &manager) {
+                player->moveLeft(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopLeft(manager, playerEntity, 17);
+            },
             nullptr);
         ButtonCallbacks moveUpCallbacks(
-            std::bind(&Player::moveUp, *player, std::placeholders::_1, playerEntity, 17),
-            nullptr,
+            [player, playerEntity](SceneManager &manager) {
+                player->moveUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopUp(manager, playerEntity, 1);
+            },
             nullptr);
         ButtonCallbacks moveDownCallbacks(
-            std::bind(&Player::moveDown, *player, std::placeholders::_1, playerEntity, 17),
-            nullptr,
+            [player, playerEntity](SceneManager &manager) {
+                player->moveDown(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopDown(manager, playerEntity, 1);
+            },
             nullptr);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);

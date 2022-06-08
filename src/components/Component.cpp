@@ -18,13 +18,4 @@ namespace indie
         return _type;
     }
 
-    void Component::setParent(std::shared_ptr<IEntity> &&parent)
-    {
-        _parent = std::move(parent);
-    }
-
-    std::shared_ptr<IEntity> Component::getParent()
-    {
-        return _parent;
-    }
 }

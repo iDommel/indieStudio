@@ -26,11 +26,20 @@ namespace indie
             BOMB
         };
 
-        Player(std::map<Keys, KeyboardKey> binds, int id);
+        Player(int id);
         ~Player();
 
         ///@brief Handle the various bonuses
         void handleBonus();
+
+        ///@brief gets the player ID
+        int getId() const;
+
+        ///@brief gets the current player speed
+        int getSpeed() const;
+
+        ///@brief gets the current maximum number of bomb a player can drop
+        int getNbBomb() const;
 
         void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
         void stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
@@ -45,7 +54,11 @@ namespace indie
     private:
         int _nbBomb;
         int _blastPower;
+        int _speed;
         int _id;
+        static const int _defaultSpeed = 10;
+        static const int _defaultNbBomb = 3;
+        static const int _defaultBlastPower = 1;
     };
 
 }
