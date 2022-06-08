@@ -15,10 +15,13 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
+#include "AudioDevice.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
 #include "Position.hpp"
 #include "Window.hpp"
+
+static float vol = 50;
 
 namespace indie
 {
@@ -30,37 +33,17 @@ namespace indie
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.addScene(createMainMenu(), SceneManager::SceneType::MAIN_MENU);
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
-        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        sceneManager.setCurrentScene(SceneManager::SceneType::SOUND);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        // int count = 0;
+        // do scalable stuff here
         // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
-        //     if (count == 0) {
-        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 333);
-        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() / 2 - 187);
-        //     } else if (count == 1) {
-        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
-        //         Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() - 100) / 2 - 18);
-        //     } else if (count == 2) {
-        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() - 80);
-        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() - 80);
-        //     } else if (count == 3) {
-        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //         Component::castComponent<Position>(components[1])->setAbscissa(0);
-        //         Component::castComponent<Position>(components[1])->setOrdinate(Window::getScreenHeight() - 80);
-        //     } else if (count == 4) {
-        //         auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //         Component::castComponent<Position>(components[1])->setAbscissa(Window::getScreenWidth() / 2 - 60);
-        //         Component::castComponent<Position>(components[1])->setOrdinate((Window::getScreenHeight() + 100) / 2 - 18);
-        //     }
-        //     count++;
+        //     auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        //     auto pos = Component::castComponent<Position>(components[1]);
+        //     auto sprite = Component::castComponent<Sprite>(components[0]);
         // }
-
     }
 
     void GameSystem::destroy()
@@ -80,17 +63,23 @@ namespace indie
         return (entity);
     }
 
-    void GameSystem::createEventListener(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
+    void GameSystem::createEventListener(std::shared_ptr<Entity> &entity, EventType event)
     {
         MouseCallbacks mouseCallbacks(
-            [scenetype, entity](SceneManager &sceneManger, Vector2 mousePosition) {
+            [event, entity](SceneManager &sceneManger, Vector2 mousePosition) {
                 auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
                 auto pos = Component::castComponent<Position>(comp[1]);
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
 
                 if (mousePosition.x > pos->getAbscissa() && mousePosition.x < pos->getAbscissa() + sprite->getX() &&
                     mousePosition.y > pos->getOrdinate() && mousePosition.y < pos->getOrdinate() + sprite->getY()) {
-                    sceneManger.setCurrentScene(scenetype);
+                    if (event != EventType::NONE)
+                        sceneManger.setCurrentScene(event);
+                    else {
+                        AudioDevice::setVolume(vol + 10);
+                        vol += 10;
+                        std::cout << vol << std::endl;
+                    }
                 }
             },
             [](SceneManager &, Vector2 mousePosition) {},
@@ -144,17 +133,17 @@ namespace indie
 
         entity1->addComponent(component)
             .addComponent(component2);
-    
+
         scene->addEntity(entity1);
         std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 500 / 2 - 18), 120, 36);
         std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
         std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
         std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
 
-        createEventListener(entity2, SceneManager::SceneType::GAME);
-        createEventListener(entity3, SceneManager::SceneType::SOUND);
-        createEventListener(entity4, SceneManager::SceneType::NONE);
-        createEventListener(entity5, SceneManager::SceneType::NONE);
+        createEventListener(entity2, EventType::GAME);
+        createEventListener(entity3, EventType::SOUND);
+        createEventListener(entity4, EventType::NONE);
+        createEventListener(entity5, EventType::NONE);
         scene->addEntity(entity2);
         scene->addEntity(entity3);
         scene->addEntity(entity4);
@@ -165,16 +154,23 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createSoundMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSoundMenu, this));
-        std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
-        std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
+        // std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
+        // std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
+        // std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
 
-        entity1->addComponent(component)
-            .addComponent(component2);
-    
-        scene->addEntity(entity1);
-        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        // entity1->addComponent(component)
+        //     .addComponent(component2);
+
+        // scene->addEntity(entity1);
+        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/minus.png", Position(250, 150), 80, 80);
+        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/plus.png", Position(500, 150), 80, 80);
+        createEventListener(entity2, EventType::MAIN_MENU);
+        createEventListener(entity3, EventType::NONE);
+        createEventListener(entity4, EventType::NONE);
         scene->addEntity(entity2);
+        scene->addEntity(entity3);
+        scene->addEntity(entity4);
         return scene;
     }
 
