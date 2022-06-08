@@ -16,6 +16,7 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
         src/modelAnimation.cpp
+        test_functions/TestModelAnimation.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

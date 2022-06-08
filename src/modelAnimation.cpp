@@ -1,5 +1,5 @@
 #include "raylib.h"
-#include "../include/modelAnimation.hpp"
+#include "modelAnimation.hpp"
 
 indie::ModelAnimation::ModelAnimation(const char *fileName, unsigned int *animsCount)
 {
