@@ -54,4 +54,10 @@ Rectangle Hitbox::getRect(void) const
         throw std::runtime_error("2d getter used on none 2d Hitbox");
 }
 
+Hitbox::~Hitbox()
+{
+    _box.release();
+    _rect.release();
+}
+
 }

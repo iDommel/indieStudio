@@ -14,10 +14,14 @@ namespace indie {
     void CollideSystem::init(SceneManager &sceneManager)
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
+        std::shared_ptr<indie::Hitbox> hitbox = nullptr;
 
         std::cout << "CollideSystem::init" << std::endl;
-        for (auto &collidable : collidables) {
-            auto hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
+        if (collidables.empty())
+            return;
+        for (auto collidable : collidables) {
+            if (!collidable || (hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX])) == nullptr)
+                continue;
             if (hitbox->is3D())
                 _collidables3D.push_back(std::make_pair(collidable, hitbox));
             else
@@ -34,7 +38,10 @@ namespace indie {
 
     void CollideSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        std::shared_ptr<indie::Hitbox> hitbox = nullptr;
+
+        if (!entity || (hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX])) == nullptr)
+            return;
         if (hitbox->is3D())
             _collidables3D.push_back(std::make_pair(entity, hitbox));
         else
@@ -57,9 +64,11 @@ namespace indie {
 
     std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity) const
     {
-        std::shared_ptr<Hitbox> hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        std::shared_ptr<Hitbox> hitbox = nullptr;
         std::vector<std::shared_ptr<IEntity>> colliders;
-        
+
+        if (!entity || (hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX])) == nullptr)
+            return colliders;
         for (auto &collidable : _collidables3D)
             if (collidable.first != entity)
                 if (check3DCollision(collidable.second, hitbox))

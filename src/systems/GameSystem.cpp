@@ -15,6 +15,7 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
+#include "HitboxComponent.hpp"
 #include "Scene.hpp"
 #include "String.hpp"
 #include "raylib.h"
@@ -67,7 +68,7 @@ namespace indie
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
-        std::shared_ptr<String> component3 = std::make_shared<String>("vector");
+        std::shared_ptr<Hitbox> component3 = std::make_shared<Hitbox>((BoundingBox){{0.0f, 0.0f, 0.0f}, {100.0f, 100.0f, 100.0f}});
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
         component2->setType(Component::Type::TEXT);
