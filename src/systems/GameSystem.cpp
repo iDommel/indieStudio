@@ -68,18 +68,15 @@ namespace indie
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
-        std::shared_ptr<Hitbox> component3 = std::make_shared<Hitbox>((BoundingBox){{0.0f, 0.0f, 0.0f}, {100.0f, 100.0f, 100.0f}});
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<Component> component3 = std::make_shared<Component>();
 
-        component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
-        entity2->addComponent(component)
-            .addComponent(component4);
-        entity->addComponent(component2)
-            .addComponent(component3);
+        entity2->addComponents({component, component3, component4});
+        entity->addComponent(component2);
 
         scene->addEntities({entity, entity2});
         return scene;

@@ -6,11 +6,38 @@
 */
 
 #include "CollideSystem.hpp"
+#include "GraphicSystem.hpp"
+#include "Position.hpp"
+#include "Sprite.hpp"
+#include "Rect.hpp"
+
 #include <raylib.h>
 
 #include <iostream>
 
 namespace indie {
+    void CollideSystem::preInit(SceneManager &sceneManager)
+    {
+        auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
+        std::shared_ptr<indie::Rect> rect = nullptr;
+        std::shared_ptr<indie::Model> model = nullptr;
+        std::shared_ptr<indie::Position> pos = nullptr;
+        std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
+
+        for (auto &collidable : collidables) {
+            if ((pos = Component::castComponent<Position>((*collidable)[IComponent::Type::VECTOR])) != nullptr &&
+            (maybeUninitialized = (*collidable)[IComponent::Type::HITBOX]) != nullptr &&
+            (!maybeUninitialized->isInitialized())) {
+                if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr)
+                    maybeUninitialized = std::make_shared<Hitbox>((Rectangle){rect->left, rect->top, rect->width, rect->height}, (Vector2){pos->_x, pos->_y});
+                else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr)
+                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), (Vector3){pos->_x, pos->_y, pos->_z});
+                else
+                    throw std::runtime_error("Uninitialized collidable entity has no rect or model");
+            }
+        }
+    }
+
     void CollideSystem::init(SceneManager &sceneManager)
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
@@ -19,6 +46,7 @@ namespace indie {
         std::cout << "CollideSystem::init" << std::endl;
         if (collidables.empty())
             return;
+        preInit(sceneManager);
         for (auto collidable : collidables) {
             if (!collidable || (hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX])) == nullptr)
                 continue;

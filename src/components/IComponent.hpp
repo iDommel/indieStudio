@@ -20,16 +20,16 @@ namespace indie
             TEXT,
             SPRITE,
             MODEL,
-            /// @brief Describe elements that can touch
             HITBOX,
-            /// @brief Describe elements that can be touched
-            HURTBOX,
             MUSIC,
             SOUND,
-            EVT_LISTENER
+            EVT_LISTENER,
+            RECT,
+            TYPE_NB
         };
 
         virtual Type getType() const = 0;
+        virtual bool isInitialized() const = 0;
     };
 
 }

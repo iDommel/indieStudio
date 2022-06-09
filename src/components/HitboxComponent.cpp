@@ -24,8 +24,8 @@ _box(std::make_unique<BoundingBox>(box)), _is3D(true)
 Hitbox::Hitbox(Rectangle rect, Vector2 pos):
 _is3D(false), _rect(std::make_unique<Rectangle>(rect))
 {
-    _rect->x = pos.x + _rect->x;
-    _rect->y = pos.y + _rect->y;
+    _rect->x = pos.x;
+    _rect->y = pos.y;
 }
 
 Hitbox::Hitbox(Rectangle rect):

@@ -79,6 +79,7 @@ class Hitbox : public Component {
         bool _is3D = false;
         std::unique_ptr<Rectangle> _rect = nullptr;
         Type _type = Type::HITBOX;
+        bool _isInitialized = true;
 };
 }
 

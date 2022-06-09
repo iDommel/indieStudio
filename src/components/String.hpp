@@ -22,6 +22,7 @@ namespace indie
 
     private:
         std::string _value;
+        bool _isInitialized = true;
     };
 
 }

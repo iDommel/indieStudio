@@ -25,10 +25,11 @@ namespace indie
         void setOrdinate(double y) { _y = y; }
         void setAbscissa(double x) { _x = x; }
 
-    private:
         double _x;
         double _y;
         double _z;
+        bool _isInitialized = true;
+    private:
     };
 
 }

@@ -111,5 +111,4 @@ namespace indie
 
         _textures.at(sprite->getValue()).first->draw(std::get<0>(pos), std::get<1>(pos));
     }
-
 }

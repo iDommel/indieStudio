@@ -26,6 +26,7 @@ namespace indie {
     /// @brief CollideSystem class provide collision detection functions for 2D and 3D shapes. (does not handle collision between 3D and 2D)
     class CollideSystem : public ISystem {
         public:
+        
             void init(SceneManager &manager) final;
             void update(SceneManager &, uint64_t) final {};
             void destroy(void) final;
@@ -214,6 +215,8 @@ namespace indie {
             **/
             bool check2DCollision(const Vector2 &center, float radius, const Vector2 &point) const;
         private:
+            void preInit(SceneManager &sceneManager);
+
             std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
             std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;
     };
