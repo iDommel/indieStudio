@@ -24,7 +24,9 @@ namespace indie
          */
         Sprite(std::string str, int nbFrame = 0) : _value(str), _nbFrame(nbFrame) { _type = IComponent::Type::SPRITE; }
 
+        /// @brief Returns component texture filepath
         std::string getValue() const { return _value; }
+        /// @brief Returns component number of frames
         int getNbFrame() { return _nbFrame; }
 
     private:
