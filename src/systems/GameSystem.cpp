@@ -59,8 +59,8 @@ namespace indie
             auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
             auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
 
-            (*pos) = *pos + *vel;
-            std::cout << "Player: " << playerComp->getId() << std::endl;
+            (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
+            std::cout << "Player: " << playerComp->getId();
             std::cout << "Player::update" << std::endl;
             std::cout << "pos->x = " << pos->x << std::endl;
             std::cout << "pos->y = " << pos->y << std::endl;
