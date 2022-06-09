@@ -16,12 +16,24 @@ namespace indie
     class String : public Component
     {
     public:
-        String(std::string str) : _value(str) {}
+        /**
+         * @brief Construct a new String object
+         * @param str Text to display
+         */
+        String(const std::string &str, const std::string &fontFile = "", float fontSize = 10.0f)
+            : _value(str), _fontFile(fontFile), _fontSize(fontSize) { _type = Type::TEXT; }
 
-        std::string getValue() const { return _value; }
+        /// @brief Returns component text reference
+        std::string &getValue() { return _value; }
+        /// @brief Returns component font size reference
+        float &getFontSize() { return _fontSize; }
+        /// @brief Returns component font file reference
+        std::string &getFontFile() { return _fontFile; }
 
     private:
         std::string _value;
+        std::string _fontFile;
+        float _fontSize;
     };
 
 }

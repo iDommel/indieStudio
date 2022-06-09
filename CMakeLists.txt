@@ -43,6 +43,10 @@ target_sources(${PROJECT_NAME}
 
         src/components/Component.cpp
         src/components/EventListener.cpp
+        src/components/CameraComponent.cpp
+        src/components/Sphere.cpp
+        src/components/Cube.cpp
+        src/components/Grid.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
