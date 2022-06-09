@@ -14,7 +14,7 @@
 #include "Component.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "MouseCallbacks.hpp"
-#include "raylib.h"
+
 namespace indie
 {
 
