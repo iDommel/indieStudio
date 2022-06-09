@@ -18,6 +18,9 @@ struct Vector3;
 
 namespace indie {
 
+/**
+ * @brief Uniformly distributed random number generator
+**/
 template<typename T>
 T random(T range_from, T range_to) {
     std::random_device                  rand_dev;
