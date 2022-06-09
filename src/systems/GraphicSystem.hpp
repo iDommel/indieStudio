@@ -38,20 +38,32 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        /// @brief Adds a sprite to the cache
         void loadSprite(std::shared_ptr<IEntity> &entity);
+        /// @brief Removes a model to the cache
         void unloadSprite(std::shared_ptr<IEntity> &entity);
+        /// @brief Displays a model
         void displaySprite(std::shared_ptr<IEntity> &entity) const;
 
+        /// @brief Adds a model to the cache
         void loadModel(std::shared_ptr<IEntity> &entity);
+        /// @brief Removes a model from the cache
         void unloadModel(std::shared_ptr<IEntity> &entity);
+        /// @brief Displays a model
         void displayModel(std::shared_ptr<IEntity> &entity) const;
 
+        /// @brief Displays a grid
         void displayGrid(std::shared_ptr<IEntity> &entity) const;
+        /// @brief Displays a sphere
         void displaySphere(std::shared_ptr<IEntity> &entity) const;
+        /// @brief Displays a cube
         void displayCube(std::shared_ptr<IEntity> &entity) const;
 
+        /// @brief Adds a text to the cache
         void loadText(std::shared_ptr<IEntity> &entity);
+        /// @brief Removes a text from the cache
         void unloadText(std::shared_ptr<IEntity> &entity);
+        /// @brief Displays a text
         void displayText(std::shared_ptr<IEntity> &entity) const;
 
         std::unique_ptr<Window> _window;
