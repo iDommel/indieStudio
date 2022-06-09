@@ -45,8 +45,9 @@ namespace indie
         std::unique_ptr<IScene> createSoundMenu();
         std::unique_ptr<IScene> createHelpMenu();
         std::unique_ptr<IScene> createControllerMenu();
-        void createEventListener(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
+        void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
+        std::shared_ptr<Entity> createText(std::string text, Position position, float fontSize);
     };
 
 }

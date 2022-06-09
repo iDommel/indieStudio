@@ -26,7 +26,10 @@
 #include "Position.hpp"
 #include "Window.hpp"
 
-static float vol = 50;
+
+#include <raylib.h>
+
+static int vol = 50;
 
 namespace indie
 {
@@ -40,7 +43,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
@@ -84,7 +87,19 @@ namespace indie
         return (entity);
     }
 
-    void GameSystem::createEventListener(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
+    std::shared_ptr<Entity> GameSystem::createText(std::string text, Position position, float fontSize)
+    {
+        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<String> component = std::make_shared<String>(text, "", fontSize);
+        std::shared_ptr<Position> component2 = std::make_shared<Position>(position);
+
+        entity->addComponent(component2)
+            .addComponent(component);
+        
+        return (entity);
+    }
+
+    void GameSystem::createSceneEvent(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
     {
         MouseCallbacks mouseCallbacks(
             [scenetype, entity](SceneManager &sceneManger, Vector2 mousePosition) {
@@ -117,11 +132,41 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
+    // void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity)
+    // {
+    //     MouseCallbacks mouseCallbacks(
+    //         [entity](SceneManager &sceneManger, Vector2 mousePosition) {
+    //             auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+    //             auto pos = Component::castComponent<Position>(comp[1]);
+    //             auto sprite = Component::castComponent<Sprite>(comp[0]);
+
+    //             if (mousePosition.x > pos->getAbscissa() && mousePosition.x < pos->getAbscissa() + sprite->getX() &&
+    //                 mousePosition.y > pos->getOrdinate() && mousePosition.y < pos->getOrdinate() + sprite->getY()) {
+    //                 while (GetKeyPressed() == 0) {
+    //                     if (GetKeyPressed() == KEY_ENTER) {
+    //                         std::cout << "bindings" << std::endl;
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         [](SceneManager &, Vector2 mousePosition) {},
+    //         [](SceneManager &, Vector2 mousePosition) {},
+    //         [](SceneManager &, Vector2 mousePosition) {});
+        
+    //     std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
+
+    //     eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
+        
+    //     entity->addComponent(eventListener);
+    // }
+
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
         ButtonCallbacks spaceCallbacks(
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
             [](SceneManager &scenemanager) {
+                scenemanager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
                 std::cout << "---------- space released" << std::endl;
             },
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
@@ -174,7 +219,7 @@ namespace indie
 
         e4->addComponent(grid);
 
-        scene->addEntities({entity2, e, e2, cam, e3, e4});
+        scene->addEntities({entity2, e, cam, e4, e2});
         return scene;
     }
 
@@ -182,7 +227,7 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createMainMenu, this));
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 800, 600);
         std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
 
         entity1->addComponent(component2)
@@ -195,11 +240,11 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/help.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity6 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
 
-        createEventListener(entity2, SceneManager::SceneType::GAME);
-        createEventListener(entity3, SceneManager::SceneType::SOUND);
-        createEventListener(entity4, SceneManager::SceneType::CONTROLLER);
-        createEventListener(entity5, SceneManager::SceneType::HELP);
-        createEventListener(entity6, SceneManager::SceneType::NONE);
+        createSceneEvent(entity2, SceneManager::SceneType::GAME);
+        createSceneEvent(entity3, SceneManager::SceneType::SOUND);
+        createSceneEvent(entity4, SceneManager::SceneType::CONTROLLER);
+        createSceneEvent(entity5, SceneManager::SceneType::HELP);
+        createSceneEvent(entity6, SceneManager::SceneType::NONE);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
@@ -208,18 +253,17 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createSoundMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSoundMenu, this));
-
         std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
-        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/minus.png", Position(250, 150), 80, 80);
-        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/plus.png", Position(500, 150), 80, 80);
+        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/minus.png", Position(220, 250), 80, 80);
+        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/plus.png", Position(500, 250), 80, 80);
+        std::shared_ptr<Entity> entity5 = createText("Sound Menu", Position(250, 50), 50);
+        std::shared_ptr<Entity> entity6 = createText("Master Volume", Position(300, 200), 25);
 
-        createEventListener(entity2, SceneManager::SceneType::MAIN_MENU);
-        createEventListener(entity3, SceneManager::SceneType::MINUS);
-        createEventListener(entity4, SceneManager::SceneType::PLUS);
+        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity3, SceneManager::SceneType::MINUS);
+        createSceneEvent(entity4, SceneManager::SceneType::PLUS);
 
-        scene->addEntity(entity2);
-        scene->addEntity(entity3);
-        scene->addEntity(entity4);
+        scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
     }
 
@@ -227,10 +271,16 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createHelpMenu, this));
         std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity3 = createText("How to play", Position(250, 50), 50);
 
-        createEventListener(entity2, SceneManager::SceneType::MAIN_MENU);
+        std::shared_ptr<Entity> entity4 = createText("Welcome in our game: Boomberman made by Indie Studio.", Position(10, 150), 25);
 
-        scene->addEntity(entity2);
+        std::shared_ptr<Entity> entity5 = createText("You will be able to plant water bombs to destroy destructible\nblocks and maybe get some boosts.", Position(10, 250), 25);
+        std::shared_ptr<Entity> entity6 = createText("If your bombs hit an opponent you will kill him.\nThe goal is to be the last man standing.", Position(10, 350), 25);
+
+        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+
+        scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
     }
 
@@ -238,10 +288,22 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createControllerMenu, this));
         std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity3 = createText("Controller Menu", Position(200, 50), 50);
+        std::shared_ptr<Entity> entity4 = createText("Player 1", Position(50, 150), 25);
+        std::shared_ptr<Entity> entity5 = createText("Player 2", Position(500, 150), 25);
+        std::shared_ptr<Entity> entity6 = createText("Player 3", Position(50, 400), 25);
+        std::shared_ptr<Entity> entity7 = createText("Player 4", Position(500, 400), 25);
+        std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 200), 20);
+        std::shared_ptr<Entity> entity12 = createText("A", Position(50, 200), 20);
+        std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
+        std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
+        std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
 
-        createEventListener(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        // createBindingsEvent(entity12);
 
-        scene->addEntity(entity2);
+        scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
+        scene->addEntities({entity8, entity9, entity10, entity11, entity12});
         return scene;
     }
 

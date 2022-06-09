@@ -30,19 +30,24 @@ namespace indie
     {
         std::cout << "GraphicSystem::init" << std::endl;
         _window = std::make_unique<Window>(800, 600, FLAG_WINDOW_RESIZABLE, "Indie Studio");
+        int i = 1;
 
         for (auto &scene : sceneManager.getScenes()) {
             for (auto &entity : (*scene.second)[IEntity::Tags::SPRITE_2D])
                 loadSprite(entity);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D]) {
+                std::cout << "3D " << std::endl;
                 loadModel(e);
+            }
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::TEXT])
                 loadText(e);
+            std::cout << _models.size() << std::endl;
         }
     }
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
+        std::cout << "begin" << std::endl;
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
@@ -71,6 +76,7 @@ namespace indie
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::TEXT])
             displayText(e);
         _window->endDraw();
+        std::cout << "end" << std::endl;
     }
 
     void GraphicSystem::destroy()
@@ -151,12 +157,16 @@ namespace indie
         auto pos = Component::castComponent<Position>(components[1]);
         Vector3 position = {pos->x, pos->y, pos->z};
 
+        std::cout << "displayModel" << _models.size() << std::endl;
         _models.at(model->getModelPath()).first->draw(position, WHITE);
+        std::cout << "end display model" << std::endl;
     }
 
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
     {
         auto model = Component::castComponent<Model3D>((*entity)[IComponent::Type::MODEL]);
+
+        std::cout << "coucou" << std::endl;
 
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
