@@ -19,6 +19,7 @@
 #include "Scene.hpp"
 #include "String.hpp"
 #include "Model3D.hpp"
+#include "Grid.hpp"
 #include "CameraComponent.hpp"
 #include "raylib.h"
 
@@ -90,6 +91,14 @@ namespace indie
         Vector3 camTarget = {0.0f, 10.0f, 0.0f};
         std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
 
+        std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
+        std::shared_ptr<String> text = std::make_shared<String>("Coucou");
+
+        std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
+        std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
+
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
@@ -105,7 +114,12 @@ namespace indie
 
         cam->addComponent(camera);
 
-        scene->addEntities({entity2, e, e2, cam});
+        e3->addComponent(pos3)
+            .addComponent(text);
+
+        e4->addComponent(grid);
+
+        scene->addEntities({entity2, e, e2, cam, e3, e4});
         return scene;
     }
 
