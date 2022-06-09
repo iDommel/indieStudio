@@ -29,7 +29,7 @@ namespace indie {
             ///@brief destroy the model object
             ~Model();
             /**
-             * @brief Draw the model 
+             * @brief Draw the model
              * @param position vector 3d to draw the model
              * @param tint Color of the model (WHITE = using texture loaded)
              * @param scale float of scaling (1.0f = default scaling)
@@ -42,7 +42,7 @@ namespace indie {
              * @param position vector 3d to draw the model
              * @param rotationAxis position of the center of rotation
              * @param rotationAngle rotation of the model
-             * @param scale vector of scaling 
+             * @param scale vector of scaling
              * @param tint Color of the model (WHITE = using texture loaded)
              */
             void drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);

@@ -25,6 +25,10 @@ namespace indie
             SOUND,
             EVT_LISTENER,
             RECT,
+            CAMERA,
+            SPHERE,
+            CUBE,
+            GRID,
             TYPE_NB
         };
 

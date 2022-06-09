@@ -5,13 +5,13 @@
 ** collideSystem
 */
 
+#include <raylib.h>
+
 #include "CollideSystem.hpp"
 #include "GraphicSystem.hpp"
 #include "Position.hpp"
 #include "Sprite.hpp"
 #include "Rect.hpp"
-
-#include <raylib.h>
 
 #include <iostream>
 
@@ -29,9 +29,9 @@ namespace indie {
             (maybeUninitialized = (*collidable)[IComponent::Type::HITBOX]) != nullptr &&
             (!maybeUninitialized->isInitialized())) {
                 if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr)
-                    maybeUninitialized = std::make_shared<Hitbox>((Rectangle){rect->left, rect->top, rect->width, rect->height}, (Vector2){pos->_x, pos->_y});
+                    maybeUninitialized = std::make_shared<Hitbox>((Rectangle){rect->left, rect->top, rect->width, rect->height}, (Vector2){pos->x, pos->y});
                 else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr)
-                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), (Vector3){pos->_x, pos->_y, pos->_z});
+                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), (Vector3){pos->x, pos->y, pos->z});
                 else
                     throw std::runtime_error("Uninitialized collidable entity has no rect or model");
             }

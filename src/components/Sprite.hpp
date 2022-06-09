@@ -17,12 +17,21 @@ namespace indie
     class Sprite : public Component
     {
     public:
-        Sprite(std::string str) : _value(str) { _type = IComponent::Type::SPRITE; }
+        /**
+         * @brief Construct a new Sprite object
+         * @param str Filepath to the texture
+         * @param nbFrame number of frames in the picture, default is 0 (means no rect update)
+         */
+        Sprite(std::string str, int nbFrame = 0) : _value(str), _nbFrame(nbFrame) { _type = IComponent::Type::SPRITE; }
 
+        /// @brief Returns component texture filepath
         std::string getValue() const { return _value; }
+        /// @brief Returns component number of frames
+        int getNbFrame() { return _nbFrame; }
 
     private:
         std::string _value;
+        int _nbFrame;
         bool _isInitialized = true;
     };
 
