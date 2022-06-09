@@ -18,21 +18,19 @@ namespace indie
     class Position : public Component
     {
     public:
-        Position(double x, double y, double z = 0) : _x(x), _y(y), _z(z) { _type = IComponent::Type::VECTOR; }
+        Position(float x, float y, float z = 0) : x(x), y(y), z(z) { _type = IComponent::Type::VECTOR; }
 
-        std::tuple<double, double, double> getPosition() const { return std::make_tuple(_x, _y, _z); }
-        void setPosition(double x, double y, double z) { _x = x; _y = y; _z = z; }
-        void setOrdinate(double y) { _y = y; }
-        void setAbscissa(double x) { _x = x; }
-        double getOrdinate() const { return _y; }
-        double getAbscissa() const { return _x; }
+        std::tuple<double, double, double> getPosition() const { return std::make_tuple(x, y, z); }
+        void setOrdinate(double _y) { _y = y; }
+        void setAbscissa(double _x) { _x = x; }
+        double getOrdinate() const { return y; }
+        double getAbscissa() const { return x; }
+        void setPosition(float newX, float newY, float newZ) { x = newX; y = newY; z = newZ; }
 
-    private:
-        double _x;
-        double _y;
-        double _z;
+        float x;
+        float y;
+        float z;
     };
-
 }
 
 #endif /* !POSITION_HPP */

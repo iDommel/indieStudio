@@ -19,13 +19,22 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/Music.cpp
+        src/Texture2D.cpp
+        src/Camera.cpp
         src/AudioDevice.cpp
-
-        test_functions/TestAudioDevice.cpp
         src/Core.cpp
         src/Scene.cpp
         src/SceneManager.cpp
         src/Entity.cpp
+        src/Window.cpp
+        src/Shape3D.cpp
+        src/Model.cpp
+        src/Text.cpp
+        src/ButtonCallbacks.cpp
+        src/MouseCallbacks.cpp
+        src/GamepadStickCallbacks.cpp
+        src/Sound.cpp
 
         src/systems/AudioSystem.cpp
         src/systems/GraphicSystem.cpp
@@ -34,27 +43,16 @@ target_sources(${PROJECT_NAME}
 
         src/components/Component.cpp
         src/components/EventListener.cpp
-
-        src/Texture2D.cpp
-        src/Window.cpp
-        src/Shape3D.cpp
-        src/Texture2D.cpp
-        src/Camera.cpp
-        src/Model.cpp
-        src/Text.cpp
-
-        src/ButtonCallbacks.cpp
-        src/MouseCallbacks.cpp
-        src/GamepadStickCallbacks.cpp
-        src/Shape3D.cpp
-        src/Texture2D.cpp
-        src/Camera.cpp
-        src/Window.cpp
-        src/Sound.cpp
+        src/components/CameraComponent.cpp
+        src/components/Sphere.cpp
+        src/components/Cube.cpp
+        src/components/Grid.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestTextures.cpp
+        test_functions/TestMusic.cpp
+        test_functions/TestAudioDevice.cpp
         test_functions/TestSound.cpp
 )
 

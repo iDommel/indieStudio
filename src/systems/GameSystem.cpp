@@ -12,11 +12,16 @@
 
 #include "Position.hpp"
 #include "Sprite.hpp"
+#include "Rect.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
 #include "AudioDevice.hpp"
 #include "Scene.hpp"
+#include "String.hpp"
+#include "Model3D.hpp"
+#include "Grid.hpp"
+#include "CameraComponent.hpp"
 #include "raylib.h"
 #include "Position.hpp"
 #include "Window.hpp"
@@ -40,11 +45,25 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        // do scalable stuff here
-        // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D]) {
-        //     auto components = e->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-        //     auto pos = Component::castComponent<Position>(components[1]);
-        //     auto sprite = Component::castComponent<Sprite>(components[0]);
+        // static int i = 0;
+        // static int j = 0;
+
+        // i++;
+        // if (i % 3 == 0) {
+        //     auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
+        //     auto r = Component::castComponent<Rect>(components[0]);
+        //     r->left = r->width * j;
+        //     if (++j > 5)
+        //         j = 0;
+        // }
+        // if (i == 100) {
+        //     std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        //     std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
+        //     std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png", 0, 0);
+        //     entity->addComponent(component).addComponent(component4);
+        //     sceneManager.getCurrentScene().addEntity(entity);
+        // } else if (i == 200) {
+        //     sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
         // }
     }
 
@@ -59,8 +78,8 @@ namespace indie
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path, heigh, width);
         std::shared_ptr<Position> component2 = std::make_shared<Position>(position);
 
-        entity->addComponent(component)
-            .addComponent(component2);
+        entity->addComponent(component2)
+            .addComponent(component);
         
         return (entity);
     }
@@ -102,30 +121,60 @@ namespace indie
     {
         ButtonCallbacks spaceCallbacks(
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
-            [](SceneManager &) {
+            [](SceneManager &scenemanager) {
                 std::cout << "---------- space released" << std::endl;
             },
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<Sprite> component2 = std::make_shared<Sprite>("sprite", 0, 0);
-        std::shared_ptr<Sprite> component3 = std::make_shared<Sprite>("vector", 0, 0);
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png", 0, 0);
 
-        component2->setType(Component::Type::TEXT);
-        component3->setType(Component::Type::HITBOX);
+        std::shared_ptr<Entity> e = std::make_shared<Entity>();
+        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
+        std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
+        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 0, 0, 6);
+
+        std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+
+        std::shared_ptr<Entity> cam = std::make_shared<Entity>();
+        Vector3 camPos = {50.0f, 50.0f, 50.0f};
+        Vector3 camTarget = {0.0f, 10.0f, 0.0f};
+        std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
+
+        std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
+        std::shared_ptr<String> text = std::make_shared<String>("Coucou");
+
+        std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
+        std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
+
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
         entity2->addComponent(component)
-            .addComponent(component4);
-        entity->addComponent(component2)
-            .addComponent(component3);
+            .addComponent(component4)
+            .addComponent(listener);
 
-        scene->addEntities({entity, entity2});
+        e->addComponent(rect)
+            .addComponent(pos)
+            .addComponent(sprite);
+
+        e2->addComponent(pos2)
+            .addComponent(model);
+
+        cam->addComponent(camera);
+
+        e3->addComponent(pos3)
+            .addComponent(text);
+
+        e4->addComponent(grid);
+
+        scene->addEntities({entity2, e, e2, cam, e3, e4});
         return scene;
     }
 
@@ -136,8 +185,8 @@ namespace indie
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png", 666, 374);
         std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - component->getX() / 2, 600 / 2 - component->getY() / 2);
 
-        entity1->addComponent(component)
-            .addComponent(component2);
+        entity1->addComponent(component2)
+            .addComponent(component);
 
         scene->addEntity(entity1);
         std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 500 / 2 - 18), 120, 36);
@@ -152,11 +201,7 @@ namespace indie
         createEventListener(entity5, SceneManager::SceneType::HELP);
         createEventListener(entity6, SceneManager::SceneType::NONE);
 
-        scene->addEntity(entity2);
-        scene->addEntity(entity3);
-        scene->addEntity(entity4);
-        scene->addEntity(entity5);
-        scene->addEntity(entity6);
+        scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
     }
 

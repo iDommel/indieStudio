@@ -23,7 +23,12 @@ namespace indie
             HITBOX,
             MUSIC,
             SOUND,
-            EVT_LISTENER
+            EVT_LISTENER,
+            RECT,
+            CAMERA,
+            SPHERE,
+            CUBE,
+            GRID
         };
 
         virtual Type getType() const = 0;

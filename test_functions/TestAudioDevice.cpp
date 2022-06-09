@@ -20,7 +20,7 @@ typedef struct {
     Color color;
 } CircleWave;
 
-void testMusic(void)
+void testAudioDevice(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
