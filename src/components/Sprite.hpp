@@ -22,7 +22,7 @@ namespace indie
          * @param str Filepath to the texture
          * @param nbFrame number of frames in the picture, default is 0 (means no rect update)
          */
-        Sprite(std::string str, int _x, int _y, int nbFrame = 0) : _value(str), x(_x), y(_y), _nbFrame(nbFrame) { _type = IComponent::Type::SPRITE; }
+        Sprite(std::string str, int _x, int _y, int nbFrame = 0) : _value(str), _nbFrame(nbFrame), x(_x), y(_y) { _type = IComponent::Type::SPRITE; }
 
         /// @brief Returns component texture filepath
         std::string getValue() const { return _value; }

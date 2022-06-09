@@ -43,7 +43,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
+        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
@@ -95,7 +95,7 @@ namespace indie
 
         entity->addComponent(component2)
             .addComponent(component);
-        
+
         return (entity);
     }
 
@@ -107,8 +107,8 @@ namespace indie
                 auto pos = Component::castComponent<Position>(comp[1]);
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
 
-                if (mousePosition.x > pos->getAbscissa() && mousePosition.x < pos->getAbscissa() + sprite->getX() &&
-                    mousePosition.y > pos->getOrdinate() && mousePosition.y < pos->getOrdinate() + sprite->getY()) {
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + sprite->getX() &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
                     if (vol < 100 && scenetype == SceneManager::SceneType::PLUS) {
                         AudioDevice::setVolume(vol + 10);
                         vol += 10;
@@ -117,18 +117,18 @@ namespace indie
                         AudioDevice::setVolume(vol - 10);
                         vol -= 10;
                         std::cout << "volume is set at: " << vol << std::endl;
-                    } else 
+                    } else
                         sceneManger.setCurrentScene(scenetype);
                 }
             },
-            [](SceneManager &, Vector2 mousePosition) {},
-            [](SceneManager &, Vector2 mousePosition) {},
-            [](SceneManager &, Vector2 mousePosition) {});
-        
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {});
+
         std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
 
         eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
-        
+
         entity->addComponent(eventListener);
     }
 
@@ -219,7 +219,7 @@ namespace indie
 
         e4->addComponent(grid);
 
-        scene->addEntities({entity2, e, cam, e4, e2});
+        scene->addEntities({entity2, e, cam, e4, e2, e3});
         return scene;
     }
 
