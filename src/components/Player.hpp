@@ -41,13 +41,21 @@ namespace indie
         ///@brief gets the current maximum number of bomb a player can drop
         int getNbBomb() const;
 
+        /// @brief sets the velocity of the player to its speed value to the right
         void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 to the right
         void stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value to the left
         void moveLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 to the left
         void stopLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value upwards
         void moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 upwards
         void stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value downwards
         void moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 downwards
         void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
 
     protected:
