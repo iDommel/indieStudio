@@ -108,7 +108,7 @@ namespace indie
         if (_textures.find(sprite->getValue()) != _textures.end())
             _textures[sprite->getValue()].second++;
         else
-            _textures[sprite->getValue()] = std::make_pair<std::unique_ptr<Texture>, int>(std::make_unique<Texture>(sprite->getValue()), 1);
+            _textures[sprite->getValue()] = std::make_pair(std::make_unique<Texture>(sprite->getValue()), 1);
 
         if (sprite->getNbFrame() == 0)
             return;
@@ -163,7 +163,7 @@ namespace indie
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
         else
-            _models[model->getModelPath()] = std::make_pair<std::unique_ptr<Model>, int>(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
+            _models[model->getModelPath()] = std::make_pair(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
     }
 
     void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)
@@ -223,7 +223,7 @@ namespace indie
         if (_texts.find(text->getValue()) != _texts.end())
             _texts[text->getValue()].second++;
         else
-            _texts[text->getValue()] = std::make_pair<std::unique_ptr<Text>, int>(std::make_unique<Text>(text->getValue(), text->getFontFile()), 1);
+            _texts[text->getValue()] = std::make_pair(std::make_unique<Text>(text->getValue(), text->getFontFile()), 1);
     }
 
     void GraphicSystem::unloadText(std::shared_ptr<IEntity> &entity)
