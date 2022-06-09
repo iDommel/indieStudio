@@ -37,7 +37,6 @@ namespace indie
 
     BoundingBox Model::getBoundingBox(void)
     {
-        BoundingBox box = ::GetModelBoundingBox(*ptr);
-        return box;
+        return ::GetModelBoundingBox(*ptr);
     }
 }

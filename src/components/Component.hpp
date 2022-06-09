@@ -34,7 +34,11 @@ namespace indie
         template <typename T>
         static std::shared_ptr<T> castComponent(std::shared_ptr<IComponent> &component)
         {
-            return std::dynamic_pointer_cast<T>(component);
+            std::shared_ptr<T> res = std::dynamic_pointer_cast<T>(component);
+
+            if (res == nullptr)
+                throw std::runtime_error("Component: dynamic_pointer_cast failed");
+            return res;
         }
 
     protected:

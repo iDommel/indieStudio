@@ -25,15 +25,17 @@ namespace indie {
         std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
 
         for (auto &collidable : collidables) {
+            if ((*collidable)[IComponent::Type::VECTOR] == nullptr || (*collidable)[IComponent::Type::HITBOX] == nullptr)
+                continue;
             if ((pos = Component::castComponent<Position>((*collidable)[IComponent::Type::VECTOR])) != nullptr &&
             (maybeUninitialized = (*collidable)[IComponent::Type::HITBOX]) != nullptr &&
             (!maybeUninitialized->isInitialized())) {
+                if ((*collidable)[IComponent::Type::RECT] == nullptr && (*collidable)[IComponent::Type::MODEL] == nullptr)
+                    throw std::runtime_error("Uninitialized collidable entity has no rect or model");
                 if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr)
                     maybeUninitialized = std::make_shared<Hitbox>((Rectangle){rect->left, rect->top, rect->width, rect->height}, (Vector2){pos->x, pos->y});
                 else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr)
                     maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), (Vector3){pos->x, pos->y, pos->z});
-                else
-                    throw std::runtime_error("Uninitialized collidable entity has no rect or model");
             }
         }
     }
@@ -42,14 +44,16 @@ namespace indie {
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
+        std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
         std::cout << "CollideSystem::init" << std::endl;
         if (collidables.empty())
             return;
         preInit(sceneManager);
         for (auto collidable : collidables) {
-            if (!collidable || (hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX])) == nullptr)
+            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr || !maybeCollider->isInitialized())
                 continue;
+            hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
             if (hitbox->is3D())
                 _collidables3D.push_back(std::make_pair(collidable, hitbox));
             else
@@ -67,9 +71,11 @@ namespace indie {
     void CollideSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
+        std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
-        if (!entity || (hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX])) == nullptr)
+        if (!entity || (maybeCollider = (*entity)[IComponent::Type::HITBOX]) == nullptr || !maybeCollider->isInitialized())
             return;
+        hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
         if (hitbox->is3D())
             _collidables3D.push_back(std::make_pair(entity, hitbox));
         else
