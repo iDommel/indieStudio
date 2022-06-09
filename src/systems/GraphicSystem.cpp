@@ -109,6 +109,13 @@ namespace indie
             _textures[sprite->getValue()].second++;
         else
             _textures[sprite->getValue()] = std::make_pair<std::unique_ptr<Texture>, int>(std::make_unique<Texture>(sprite->getValue()), 1);
+
+        if (sprite->getNbFrame() == 0)
+            return;
+        auto spriteRect = Component::castComponent<Rect>((*entity)[IComponent::Type::RECT]);
+
+        spriteRect->width = _textures[sprite->getValue()].first->getWidth() / sprite->getNbFrame();
+        spriteRect->height = _textures[sprite->getValue()].first->getHeight();
     }
 
     void GraphicSystem::unloadSprite(std::shared_ptr<IEntity> &entity)
@@ -131,6 +138,7 @@ namespace indie
             auto rect = entity->getFilteredComponents({ IComponent::Type::RECT });
             auto r = Component::castComponent<Rect>(rect[0]);
             Vector2 p = {pos->x, pos->y};
+
             _textures.at(sprite->getValue()).first->setRect(r->left, r->top, r->width, r->height);
             _textures.at(sprite->getValue()).first->drawRec(p);
         } catch (std::invalid_argument &) {

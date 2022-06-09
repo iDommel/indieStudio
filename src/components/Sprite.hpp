@@ -17,12 +17,14 @@ namespace indie
     class Sprite : public Component
     {
     public:
-        Sprite(std::string str) : _value(str) { _type = IComponent::Type::SPRITE; }
+        Sprite(std::string str, int nbFrame = 0) : _value(str), _nbFrame(nbFrame) { _type = IComponent::Type::SPRITE; }
 
         std::string getValue() const { return _value; }
+        int getNbFrame() { return _nbFrame; }
 
     private:
         std::string _value;
+        int _nbFrame;
     };
 
 }

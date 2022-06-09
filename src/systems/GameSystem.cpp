@@ -37,15 +37,15 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
         static int i = 0;
-        static int j = -1;
+        static int j = 0;
 
         i++;
         if (i % 3 == 0) {
             auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
             auto r = Component::castComponent<Rect>(components[0]);
-            r->left = 100 * (j++);
-            if (j  > 5)
-                j = -1;
+            r->left = r->width * j;
+            if (++j > 5)
+                j = 0;
         }
         if (i == 100) {
             std::shared_ptr<Entity> entity = std::make_shared<Entity>();
@@ -78,9 +78,9 @@ namespace indie
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
 
         std::shared_ptr<Entity> e = std::make_shared<Entity>();
-        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 100, 100);
+        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
         std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
-        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png");
+        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
 
         std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
         std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
