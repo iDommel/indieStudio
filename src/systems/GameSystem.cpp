@@ -26,10 +26,8 @@
 #include "Position.hpp"
 #include "Window.hpp"
 
-
-#include <raylib.h>
-
 static int vol = 50;
+static bool check = false;
 
 namespace indie
 {
@@ -43,7 +41,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        sceneManager.setCurrentScene(SceneManager::SceneType::CONTROLLER);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
@@ -132,34 +130,39 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
-    // void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity)
-    // {
-    //     MouseCallbacks mouseCallbacks(
-    //         [entity](SceneManager &sceneManger, Vector2 mousePosition) {
-    //             auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
-    //             auto pos = Component::castComponent<Position>(comp[1]);
-    //             auto sprite = Component::castComponent<Sprite>(comp[0]);
+    void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity)
+    {
+        MouseCallbacks mouseCallbacks(
+            [entity](SceneManager &sceneManger, Vector2 mousePosition) {
+                auto comp = entity->getFilteredComponents({ IComponent::Type::TEXT, IComponent::Type::VECTOR });
+                auto pos = Component::castComponent<Position>(comp[1]);
 
-    //             if (mousePosition.x > pos->getAbscissa() && mousePosition.x < pos->getAbscissa() + sprite->getX() &&
-    //                 mousePosition.y > pos->getOrdinate() && mousePosition.y < pos->getOrdinate() + sprite->getY()) {
-    //                 while (GetKeyPressed() == 0) {
-    //                     if (GetKeyPressed() == KEY_ENTER) {
-    //                         std::cout << "bindings" << std::endl;
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //         },
-    //         [](SceneManager &, Vector2 mousePosition) {},
-    //         [](SceneManager &, Vector2 mousePosition) {},
-    //         [](SceneManager &, Vector2 mousePosition) {});
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
+                    check = true;
+                }
+            },
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [entity](SceneManager &, Vector2 /*mousePosition*/) {
+                char get = 0;
+                auto comp = entity->getFilteredComponents({ IComponent::Type::TEXT, IComponent::Type::VECTOR });
+                auto text = Component::castComponent<String>(comp[0]);
+                if (check) {
+                    get = Window::getKeyPressed();
+                    if (get != 0) {
+                        std::cout << "key pressed: " << get << std::endl;
+                        check = false;
+                    }
+                }
+            });
         
-    //     std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
+        std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
 
-    //     eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
+        eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
         
-    //     entity->addComponent(eventListener);
-    // }
+        entity->addComponent(eventListener);
+    }
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
@@ -294,13 +297,13 @@ namespace indie
         std::shared_ptr<Entity> entity6 = createText("Player 3", Position(50, 400), 25);
         std::shared_ptr<Entity> entity7 = createText("Player 4", Position(500, 400), 25);
         std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 200), 20);
-        std::shared_ptr<Entity> entity12 = createText("A", Position(50, 200), 20);
         std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
         std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
         std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
+        std::shared_ptr<Entity> entity12 = createText("test", Position(100, 200), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        // createBindingsEvent(entity12);
+        createBindingsEvent(entity12);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11, entity12});
