@@ -19,6 +19,19 @@ namespace indie
     {
     }
 
+    AVector::AVector(const AVector &&other)
+        : Component(other.getType()), x(other.x), y(other.y), z(other.z)
+    {
+    }
+
+    void AVector::operator=(const AVector &other)
+    {
+        _type = other.getType();
+        x = other.x;
+        y = other.y;
+        z = other.z;
+    }
+
     std::tuple<float, float, float> AVector::getVector() const
     {
         return std::make_tuple(x, y, z);
@@ -39,6 +52,11 @@ namespace indie
     AVector AVector::operator-(const AVector &other) const
     {
         return AVector(other.getType(), x - other.x, y - other.y, z - other.z);
+    }
+
+    AVector AVector::operator*(float scalar) const
+    {
+        return AVector(_type, x * scalar, y * scalar, z * scalar);
     }
 
 }  // namespace indie

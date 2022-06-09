@@ -19,6 +19,10 @@ namespace indie
     {
     public:
         Position(float x, float y, float z = 0);
+        Position(const Position &other);
+        Position(const Position &&other);
+        Position(const AVector &other);
+        void operator=(const AVector &other);
     };
 
 }

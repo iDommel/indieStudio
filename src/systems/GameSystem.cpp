@@ -31,13 +31,15 @@ namespace indie
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
     }
 
-    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
+    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
         static int i = 0;
         // std::cout << "GameSystem::update" << std::endl;
         // auto e = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][0];
         // auto comp = (*e)[Component::Type::SPRITE];
         i++;
+        if (i % 10 == 0)
+            updatePlayers(sceneManager, dt);
         if (i == 100) {
             std::shared_ptr<Entity> entity = std::make_shared<Entity>();
             std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
@@ -46,6 +48,23 @@ namespace indie
             sceneManager.getCurrentScene().addEntity(entity);
         } else if (i == 200) {
             sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]);
+        }
+    }
+
+    void GameSystem::updatePlayers(SceneManager &sceneManager, uint64_t dt)
+    {
+        auto players = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER];
+        for (auto &player : players) {
+            auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
+            auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
+            auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
+
+            (*pos) = *pos + *vel;
+            std::cout << "Player: " << playerComp->getId() << std::endl;
+            std::cout << "Player::update" << std::endl;
+            std::cout << "pos->x = " << pos->x << std::endl;
+            std::cout << "pos->y = " << pos->y << std::endl;
+            std::cout << "pos->z = " << pos->z << std::endl;
         }
     }
 

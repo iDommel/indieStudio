@@ -16,7 +16,6 @@ namespace indie
     {
     public:
         enum class Type {
-            VECTOR,
             POSITION,
             VELOCITY,
             TRANSFORM,

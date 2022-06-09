@@ -127,4 +127,18 @@ namespace indie
         std::cout << "pos->z = " << vel->z << std::endl;
     }
 
+    int Player::getId() const
+    {
+        return _id;
+    }
+
+    int Player::getSpeed() const
+    {
+        return _speed;
+    }
+
+    int Player::getNbBomb() const
+    {
+        return _nbBomb;
+    }
 }

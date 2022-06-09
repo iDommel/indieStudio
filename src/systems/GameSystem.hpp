@@ -40,6 +40,7 @@ namespace indie
     private:
         std::unique_ptr<IScene> createScene();
         void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id);
+        void updatePlayers(SceneManager &scene, uint64_t dt);
     };
 
 }
