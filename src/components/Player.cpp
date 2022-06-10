@@ -16,6 +16,7 @@
 #include "Position.hpp"
 #include "String.hpp"
 #include "Velocity.hpp"
+#include "HitboxComponent.hpp"
 
 namespace indie
 {
@@ -88,7 +89,7 @@ namespace indie
     void Player::moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->y = -_speed;
+        vel->z = -_speed;
         std::cout << "Player::moveUp" << std::endl;
         std::cout << "pos->x = " << vel->x << std::endl;
         std::cout << "pos->y = " << vel->y << std::endl;
@@ -98,8 +99,8 @@ namespace indie
     void Player::stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->y == -_speed)
-            vel->y = 0;
+        if (vel->z == -_speed)
+            vel->z = 0;
         std::cout << "Player::stopUp" << std::endl;
         std::cout << "pos->x = " << vel->x << std::endl;
         std::cout << "pos->y = " << vel->y << std::endl;
@@ -109,7 +110,7 @@ namespace indie
     void Player::moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->y = _speed;
+        vel->z = _speed;
         std::cout << "Player::moveDown" << std::endl;
         std::cout << "pos->x = " << vel->x << std::endl;
         std::cout << "pos->y = " << vel->y << std::endl;
@@ -119,8 +120,8 @@ namespace indie
     void Player::stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->y == _speed)
-            vel->y = 0;
+        if (vel->z == _speed)
+            vel->z = 0;
         std::cout << "Player::stopDown" << std::endl;
         std::cout << "pos->x = " << vel->x << std::endl;
         std::cout << "pos->y = " << vel->y << std::endl;

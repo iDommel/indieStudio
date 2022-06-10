@@ -78,6 +78,11 @@ namespace indie
         return (std::find(_tags.begin(), _tags.end(), tag) != _tags.end());
     }
 
+    bool Entity::hasComponent(IComponent::Type type) const
+    {
+        return (std::find(_componentsType.begin(), _componentsType.end(), type) != _componentsType.end());
+    }
+
     std::map<IComponent::Type, std::shared_ptr<IComponent>> &Entity::getComponents()
     {
         return _components;

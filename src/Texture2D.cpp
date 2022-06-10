@@ -16,7 +16,7 @@ namespace indie
     {
         _texture = std::make_unique<Texture2D>(LoadTexture(fileName.c_str()));
         if (_texture->id == 0)
-            throw TextureError("Texture constructor: Texture not loaded");
+            throw TextureError("Texture constructor: Texture not loaded :" + fileName);
         _isLoaded = true;
     }
 

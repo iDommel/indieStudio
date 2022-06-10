@@ -20,6 +20,7 @@ struct Image;
 
 namespace indie
 {
+    class AVector;
     class Hitbox : public Component
     {
     public:
@@ -73,6 +74,11 @@ namespace indie
         Hitbox &operator*=(const Vector2 shift);
         /// @brief Shift the 2D Rectangle
         Hitbox &operator/=(const Vector2 shift);
+
+        /// @brief Shift the 3D hitbox
+        Hitbox &operator+=(const AVector shift);
+        /// @brief Shift the 3D hitbox
+        Hitbox &operator-=(const AVector shift);
 
         /// @brief Test if the hitbox is a 3d Type one
         bool is3D(void) const;

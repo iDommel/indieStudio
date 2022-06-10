@@ -6,7 +6,7 @@
 */
 
 #include "HitboxComponent.hpp"
-
+#include "AVector.hpp"
 #include "raylib.h"
 
 namespace indie
@@ -57,6 +57,22 @@ namespace indie
             return *_rect;
         else
             throw std::runtime_error("2d getter used on none 2d Hitbox");
+    }
+
+    Hitbox &Hitbox::operator+=(const AVector shift)
+    {
+        if (_box) {
+            _box->min.x += shift.x;
+            _box->min.y += shift.y;
+            _box->min.z += shift.z;
+            _box->max.x += shift.x;
+            _box->max.y += shift.y;
+            _box->max.z += shift.z;
+        } else if (_rect) {
+            _rect->x += shift.x;
+            _rect->y += shift.y;
+        }
+        return (*this);
     }
 
     Hitbox::~Hitbox()

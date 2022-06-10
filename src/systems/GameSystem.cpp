@@ -69,8 +69,9 @@ namespace indie
             auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
             auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
             auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
-
+            auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
+            (*hitbox) += *vel * (float)(dt / 1000.0f);
             std::cout << "Player: " << playerComp->getId();
             std::cout << "Player::update" << std::endl;
             std::cout << "pos->x = " << pos->x << std::endl;
@@ -98,9 +99,10 @@ namespace indie
         std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
         std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
 
-        std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
+        std::shared_ptr<Entity> turretEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(BoundingBox{{0, 0, 0}, {50, 50, 50}});
 
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
         Vector3 camPos = {50.0f, 50.0f, 50.0f};
@@ -124,8 +126,9 @@ namespace indie
             .addComponent(pos)
             .addComponent(sprite);
 
-        e2->addComponent(pos2)
-            .addComponent(model);
+        turretEntity->addComponent(pos2)
+            .addComponent(model)
+            .addComponent(hitbox);
 
         cam->addComponent(camera);
 
@@ -134,15 +137,18 @@ namespace indie
 
         e4->addComponent(grid);
 
-        scene->addEntities({entity2, e, e2, cam, e3, e4});
+        scene->addEntities({entity2, e, turretEntity, cam, e3, e4});
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1);
         return scene;
     }
 
     void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id)
     {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
-        std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 10);
+        std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 0, 10);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
+        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(BoundingBox{{0, 0, 0}, {10, 10, 10}});
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
 
@@ -186,7 +192,9 @@ namespace indie
         playerEntity->addComponent(player)
             .addComponent(playerPos)
             .addComponent(playerVel)
-            .addComponent(playerListener);
+            .addComponent(playerListener)
+            .addComponent(playerHitbox)
+            .addComponent(model);
         scene.addEntity(playerEntity);
     }
 

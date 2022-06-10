@@ -64,7 +64,7 @@ namespace indie
         int _blastPower;
         int _speed;
         int _id;
-        static const int _defaultSpeed = 10;
+        static const int _defaultSpeed = 40;
         static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 1;
     };
