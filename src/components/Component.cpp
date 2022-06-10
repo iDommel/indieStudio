@@ -9,7 +9,7 @@
 
 namespace indie
 {
-    Component::Component(Type type) : _type(type), _parent(nullptr)
+    Component::Component(Type type) : _type(type)
     {
     }
 

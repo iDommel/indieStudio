@@ -9,6 +9,8 @@
 
 #include "Core.hpp"
 
+#include "TestHeaders.hpp"
+
 int main(void)
 {
     indie::Core core;

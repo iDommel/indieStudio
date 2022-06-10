@@ -93,7 +93,7 @@ namespace indie
         }
     }
 
-    void EventSystem::handleGamepadSticks(SceneManager &manager, std::shared_ptr<EventListener> listener, int nb)
+    void EventSystem::handleGamepadSticks(SceneManager &, std::shared_ptr<EventListener> listener, int nb)
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
             if (it.second)

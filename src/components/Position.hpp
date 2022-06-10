@@ -23,8 +23,8 @@ namespace indie
         Position(const Position &&other);
         Position(const AVector &other);
         void operator=(const AVector &other);
+        bool _isInitialized = true;
     };
-
 }
 
 #endif /* !POSITION_HPP */
