@@ -14,6 +14,7 @@
     struct BoundingBox;
 
     #include <memory>
+    #include <string>
 
 namespace indie {
 
