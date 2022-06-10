@@ -11,6 +11,12 @@
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
 
+#define GAME_MAP_WIDTH 15
+#define GAME_MAP_HEIGHT 15
+#define GAME_TILE_SIZE 12
+
+struct Vector3;
+
 namespace indie
 {
 
@@ -38,6 +44,9 @@ namespace indie
 
     private:
         std::unique_ptr<IScene> createScene();
+        std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
+        static void generateMap(const std::string &filename, IScene &scene);
+
     };
 
 }
