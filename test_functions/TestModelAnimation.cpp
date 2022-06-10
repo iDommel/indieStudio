@@ -8,12 +8,11 @@ void test_raylib_modelAnimation()
 
     InitWindow(screenWidth, screenHeight, "raylib [models] example - model animation");
 
-    Camera camera = { 0 };
-    camera.position = (Vector3){ 10.0f, 10.0f, 10.0f }; 
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f }; 
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };        
-    camera.fovy = 45.0f;                               
-    camera.projection = CAMERA_PERSPECTIVE;            
+    // Define the camera to look into our 3d world
+    Vector3 a = { 0.0f, 10.0f, 10.0f };
+    Vector3 b = { 0.0f, 0.0f, 0.0f };
+    Vector3 c = { 0.0f, 1.0f, 0.0f };
+    Camera camera = { a, b, c, 45.0f, 0 };
 
     Model model = LoadModel("assets_test/guy.iqm");            
     Texture2D texture = LoadTexture("assets_test/guytex.png");       
@@ -45,8 +44,9 @@ void test_raylib_modelAnimation()
             ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
-
-                DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
+                Vector3 x = { 1.0f, 0.0f, 0.0f };
+                Vector3 x2 = { 1.0f, 1.0f, 1.0f };
+                DrawModelEx(model, position, x, -90.0f, x2, WHITE);
 
                 DrawGrid(10, 1.0f);
 
