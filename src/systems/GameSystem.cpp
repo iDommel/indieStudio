@@ -26,9 +26,6 @@
 #include "Position.hpp"
 #include "Window.hpp"
 
-static int vol = 50;
-static std::string check = "";
-
 namespace indie
 {
 
@@ -41,11 +38,74 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::CONTROLLER);
+        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+    }
+
+    void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
+    {
+        if (players->changeUp == 2) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
+            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto value = Component::castComponent<String>(text[0]);
+            value->getValue() = players->getUp();
+            players->changeUp = 0;
+        } else if (players->changeLeft == 2) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
+            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto value = Component::castComponent<String>(text[0]);
+            value->getValue() = players->getLeft();
+            players->changeLeft = 0;
+        } else if (players->changeRight == 2) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
+            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto value = Component::castComponent<String>(text[0]);
+            value->getValue() = players->getRight();
+            players->changeRight = 0;
+        } else if (players->changeDown == 2) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
+            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto value = Component::castComponent<String>(text[0]);
+            value->getValue() = players->getDown();
+            players->changeDown = 0;
+        }
+    }
+    
+    void GameSystem::updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
+    {
+        if (players->changeUp == 1) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
+            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto text = Component::castComponent<String>(test[0]);
+            text->getValue() = "|";
+        } else if (players->changeLeft == 1) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
+            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto text = Component::castComponent<String>(test[0]);
+            text->getValue() = "|";
+        } else if (players->changeRight == 1) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
+            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto text = Component::castComponent<String>(test[0]);
+            text->getValue() = "|";
+        } else if (players->changeDown == 1) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
+            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto text = Component::castComponent<String>(test[0]);
+            text->getValue() = "|";
+        }
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
+        int firstText = 9;
+        for (auto &scene : sceneManager.getScenes()) {
+            for (auto &e : (*scene.second)[IEntity::Tags::PLAYER]) {
+                auto players = Component::castComponent<Player>(e->getFilteredComponents({ IComponent::Type::PLAYER })[0]);
+                updateTextBindings(sceneManager, players, firstText);
+                replaceTextBindings(sceneManager, players, firstText);
+                firstText += 4;
+            }
+        }
         // static int i = 0;
         // static int j = 0;
 
@@ -107,14 +167,14 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + sprite->getX() &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
-                    if (vol < 100 && scenetype == SceneManager::SceneType::PLUS) {
-                        AudioDevice::setVolume(vol + 10);
-                        vol += 10;
-                        std::cout << "volume is set at: " << vol << std::endl;
-                    } else if (vol > 0 && scenetype == SceneManager::SceneType::MINUS) {
-                        AudioDevice::setVolume(vol - 10);
-                        vol -= 10;
-                        std::cout << "volume is set at: " << vol << std::endl;
+                    if (AudioDevice::getMasterVolume() < 100 && scenetype == SceneManager::SceneType::PLUS) {
+                        AudioDevice::getMasterVolume() += 10;
+                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
+                        std::cout << "volume is set at: " << AudioDevice::getMasterVolume()  << std::endl;
+                    } else if (AudioDevice::getMasterVolume()  > 0 && scenetype == SceneManager::SceneType::MINUS) {
+                        AudioDevice::getMasterVolume() -= 10;
+                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
+                        std::cout << "volume is set at: " << AudioDevice::getMasterVolume()  << std::endl;
                     } else
                         sceneManger.setCurrentScene(scenetype);
                 }
@@ -130,28 +190,71 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
-    void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, std::string button)
+    void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button)
     {
         MouseCallbacks mouseCallbacks(
-            [entity, button](SceneManager &sceneManger, Vector2 mousePosition) {
+            [entity, button, id_player](SceneManager &sceneManager, Vector2 mousePosition) {
                 auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
                 auto pos = Component::castComponent<Position>(comp[0]);
 
+                auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
+                auto player = Component::castComponent<Player>(component[0]);
+
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
-                    check = button;
+                    switch (button) {
+                        case 0:
+                            player->changeUp = 1;
+                            break;
+                        case 1:
+                            player->changeLeft = 1;
+                            break;
+                        case 2:
+                            player->changeRight = 1;
+                            break;
+                        case 3:
+                            player->changeDown = 1;
+                            break;
+                    }
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [](SceneManager &, Vector2 /*mousePosition*/) {},
-            [entity, id_player, button](SceneManager &, Vector2 /*mousePosition*/) {
-                char get = 0;
+            [entity, button, id_player](SceneManager &sceneManager, Vector2 /*mousePosition*/) {
+                auto component = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                auto comp = component->getFilteredComponents({ IComponent::Type::PLAYER});
+                auto player = Component::castComponent<Player>(comp[0]);
+                std::string get = "";
+                char input = 0;
 
-                if (check == button) {
-                    get = Window::getKeyPressed();
-                    if (get != 0) {
-                        std::cout << "Player " << id_player << " change his " << button << " to: " << get << std::endl;
-                        check = "";
+                if (player->changeUp == true) {
+                    input = Window::getKeyPressed();
+                    if (input != 0) {
+                        get.assign(1, input);
+                        player->setUP(get);
+                        player->changeUp = 2;
+                    }
+                } else if (player->changeLeft == true) {
+                    input = Window::getKeyPressed();
+                    if (input != 0) {
+                        get.assign(1, input);
+                        player->setLEFT(get);
+                        player->changeLeft = 2;
+                    }
+                } else if (player->changeRight == true) {
+                    input = Window::getKeyPressed();
+                    if (input != 0) {
+                        get.assign(1, input);
+                        player->setRIGHT(get);
+                        player->changeRight = 2;
+                    }
+                } else if (player->changeDown == true) {
+                    input = Window::getKeyPressed();
+                    if (input != 0) {
+                        get.assign(1, input);
+                        player->setDOWN(get);
+                        player->changeDown = 2;
                     }
                 }
             });
@@ -299,20 +402,40 @@ namespace indie
         std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
         std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
         std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
-        std::shared_ptr<Entity> entity12 = createText("test", Position(100, 200), 20);
-        std::shared_ptr<Entity> entity13 = createText("test", Position(100, 230), 20);
-        std::shared_ptr<Entity> entity14 = createText("test", Position(100, 260), 20);
-        std::shared_ptr<Entity> entity15 = createText("test", Position(100, 290), 20);
+
+
+        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D");
+        std::shared_ptr<Entity> entity16 = std::make_shared<Entity>();
+
+        entity16->addComponent(player);
+
+        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L");
+        std::shared_ptr<Entity> entity17 = std::make_shared<Entity>();
+
+        entity17->addComponent(player2);
+
+        std::shared_ptr<Entity> entity12 = createText(player->getUp(), Position(100, 200), 20);
+        std::shared_ptr<Entity> entity13 = createText(player->getLeft(), Position(100, 230), 20);
+        std::shared_ptr<Entity> entity14 = createText(player->getRight(), Position(100, 260), 20);
+        std::shared_ptr<Entity> entity15 = createText(player->getDown(), Position(100, 290), 20);
+        std::shared_ptr<Entity> entity18 = createText(player2->getUp(), Position(600, 200), 20);
+        std::shared_ptr<Entity> entity19 = createText(player2->getLeft(), Position(600, 230), 20);
+        std::shared_ptr<Entity> entity20 = createText(player2->getRight(), Position(600, 260), 20);
+        std::shared_ptr<Entity> entity21 = createText(player2->getDown(), Position(600, 290), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        createBindingsEvent(entity12, 1, "UP");
-        createBindingsEvent(entity13, 1, "LEFT");
-        createBindingsEvent(entity14, 1, "RIGHT");
-        createBindingsEvent(entity15, 1, "DOWN");
+        createBindingsEvent(entity12, 0, 0);
+        createBindingsEvent(entity13, 0, 1);
+        createBindingsEvent(entity14, 0, 2);
+        createBindingsEvent(entity15, 0, 3);
+        createBindingsEvent(entity18, 1, 0);
+        createBindingsEvent(entity19, 1, 1);
+        createBindingsEvent(entity20, 1, 2);
+        createBindingsEvent(entity21, 1, 3);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
-        scene->addEntities({entity12, entity13, entity14, entity15});
+        scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity17, entity18, entity19, entity20, entity21});
         return scene;
     }
 

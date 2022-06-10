@@ -28,7 +28,8 @@ namespace indie
             CAMERA,
             SPHERE,
             CUBE,
-            GRID
+            GRID,
+            PLAYER
         };
 
         virtual Type getType() const = 0;

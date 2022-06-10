@@ -43,6 +43,10 @@ namespace indie
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
+        for (auto &scene : sceneManager.getScenes()) {
+            for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
+                loadText(e);
+        }
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
