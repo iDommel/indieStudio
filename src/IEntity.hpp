@@ -21,11 +21,15 @@ namespace indie
         enum class Tags {
             RENDERABLE_3D,
             SPRITE_2D,
+            SPHERE,
+            CUBE,
+            GRID,
             TEXT,
             COLLIDABLE,
             AUDIBLE,
             CALLABLE,
-            BONUS
+            BONUS,
+            CAMERA
         };
 
         virtual ~IEntity() = default;

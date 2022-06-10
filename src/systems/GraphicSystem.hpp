@@ -12,6 +12,8 @@
 #include "SceneManager.hpp"
 #include "Window.hpp"
 #include "Texture2D.hpp"
+#include "Model.hpp"
+#include "Text.hpp"
 
 namespace indie
 {
@@ -40,8 +42,22 @@ namespace indie
         void unloadSprite(std::shared_ptr<IEntity> &entity);
         void displaySprite(std::shared_ptr<IEntity> &entity) const;
 
+        void loadModel(std::shared_ptr<IEntity> &entity);
+        void unloadModel(std::shared_ptr<IEntity> &entity);
+        void displayModel(std::shared_ptr<IEntity> &entity) const;
+
+        void displayGrid(std::shared_ptr<IEntity> &entity) const;
+        void displaySphere(std::shared_ptr<IEntity> &entity) const;
+        void displayCube(std::shared_ptr<IEntity> &entity) const;
+
+        void loadText(std::shared_ptr<IEntity> &entity);
+        void unloadText(std::shared_ptr<IEntity> &entity);
+        void displayText(std::shared_ptr<IEntity> &entity) const;
+
         std::unique_ptr<Window> _window;
         std::map<std::string, std::pair<std::unique_ptr<Texture>, int>> _textures;
+        std::map<std::string, std::pair<std::unique_ptr<Model>, int>> _models;
+        std::map<std::string, std::pair<std::unique_ptr<Text>, int>> _texts;
     };
 
 }

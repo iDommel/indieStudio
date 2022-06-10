@@ -20,11 +20,19 @@ namespace indie
          {{IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
         {Entity::Tags::RENDERABLE_3D,
          {{IComponent::Type::VECTOR, IComponent::Type::MODEL}}},
+        {Entity::Tags::GRID,
+         {{IComponent::Type::GRID}}},
+        {Entity::Tags::CUBE,
+          {{IComponent::Type::VECTOR, IComponent::Type::CUBE}}},
+        {Entity::Tags::SPHERE,
+         {{IComponent::Type::VECTOR, IComponent::Type::SPHERE}}},
         {Entity::Tags::AUDIBLE,
          {{IComponent::Type::MUSIC},
           {IComponent::Type::SOUND}}},
         {Entity::Tags::COLLIDABLE,
          {{IComponent::Type::HITBOX}}},
+        {Entity::Tags::CAMERA,
+         {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}},
         {Entity::Tags::BONUS,
@@ -89,8 +97,12 @@ namespace indie
 
     std::shared_ptr<IComponent> &Entity::operator[](IComponent::Type type)
     {
-        if (_components.find(type) == _components.end())
-            throw std::runtime_error("Entity: Component type not found");
-        return _components.at(type);
+        static std::shared_ptr<IComponent> null = nullptr;
+
+        if (type >= IComponent::Type::TYPE_NB)
+            throw std::invalid_argument("Entity: Component type not found");
+        if (_components.find(type) != _components.end())
+            return _components.at(type);
+        return null;
     }
 }
