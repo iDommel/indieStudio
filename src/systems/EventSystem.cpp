@@ -12,22 +12,23 @@
 #include "Component.hpp"
 #include "EventListener.hpp"
 #include "Window.hpp"
-#include <algorithm>
 namespace indie
 {
     void EventSystem::init(SceneManager &sceneManager)
     {
         std::cout << "EventSystem init" << std::endl;
-        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CALLABLE]) {
-            auto listener = Component::castComponent<EventListener>((*e)[IComponent::Type::EVT_LISTENER]);
-            if (listener)
-                _listeners.push_back(listener);
+        for (auto &index : sceneManager.getSceneTypeList()) {
+            for (auto &entity : sceneManager.getScene(index)[IEntity::Tags::CALLABLE]) {
+                auto listener = Component::castComponent<EventListener>((*entity)[IComponent::Type::EVT_LISTENER]);
+                if (listener)
+                    _listeners[(int)index].push_back(listener);
+            }
         }
     }
 
     void EventSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &listener : _listeners) {
+        for (auto &listener : _listeners[(int)sceneManager.getCurrentSceneType()]) {
             handleKeyboard(sceneManager, listener);
             handleMouse(sceneManager, listener);
             for (int i = 0; i < _maxGamepads; i++) {
@@ -118,17 +119,18 @@ namespace indie
     {
         if (entity->hasTag(IEntity::Tags::CALLABLE)) {
             std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>((*entity)[Component::Type::EVT_LISTENER]);
-            _listeners.push_back(listener);
+            _listeners[(int)SceneManager::getCurrentSceneType()].push_back(listener);
         }
     }
 
     void EventSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
         if (entity->hasTag(IEntity::Tags::CALLABLE)) {
+            auto currentListeners = _listeners[(int)SceneManager::getCurrentSceneType()];
             std::shared_ptr<EventListener> listener = Component::castComponent<EventListener>((*entity)[Component::Type::EVT_LISTENER]);
-            auto it = std::find(_listeners.begin(), _listeners.end(), listener);
-            if (it != _listeners.end()) {
-                _listeners.erase(it);
+            auto it = std::find(currentListeners.begin(), currentListeners.end(), listener);
+            if (it != currentListeners.end()) {
+                currentListeners.erase(it);
             }
         }
     }

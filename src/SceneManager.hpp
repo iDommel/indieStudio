@@ -29,7 +29,8 @@ namespace indie
             PAUSE,
             SOUND,
             MINUS,
-            PLUS
+            PLUS,
+            NB_SCENES
         };
 
         /**
@@ -73,6 +74,22 @@ namespace indie
          * @param callback Callback to set as removeEntityCallback
          */
         void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+
+        /**
+         * @brief Get the Current Scene Type object
+         *
+         * @return SceneType
+         */
+        static SceneType &getCurrentSceneType();
+
+        std::vector<SceneType> getSceneTypeList();
+        /**
+         * @brief Get the Scene object
+         *
+         * @param sceneType the scene type you want to access
+         * @return std::shared_ptr<IScene>
+         */
+        IScene &getScene(SceneType sceneType);
 
     private:
         std::map<SceneType, std::unique_ptr<IScene>> _scenes;
