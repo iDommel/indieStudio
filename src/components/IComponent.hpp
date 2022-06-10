@@ -28,10 +28,12 @@ namespace indie
             CAMERA,
             SPHERE,
             CUBE,
-            GRID
+            GRID,
+            TYPE_NB
         };
 
         virtual Type getType() const = 0;
+        virtual bool isInitialized() const = 0;
     };
 
 }

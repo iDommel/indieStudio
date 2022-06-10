@@ -1,5 +1,4 @@
 #include "Model.hpp"
-
 #include <iostream>
 
 #include "raylib.h"
@@ -34,5 +33,10 @@ namespace indie
     void Model::drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
     {
         DrawModelEx(*ptr.get(), position, rotationAxis, rotationAngle, scale, tint);
+    }
+
+    BoundingBox Model::getBoundingBox(void)
+    {
+        return ::GetModelBoundingBox(*ptr);
     }
 }

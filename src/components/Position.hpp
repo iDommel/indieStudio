@@ -25,6 +25,7 @@ namespace indie
         float x;
         float y;
         float z;
+        bool _isInitialized = true;
     };
 }
 

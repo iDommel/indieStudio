@@ -33,6 +33,7 @@ namespace indie
     private:
         Vector3 _size;
         Color _color;
+        bool _isInitialized = true;
     };
 }
 

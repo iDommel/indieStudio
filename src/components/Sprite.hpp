@@ -32,6 +32,7 @@ namespace indie
     private:
         std::string _value;
         int _nbFrame;
+        bool _isInitialized = true;
     };
 
 }

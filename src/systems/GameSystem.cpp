@@ -16,6 +16,7 @@
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
+#include "HitboxComponent.hpp"
 #include "Scene.hpp"
 #include "String.hpp"
 #include "Model3D.hpp"
@@ -76,6 +77,8 @@ namespace indie
         std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
+        std::shared_ptr<Component> component3 = std::make_shared<Component>();
 
         std::shared_ptr<Entity> e = std::make_shared<Entity>();
         std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
@@ -93,7 +96,7 @@ namespace indie
 
         std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
         std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
-        std::shared_ptr<String> text = std::make_shared<String>("Coucou");
+        std::shared_ptr<String> text = std::make_shared<String>("The below sprite entity has a hitbox of 250,250");
 
         std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
         std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
@@ -101,9 +104,12 @@ namespace indie
 
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
+        component3->setType(Component::Type::HITBOX);
 
         entity2->addComponent(component)
-            .addComponent(component4);
+            .addComponent(component4)
+            .addComponent(component3)
+            .addComponent(component5);
 
         e->addComponent(rect)
             .addComponent(pos)

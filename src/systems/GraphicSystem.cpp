@@ -235,5 +235,4 @@ namespace indie
         else
             _texts.erase(text->getValue());
     }
-
 }

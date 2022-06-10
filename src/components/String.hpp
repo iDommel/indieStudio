@@ -34,6 +34,7 @@ namespace indie
         std::string _value;
         std::string _fontFile;
         float _fontSize;
+        bool _isInitialized = true;
     };
 
 }

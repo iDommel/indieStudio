@@ -32,6 +32,7 @@ namespace indie
     private:
         float _radius;
         Color _color;
+        bool _isInitialized = true;
     };
 }
 

@@ -29,6 +29,7 @@ namespace indie
     private:
         std::string _modelPath;
         std::string _texturePath;
+        bool _isInitialized = true;
     };
 }
 

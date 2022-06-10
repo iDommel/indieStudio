@@ -95,8 +95,12 @@ namespace indie
 
     std::shared_ptr<IComponent> &Entity::operator[](IComponent::Type type)
     {
-        if (_components.find(type) == _components.end())
-            throw std::runtime_error("Entity: Component type not found");
-        return _components.at(type);
+        static std::shared_ptr<IComponent> null = nullptr;
+
+        if (type >= IComponent::Type::TYPE_NB)
+            throw std::invalid_argument("Entity: Component type not found");
+        if (_components.find(type) != _components.end())
+            return _components.at(type);
+        return null;
     }
 }

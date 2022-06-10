@@ -31,6 +31,7 @@ namespace indie
 
     private:
         Camera _camera;
+        bool _isInitialized = true;
     };
 }
 

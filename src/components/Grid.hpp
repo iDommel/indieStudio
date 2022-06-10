@@ -32,6 +32,7 @@ namespace indie
     private:
         int _slices;
         float _spacing;
+        bool _isInitialized = true;
     };
 }
 
