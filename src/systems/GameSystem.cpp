@@ -34,6 +34,7 @@ namespace indie
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
+        _collideSystem.init(sceneManager);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
@@ -60,6 +61,7 @@ namespace indie
         } else if (i == 200) {
             sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
         }
+        _collideSystem.update(sceneManager, dt);
     }
 
     void GameSystem::updatePlayers(SceneManager &sceneManager, uint64_t dt)
@@ -72,6 +74,10 @@ namespace indie
             auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
             (*hitbox) += *vel * (float)(dt / 1000.0f);
+
+            ::DrawBoundingBox(hitbox->getBBox(), GREEN);
+            if (!_collideSystem.getColliders(player).empty())
+                std::cout << "COLLLISIONS !!" << std::endl;
             std::cout << "Player: " << playerComp->getId();
             std::cout << "Player::update" << std::endl;
             std::cout << "pos->x = " << pos->x << std::endl;
@@ -83,6 +89,7 @@ namespace indie
     void GameSystem::destroy()
     {
         std::cout << "GameSystem::destroy" << std::endl;
+        _collideSystem.destroy();
     }
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
@@ -147,7 +154,7 @@ namespace indie
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 0, 10);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
-        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(BoundingBox{{0, 0, 0}, {10, 10, 10}});
+        std::shared_ptr<Component> playerHitbox = std::make_shared<Component>(IComponent::Type::HITBOX);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
@@ -198,12 +205,14 @@ namespace indie
         scene.addEntity(playerEntity);
     }
 
-    void GameSystem::loadEntity(std::shared_ptr<IEntity>)
+    void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
+        _collideSystem.loadEntity(entity);
     }
 
-    void GameSystem::unloadEntity(std::shared_ptr<IEntity>)
+    void GameSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
+        _collideSystem.unloadEntity(entity);
     }
 
     void GameSystem::printStuff(SceneManager &)

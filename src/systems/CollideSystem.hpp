@@ -48,7 +48,7 @@ namespace indie
          * @param entity The Entity to check
          * @return List of entities that collide with the entity
          */
-        static std::vector<std::shared_ptr<IEntity>> getColliders(std::shared_ptr<IEntity> entity);
+        std::vector<std::shared_ptr<IEntity>> getColliders(std::shared_ptr<IEntity> entity) const;
         /// ------- 3D -------
 
         /**
@@ -80,7 +80,7 @@ namespace indie
          * @param box2 Second hitbox
          * @return True if the bounding boxes are colliding, false otherwise
          **/
-        static bool check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2);
+        bool check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2) const;
 
         /**
          * @brief Check collision between two bounding boxes
@@ -88,7 +88,7 @@ namespace indie
          * @param box2 Second bounding box
          * @return True if collision, false otherwise
          **/
-        static bool check3DCollision(const BoundingBox &box1, const BoundingBox &box2);
+        bool check3DCollision(const BoundingBox &box1, const BoundingBox &box2) const;
 
         /**
          * @brief Check collision between a bounding box and a sphere
@@ -97,7 +97,7 @@ namespace indie
          * @param radius Sphere radius
          * @return True if collision, false otherwise
          **/
-        static bool check3DCollision(const BoundingBox &box, const Vector3 &center, float radius);
+        bool check3DCollision(const BoundingBox &box, const Vector3 &center, float radius) const;
         /**
          * @brief Check collision between a sphere and a bounding box
          * @param center Sphere center
@@ -105,7 +105,7 @@ namespace indie
          * @param box Bounding box
          * @return True if collision, false otherwise
          **/
-        static bool check3DCollision(const Vector3 &center, float radius, const BoundingBox &box);
+        bool check3DCollision(const Vector3 &center, float radius, const BoundingBox &box) const;
 
         /**
          * @brief Check collision between two spheres
@@ -115,7 +115,7 @@ namespace indie
          * @param radius2 Second sphere radius
          * @return True if collision, false otherwise
          **/
-        static bool check3DCollision(const Vector3 &center1, float radius1, const Vector3 &center2, float radius2);
+        bool check3DCollision(const Vector3 &center1, float radius1, const Vector3 &center2, float radius2) const;
 
         /// ------- 2D -------
 
@@ -219,8 +219,8 @@ namespace indie
     private:
         void preInit(SceneManager &sceneManager);
 
-        static std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
-        static std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;
+        std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
+        std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;
     };
 }
 

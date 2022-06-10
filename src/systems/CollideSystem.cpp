@@ -15,35 +15,33 @@
 #include "Position.hpp"
 #include "Rect.hpp"
 #include "Sprite.hpp"
+#include "Model3D.hpp"
 
 namespace indie
 {
-    static std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D = {};
-    static std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D = {};
-
     void CollideSystem::preInit(SceneManager &sceneManager)
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
         std::shared_ptr<indie::Rect> rect = nullptr;
-        std::shared_ptr<indie::Model> model = nullptr;
+        std::shared_ptr<indie::Model3D> model = nullptr;
         std::shared_ptr<indie::Position> pos = nullptr;
         std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
 
         for (auto &collidable : collidables) {
-            if (collidable->hasComponent(IComponent::Type::POSITION) || collidable->hasComponent(IComponent::Type::HITBOX))
+            if (!collidable->hasComponent(IComponent::Type::POSITION) || !collidable->hasComponent(IComponent::Type::HITBOX))
                 continue;
-            if ((pos = Component::castComponent<Position>((*collidable)[IComponent::Type::POSITION])) != nullptr &&
-                (maybeUninitialized = (*collidable)[IComponent::Type::HITBOX]) != nullptr &&
-                (!maybeUninitialized->isInitialized())) {
+            maybeUninitialized = (*collidable)[IComponent::Type::HITBOX];
+            if (!maybeUninitialized->isInitialized()) {
+                pos = Component::castComponent<Position>((*collidable)[IComponent::Type::POSITION]);
                 if (collidable->hasComponent(IComponent::Type::RECT)) {
                     rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT]);
                     Vector2 pos2d = {pos->x, pos->y};
                     Rectangle toUpdateRect = {rect->left, rect->top, rect->width, rect->height};
                     maybeUninitialized = std::make_shared<Hitbox>(toUpdateRect, pos2d);
                 } else if (collidable->hasComponent(IComponent::Type::MODEL)) {
-                    model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL]);
+                    model = Component::castComponent<Model3D>((*collidable)[IComponent::Type::MODEL]);
                     Vector3 pos3d = {pos->x, pos->y, pos->z};
-                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), pos3d);
+                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), pos3d);//BHA OUAIS MAIS J'AI BESOINS DU CACHE DU MODEL QUOI...
                 } else {
                     throw std::runtime_error("Uninitialized collidable entity has no rect or model");
                 }
@@ -107,7 +105,7 @@ namespace indie
             }
     }
 
-    std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity)
+    std::vector<std::shared_ptr<IEntity>> CollideSystem::getColliders(std::shared_ptr<IEntity> entity) const
     {
         std::shared_ptr<Hitbox> hitbox = nullptr;
         std::vector<std::shared_ptr<IEntity>> colliders;
@@ -148,27 +146,27 @@ namespace indie
         return updatedBox;
     }
 
-    bool CollideSystem::check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2)
+    bool CollideSystem::check3DCollision(std::shared_ptr<Hitbox> box1, std::shared_ptr<Hitbox> box2) const
     {
         return (check3DCollision(box1->getBBox(), box2->getBBox()));
     }
 
-    bool CollideSystem::check3DCollision(const BoundingBox &box1, const BoundingBox &box2)
+    bool CollideSystem::check3DCollision(const BoundingBox &box1, const BoundingBox &box2) const
     {
         return CheckCollisionBoxes(box1, box2);
     }
 
-    bool CollideSystem::check3DCollision(const BoundingBox &box, const Vector3 &center, float radius)
+    bool CollideSystem::check3DCollision(const BoundingBox &box, const Vector3 &center, float radius) const
     {
         return CheckCollisionBoxSphere(box, center, radius);
     }
 
-    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const BoundingBox &box)
+    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const BoundingBox &box) const
     {
         return CheckCollisionBoxSphere(box, center, radius);
     }
 
-    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const Vector3 &center2, float radius2)
+    bool CollideSystem::check3DCollision(const Vector3 &center, float radius, const Vector3 &center2, float radius2) const
     {
         return CheckCollisionSpheres(center, radius, center2, radius2);
     }
