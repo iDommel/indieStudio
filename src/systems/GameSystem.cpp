@@ -27,7 +27,7 @@
 #include "Window.hpp"
 
 static int vol = 50;
-static bool check = false;
+static std::string check = "";
 
 namespace indie
 {
@@ -130,33 +130,32 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
-    void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity)
+    void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, std::string button)
     {
         MouseCallbacks mouseCallbacks(
-            [entity](SceneManager &sceneManger, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::TEXT, IComponent::Type::VECTOR });
-                auto pos = Component::castComponent<Position>(comp[1]);
+            [entity, button](SceneManager &sceneManger, Vector2 mousePosition) {
+                auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
+                auto pos = Component::castComponent<Position>(comp[0]);
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
-                    mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
-                    check = true;
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
+                    check = button;
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [](SceneManager &, Vector2 /*mousePosition*/) {},
-            [entity](SceneManager &, Vector2 /*mousePosition*/) {
+            [entity, id_player, button](SceneManager &, Vector2 /*mousePosition*/) {
                 char get = 0;
-                auto comp = entity->getFilteredComponents({ IComponent::Type::TEXT, IComponent::Type::VECTOR });
-                auto text = Component::castComponent<String>(comp[0]);
-                if (check) {
+
+                if (check == button) {
                     get = Window::getKeyPressed();
                     if (get != 0) {
-                        std::cout << "key pressed: " << get << std::endl;
-                        check = false;
+                        std::cout << "Player " << id_player << " change his " << button << " to: " << get << std::endl;
+                        check = "";
                     }
                 }
             });
-        
+
         std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
 
         eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
@@ -301,12 +300,19 @@ namespace indie
         std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
         std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
         std::shared_ptr<Entity> entity12 = createText("test", Position(100, 200), 20);
+        std::shared_ptr<Entity> entity13 = createText("test", Position(100, 230), 20);
+        std::shared_ptr<Entity> entity14 = createText("test", Position(100, 260), 20);
+        std::shared_ptr<Entity> entity15 = createText("test", Position(100, 290), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        createBindingsEvent(entity12);
+        createBindingsEvent(entity12, 1, "UP");
+        createBindingsEvent(entity13, 1, "LEFT");
+        createBindingsEvent(entity14, 1, "RIGHT");
+        createBindingsEvent(entity15, 1, "DOWN");
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
-        scene->addEntities({entity8, entity9, entity10, entity11, entity12});
+        scene->addEntities({entity8, entity9, entity10, entity11});
+        scene->addEntities({entity12, entity13, entity14, entity15});
         return scene;
     }
 

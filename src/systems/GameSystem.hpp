@@ -48,7 +48,7 @@ namespace indie
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
         std::shared_ptr<Entity> createText(std::string text, Position position, float fontSize);
-        void createBindingsEvent(std::shared_ptr<Entity> &entity);
+        void createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, std::string button);
     };
 
 }
