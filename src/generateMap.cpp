@@ -10,6 +10,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <array>
 
 #include "IScene.hpp"
 #include "Entity.hpp"
@@ -40,7 +41,7 @@ namespace indie {
         "assets/ground_asset/sand_asset_basic/sand_asset_basic",
         "assets/ground_asset/sand_asset_basic/sand_asset_basic",
         "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
+        "assets/ground_asset/sand_asset_basic/sand_asset_basic"
     };
 
     static const std::string wallFilepath = "assets/wall asset/plamier_wall/palmier_wall_1";
@@ -52,6 +53,37 @@ namespace indie {
         wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
+    }
+
+    int createRandomWalls(IScene &scene)
+    {
+        std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> map;
+
+        for (auto &line : map)
+            line.fill(' ');
+        for (int n = 0; n < GAME_NB_INDESTRUCTIBLE_WALL; n++) {
+            int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
+            int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
+            if (map[y][x] != ' ') {
+                n--;
+                continue;
+            }
+            map[y][x] = '#';
+            scene.addEntity(createWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
+        }
+
+        for (int n = 0; n < GAME_NB_DESTRUCTIBLE_WALL; n++) {
+            int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
+            int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
+            if (map[y][x] != ' ') {
+                n--;
+                continue;
+            }
+            map[y][x] = '#';
+            scene.addEntity(createWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
+        }
+
+        return 0;
     }
 
     static std::shared_ptr<IEntity> createSpawn(int x, int y)
@@ -96,7 +128,6 @@ namespace indie {
 
         if (!file.is_open())
             throw std::runtime_error("Could not open map file");
-        // extraction des donnees et creation des entités
         scene.addEntities(createTiles());
         while (!file.eof()) {
             y++;
@@ -109,6 +140,7 @@ namespace indie {
             }
         }
         file.close();
+        createRandomWalls(scene);
     }
 
 }

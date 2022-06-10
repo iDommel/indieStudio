@@ -11,9 +11,11 @@
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
 
-#define GAME_MAP_WIDTH 15
-#define GAME_MAP_HEIGHT 15
-#define GAME_TILE_SIZE 12
+#define GAME_MAP_WIDTH              15
+#define GAME_MAP_HEIGHT             15
+#define GAME_TILE_SIZE              12
+#define GAME_NB_INDESTRUCTIBLE_WALL (GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 7
+#define GAME_NB_DESTRUCTIBLE_WALL   (GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 7
 
 struct Vector3;
 
