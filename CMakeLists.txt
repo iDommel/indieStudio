@@ -19,6 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/ModelAnimation.cpp
         src/Music.cpp
         src/Texture2D.cpp
         src/Camera.cpp
@@ -58,6 +59,7 @@ target_sources(${PROJECT_NAME}
         test_functions/TestMusic.cpp
         test_functions/TestAudioDevice.cpp
         test_functions/TestSound.cpp
+        test_functions/TestModelAnimation.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
