@@ -39,6 +39,7 @@ namespace indie
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        AudioDevice::getMasterVolume() += 50;
     }
 
     void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
@@ -157,6 +158,40 @@ namespace indie
         return (entity);
     }
 
+    void GameSystem::createSoundEvent(std::shared_ptr<Entity> &entity, std::string value) {
+        MouseCallbacks mouseCallbacks(
+            [value, entity](SceneManager &sceneManger, Vector2 mousePosition) {
+                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+                auto pos = Component::castComponent<Position>(comp[1]);
+                auto sprite = Component::castComponent<Sprite>(comp[0]);
+
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + sprite->getX() &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
+                    auto comp2 = sceneManger.getCurrentScene()[IEntity::Tags::TEXT][2];
+                    auto text = comp2->getFilteredComponents({ IComponent::Type::TEXT });
+                    auto value2 = Component::castComponent<String>(text[0]);
+                    if (AudioDevice::getMasterVolume() < 100 && value == "+") {
+                        AudioDevice::getMasterVolume() += 10;
+                        AudioDevice::setVolume(AudioDevice::getMasterVolume());
+                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
+                    } else if (AudioDevice::getMasterVolume()  > 0 && value == "-") {
+                        AudioDevice::getMasterVolume() -= 10;
+                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
+                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
+                    }
+                }
+            },
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {});
+
+        std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
+
+        eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, mouseCallbacks);
+
+        entity->addComponent(eventListener);
+    }
+
     void GameSystem::createSceneEvent(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
     {
         MouseCallbacks mouseCallbacks(
@@ -167,16 +202,7 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + sprite->getX() &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
-                    if (AudioDevice::getMasterVolume() < 100 && scenetype == SceneManager::SceneType::PLUS) {
-                        AudioDevice::getMasterVolume() += 10;
-                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
-                        std::cout << "volume is set at: " << AudioDevice::getMasterVolume()  << std::endl;
-                    } else if (AudioDevice::getMasterVolume()  > 0 && scenetype == SceneManager::SceneType::MINUS) {
-                        AudioDevice::getMasterVolume() -= 10;
-                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
-                        std::cout << "volume is set at: " << AudioDevice::getMasterVolume()  << std::endl;
-                    } else
-                        sceneManger.setCurrentScene(scenetype);
+                    sceneManger.setCurrentScene(scenetype);
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
@@ -197,12 +223,11 @@ namespace indie
                 auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
                 auto pos = Component::castComponent<Position>(comp[0]);
 
-                auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
-                auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
-                auto player = Component::castComponent<Player>(component[0]);
-
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
+                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                    auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
+                    auto player = Component::castComponent<Player>(component[0]);
                     switch (button) {
                         case 0:
                             player->changeUp = 1;
@@ -363,12 +388,13 @@ namespace indie
         std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/plus.png", Position(500, 250), 80, 80);
         std::shared_ptr<Entity> entity5 = createText("Sound Menu", Position(250, 50), 50);
         std::shared_ptr<Entity> entity6 = createText("Master Volume", Position(300, 200), 25);
+        std::shared_ptr<Entity> entity7 = createText("50", Position(370, 250), 80);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        createSceneEvent(entity3, SceneManager::SceneType::MINUS);
-        createSceneEvent(entity4, SceneManager::SceneType::PLUS);
+        createSoundEvent(entity3, "-");
+        createSoundEvent(entity4, "+");
 
-        scene->addEntities({entity2, entity3, entity4, entity5, entity6});
+        scene->addEntities({entity2, entity3, entity4, entity5, entity6 ,entity7});
         return scene;
     }
 
