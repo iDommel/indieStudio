@@ -18,7 +18,7 @@
 namespace indie
 {
 
-    void AudioSystem::init(SceneManager &SceneManager)
+    void AudioSystem::init(SceneManager &)
     {
         std::cout << "AudioSystem::init" << std::endl;
         if (AudioDevice::isReady()) {
@@ -35,10 +35,14 @@ namespace indie
         if (!AudioDevice::isReady())
             return;
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AUDIBLE]) {
+            if ((*e)[IComponent::Type::MUSIC] == nullptr)
+                continue;
             auto music = Component::castComponent<MusicComponent>((*e)[IComponent::Type::MUSIC]);
             manageMusic(*music);
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AUDIBLE]) {
+            if ((*e)[IComponent::Type::SOUND] == nullptr)
+                continue;
             auto sound = Component::castComponent<SoundComponent>((*e)[IComponent::Type::SOUND]);
             manageSound(*sound);
         }
@@ -49,7 +53,7 @@ namespace indie
         std::cout << "AudioSystem::destroy" << std::endl;
     }
 
-    void AudioSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    void AudioSystem::loadEntity(std::shared_ptr<IEntity>entity)
     {
         std::cout << "AudioSystem::loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::AUDIBLE)) {
