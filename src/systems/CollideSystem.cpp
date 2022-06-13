@@ -23,7 +23,6 @@ namespace indie
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
         std::shared_ptr<indie::Rect> rect = nullptr;
-        std::shared_ptr<indie::Model3D> model = nullptr;
         std::shared_ptr<indie::Position> pos = nullptr;
         std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
 
@@ -31,7 +30,7 @@ namespace indie
             if (!collidable->hasComponent(IComponent::Type::POSITION) || !collidable->hasComponent(IComponent::Type::HITBOX))
                 continue;
             maybeUninitialized = (*collidable)[IComponent::Type::HITBOX];
-            if (!maybeUninitialized->isInitialized()) {
+            if (maybeUninitialized && !maybeUninitialized->isInitialized()) {
                 pos = Component::castComponent<Position>((*collidable)[IComponent::Type::POSITION]);
                 if (collidable->hasComponent(IComponent::Type::RECT)) {
                     rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT]);
@@ -39,9 +38,8 @@ namespace indie
                     Rectangle toUpdateRect = {rect->left, rect->top, rect->width, rect->height};
                     maybeUninitialized = std::make_shared<Hitbox>(toUpdateRect, pos2d);
                 } else if (collidable->hasComponent(IComponent::Type::MODEL)) {
-                    model = Component::castComponent<Model3D>((*collidable)[IComponent::Type::MODEL]);
                     Vector3 pos3d = {pos->x, pos->y, pos->z};
-                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), pos3d);//BHA OUAIS MAIS J'AI BESOINS DU CACHE DU MODEL QUOI...
+                    Component::castComponent<Hitbox>(maybeUninitialized)->setBBox(makeUpdatedBBox({{0,0,0}, {0,0,0}}, pos3d));
                 } else {
                     throw std::runtime_error("Uninitialized collidable entity has no rect or model");
                 }
@@ -59,22 +57,22 @@ namespace indie
         if (collidables.empty())
             return;
         preInit(sceneManager);
-        for (auto collidable : collidables) {
-            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr || !maybeCollider->isInitialized())
+        for (auto &collidable : collidables) {
+            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr)
                 continue;
             hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
             if (hitbox->is3D())
-                CollideSystem::_collidables3D.push_back(std::make_pair(collidable, hitbox));
+                _collidables3D.push_back(std::make_pair(collidable, hitbox));
             else
-                CollideSystem::_collidables2D.push_back(std::make_pair(collidable, hitbox));
+                _collidables2D.push_back(std::make_pair(collidable, hitbox));
         }
     }
 
     void CollideSystem::destroy()
     {
         std::cout << "CollideSystem::destroy" << std::endl;
-        CollideSystem::_collidables3D.clear();
-        CollideSystem::_collidables2D.clear();
+        _collidables3D.clear();
+        _collidables2D.clear();
     }
 
     void CollideSystem::loadEntity(std::shared_ptr<IEntity> entity)
@@ -86,21 +84,21 @@ namespace indie
             return;
         hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
         if (hitbox->is3D())
-            CollideSystem::_collidables3D.push_back(std::make_pair(entity, hitbox));
+            _collidables3D.push_back(std::make_pair(entity, hitbox));
         else
-            CollideSystem::_collidables2D.push_back(std::make_pair(entity, hitbox));
+            _collidables2D.push_back(std::make_pair(entity, hitbox));
     }
 
     void CollideSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
-        for (auto it = CollideSystem::_collidables3D.begin(); it != CollideSystem::_collidables3D.end(); ++it)
+        for (auto it = _collidables3D.begin(); it != _collidables3D.end(); ++it)
             if (it->first == entity) {
-                CollideSystem::_collidables3D.erase(it);
+                _collidables3D.erase(it);
                 return;
             }
-        for (auto it = CollideSystem::_collidables2D.begin(); it != CollideSystem::_collidables2D.end(); ++it)
+        for (auto it = _collidables2D.begin(); it != _collidables2D.end(); ++it)
             if (it->first == entity) {
-                CollideSystem::_collidables2D.erase(it);
+                _collidables2D.erase(it);
                 return;
             }
     }
@@ -110,9 +108,10 @@ namespace indie
         std::shared_ptr<Hitbox> hitbox = nullptr;
         std::vector<std::shared_ptr<IEntity>> colliders;
 
-        if (!entity || (hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX])) == nullptr)
+        if (!entity)
             return colliders;
-        for (auto &collidable : CollideSystem::_collidables3D)
+        hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        for (auto &collidable : _collidables3D)
             if (collidable.first != entity)
                 if (check3DCollision(collidable.second, hitbox))
                     colliders.push_back(collidable.first);
@@ -137,7 +136,7 @@ namespace indie
         return box;
     }
 
-    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos) const
+    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos)
     {
         Vector3 min = {pos.x + box.min.x, pos.y + box.min.y, pos.z + box.min.z};
         Vector3 max = {pos.x + box.max.x, pos.y + box.max.y, pos.z + box.max.z};

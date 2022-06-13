@@ -12,6 +12,7 @@ namespace indie
 {
     Cube::Cube(Vector3 size, Color color) : Component(Type::CUBE), _size(size), _color(color)
     {
+        _isInitialized = true;
     }
 
     Color &Cube::getColor()

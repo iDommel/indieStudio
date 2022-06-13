@@ -52,9 +52,9 @@ namespace indie
         Hitbox(Rectangle rect);
         /**
          * @brief Construct uninitialized Hitbox object
-         *
+         * @param is3D True if the hitbox is 3D, false if it is 2D
          */
-        Hitbox();
+        Hitbox(bool is3D);
         ~Hitbox();
 
         /// @brief Shift the 3D hitbox
@@ -86,13 +86,13 @@ namespace indie
         BoundingBox getBBox(void) const;
         /// @brief Get the 2D Rectangle (WARNING-> use 2d funtions on 2d hitbox only)
         Rectangle getRect(void) const;
+        void setBBox(BoundingBox box);
 
     protected:
     private:
         std::unique_ptr<BoundingBox> _box = nullptr;
         bool _is3D = false;
         std::unique_ptr<Rectangle> _rect = nullptr;
-        bool _isInitialized = true;
     };
 }
 

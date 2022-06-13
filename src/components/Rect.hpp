@@ -21,13 +21,13 @@ namespace indie
         Rect(float left = 0, float top = 0, float width = 0, float height = 0)
             : Component(Type::RECT), left(left), top(top), width(width), height(height)
         {
+            _isInitialized = true;
         }
 
         float left;
         float top;
         float width;
         float height;
-        bool _isInitialized = true;
     };
 
 }

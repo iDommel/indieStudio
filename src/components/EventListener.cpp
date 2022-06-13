@@ -13,6 +13,7 @@ namespace indie
 
     EventListener::EventListener() : Component(Type::EVT_LISTENER)
     {
+        _isInitialized = true;
     }
 
     EventListener::~EventListener()

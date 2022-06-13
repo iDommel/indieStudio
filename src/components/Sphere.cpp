@@ -13,7 +13,9 @@ namespace indie
 {
     Sphere::Sphere(float radius, Color color) : Component(Type::SPHERE), _radius(radius), _color(color)
     {
+        _isInitialized = true;
     }
+
     Color &Sphere::getColor()
     {
         return _color;

@@ -22,7 +22,7 @@ namespace indie
          * @param texturePath Path to the model texture
          */
         Model3D(const std::string &modelPath, const std::string &texturePath = "")
-            : Component(Type::MODEL), _modelPath(modelPath), _texturePath(texturePath){};
+            : Component(Type::MODEL), _modelPath(modelPath), _texturePath(texturePath){_isInitialized = true;};
 
         std::string &getModelPath() { return _modelPath; };
         std::string &getTexturePath() { return _texturePath; };
@@ -30,7 +30,6 @@ namespace indie
     private:
         std::string _modelPath;
         std::string _texturePath;
-        bool _isInitialized = true;
     };
 }
 

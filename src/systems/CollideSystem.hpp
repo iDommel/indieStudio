@@ -73,7 +73,7 @@ namespace indie
          * @param pos Position of the model
          * @return New updated BoundingBox
          **/
-        BoundingBox makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos) const;
+        static BoundingBox makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos);
 
         /** brief Check if an hitbox is colliding with another one
          * @param box1 First hitbox

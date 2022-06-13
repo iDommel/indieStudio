@@ -21,6 +21,7 @@
 #include "Sprite.hpp"
 #include "String.hpp"
 #include "Texture2D.hpp"
+#include "HitboxComponent.hpp"
 
 namespace indie
 {
@@ -66,6 +67,8 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+                displayCollidable(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -156,14 +159,34 @@ namespace indie
         _models.at(model->getModelPath()).first->draw(position, WHITE);
     }
 
+    void GraphicSystem::displayCollidable(std::shared_ptr<IEntity> &entity) const
+    {
+        auto components = entity->getFilteredComponents({IComponent::Type::HITBOX});
+        auto hitbox = Component::castComponent<Hitbox>(components[0]);
+        if (hitbox->is3D())
+            ::DrawBoundingBox(hitbox->getBBox(), RED);
+    }
+
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
     {
         auto model = Component::castComponent<Model3D>((*entity)[IComponent::Type::MODEL]);
+        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
 
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
         else
             _models[model->getModelPath()] = std::make_pair(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
+        if (hitbox->is3D() && !hitbox->isInitialized()) {
+            auto box = _models[model->getModelPath()].first->getBoundingBox();
+            auto pos = hitbox->getBBox().max;
+            box.max.x += pos.x;
+            box.max.y += pos.y;
+            box.max.z += pos.z;
+            box.min.x += pos.x;
+            box.min.y += pos.y;
+            box.min.z += pos.z;
+            hitbox->setBBox(box);
+        }
     }
 
     void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)

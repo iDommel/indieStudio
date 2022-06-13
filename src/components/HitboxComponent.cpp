@@ -17,23 +17,28 @@ namespace indie
     {
         _box->min = {pos.x + _box->min.x, pos.y + _box->min.y, pos.z + _box->min.z};
         _box->max = {pos.x + _box->max.x, pos.y + _box->max.y, pos.z + _box->max.z};
+        _isInitialized = true;
     }
 
     Hitbox::Hitbox(BoundingBox box) : Component(Type::HITBOX), _box(std::make_unique<BoundingBox>(box)), _is3D(true)
     {
+        _isInitialized = true;
     }
 
     Hitbox::Hitbox(Rectangle rect, Vector2 pos) : Component(Type::HITBOX), _is3D(false), _rect(std::make_unique<Rectangle>(rect))
     {
         _rect->x = pos.x;
         _rect->y = pos.y;
+        _isInitialized = true;
     }
 
     Hitbox::Hitbox(Rectangle rect) : Component(Type::HITBOX), _is3D(false), _rect(std::make_unique<Rectangle>(rect))
     {
+        _isInitialized = true;
     }
 
-    Hitbox::Hitbox() : Component(Type::HITBOX), _is3D(false)
+    Hitbox::Hitbox(bool is3D)
+    : Component(Type::HITBOX), _is3D(is3D)
     {
         _isInitialized = false;
     }
@@ -49,6 +54,14 @@ namespace indie
             return *_box;
         else
             throw std::runtime_error("3d getter used on none 3d Hitbox");
+    }
+
+    void Hitbox::setBBox(BoundingBox box)
+    {
+        if (_is3D)
+            _box = std::make_unique<BoundingBox>(box);
+        else
+            throw std::runtime_error("3d setter used on none 3d Hitbox");
     }
 
     Rectangle Hitbox::getRect(void) const

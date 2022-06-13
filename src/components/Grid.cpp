@@ -13,6 +13,7 @@ namespace indie
 {
     Grid::Grid(int slices, float spacing) : Component(Type::GRID), _slices(slices), _spacing(spacing)
     {
+        _isInitialized = true;
     }
 
     int &Grid::getSlices()

@@ -24,6 +24,7 @@ namespace indie
         String(const std::string &str, const std::string &fontFile = "", float fontSize = 10.0f)
             : Component(Type::TEXT), _value(str), _fontFile(fontFile), _fontSize(fontSize)
         {
+            _isInitialized = true;
         }
 
         /// @brief Returns component text reference
@@ -37,7 +38,6 @@ namespace indie
         std::string _value;
         std::string _fontFile;
         float _fontSize;
-        bool _isInitialized = true;
     };
 
 }

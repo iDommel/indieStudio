@@ -26,6 +26,7 @@ namespace indie
         Sprite(std::string str, int nbFrame = 0)
             : Component(IComponent::Type::SPRITE), _value(str), _nbFrame(nbFrame)
         {
+            _isInitialized = true;
         }
 
         /// @brief Returns component texture filepath
@@ -36,7 +37,6 @@ namespace indie
     private:
         std::string _value;
         int _nbFrame;
-        bool _isInitialized = true;
     };
 
 }

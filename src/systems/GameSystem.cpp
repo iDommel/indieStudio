@@ -75,9 +75,8 @@ namespace indie
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
             (*hitbox) += *vel * (float)(dt / 1000.0f);
 
-            ::DrawBoundingBox(hitbox->getBBox(), GREEN);
             if (!_collideSystem.getColliders(player).empty())
-                std::cout << "COLLLISIONS !!" << std::endl;
+                std::cout << "COLLLISIONS !!\n\n\n" << std::endl;
             std::cout << "Player: " << playerComp->getId();
             std::cout << "Player::update" << std::endl;
             std::cout << "pos->x = " << pos->x << std::endl;
@@ -99,7 +98,7 @@ namespace indie
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
         std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
-        std::shared_ptr<Hitbox> component3 = std::make_shared<Hitbox>();
+        std::shared_ptr<Hitbox> component3 = std::make_shared<Hitbox>(false);
 
         std::shared_ptr<Entity> e = std::make_shared<Entity>();
         std::shared_ptr<Rect> rect = std::make_shared<Rect>(0, 0, 0, 0);
@@ -109,7 +108,7 @@ namespace indie
         std::shared_ptr<Entity> turretEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(BoundingBox{{0, 0, 0}, {50, 50, 50}});
+        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
 
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
         Vector3 camPos = {50.0f, 50.0f, 50.0f};
@@ -154,7 +153,7 @@ namespace indie
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(10, 0, 10);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
-        std::shared_ptr<Component> playerHitbox = std::make_shared<Component>(IComponent::Type::HITBOX);
+        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(true);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();

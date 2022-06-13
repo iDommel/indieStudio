@@ -14,6 +14,7 @@ namespace indie
     CameraComponent::CameraComponent(Vector3 target, Vector3 position)
         : Component(Type::CAMERA), _camera(target, position)
     {
+        _isInitialized = true;
     }
 
     Camera &CameraComponent::getCamera() { return _camera; }
