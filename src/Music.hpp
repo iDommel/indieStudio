@@ -43,11 +43,13 @@ namespace indie {
             float getTimeLengthMusic();
             ///  @brief Get current music time played (in seconds)
             float getTimePlayedMusic();
+            /// @brief Check if music is playing
+            bool isMusicPlaying();
+            MusicState _state = MusicState::PAUSE;
 
         protected:
         private:
             std::unique_ptr<::Music> _music;
-            MusicState _state = MusicState::STOP;
     };
 }
 

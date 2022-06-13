@@ -10,6 +10,8 @@
 
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
+#include "MusicComponent.hpp"
+#include "SoundComponent.hpp"
 
 namespace indie
 {
@@ -31,6 +33,10 @@ namespace indie
          * @param entity The Entity that was removed
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
+        void manageMusic(MusicComponent &music);
+        void manageSound(SoundComponent &sound);
+        std::map<std::string, std::unique_ptr <Music>> _musics;
+        std::map<std::string, std::unique_ptr <Sound>> _sounds;
 
     private:
     };

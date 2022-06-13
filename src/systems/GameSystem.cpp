@@ -5,6 +5,7 @@
 ** GameSystem.cpp
 */
 
+#include "raylib.h"
 #include "GameSystem.hpp"
 
 #include <functional>
@@ -17,7 +18,9 @@
 #include "EventListener.hpp"
 #include "Scene.hpp"
 #include "String.hpp"
-#include "raylib.h"
+#include "MusicComponent.hpp"
+#include "SoundComponent.hpp"
+#include "AudioDevice.hpp"
 
 namespace indie
 {
@@ -28,6 +31,7 @@ namespace indie
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
+        //indie::AudioDevice audioDevice;
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
@@ -69,6 +73,7 @@ namespace indie
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        std::shared_ptr<MusicComponent> component5 = std::make_shared<MusicComponent>("music.ogg");
 
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
@@ -76,9 +81,11 @@ namespace indie
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
         entity2->addComponent(component)
-            .addComponent(component4);
+            .addComponent(component4)
+            .addComponent(component5);
         entity->addComponent(component2)
             .addComponent(component3);
+
 
         scene->addEntities({entity, entity2});
         return scene;

@@ -12,6 +12,7 @@
 
 indie::AudioDevice::AudioDevice()
 {
+    //initAudio();
     InitAudioDevice();
     if (isReady() != true)
         throw AudioDeviceError("AudioDevice already initialized");
@@ -20,6 +21,11 @@ indie::AudioDevice::AudioDevice()
 indie::AudioDevice::~AudioDevice()
 {
     CloseAudioDevice();
+}
+
+void indie::AudioDevice::initAudio()
+{
+    InitAudioDevice();
 }
 
 bool indie::AudioDevice::isReady()

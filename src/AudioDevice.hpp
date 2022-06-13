@@ -15,6 +15,8 @@ namespace indie {
             AudioDevice();
             ///  @brief Destruct the audio device:: close the audio device
             ~AudioDevice();
+            /// @brief Init audio device
+            void initAudio();
             ///  @brief isReady:: Check if the audio device is playing
             bool isReady();
             ///  @brief Set music volume

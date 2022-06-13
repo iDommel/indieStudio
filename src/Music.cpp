@@ -7,6 +7,7 @@
 
 #include "raylib.h"
 
+#include <iostream>
 #include "Music.hpp"
 #include "exceptions/MusicError.hpp"
 
@@ -32,6 +33,7 @@ namespace indie {
             _state = MusicState::STOP;
         PlayMusicStream(*_music);
         _state = MusicState::PLAY;
+        std::cout << "Music playing" << std::endl;
     }
 
     void Music::stopMusic()
@@ -76,5 +78,10 @@ namespace indie {
     float Music::getTimePlayedMusic()
     {
         return GetMusicTimePlayed(*_music);
+    }
+
+    bool Music::isMusicPlaying()
+    {
+        return IsMusicStreamPlaying(*_music);
     }
 }
