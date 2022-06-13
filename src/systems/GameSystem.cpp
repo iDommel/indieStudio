@@ -44,30 +44,35 @@ namespace indie
 
     void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
     {
-        if (players->changeUp == 2) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
-            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto value = Component::castComponent<String>(text[0]);
-            value->getValue() = players->getUp();
-            players->changeUp = 0;
-        } else if (players->changeLeft == 2) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
-            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto value = Component::castComponent<String>(text[0]);
-            value->getValue() = players->getLeft();
-            players->changeLeft = 0;
-        } else if (players->changeRight == 2) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
-            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto value = Component::castComponent<String>(text[0]);
-            value->getValue() = players->getRight();
-            players->changeRight = 0;
-        } else if (players->changeDown == 2) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
-            auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto value = Component::castComponent<String>(text[0]);
-            value->getValue() = players->getDown();
-            players->changeDown = 0;
+        if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::CONTROLLER) {
+            if (players->changeUp == 2 || players->changeUp == 0) {
+                auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+                auto value = Component::castComponent<String>(text[0]);
+                value->getValue() = players->getUp();
+                players->changeUp = 0;
+            }
+            if (players->changeLeft == 2 || players->changeLeft == 0) {
+                auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+                auto value = Component::castComponent<String>(text[0]);
+                value->getValue() = players->getLeft();
+                players->changeLeft = 0;
+            } 
+            if (players->changeRight == 2 || players->changeRight == 0) {
+                auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+                auto value = Component::castComponent<String>(text[0]);
+                value->getValue() = players->getRight();
+                players->changeRight = 0;
+            }
+            if (players->changeDown == 2 || players->changeDown == 0) {
+                auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+                auto value = Component::castComponent<String>(text[0]);
+                value->getValue() = players->getDown();
+                players->changeDown = 0;
+            }
         }
     }
     
@@ -231,15 +236,27 @@ namespace indie
                     switch (button) {
                         case 0:
                             player->changeUp = 1;
+                            player->changeDown = 0;
+                            player->changeLeft = 0;
+                            player->changeRight = 0;
                             break;
                         case 1:
                             player->changeLeft = 1;
+                            player->changeDown = 0;
+                            player->changeRight = 0;
+                            player->changeUp = 0;
                             break;
                         case 2:
                             player->changeRight = 1;
+                            player->changeDown = 0;
+                            player->changeLeft = 0;
+                            player->changeUp = 0;
                             break;
                         case 3:
                             player->changeDown = 1;
+                            player->changeLeft = 0;
+                            player->changeRight = 0;
+                            player->changeUp = 0;
                             break;
                     }
                 }
