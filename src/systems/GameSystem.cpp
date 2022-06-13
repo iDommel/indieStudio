@@ -31,7 +31,7 @@ namespace indie
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
-        //indie::AudioDevice audioDevice;
+        // indie::AudioDevice audioDevice;
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
@@ -59,35 +59,40 @@ namespace indie
 
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
-        ButtonCallbacks spaceCallbacks(
-            std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
-            [](SceneManager &) {
-                std::cout << "---------- space released" << std::endl;
-            },
-            std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
-
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
+        std::shared_ptr<Entity> musicEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-        std::shared_ptr<MusicComponent> component5 = std::make_shared<MusicComponent>("music.ogg");
+        std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
 
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+
+        ButtonCallbacks spaceCallbacks(
+            [musicEntity](SceneManager &) {
+                auto comp = Component::castComponent<MusicComponent>((*musicEntity)[Component::Type::MUSIC]);
+                if (comp->getMusicState() == Music::MusicState::PAUSE)
+                    comp->setMusicState(Music::MusicState::PLAY);
+                else
+                    comp->setMusicState(Music::MusicState::PAUSE);
+            },
+            [](SceneManager &) {},
+            [](SceneManager &) {});
+
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
-        entity2->addComponent(component)
+        musicEntity->addComponent(component)
             .addComponent(component4)
-            .addComponent(component5);
+            .addComponent(musicComponent)
+            .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);
 
-
-        scene->addEntities({entity, entity2});
+        scene->addEntities({entity, musicEntity});
         return scene;
     }
 

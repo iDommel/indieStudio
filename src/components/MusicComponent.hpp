@@ -21,6 +21,8 @@ namespace indie
         MusicComponent(std::string str) : music(str) { _type = IComponent::Type::MUSIC; };
 
         std::string getValue() const { return music; };
+        void setMusicState(Music::MusicState state) { _newState = state; };
+        Music::MusicState getMusicState() { return _newState; };
         Music::MusicState _newState = Music::MusicState::PLAY;
         std::string music;
 
