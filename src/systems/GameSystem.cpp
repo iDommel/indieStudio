@@ -32,31 +32,46 @@ namespace indie
         std::cout << "GameSystem::init" << std::endl;
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
-        sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
+        sceneManager.addScene(createSplashScreen(), SceneManager::SceneType::SPLASH);
+        sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
     {
-        static int i = 0;
-        static int j = 0;
+        // static int i = 0;
+        // static int j = 0;
 
-        i++;
-        if (i % 3 == 0) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
-            auto r = Component::castComponent<Rect>(components[0]);
-            r->left = r->width * j;
-            if (++j > 5)
-                j = 0;
-        }
-        if (i == 100) {
-            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-            std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
-            std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-            entity->addComponent(component).addComponent(component4);
-            sceneManager.getCurrentScene().addEntity(entity);
-        } else if (i == 200) {
-            sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
-        }
+        // i++;
+        // if (i % 3 == 0) {
+        //     auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
+        //     auto r = Component::castComponent<Rect>(components[0]);
+        //     r->left = r->width * j;
+        //     if (++j > 5)
+        //         j = 0;
+        // }
+        // if (i == 100) {
+        //     std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        //     std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
+        //     std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+        //     entity->addComponent(component).addComponent(component4);
+        //     sceneManager.getCurrentScene().addEntity(entity);
+        // } else if (i == 200) {
+        //     sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
+        // }
+    }
+
+    std::unique_ptr<IScene> GameSystem::createSplashScreen()
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSplashScreen, this));
+
+        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos = std::make_shared<Position>(550, 350);
+        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+
+        entity->addComponent(pos)
+            .addComponent(sprite);
+        scene->addEntities({entity});
+        return scene;
     }
 
     void GameSystem::destroy()

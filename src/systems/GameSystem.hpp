@@ -38,6 +38,7 @@ namespace indie
 
     private:
         std::unique_ptr<IScene> createScene();
+        std::unique_ptr<IScene> createSplashScreen();
     };
 
 }
