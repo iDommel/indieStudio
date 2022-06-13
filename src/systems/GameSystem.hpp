@@ -54,6 +54,7 @@ namespace indie
         void createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
+        int timeElasped;
     };
 
 }

@@ -40,7 +40,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         AudioDevice::getMasterVolume() += 50;
     }
 
@@ -103,7 +103,7 @@ namespace indie
         }
     }
 
-    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t)
+    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t delta)
     {
         int firstText = 9;
         for (auto &scene : sceneManager.getScenes()) {
@@ -112,6 +112,12 @@ namespace indie
                 updateTextBindings(sceneManager, players, firstText);
                 replaceTextBindings(sceneManager, players, firstText);
                 firstText += 4;
+            }
+        }
+        if (sceneManager.getCurrentSceneType() == SceneManager::SceneType::SPLASH) {
+            timeElasped += delta;
+            if (timeElasped > 3000) {
+                sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
             }
         }
         // static int i = 0;
@@ -146,7 +152,12 @@ namespace indie
 
         entity->addComponent(pos)
             .addComponent(sprite);
-        scene->addEntities({entity});
+
+        std::shared_ptr<Entity> entity2 = createText("Super Bomberman", Position(200, 50), 50);
+        std::shared_ptr<Entity> entity3 = createText("Made by Indie Studio", Position(250, 100), 30);
+        std::shared_ptr<Entity> entity4 = createText("Iona Dommel-Prioux\nAntoine Penot\nCamille Maux\nIzaac Carcenac-Sautron\nLéo Maman\nMaxence Folio\nRoxanne Baert", Position(10, 450), 15);
+
+        scene->addEntities({entity, entity2, entity3, entity4});
         return scene;
     }
 
@@ -189,8 +200,8 @@ namespace indie
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
                 auto rect = Component::castComponent<Rect>(comp[2]);
 
-                if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->height &&
-                    mousePosition.y > pos->y && mousePosition.y < pos->y + rect->width) {
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->width &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     auto comp2 = sceneManger.getCurrentScene()[IEntity::Tags::TEXT][2];
                     auto text = comp2->getFilteredComponents({ IComponent::Type::TEXT });
                     auto value2 = Component::castComponent<String>(text[0]);
@@ -225,8 +236,8 @@ namespace indie
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
                 auto rect = Component::castComponent<Rect>(comp[2]);
 
-                if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->height &&
-                    mousePosition.y > pos->y && mousePosition.y < pos->y + rect->width) {
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->width &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     sceneManger.setCurrentScene(scenetype);
                 }
             },
