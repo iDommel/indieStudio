@@ -101,10 +101,6 @@ namespace indie
     {
         vel->z = (_speed * _isDown) + (-_speed * _isUp);
         vel->x = (_speed * _isRight) + (-_speed * _isLeft);
-        std::cout << "Player::move" << std::endl;
-        std::cout << "vel->x = " << vel->x << std::endl;
-        std::cout << "vel->y = " << vel->y << std::endl;
-        std::cout << "vel->z = " << vel->z << std::endl;
     }
     int Player::getId() const
     {
