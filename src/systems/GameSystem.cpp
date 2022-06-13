@@ -69,19 +69,17 @@ namespace indie
         auto players = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER];
         for (auto &player : players) {
             auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
+            auto lastPos = *pos; 
             auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
             auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
             auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
+
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
             (*hitbox) += *vel * (float)(dt / 1000.0f);
-
-            if (!_collideSystem.getColliders(player).empty())
-                std::cout << "COLLLISIONS !!\n\n\n" << std::endl;
-            std::cout << "Player: " << playerComp->getId();
-            std::cout << "Player::update" << std::endl;
-            std::cout << "pos->x = " << pos->x << std::endl;
-            std::cout << "pos->y = " << pos->y << std::endl;
-            std::cout << "pos->z = " << pos->z << std::endl;
+            if (!_collideSystem.getColliders(player).empty()) {
+                (*pos) = lastPos;
+                (*hitbox) -= *vel * (float)(dt / 1000.0f);
+            }
         }
     }
 

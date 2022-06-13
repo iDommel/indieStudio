@@ -43,91 +43,69 @@ namespace indie
     void Player::moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->x = _speed;
-        std::cout << "Player :" << _id << std::endl;
-
-        std::cout << "Player::moveRight" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isRight = true;
+        move(vel);
     }
 
     void Player::stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->x == _speed)
-            vel->x = 0;
-        std::cout << "Player::stopRight" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isRight = false;
+        move(vel);
     }
 
     void Player::moveLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->x = -_speed;
-        std::cout << "Player :" << _id << std::endl;
-
-        std::cout << "Player::moveLeft" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isLeft = true;
+        move(vel);
     }
 
     void Player::stopLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->x == -_speed)
-            vel->x = 0;
-        std::cout << "Player::stopLeft" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isLeft = false;
+        move(vel);
     }
 
     void Player::moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->z = -_speed;
-        std::cout << "Player::moveUp" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isUp = true;
+        move(vel);
     }
 
     void Player::stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->z == -_speed)
-            vel->z = 0;
-        std::cout << "Player::stopUp" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isUp = false;
+        move(vel);
+
     }
 
     void Player::moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        vel->z = _speed;
-        std::cout << "Player::moveDown" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isDown = true;
+        move(vel);
     }
 
     void Player::stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
-        if (vel->z == _speed)
-            vel->z = 0;
-        std::cout << "Player::stopDown" << std::endl;
-        std::cout << "pos->x = " << vel->x << std::endl;
-        std::cout << "pos->y = " << vel->y << std::endl;
-        std::cout << "pos->z = " << vel->z << std::endl;
+        _isDown = false;
+        move(vel);
     }
 
+    void Player::move(std::shared_ptr<Velocity> vel)
+    {
+        vel->z = (_speed * _isDown) + (-_speed * _isUp);
+        vel->x = (_speed * _isRight) + (-_speed * _isLeft);
+        std::cout << "Player::move" << std::endl;
+        std::cout << "vel->x = " << vel->x << std::endl;
+        std::cout << "vel->y = " << vel->y << std::endl;
+        std::cout << "vel->z = " << vel->z << std::endl;
+    }
     int Player::getId() const
     {
         return _id;

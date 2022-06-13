@@ -14,6 +14,7 @@
 
 namespace indie
 {
+    class Velocity;
 
     class Player : public Component
     {
@@ -60,10 +61,15 @@ namespace indie
 
     protected:
     private:
+        void move(std::shared_ptr<Velocity> vel);
         int _nbBomb;
         int _blastPower;
         int _speed;
         int _id;
+        bool _isUp;
+        bool _isDown;
+        bool _isLeft;
+        bool _isRight;
         static const int _defaultSpeed = 40;
         static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 1;

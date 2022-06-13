@@ -21,6 +21,7 @@ namespace indie
         Position(float x, float y, float z = 0);
         Position(const Position &other);
         Position(const Position &&other);
+        void operator=(const Position &other);
         Position(const AVector &other);
         void operator=(const AVector &other);
     };
