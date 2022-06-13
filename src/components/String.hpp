@@ -5,7 +5,8 @@
 ** String.hpp
 */
 
-#pragma once
+#ifndef SPRITEHPP
+#define SPRITEHPP
 
 #include <string>
 #include "Component.hpp"
@@ -38,3 +39,5 @@ namespace indie
     };
 
 }
+
+#endif /* !SPRITEHPP */

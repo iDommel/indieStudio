@@ -28,8 +28,9 @@ namespace indie
     void SceneManager::setCurrentScene(SceneType sceneType, bool initScene)
     {
         if (_scenes.find(sceneType) == _scenes.end())
-            throw std::invalid_argument("SceneManager: Invalid scene type");
+            throw std::invalid_argument("SceneManager: Invalid scene type: " + std::to_string((int)sceneType));
         _currentScene = sceneType;
+        getCurrentSceneType() = sceneType;
         if (initScene) {
             _scenes[_currentScene] = _scenes[_currentScene]->initScene();
         }
@@ -62,5 +63,27 @@ namespace indie
         for (auto &scene : _scenes) {
             scene.second->setRemoveEntityCallback(callback);
         }
+    }
+
+    SceneManager::SceneType &SceneManager::getCurrentSceneType()
+    {
+        static SceneType currentSceneType = SceneType::NONE;
+        return currentSceneType;
+    }
+
+    IScene &SceneManager::getScene(SceneType sceneType)
+    {
+        if (_scenes.find(sceneType) == _scenes.end())
+            throw std::invalid_argument("SceneManager: Invalid scene type: " + std::to_string((int)sceneType));
+        return *_scenes[sceneType];
+    }
+
+    std::vector<SceneManager::SceneType> SceneManager::getSceneTypeList()
+    {
+        std::vector<SceneType> sceneTypeList;
+        for (auto &scene : _scenes) {
+            sceneTypeList.push_back(scene.first);
+        }
+        return sceneTypeList;
     }
 }

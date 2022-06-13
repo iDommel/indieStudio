@@ -29,6 +29,7 @@ namespace indie
             AUDIBLE,
             CALLABLE,
             CAMERA,
+            PLAYER
         };
 
         virtual ~IEntity() = default;

@@ -18,10 +18,12 @@ namespace indie {
             ///  @brief isReady:: Check if the audio device is playing
             bool isReady();
             ///  @brief Set music volume
-            void setVolume(float volume);
+            static void setVolume(float volume);
 
+            static int &getMasterVolume() {static int masterVolume; return masterVolume;};
         protected:
         private:
+            static int masterVolume;
     };
 }
 

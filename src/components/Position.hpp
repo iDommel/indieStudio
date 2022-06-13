@@ -18,7 +18,7 @@ namespace indie
     class Position : public Component
     {
     public:
-        Position(float x, float y, float z = 0) : x(x), y(y), z(z) { _type = IComponent::Type::VECTOR; }
+        Position(float newX, float newY, float newZ = 0) : x(newX), y(newY), z(newZ) { _type = IComponent::Type::VECTOR; }
 
         void setPosition(float newX, float newY, float newZ) { x = newX; y = newY; z = newZ; }
 

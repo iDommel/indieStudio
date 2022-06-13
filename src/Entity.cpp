@@ -34,7 +34,9 @@ namespace indie
         {Entity::Tags::CAMERA,
          {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
-         {{IComponent::Type::EVT_LISTENER}}}};
+         {{IComponent::Type::EVT_LISTENER}}},
+        {IEntity::Tags::PLAYER,
+        {{IComponent::Type::PLAYER}}}};
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {

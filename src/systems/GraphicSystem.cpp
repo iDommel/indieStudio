@@ -4,8 +4,6 @@
 ** File description:
 ** GraphicSystem.cpp
 */
-
-
 #include <iostream>
 #include "raylib.h"
 
@@ -36,15 +34,19 @@ namespace indie
         for (auto &scene : sceneManager.getScenes()) {
             for (auto &entity : (*scene.second)[IEntity::Tags::SPRITE_2D])
                 loadSprite(entity);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
+            for (auto &e : (*scene.second)[IEntity::Tags::RENDERABLE_3D])
                 loadModel(e);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::TEXT])
+            for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
         }
     }
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
+        for (auto &scene : sceneManager.getScenes()) {
+            for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
+                loadText(e);
+        }
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;

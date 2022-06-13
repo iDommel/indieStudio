@@ -38,5 +38,4 @@ namespace indie
     {
         std::cout << "AudioSystem::unloadEntity" << std::endl;
     }
-
 }
