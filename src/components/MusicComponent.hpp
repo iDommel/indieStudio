@@ -29,6 +29,4 @@ namespace indie
 
 }
 
-
-
 #endif /* !MUSIC_HPP_ */

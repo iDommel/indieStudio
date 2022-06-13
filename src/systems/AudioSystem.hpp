@@ -12,6 +12,7 @@
 #include "SceneManager.hpp"
 #include "MusicComponent.hpp"
 #include "SoundComponent.hpp"
+#include "AudioDevice.hpp"
 
 namespace indie
 {
@@ -35,10 +36,11 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
         void manageMusic(MusicComponent &music);
         void manageSound(SoundComponent &sound);
-        std::map<std::string, std::unique_ptr <Music>> _musics;
-        std::map<std::string, std::unique_ptr <Sound>> _sounds;
+        std::map<std::string, std::unique_ptr<Music>> _musics;
+        std::map<std::string, std::unique_ptr<Sound>> _sounds;
 
     private:
+        AudioDevice audioDevice;
     };
 
 }

@@ -12,7 +12,7 @@
 
 indie::AudioDevice::AudioDevice()
 {
-    //initAudio();
+    // initAudio();
     InitAudioDevice();
     if (isReady() != true)
         throw AudioDeviceError("AudioDevice already initialized");

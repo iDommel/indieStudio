@@ -10,8 +10,10 @@
 #include <iostream>
 #include "Music.hpp"
 #include "exceptions/MusicError.hpp"
+#include "AudioDevice.hpp"
 
-namespace indie {
+namespace indie
+{
     Music::Music(const std::string &fileName)
     {
         _music = std::make_unique<::Music>();
