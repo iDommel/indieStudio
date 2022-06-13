@@ -62,6 +62,7 @@ namespace indie
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Entity> musicEntity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> soundEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
         std::shared_ptr<String> component2 = std::make_shared<String>("sprite");
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
@@ -74,29 +75,26 @@ namespace indie
         component3->setType(Component::Type::HITBOX);
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
 
+        soundEntity->addComponent(soundComponent)
+            //.addComponent(soundComponent2)
+            .addComponent(listener);
+
         ButtonCallbacks spaceCallbacks(
-            [musicEntity](SceneManager &) {
-                auto comp = Component::castComponent<MusicComponent>((*musicEntity)[Component::Type::MUSIC]);
-                if (comp->getMusicState() == Music::MusicState::PAUSE)
-                    comp->setMusicState(Music::MusicState::PLAY);
+            [soundEntity](SceneManager &) {
+                auto comp = Component::castComponent<SoundComponent>((*soundEntity)[Component::Type::SOUND]);
+                if (comp->getSoundState() == Sound::SoundState::PAUSED)
+                    comp->setSoundState(Sound::SoundState::PLAYING);
                 else
-                    comp->setMusicState(Music::MusicState::PAUSE);
+                    comp->setSoundState(Sound::SoundState::PAUSED);
             },
             [](SceneManager &) {},
             [](SceneManager &) {});
 
         listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
 
-        musicEntity->addComponent(component)
-            .addComponent(component4)
-            .addComponent(musicComponent)
-            .addComponent(soundComponent)
-            //.addComponent(soundComponent2)
-            .addComponent(listener);
-        entity->addComponent(component2)
-            .addComponent(component3);
+    
 
-        scene->addEntities({entity, musicEntity});
+        scene->addEntities({entity, soundEntity});
         return scene;
     }
 
