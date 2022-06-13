@@ -28,7 +28,8 @@ namespace indie
             HELP,
             PAUSE,
             SOUND,
-            NB_SCENES
+            NB_SCENES,
+            PREVIOUS
         };
 
         /**
@@ -79,6 +80,13 @@ namespace indie
          * @return SceneType
          */
         static SceneType &getCurrentSceneType();
+
+        /**
+         * @brief Get the Previous Scene Type object
+         *
+         * @return SceneType
+         */
+        static SceneType &getPreviousSceneType();
 
         std::vector<SceneType> getSceneTypeList();
         /**

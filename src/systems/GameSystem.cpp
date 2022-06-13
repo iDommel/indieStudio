@@ -38,7 +38,8 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+        sceneManager.addScene(createPauseMenu(sceneManager), SceneManager::SceneType::PAUSE);
+        sceneManager.setCurrentScene(SceneManager::SceneType::PAUSE);
         AudioDevice::getMasterVolume() += 50;
     }
 
@@ -207,7 +208,10 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + sprite->getX() &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
-                    sceneManger.setCurrentScene(scenetype);
+                    if (scenetype == SceneManager::SceneType::PREVIOUS)
+                        sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
+                    else
+                        sceneManger.setCurrentScene(scenetype);
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
@@ -313,7 +317,7 @@ namespace indie
         ButtonCallbacks spaceCallbacks(
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
             [](SceneManager &scenemanager) {
-                scenemanager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+                scenemanager.setCurrentScene(SceneManager::SceneType::PAUSE);
                 std::cout << "---------- space released" << std::endl;
             },
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
@@ -346,7 +350,7 @@ namespace indie
         std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
 
         std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
+        listener->addKeyboardEvent(KEY_P, spaceCallbacks);
 
         entity2->addComponent(component)
             .addComponent(component4)
@@ -407,7 +411,7 @@ namespace indie
         std::shared_ptr<Entity> entity6 = createText("Master Volume", Position(300, 200), 25);
         std::shared_ptr<Entity> entity7 = createText("50", Position(370, 250), 80);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
         createSoundEvent(entity3, "-");
         createSoundEvent(entity4, "+");
 
@@ -426,7 +430,7 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createText("You will be able to plant water bombs to destroy destructible\nblocks and maybe get some boosts.", Position(10, 250), 25);
         std::shared_ptr<Entity> entity6 = createText("If your bombs hit an opponent you will kill him.\nThe goal is to be the last man standing.", Position(10, 350), 25);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
@@ -466,7 +470,7 @@ namespace indie
         std::shared_ptr<Entity> entity20 = createText(player2->getRight(), Position(600, 260), 20);
         std::shared_ptr<Entity> entity21 = createText(player2->getDown(), Position(600, 290), 20);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
         createBindingsEvent(entity12, 0, 0);
         createBindingsEvent(entity13, 0, 1);
         createBindingsEvent(entity14, 0, 2);
@@ -479,6 +483,29 @@ namespace indie
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
         scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity17, entity18, entity19, entity20, entity21});
+        return scene;
+    }
+
+    std::unique_ptr<IScene> GameSystem::createPauseMenu(SceneManager &sceneManager)
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPauseMenu, this, std::ref(sceneManager)));
+
+        std::shared_ptr<Entity> entity = createText("Pause", Position(325, 50), 50);
+        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/resume_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/help.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity6 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity7 = createButton("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 550 / 2 - 18), 120, 36);
+
+        createSceneEvent(entity2, SceneManager::SceneType::GAME);
+        createSceneEvent(entity3, SceneManager::SceneType::SOUND);
+        createSceneEvent(entity4, SceneManager::SceneType::CONTROLLER);
+        createSceneEvent(entity5, SceneManager::SceneType::HELP);
+        createSceneEvent(entity6, SceneManager::SceneType::NONE);
+        createSceneEvent(entity7, SceneManager::SceneType::MAIN_MENU);
+
+        scene->addEntities({entity, entity2, entity3, entity4, entity5, entity6, entity7});
         return scene;
     }
 

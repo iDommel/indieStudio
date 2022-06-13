@@ -29,6 +29,7 @@ namespace indie
     {
         if (_scenes.find(sceneType) == _scenes.end())
             throw std::invalid_argument("SceneManager: Invalid scene type: " + std::to_string((int)sceneType));
+        getPreviousSceneType() = _currentScene;
         _currentScene = sceneType;
         getCurrentSceneType() = sceneType;
         if (initScene) {
@@ -70,6 +71,13 @@ namespace indie
         static SceneType currentSceneType = SceneType::NONE;
         return currentSceneType;
     }
+
+    SceneManager::SceneType &SceneManager::getPreviousSceneType()
+    {
+        static SceneType previousSceneType = SceneType::NONE;
+        return previousSceneType;
+    }
+
 
     IScene &SceneManager::getScene(SceneType sceneType)
     {
