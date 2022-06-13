@@ -67,6 +67,8 @@ namespace indie
         std::shared_ptr<String> component3 = std::make_shared<String>("vector");
         std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
         std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
+        std::shared_ptr<SoundComponent> soundComponent = std::make_shared<SoundComponent>("sound_det");
+        std::shared_ptr<SoundComponent> soundComponent2 = std::make_shared<SoundComponent>("sound_expl");
 
         component2->setType(Component::Type::TEXT);
         component3->setType(Component::Type::HITBOX);
@@ -88,6 +90,8 @@ namespace indie
         musicEntity->addComponent(component)
             .addComponent(component4)
             .addComponent(musicComponent)
+            .addComponent(soundComponent)
+            //.addComponent(soundComponent2)
             .addComponent(listener);
         entity->addComponent(component2)
             .addComponent(component3);

@@ -20,6 +20,8 @@ namespace indie
         SoundComponent(std::string str) : sound(str) { _type = IComponent::Type::SOUND; };
 
         std::string getValue() const { return sound; };
+        void setSoundState(Sound::SoundState state) { _newState = state; };
+        Sound::SoundState getSoundState() { return _newState; };
         Sound::SoundState _newState = Sound::SoundState::PLAYING;
         std::string sound;
 

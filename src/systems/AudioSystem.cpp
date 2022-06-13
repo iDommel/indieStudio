@@ -26,8 +26,8 @@ namespace indie
             AudioDevice::setVolume(100);
         }
         _musics.emplace(std::string("music.ogg"), std::make_unique<Music>("resources/Music.ogg"));
-        //_sounds.emplace(std::string("sound_det"), std::make_unique<Sound>("resources/Detonation.ogg"));
-        //_sounds.emplace(std::string("sound_expl"), std::make_unique<Sound>("resources/Explosion.ogg"));
+        _sounds.emplace(std::string("sound_det"), std::make_unique<Sound>("resources/Detonation.ogg"));
+        _sounds.emplace(std::string("sound_expl"), std::make_unique<Sound>("resources/Explosion.ogg"));
     }
 
     void AudioSystem::update(SceneManager &sceneManager, uint64_t)
@@ -37,6 +37,10 @@ namespace indie
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AUDIBLE]) {
             auto music = Component::castComponent<MusicComponent>((*e)[IComponent::Type::MUSIC]);
             manageMusic(*music);
+        }
+        for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AUDIBLE]) {
+            auto sound = Component::castComponent<SoundComponent>((*e)[IComponent::Type::SOUND]);
+            manageSound(*sound);
         }
     }
 
@@ -73,17 +77,17 @@ namespace indie
         _musics[musicComponent.music]->_state = musicComponent._newState;
     }
 
-    // void AudioSystem::manageSound(SoundComponent &soundComponent)
-    //{
-    //     if (soundComponent._newState == _sounds[soundComponent.sound]->_state)
-    //         return;
-    //     std::cout << "AudioSystem::manageSound" << std::endl;
-    //     if (soundComponent._newState == Sound::SoundState::PLAYING)
-    //         _sounds[soundComponent.sound]->play();
-    //     else if (soundComponent._newState == Sound::SoundState::PAUSED)
-    //         _sounds[soundComponent.sound]->pause();
-    //     else if (soundComponent._newState == Sound::SoundState::STOPPED)
-    //         _sounds[soundComponent.sound]->stop();
-    //     _sounds[soundComponent.sound]->_state = soundComponent._newState;
-    // }
+     void AudioSystem::manageSound(SoundComponent &soundComponent)
+    {
+         if (soundComponent._newState == _sounds[soundComponent.sound]->_state)
+             return;
+         std::cout << "AudioSystem::manageSound" << std::endl;
+         if (soundComponent._newState == Sound::SoundState::PLAYING)
+             _sounds[soundComponent.sound]->play();
+         else if (soundComponent._newState == Sound::SoundState::PAUSED)
+             _sounds[soundComponent.sound]->pause();
+         else if (soundComponent._newState == Sound::SoundState::STOPPED)
+             _sounds[soundComponent.sound]->stop();
+         _sounds[soundComponent.sound]->_state = soundComponent._newState;
+    }
 }
