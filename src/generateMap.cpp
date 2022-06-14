@@ -44,23 +44,30 @@ namespace indie {
         "assets/ground_asset/sand_asset_basic/sand_asset_basic"
     };
 
-    static const std::string wallFilepath = "assets/wall asset/plamier_wall/palmier_wall_1";
+    static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
+    static const std::string indestructibleWallFile = "assets/wall asset/plamier_wall/palmier_wall_1";
+    static const std::string wallFilepath = "assets/wall asset/breakable_wall/wood_box_breakable";
 
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
 
-        wall->addComponent(std::make_shared<Position>(x, 0, y))
+        wall->addComponent(std::make_shared<Position>(x, 2, y))
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
     }
 
-    int createRandomWalls(IScene &scene)
+    static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
-        std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> map;
+        std::shared_ptr<Entity> wall = std::make_shared<Entity>();
 
-        for (auto &line : map)
-            line.fill(' ');
+        wall->addComponent(std::make_shared<Position>(x, 0, y))
+            .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"));
+        return wall;
+    }
+
+    int createRandomWalls(IScene &scene, std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> &map)
+    {
         for (int n = 0; n < GAME_NB_INDESTRUCTIBLE_WALL; n++) {
             int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
             int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
@@ -68,18 +75,18 @@ namespace indie {
                 n--;
                 continue;
             }
-            map[y][x] = '#';
-            scene.addEntity(createWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
+            map[y][x] = 'H';
+            scene.addEntity(createIndestructibleWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleWallFile));
         }
 
         for (int n = 0; n < GAME_NB_DESTRUCTIBLE_WALL; n++) {
-            int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
-            int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
-            if (map[y][x] != ' ') {
+            int x = rand() % (GAME_MAP_WIDTH - 2) + 1;
+            int y = rand() % (GAME_MAP_HEIGHT - 2) + 1;
+            if (map[y][x] != ' ' || (x <= 2 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3)) || (x >= GAME_MAP_WIDTH - 3 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3))) {
                 n--;
                 continue;
             }
-            map[y][x] = '#';
+            map[y][x] = 'D';
             scene.addEntity(createWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
         }
 
@@ -124,23 +131,31 @@ namespace indie {
     {
         std::ifstream file(filename);
         std::string line;
+        std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> map;
         int y = -1;
 
         if (!file.is_open())
             throw std::runtime_error("Could not open map file");
+        for (auto &line : map)
+            line.fill(' ');
         scene.addEntities(createTiles());
         while (!file.eof()) {
             y++;
             std::getline(file, line);
             for (size_t i = 0; i < line.size(); i++) {
-                if (line[i] == '#')
-                    scene.addEntity(createWall(i * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
+                if (line[i] == '#') {
+                    scene.addEntity(createIndestructibleWall(i * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleBordersFile));
+                    map[y][i] = line[i];
+                } else if (line[i] == 'H') {
+                    scene.addEntity(createIndestructibleWall(i * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleWallFile));
+                    map[y][i] = line[i];
+                }
                 // else if (line[i] == 'o')
                 //     scene.addEntity(createSpawn(i, y));
             }
         }
         file.close();
-        createRandomWalls(scene);
+        createRandomWalls(scene, map);
     }
 
 }

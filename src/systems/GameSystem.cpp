@@ -83,7 +83,7 @@ namespace indie
         //     std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 200.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE + 50};
+        Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 4 * 3, 200.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE + 50};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
         // std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
         // std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
@@ -130,7 +130,7 @@ namespace indie
         // e4->addComponent(grid);
 
         scene->addEntities({createCamera(camPos,camTarget)});
-        generateMap("assets/maps/map1.txt", *scene);
+        generateMap("assets/maps/map2.txt", *scene);
         return scene;
     }
 
