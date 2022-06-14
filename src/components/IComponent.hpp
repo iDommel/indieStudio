@@ -29,6 +29,7 @@ namespace indie
             SPHERE,
             CUBE,
             GRID,
+            ANIMATION,
             TYPE_NB
         };
 
