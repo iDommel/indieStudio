@@ -18,8 +18,7 @@ void test_raylib_modelAnimation()
     std::unique_ptr<indie::Model> model = std::make_unique<indie::Model>("assets_test/guy.iqm", "assets_test/guytex.png");
     Vector3 position = { 0.0f, 0.0f, 0.0f };
 
-    unsigned int animsCount = 0;
-    indie::ModelAnimation anim("assets_test/guyanim.iqm", &animsCount);
+    indie::ModelAnimation anim("assets_test/guyanim.iqm");
     int animFrameCounter = 0;
 
     SetCameraMode(camera, CAMERA_FREE);

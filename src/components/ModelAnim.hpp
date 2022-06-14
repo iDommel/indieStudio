@@ -28,15 +28,12 @@ namespace indie
         std::string getAnimPath() { return _filepath; };
         /// @brief Get the reference of the current frame
         int &getCurrentFrame() { return _currFrame; };
-        /// @brief Get the reference of the animation count
-        unsigned *getAnimCount() { return &_animCount; };
         /// @brief Get the reference of the animation number of frames
         int &getNbFrames() { return _nbFrames; };
 
     private:
         std::string _filepath;
         int _currFrame;
-        unsigned _animCount = 0;
         /// @brief Set at -1 for initialization by the graphic system
         int _nbFrames = -1;
         bool _isInitialized = true;

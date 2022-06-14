@@ -1,10 +1,9 @@
 #include "raylib.h"
 #include "ModelAnimation.hpp"
 
-indie::ModelAnimation::ModelAnimation(const std::string &fileName, unsigned int *animsCount)
+indie::ModelAnimation::ModelAnimation(const std::string &fileName)
 {
-    anims = LoadModelAnimations(fileName.c_str(), animsCount);
-    std::cout << "Anims count:" << *animsCount << std::endl;
+    anims = LoadModelAnimations(fileName.c_str(), &_animsCount);
     _isLoaded = true;
 }
 
@@ -17,12 +16,12 @@ indie::ModelAnimation::~ModelAnimation()
 void indie::ModelAnimation::updateModelAnimation(indie::Model &model, int frame)
 {
     ::UpdateModelAnimation(model.getModel(), anims[0], frame);
-    // _isLoaded = false;
 }
 
 void indie::ModelAnimation::unloadModelAnimation()
 {
-    UnloadModelAnimation(anims[0]);
+    for (unsigned int i = 0; i < _animsCount; ++i)
+        UnloadModelAnimation(anims[i]);
     _isLoaded = false;
 }
 

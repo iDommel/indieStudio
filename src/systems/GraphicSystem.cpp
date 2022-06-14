@@ -255,7 +255,7 @@ namespace indie
         if (_animations.find(anim->getAnimPath()) != _animations.end())
             _animations[anim->getAnimPath()].second++;
         else
-            _animations[anim->getAnimPath()] = std::make_pair(std::make_unique<ModelAnimation>(anim->getAnimPath(), anim->getAnimCount()), 1);
+            _animations[anim->getAnimPath()] = std::make_pair(std::make_unique<ModelAnimation>(anim->getAnimPath()), 1);
 
         if (anim->getNbFrames() < 0) {
             anim->getNbFrames() = _animations[anim->getAnimPath()].first->getFrameCount();

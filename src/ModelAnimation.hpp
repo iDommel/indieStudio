@@ -24,9 +24,8 @@
                 /**
                  * @brief Construct / load ModelAnimation object
                  * @param fileName Path to the animation file
-                 * @param animsCount Pointer to the counter of the animation (default = 0)
                  */
-                ModelAnimation(const std::string &fileName, unsigned int *animsCount);
+                ModelAnimation(const std::string &fileName);
                 /**
                  * @brief Destroy ModelAnimation object
                  */
@@ -56,6 +55,7 @@
                  * @brief List of animation object
                  */
                 ::ModelAnimation *anims;
+                unsigned int _animsCount;
                 /// @brief Boolean to see if the animation is loaded or not
                 bool _isLoaded;
         };
