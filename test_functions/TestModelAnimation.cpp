@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "../src/ModelAnimation.hpp"
+#include "../src/Model.hpp"
 
 void test_raylib_modelAnimation()
 {
@@ -14,28 +15,26 @@ void test_raylib_modelAnimation()
     Vector3 c = { 0.0f, 1.0f, 0.0f };
     Camera camera = { a, b, c, 45.0f, 0 };
 
-    Model model = LoadModel("assets_test/guy.iqm");            
-    Texture2D texture = LoadTexture("assets_test/guytex.png");       
-    SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);   
-
-    Vector3 position = { 0.0f, 0.0f, 0.0f };      
+    std::unique_ptr<indie::Model> model = std::make_unique<indie::Model>("assets_test/guy.iqm", "assets_test/guytex.png");
+    Vector3 position = { 0.0f, 0.0f, 0.0f };
 
     unsigned int animsCount = 0;
     indie::ModelAnimation anim("assets_test/guyanim.iqm", &animsCount);
     int animFrameCounter = 0;
 
-    SetCameraMode(camera, CAMERA_FREE); 
+    SetCameraMode(camera, CAMERA_FREE);
 
     SetTargetFPS(60);
 
-    while (!WindowShouldClose())       
+    while (!WindowShouldClose())
     {
         UpdateCamera(&camera);
 
         if (IsKeyDown(KEY_SPACE))
         {
             animFrameCounter++;
-            anim.updateModelAnimation(model, animFrameCounter);
+            std::cout << "animFrameCounter: " << animFrameCounter << std::endl;
+            anim.updateModelAnimation(*model, animFrameCounter);
             if (animFrameCounter >= anim.getFrameCount()) animFrameCounter = 0;
         }
 
@@ -46,7 +45,7 @@ void test_raylib_modelAnimation()
             BeginMode3D(camera);
                 Vector3 x = { 1.0f, 0.0f, 0.0f };
                 Vector3 x2 = { 1.0f, 1.0f, 1.0f };
-                DrawModelEx(model, position, x, -90.0f, x2, WHITE);
+                DrawModelEx(model->getModel(), position, x, -90.0f, x2, WHITE);
 
                 DrawGrid(10, 1.0f);
 
@@ -54,11 +53,8 @@ void test_raylib_modelAnimation()
 
         EndDrawing();
     }
-    UnloadTexture(texture); 
 
     anim.unloadModelAnimation();
 
-    UnloadModel(model); 
-
-    CloseWindow();  
+    CloseWindow();
 }

@@ -39,4 +39,9 @@ namespace indie
     {
         return ::GetModelBoundingBox(*ptr);
     }
+
+    ::Model &Model::getModel()
+    {
+        return *ptr;
+    }
 }
