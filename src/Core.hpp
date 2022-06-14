@@ -15,13 +15,13 @@
 
 #include <iostream>
 
-#define UPDATE_DELTA     17
+#define UPDATE_DELTA 17
 
-namespace indie {
+namespace indie
+{
     class Core
     {
     public:
-
         /**
          * @brief Types of systems: systems init and destroy calls are effectued by ascending order
          */

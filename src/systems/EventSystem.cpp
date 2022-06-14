@@ -41,17 +41,22 @@ namespace indie
     void EventSystem::handleKeyboard(SceneManager &manager, std::shared_ptr<EventListener> listener)
     {
         for (auto &it : listener->getKeyboardMappings()) {
+            bool wasPressed = false;
             if (it.second.pressed && Window::isKeyPressed(it.first)) {
                 it.second.pressed(manager);
-                break;
+                wasPressed = true;
             }
             if (it.second.down && Window::isKeyDown(it.first)) {
                 it.second.down(manager);
-                break;
+                wasPressed = true;
             }
             if (it.second.released && Window::isKeyReleased(it.first)) {
+                wasPressed = false;
                 it.second.released(manager);
-                break;
+            }
+            if (it.second.up && wasPressed && Window::isKeyUp(it.first)) {
+                it.second.up(manager);
+                wasPressed = false;
             }
         }
     }

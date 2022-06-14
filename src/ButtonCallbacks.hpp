@@ -29,11 +29,13 @@ namespace indie
         ButtonCallbacks(
             std::function<void(SceneManager &)> pressed,
             std::function<void(SceneManager &)> released,
-            std::function<void(SceneManager &)> down);
+            std::function<void(SceneManager &)> down,
+            std::function<void(SceneManager &)> up);
         ~ButtonCallbacks();
         std::function<void(SceneManager &)> pressed;
         std::function<void(SceneManager &)> released;
         std::function<void(SceneManager &)> down;
+        std::function<void(SceneManager &)> up;
 
     protected:
     private:

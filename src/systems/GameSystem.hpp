@@ -17,6 +17,7 @@ namespace indie
 
     class IEntity;
     class Scene;
+    class Position;
 
     class GameSystem : public ISystem
     {
@@ -40,7 +41,7 @@ namespace indie
 
     private:
         std::unique_ptr<IScene> createScene();
-        void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id);
+        void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
     };
