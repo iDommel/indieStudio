@@ -22,28 +22,26 @@
 namespace indie {
 
     static const std::vector<std::string> tilesFilepaths = {
-        "assets/ground_asset/sand_asset_1/sand_asset_1",
-        "assets/ground_asset/sand_asset_2/sand_asset_2",
-        "assets/ground_asset/sand_asset_3/sand_asset_3",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic",
-        "assets/ground_asset/sand_asset_basic/sand_asset_basic"
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach",
+        "assets/ground_asset/sand_asset_basic/basicBeach"
     };
 
+    static const std::string tilesFilepath = "assets/ground_asset/sand_asset_basic/basicBeach";
     static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
     static const std::string indestructibleWallFile = "assets/wall asset/plamier_wall/palmier_wall_1";
     static const std::string wallFilepath = "assets/wall asset/breakable_wall/wood_box_breakable";
@@ -110,7 +108,7 @@ namespace indie {
         int nb = std::rand() % tilesFilepaths.size();
 
         groundTile->addComponent(std::make_shared<Position>(x, 0, y))
-                    .addComponent(std::make_shared<Model3D>(tilesFilepaths[nb] + ".obj", tilesFilepaths[nb] + ".png"));
+                    .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
         return groundTile;
     }
 
