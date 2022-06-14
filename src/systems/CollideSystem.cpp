@@ -32,10 +32,14 @@ namespace indie {
             (!maybeUninitialized->isInitialized())) {
                 if ((*collidable)[IComponent::Type::RECT] == nullptr && (*collidable)[IComponent::Type::MODEL] == nullptr)
                     throw std::runtime_error("Uninitialized collidable entity has no rect or model");
-                if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr)
-                    maybeUninitialized = std::make_shared<Hitbox>((Rectangle){rect->left, rect->top, rect->width, rect->height}, (Vector2){pos->x, pos->y});
-                else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr)
-                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), (Vector3){pos->x, pos->y, pos->z});
+                if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr) {
+                    Vector2 pos2d = { pos->x, pos->y };
+                    Rectangle toUpdateRect = { rect->left, rect->top, rect->width, rect->height };
+                    maybeUninitialized = std::make_shared<Hitbox>(toUpdateRect, pos2d);
+                } else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr) {
+                    Vector3 pos3d = { pos->x, pos->y, pos->z };
+                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), pos3d);
+                }
             }
         }
     }
@@ -130,16 +134,9 @@ namespace indie {
 
     BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos) const
     {
-        BoundingBox updatedBox = {
-            (Vector3) {
-                pos.x + box.min.x,
-                pos.y + box.min.y,
-                pos.z + box.min.z},
-            (Vector3) {
-                pos.x + box.max.x,
-                pos.y + box.max.y,
-                pos.z + box.max.z}
-            };
+        Vector3 min = { pos.x + box.min.x, pos.y + box.min.y, pos.z + box.min.z };
+        Vector3 max = { pos.x + box.max.x, pos.y + box.max.y, pos.z + box.max.z };
+        BoundingBox updatedBox = {min, max};
 
         return updatedBox;
     }

@@ -20,13 +20,12 @@ void testModelsCollision(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [models] example - models loading");
 
+
     // Define the camera to look into our 3d world
-    Camera camera = { { 0.0f, 10.0f, 10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
-    camera.position = (Vector3){ 50.0f, 50.0f, 50.0f }; // Camera position
-    camera.target = (Vector3){ 0.0f, 10.0f, 0.0f };     // Camera looking at point
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-    camera.fovy = 45.0f;                                // Camera field-of-view Y
-    camera.projection = CAMERA_PERSPECTIVE;                   // Camera mode type
+    Vector3 a = { 0.0f, 10.0f, 10.0f };
+    Vector3 b = { 0.0f, 0.0f, 0.0f };
+    Vector3 c = { 0.0f, 1.0f, 0.0f };
+    Camera camera = { a, b, c, 45.0f, 0 };
 
     indie::Model test("test_models/turret.obj", "test_models/turret.png");
     indie::Model test2("test_models/turret.obj", "test_models/turret.png");

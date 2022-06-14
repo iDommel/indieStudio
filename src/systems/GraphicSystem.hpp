@@ -14,6 +14,7 @@
 #include "Texture2D.hpp"
 #include "Model.hpp"
 #include "Text.hpp"
+#include "ModelAnimation.hpp"
 
 namespace indie
 {
@@ -44,7 +45,7 @@ namespace indie
 
         void loadModel(std::shared_ptr<IEntity> &entity);
         void unloadModel(std::shared_ptr<IEntity> &entity);
-        void displayModel(std::shared_ptr<IEntity> &entity) const;
+        void displayModel(std::shared_ptr<IEntity> &entity);
 
         void displayGrid(std::shared_ptr<IEntity> &entity) const;
         void displaySphere(std::shared_ptr<IEntity> &entity) const;
@@ -54,10 +55,14 @@ namespace indie
         void unloadText(std::shared_ptr<IEntity> &entity);
         void displayText(std::shared_ptr<IEntity> &entity) const;
 
+        void loadModelAnimation(std::shared_ptr<IEntity> &entity);
+        void unloadModelAnimation(std::shared_ptr<IEntity> &entity);
+
         std::unique_ptr<Window> _window;
         std::map<std::string, std::pair<std::unique_ptr<Texture>, int>> _textures;
         std::map<std::string, std::pair<std::unique_ptr<Model>, int>> _models;
         std::map<std::string, std::pair<std::unique_ptr<Text>, int>> _texts;
+        std::map<std::string, std::pair<std::unique_ptr<ModelAnimation>, int>> _animations;
     };
 
 }
