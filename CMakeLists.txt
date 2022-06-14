@@ -36,6 +36,7 @@ target_sources(${PROJECT_NAME}
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
         src/Sound.cpp
+        src/generateMap.cpp
 
         src/systems/AudioSystem.cpp
         src/systems/GraphicSystem.cpp
