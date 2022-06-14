@@ -8,6 +8,7 @@
 #ifndef AVECTOR_HPP_
 #define AVECTOR_HPP_
 
+#include <tuple>
 #include "Component.hpp"
 namespace indie
 {
