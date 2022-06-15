@@ -56,10 +56,9 @@ namespace indie
         _window->clearBackground(RAYWHITE);
 
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CAMERA]) {
-            auto camComponents = e->getFilteredComponents({IComponent::Type::CAMERA});
-            if (camComponents.size() == 0)
-                continue;
-            auto cam = Component::castComponent<CameraComponent>(camComponents[0]);
+            auto camComponent = (*e)[IComponent::Type::CAMERA];
+
+            auto cam = Component::castComponent<CameraComponent>(camComponent);
             cam->getCamera().beginDrawScope();
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
                 displayModel(e);
@@ -140,13 +139,13 @@ namespace indie
         auto pos = Component::castComponent<Position>(components[1]);
 
         try {
-            auto rect = entity->getFilteredComponents({IComponent::Type::RECT});
-            auto r = Component::castComponent<Rect>(rect[0]);
+            auto rect = (*entity)[IComponent::Type::RECT];
+            auto r = Component::castComponent<Rect>(rect);
             Vector2 p = {pos->x, pos->y};
 
             _textures.at(sprite->getValue()).first->setRect(r->left, r->top, r->width, r->height);
             _textures.at(sprite->getValue()).first->drawRec(p);
-        } catch (std::invalid_argument &) {
+        } catch (std::runtime_error &) {
             _textures.at(sprite->getValue()).first->draw(pos->x, pos->y);
         }
     }

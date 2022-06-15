@@ -39,16 +39,16 @@ void test_raylib_modelAnimation()
 
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+        ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
                 Vector3 x = { 1.0f, 0.0f, 0.0f };
                 Vector3 x2 = { 1.0f, 1.0f, 1.0f };
                 DrawModelEx(model->getModel(), position, x, -90.0f, x2, WHITE);
 
-                DrawGrid(10, 1.0f);
+        DrawGrid(10, 1.0f);
 
-            EndMode3D();
+        EndMode3D();
 
         EndDrawing();
     }

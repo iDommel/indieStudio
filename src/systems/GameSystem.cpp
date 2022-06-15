@@ -47,21 +47,16 @@ namespace indie
 
         i++;
         updatePlayers(sceneManager, dt);
-        if (i == 100) {
-            std::shared_ptr<Entity> entity = std::make_shared<Entity>();
-            std::shared_ptr<Position> component = std::make_shared<Position>(500, 100);
-            std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-            entity->addComponent(component).addComponent(component4);
-            sceneManager.getCurrentScene().addEntity(entity);
-        } else if (i == 200) {
-            sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2]);
-        }
         _collideSystem.update(sceneManager, dt);
-
-        auto component = Component::castComponent<ModelAnim>((*sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D][0])[IComponent::Type::ANIMATION]);
-        component->getCurrentFrame()++;
-        if (component->getCurrentFrame() >= component->getNbFrames())
-            component->getCurrentFrame() = 0;
+        auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
+        for (auto &renderable : renderables) {
+            if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
+                auto component = Component::castComponent<ModelAnim>((*renderable)[IComponent::Type::ANIMATION]);
+                component->getCurrentFrame()++;
+                if (component->getCurrentFrame() >= component->getNbFrames())
+                    component->getCurrentFrame() = 0;
+            }
+        }
     }
 
     void GameSystem::destroy()
@@ -70,30 +65,13 @@ namespace indie
         _collideSystem.destroy();
     }
 
-    std::unique_ptr<indie::IScene> GameSystem::createScene()
+    std::shared_ptr<IEntity> GameSystem::createCamera(Vector3 camPos, Vector3 camTarget)
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-
-        std::shared_ptr<Entity> modelEntity = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
-        std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
-
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
-        Vector3 camPos = {50.0f, 50.0f, 50.0f};
-        Vector3 camTarget = {0.0f, 10.0f, 0.0f};
         std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
 
-        modelEntity->addComponent(pos2)
-            .addComponent(model)
-            .addComponent(anim);
-
         cam->addComponent(camera);
-
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
-        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
-        scene->addEntities({modelEntity, cam});
-        return scene;
+        return cam;
     }
 
     void GameSystem::updatePlayers(SceneManager &sceneManager, uint64_t dt)
@@ -113,6 +91,26 @@ namespace indie
                 (*hitbox) -= *vel * (float)(dt / 1000.0f);
             }
         }
+    }
+
+    std::unique_ptr<IScene> GameSystem::createScene()
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
+
+        std::shared_ptr<Entity> modelEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
+        std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
+        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
+        modelEntity->addComponent(pos2)
+            .addComponent(model)
+            .addComponent(anim)
+            .addComponent(hitbox);
+
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
+        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
+        scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
+        return scene;
     }
 
     void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
