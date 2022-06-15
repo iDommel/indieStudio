@@ -46,7 +46,7 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void printStuff(SceneManager &);
+        void changeBindings(SceneManager &SceneManager, int id_player, int button);
 
     private:
         std::unique_ptr<IScene> createScene();
@@ -57,7 +57,7 @@ namespace indie
         std::unique_ptr<IScene> createControllerMenu();
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
-        std::shared_ptr<Entity> createButton(std::string path, Position position, float heigh, float width);
+        std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
         std::shared_ptr<Entity> createText(std::string text, Position position, float fontSize);
         void createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);

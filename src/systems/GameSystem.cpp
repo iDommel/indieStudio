@@ -172,12 +172,12 @@ namespace indie
         std::cout << "GameSystem::destroy" << std::endl;
     }
 
-    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, float heigh, float width)
+    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path);
         std::shared_ptr<Position> component2 = std::make_shared<Position>(position);
-        std::shared_ptr<Rect> component3 = std::make_shared<Rect>(0.0, 0.0, heigh, width);
+        std::shared_ptr<Rect> component3 = std::make_shared<Rect>(0, 0, heigh, width);
 
         entity->addComponent(component2)
             .addComponent(component)
@@ -261,41 +261,13 @@ namespace indie
     void GameSystem::createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button)
     {
         MouseCallbacks mouseCallbacks(
-            [entity, button, id_player](SceneManager &sceneManager, Vector2 mousePosition) {
+            [entity, button, id_player, this](SceneManager &sceneManager, Vector2 mousePosition) {
                 auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
                 auto pos = Component::castComponent<Position>(comp[0]);
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
-                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
-                    auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
-                    auto player = Component::castComponent<Player>(component[0]);
-                    switch (button) {
-                        case 0:
-                            player->changeUp = 1;
-                            player->changeDown = 0;
-                            player->changeLeft = 0;
-                            player->changeRight = 0;
-                            break;
-                        case 1:
-                            player->changeLeft = 1;
-                            player->changeDown = 0;
-                            player->changeRight = 0;
-                            player->changeUp = 0;
-                            break;
-                        case 2:
-                            player->changeRight = 1;
-                            player->changeDown = 0;
-                            player->changeLeft = 0;
-                            player->changeUp = 0;
-                            break;
-                        case 3:
-                            player->changeDown = 1;
-                            player->changeLeft = 0;
-                            player->changeRight = 0;
-                            player->changeUp = 0;
-                            break;
-                    }
+                    changeBindings(sceneManager, id_player, button);
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
@@ -517,8 +489,36 @@ namespace indie
     {
     }
 
-    void GameSystem::printStuff(SceneManager &)
+    void GameSystem::changeBindings(SceneManager &sceneManager, int id_player, int button)
     {
-        std::cout << "GameSystem::printStuff" << std::endl;
+        auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+        auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
+        auto player = Component::castComponent<Player>(component[0]);
+        switch (button) {
+            case 0:
+                player->changeUp = 1;
+                player->changeDown = 0;
+                player->changeLeft = 0;
+                player->changeRight = 0;
+                break;
+            case 1:
+                player->changeLeft = 1;
+                player->changeDown = 0;
+                player->changeRight = 0;
+                player->changeUp = 0;
+                break;
+            case 2:
+                player->changeRight = 1;
+                player->changeDown = 0;
+                player->changeLeft = 0;
+                player->changeUp = 0;
+                break;
+            case 3:
+                player->changeDown = 1;
+                player->changeLeft = 0;
+                player->changeRight = 0;
+                player->changeUp = 0;
+                break;
+        }
     }
 }
