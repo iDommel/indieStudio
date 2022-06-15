@@ -19,6 +19,7 @@
 #include "Sprite.hpp"
 #include "GameSystem.hpp"
 #include "Model3D.hpp"
+#include "Cube.hpp"
 
 namespace indie
 {
@@ -50,8 +51,13 @@ namespace indie
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
+        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+        Vector3 pos = {x, 0, y};
+        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
 
         wall->addComponent(std::make_shared<Position>(x, 2, y))
+            .addComponent(std::make_shared<Hitbox>(true))
+            // .addComponent(std::make_shared<Cube>(size, BROWN)
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
     }
@@ -59,9 +65,13 @@ namespace indie
     static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-
+        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+        Vector3 pos = {x, 0, y};
+        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
         wall->addComponent(std::make_shared<Position>(x, 0, y))
-            .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"));
+            // .addComponent(std::make_shared<Cube>(size, GREEN))
+            .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"))
+            .addComponent(std::make_shared<Hitbox>(true));
         return wall;
     }
 

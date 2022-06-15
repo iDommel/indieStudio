@@ -40,7 +40,7 @@ namespace indie
             auto time = std::chrono::high_resolution_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(time - clock).count();
             if (deltaTime < UPDATE_DELTA) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(UPDATE_DELTA - deltaTime));
+                // std::this_thread::sleep_for(std::chrono::milliseconds(UPDATE_DELTA - deltaTime));
                 continue;
             }
             _systems[SystemType::EVENT]->update(_sceneManager, deltaTime);

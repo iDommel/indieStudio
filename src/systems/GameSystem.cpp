@@ -102,14 +102,17 @@ namespace indie
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
         std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
         std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
+        Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 8 * 5, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
+        Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
+
         modelEntity->addComponent(pos2)
             .addComponent(model)
             .addComponent(anim)
             .addComponent(hitbox);
-
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
-        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
-        scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
+        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
+        generateMap("assets/maps/map2.txt", *scene);
+        scene->addEntities({modelEntity, createCamera(camPos, camTarget)});
         return scene;
     }
 
