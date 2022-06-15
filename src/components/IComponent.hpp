@@ -29,8 +29,9 @@ namespace indie
             SPHERE,
             CUBE,
             GRID,
-            TYPE_NB,
-            PLAYER
+            PLAYER,
+            ANIMATION,
+            TYPE_NB
         };
 
         virtual Type getType() const = 0;

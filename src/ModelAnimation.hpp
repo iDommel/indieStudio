@@ -9,22 +9,23 @@
     #define MODELANIMATIONH
 
     #include <iostream>
+    #include <memory>
+    #include "Model.hpp"
 
     struct ModelAnimation;
     struct Model;
 
     namespace indie {
-        /**struct ModelAnimation;
+        /**
          * @brief ModelAnimation object
-         */ 
+         */
         class ModelAnimation {
             public:
                 /**
                  * @brief Construct / load ModelAnimation object
                  * @param fileName Path to the animation file
-                 * @param animsCount Pointer to the counter of the animation (default = 0)
                  */
-                ModelAnimation(const char *fileName, unsigned int *animsCount);
+                ModelAnimation(const std::string &fileName);
                 /**
                  * @brief Destroy ModelAnimation object
                  */
@@ -35,7 +36,7 @@
                  * @param model Model to update
                  * @param frame Frame counter of the animation
                  */
-                void updateModelAnimation(Model model, int frame);
+                void updateModelAnimation(Model &model, int frame);
                 /**
                  * @brief Unload ModelAnimation object
                  */
@@ -44,7 +45,7 @@
                  * @brief Check validity of ModelAnimation object
                  * @param model Model to check
                  */
-                bool isValid(Model model);
+                bool isValid(::Model model);
                 /**
                  * @brief Get the max frame of ModelAnimation object
                  */
@@ -54,6 +55,7 @@
                  * @brief List of animation object
                  */
                 ::ModelAnimation *anims;
+                unsigned int _animsCount;
                 /// @brief Boolean to see if the animation is loaded or not
                 bool _isLoaded;
         };

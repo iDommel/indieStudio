@@ -15,6 +15,14 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 
+#define GAME_MAP_WIDTH              15
+#define GAME_MAP_HEIGHT             15
+#define GAME_TILE_SIZE              12
+#define GAME_NB_INDESTRUCTIBLE_WALL 0 //(GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 7
+#define GAME_NB_DESTRUCTIBLE_WALL   (GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 3
+
+struct Vector3;
+
 namespace indie
 {
 
@@ -55,6 +63,10 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         int timeElasped;
+        std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
+        /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
+        static void generateMap(const std::string &filename, IScene &scene);
+
     };
 
 }
