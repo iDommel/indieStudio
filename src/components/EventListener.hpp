@@ -123,7 +123,6 @@ namespace indie
         std::map<MouseButton, MouseCallbacks> _mouseMap;
         std::map<int, std::map<GamepadButton, ButtonCallbacks>> _gamepadMap;
         std::map<int, std::map<int, std::function<void(float)>>> _gamepadStickMap;
-        bool _isInitialized = true;
     };
 }  // namespace indie
 

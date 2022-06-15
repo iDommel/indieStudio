@@ -11,12 +11,15 @@
 namespace indie
 {
 
+    class IEntity;
     class IComponent
     {
     public:
-
         enum class Type {
-            VECTOR,
+            POSITION,
+            VELOCITY,
+            TRANSFORM,
+            ROTATION,
             TEXT,
             SPRITE,
             MODEL,
@@ -24,6 +27,7 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
+            PLAYER,
             RECT,
             CAMERA,
             SPHERE,
@@ -32,7 +36,6 @@ namespace indie
             ANIMATION,
             TYPE_NB
         };
-
         virtual Type getType() const = 0;
         virtual bool isInitialized() const = 0;
     };

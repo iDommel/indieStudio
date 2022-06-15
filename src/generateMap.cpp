@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <array>
+#include "raylib.h"
 
 #include "IScene.hpp"
 #include "Entity.hpp"
@@ -19,7 +20,8 @@
 #include "GameSystem.hpp"
 #include "Model3D.hpp"
 
-namespace indie {
+namespace indie
+{
 
     static const std::vector<std::string> tilesFilepaths = {
         "assets/ground_asset/sand_asset_basic/basicBeach",
@@ -38,8 +40,7 @@ namespace indie {
         "assets/ground_asset/sand_asset_basic/basicBeach",
         "assets/ground_asset/sand_asset_basic/basicBeach",
         "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach"
-    };
+        "assets/ground_asset/sand_asset_basic/basicBeach"};
 
     static const std::string tilesFilepath = "assets/ground_asset/sand_asset_basic/basicBeach";
     static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
@@ -67,8 +68,8 @@ namespace indie {
     int createRandomWalls(IScene &scene, std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> &map)
     {
         for (int n = 0; n < GAME_NB_INDESTRUCTIBLE_WALL; n++) {
-            int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
-            int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
+            int x = std::rand() % (GAME_MAP_WIDTH - 4) + 2;
+            int y = std::rand() % (GAME_MAP_HEIGHT - 4) + 2;
             if (map[y][x] != ' ') {
                 n--;
                 continue;
@@ -78,8 +79,8 @@ namespace indie {
         }
 
         for (int n = 0; n < GAME_NB_DESTRUCTIBLE_WALL; n++) {
-            int x = rand() % (GAME_MAP_WIDTH - 2) + 1;
-            int y = rand() % (GAME_MAP_HEIGHT - 2) + 1;
+            int x = std::rand() % (GAME_MAP_WIDTH - 2) + 1;
+            int y = std::rand() % (GAME_MAP_HEIGHT - 2) + 1;
             if (map[y][x] != ' ' || (x <= 2 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3)) || (x >= GAME_MAP_WIDTH - 3 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3))) {
                 n--;
                 continue;
@@ -108,7 +109,7 @@ namespace indie {
         int nb = std::rand() % tilesFilepaths.size();
 
         groundTile->addComponent(std::make_shared<Position>(x, 0, y))
-                    .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
+            .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
         return groundTile;
     }
 

@@ -5,40 +5,43 @@
 ** collideSystem
 */
 
-#include <raylib.h>
-
 #include "CollideSystem.hpp"
-#include "GraphicSystem.hpp"
-#include "Position.hpp"
-#include "Sprite.hpp"
-#include "Rect.hpp"
+
+#include "raylib.h"
 
 #include <iostream>
 
-namespace indie {
+#include "GraphicSystem.hpp"
+#include "Position.hpp"
+#include "Rect.hpp"
+#include "Sprite.hpp"
+#include "Model3D.hpp"
+
+namespace indie
+{
     void CollideSystem::preInit(SceneManager &sceneManager)
     {
         auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
         std::shared_ptr<indie::Rect> rect = nullptr;
-        std::shared_ptr<indie::Model> model = nullptr;
         std::shared_ptr<indie::Position> pos = nullptr;
         std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
 
         for (auto &collidable : collidables) {
-            if ((*collidable)[IComponent::Type::VECTOR] == nullptr || (*collidable)[IComponent::Type::HITBOX] == nullptr)
+            if (!collidable->hasComponent(IComponent::Type::POSITION) || !collidable->hasComponent(IComponent::Type::HITBOX))
                 continue;
-            if ((pos = Component::castComponent<Position>((*collidable)[IComponent::Type::VECTOR])) != nullptr &&
-            (maybeUninitialized = (*collidable)[IComponent::Type::HITBOX]) != nullptr &&
-            (!maybeUninitialized->isInitialized())) {
-                if ((*collidable)[IComponent::Type::RECT] == nullptr && (*collidable)[IComponent::Type::MODEL] == nullptr)
-                    throw std::runtime_error("Uninitialized collidable entity has no rect or model");
-                if ((rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT])) != nullptr) {
-                    Vector2 pos2d = { pos->x, pos->y };
-                    Rectangle toUpdateRect = { rect->left, rect->top, rect->width, rect->height };
+            maybeUninitialized = (*collidable)[IComponent::Type::HITBOX];
+            if (maybeUninitialized && !maybeUninitialized->isInitialized()) {
+                pos = Component::castComponent<Position>((*collidable)[IComponent::Type::POSITION]);
+                if (collidable->hasComponent(IComponent::Type::RECT)) {
+                    rect = Component::castComponent<Rect>((*collidable)[IComponent::Type::RECT]);
+                    Vector2 pos2d = {pos->x, pos->y};
+                    Rectangle toUpdateRect = {rect->left, rect->top, rect->width, rect->height};
                     maybeUninitialized = std::make_shared<Hitbox>(toUpdateRect, pos2d);
-                } else if ((model = Component::castComponent<Model>((*collidable)[IComponent::Type::MODEL])) != nullptr) {
-                    Vector3 pos3d = { pos->x, pos->y, pos->z };
-                    maybeUninitialized = std::make_shared<Hitbox>(model->getBoundingBox(), pos3d);
+                } else if (collidable->hasComponent(IComponent::Type::MODEL)) {
+                    Vector3 pos3d = {pos->x, pos->y, pos->z};
+                    Component::castComponent<Hitbox>(maybeUninitialized)->setBBox(makeUpdatedBBox({{0,0,0}, {0,0,0}}, pos3d));
+                } else {
+                    throw std::runtime_error("Uninitialized collidable entity has no rect or model");
                 }
             }
         }
@@ -54,8 +57,8 @@ namespace indie {
         if (collidables.empty())
             return;
         preInit(sceneManager);
-        for (auto collidable : collidables) {
-            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr || !maybeCollider->isInitialized())
+        for (auto &collidable : collidables) {
+            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr)
                 continue;
             hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
             if (hitbox->is3D())
@@ -105,8 +108,9 @@ namespace indie {
         std::shared_ptr<Hitbox> hitbox = nullptr;
         std::vector<std::shared_ptr<IEntity>> colliders;
 
-        if (!entity || (hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX])) == nullptr)
+        if (!entity)
             return colliders;
+        hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
         for (auto &collidable : _collidables3D)
             if (collidable.first != entity)
                 if (check3DCollision(collidable.second, hitbox))
@@ -132,10 +136,10 @@ namespace indie {
         return box;
     }
 
-    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos) const
+    BoundingBox CollideSystem::makeUpdatedBBox(const BoundingBox &box, const Vector3 &pos)
     {
-        Vector3 min = { pos.x + box.min.x, pos.y + box.min.y, pos.z + box.min.z };
-        Vector3 max = { pos.x + box.max.x, pos.y + box.max.y, pos.z + box.max.z };
+        Vector3 min = {pos.x + box.min.x, pos.y + box.min.y, pos.z + box.min.z};
+        Vector3 max = {pos.x + box.max.x, pos.y + box.max.y, pos.z + box.max.z};
         BoundingBox updatedBox = {min, max};
 
         return updatedBox;
@@ -178,11 +182,10 @@ namespace indie {
     Rectangle CollideSystem::makeUpdatedRect(const Rectangle &rect, const Vector2 &pos) const
     {
         Rectangle updatedRect = {
-            (int) pos.x + rect.x,
-            (int) pos.y + rect.y,
+            (int)pos.x + rect.x,
+            (int)pos.y + rect.y,
             rect.width,
-            rect.height
-        };
+            rect.height};
 
         return updatedRect;
     }

@@ -19,6 +19,7 @@ namespace indie
     class Component : public IComponent
     {
     public:
+        Component(Type type);
         Type getType() const override;
 
         void setType(Type type) { _type = type; };
