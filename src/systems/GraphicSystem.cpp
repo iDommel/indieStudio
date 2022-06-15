@@ -22,6 +22,8 @@
 #include "String.hpp"
 #include "Texture2D.hpp"
 #include "HitboxComponent.hpp"
+#include "ModelAnim.hpp"
+#include "ModelAnimation.hpp"
 
 namespace indie
 {
@@ -149,14 +151,21 @@ namespace indie
         }
     }
 
-    void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity) const
+    void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity)
     {
         auto components = entity->getFilteredComponents({IComponent::Type::MODEL, IComponent::Type::POSITION});
         auto model = Component::castComponent<Model3D>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
         Vector3 position = {pos->x, pos->y, pos->z};
 
-        _models.at(model->getModelPath()).first->draw(position, WHITE);
+        if ((*entity)[IComponent::Type::ANIMATION] != nullptr) {
+            auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
+            _animations[anim->getAnimPath()].first->updateModelAnimation(*_models[model->getModelPath()].first, anim->getCurrentFrame());
+            Vector3 x = {1.0f, 0.0f, 0.0f};
+            Vector3 x2 = {1.0f, 1.0f, 1.0f};
+            _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, x2, WHITE);
+        } else
+            _models.at(model->getModelPath()).first->draw(position, WHITE);
     }
 
     void GraphicSystem::displayCollidable(std::shared_ptr<IEntity> &entity) const
@@ -187,6 +196,9 @@ namespace indie
             box.min.z += pos.z;
             hitbox->setBBox(box);
         }
+
+        if ((*entity)[IComponent::Type::ANIMATION] != nullptr)
+            loadModelAnimation(entity);
     }
 
     void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)
@@ -257,5 +269,29 @@ namespace indie
             _texts[text->getValue()].second--;
         else
             _texts.erase(text->getValue());
+    }
+
+    void GraphicSystem::loadModelAnimation(std::shared_ptr<IEntity> &entity)
+    {
+        auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
+
+        if (_animations.find(anim->getAnimPath()) != _animations.end())
+            _animations[anim->getAnimPath()].second++;
+        else
+            _animations[anim->getAnimPath()] = std::make_pair(std::make_unique<ModelAnimation>(anim->getAnimPath()), 1);
+
+        if (anim->getNbFrames() < 0) {
+            anim->getNbFrames() = _animations[anim->getAnimPath()].first->getFrameCount();
+        }
+    }
+
+    void GraphicSystem::unloadModelAnimation(std::shared_ptr<IEntity> &entity)
+    {
+        auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
+
+        if (_animations[anim->getAnimPath()].second != 1)
+            _animations[anim->getAnimPath()].second--;
+        else
+            _animations.erase(anim->getAnimPath());
     }
 }

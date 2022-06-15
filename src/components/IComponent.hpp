@@ -33,6 +33,7 @@ namespace indie
             SPHERE,
             CUBE,
             GRID,
+            ANIMATION,
             TYPE_NB
         };
         virtual Type getType() const = 0;
