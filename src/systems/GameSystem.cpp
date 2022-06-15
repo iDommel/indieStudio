@@ -230,7 +230,7 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
-                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                    auto entity = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
                     auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
                     auto player = Component::castComponent<Player>(component[0]);
                     switch (button) {
@@ -264,7 +264,7 @@ namespace indie
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [entity, button, id_player](SceneManager &sceneManager, Vector2 /*mousePosition*/) {
-                auto component = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                auto component = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
                 auto comp = component->getFilteredComponents({ IComponent::Type::PLAYER});
                 auto player = Component::castComponent<Player>(comp[0]);
                 std::string get = "";
@@ -366,7 +366,17 @@ namespace indie
 
         e4->addComponent(grid);
 
-        scene->addEntities({entity2, e, cam, e4, e2, e3});
+        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D");
+        std::shared_ptr<Entity> entity16 = std::make_shared<Entity>();
+
+        entity16->addComponent(player);
+
+        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L");
+        std::shared_ptr<Entity> entity17 = std::make_shared<Entity>();
+
+        entity17->addComponent(player2);
+
+        scene->addEntities({entity2, e, cam, e4, e2, e3 ,entity16, entity17});
         return scene;
     }
 
@@ -445,26 +455,14 @@ namespace indie
         std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
         std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
         std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
-
-
-        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D");
-        std::shared_ptr<Entity> entity16 = std::make_shared<Entity>();
-
-        entity16->addComponent(player);
-
-        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L");
-        std::shared_ptr<Entity> entity17 = std::make_shared<Entity>();
-
-        entity17->addComponent(player2);
-
-        std::shared_ptr<Entity> entity12 = createText(player->getUp(), Position(100, 200), 20);
-        std::shared_ptr<Entity> entity13 = createText(player->getLeft(), Position(100, 230), 20);
-        std::shared_ptr<Entity> entity14 = createText(player->getRight(), Position(100, 260), 20);
-        std::shared_ptr<Entity> entity15 = createText(player->getDown(), Position(100, 290), 20);
-        std::shared_ptr<Entity> entity18 = createText(player2->getUp(), Position(600, 200), 20);
-        std::shared_ptr<Entity> entity19 = createText(player2->getLeft(), Position(600, 230), 20);
-        std::shared_ptr<Entity> entity20 = createText(player2->getRight(), Position(600, 260), 20);
-        std::shared_ptr<Entity> entity21 = createText(player2->getDown(), Position(600, 290), 20);
+        std::shared_ptr<Entity> entity12 = createText("", Position(100, 200), 20);
+        std::shared_ptr<Entity> entity13 = createText("", Position(100, 230), 20);
+        std::shared_ptr<Entity> entity14 = createText("", Position(100, 260), 20);
+        std::shared_ptr<Entity> entity15 = createText("", Position(100, 290), 20);
+        std::shared_ptr<Entity> entity18 = createText("", Position(600, 200), 20);
+        std::shared_ptr<Entity> entity19 = createText("", Position(600, 230), 20);
+        std::shared_ptr<Entity> entity20 = createText("", Position(600, 260), 20);
+        std::shared_ptr<Entity> entity21 = createText("", Position(600, 290), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
         createBindingsEvent(entity12, 0, 0);
@@ -478,7 +476,7 @@ namespace indie
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
-        scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity17, entity18, entity19, entity20, entity21});
+        scene->addEntities({entity12, entity13, entity14, entity15, entity18, entity19, entity20, entity21});
         return scene;
     }
 
