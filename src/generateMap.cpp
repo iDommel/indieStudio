@@ -68,8 +68,8 @@ namespace indie
     int createRandomWalls(IScene &scene, std::array<std::array<char, GAME_MAP_WIDTH>, GAME_MAP_HEIGHT> &map)
     {
         for (int n = 0; n < GAME_NB_INDESTRUCTIBLE_WALL; n++) {
-            int x = rand() % (GAME_MAP_WIDTH - 4) + 2;
-            int y = rand() % (GAME_MAP_HEIGHT - 4) + 2;
+            int x = std::rand() % (GAME_MAP_WIDTH - 4) + 2;
+            int y = std::rand() % (GAME_MAP_HEIGHT - 4) + 2;
             if (map[y][x] != ' ') {
                 n--;
                 continue;
@@ -79,8 +79,8 @@ namespace indie
         }
 
         for (int n = 0; n < GAME_NB_DESTRUCTIBLE_WALL; n++) {
-            int x = rand() % (GAME_MAP_WIDTH - 2) + 1;
-            int y = rand() % (GAME_MAP_HEIGHT - 2) + 1;
+            int x = std::rand() % (GAME_MAP_WIDTH - 2) + 1;
+            int y = std::rand() % (GAME_MAP_HEIGHT - 2) + 1;
             if (map[y][x] != ' ' || (x <= 2 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3)) || (x >= GAME_MAP_WIDTH - 3 && (y <= 2 || y >= GAME_MAP_HEIGHT - 3))) {
                 n--;
                 continue;
