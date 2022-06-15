@@ -24,6 +24,7 @@
 #include "Sprite.hpp"
 #include "String.hpp"
 #include "Velocity.hpp"
+#include "Bomb.hpp"
 #include "CameraComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
@@ -47,6 +48,7 @@ namespace indie
 
         i++;
         updatePlayers(sceneManager, dt);
+        updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
         for (auto &renderable : renderables) {
@@ -93,6 +95,20 @@ namespace indie
         }
     }
 
+    void GameSystem::updateBombs(SceneManager &sceneManager, uint64_t dt)
+    {
+        auto bombs = sceneManager.getCurrentScene()[IEntity::Tags::BOMB];
+
+        for (auto &bomb : bombs) {
+            auto comp = Component::castComponent<Bomb>((*bomb)[IComponent::Type::BOMB]);
+            comp->setTimer(comp->getTimer() - dt);
+            if (comp->getTimer() <= 0) {
+                comp->explode();
+                sceneManager.getCurrentScene().removeEntity(bomb);
+            }
+        }
+    }
+
     std::unique_ptr<IScene> GameSystem::createScene()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
@@ -107,13 +123,13 @@ namespace indie
             .addComponent(anim)
             .addComponent(hitbox);
 
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
-        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 1, {10, 0, 10});
+        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, KEY_E, 2, {0, 0, 0});
         scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
         return scene;
     }
 
-    void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
+    void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos)
     {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(pos);
@@ -175,10 +191,18 @@ namespace indie
             [player, playerEntity](SceneManager &manager) {
                 player->stopDown(manager, playerEntity, 1);
             });
+        ButtonCallbacks bombCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->generateBomb(manager);
+            },
+            [player, playerEntity](SceneManager &) {},
+            [player, playerEntity](SceneManager &) {},
+            [player, playerEntity](SceneManager &) {});
         playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyBomb, bombCallbacks);
 
         playerEntity->addComponent(player)
             .addComponent(playerPos)

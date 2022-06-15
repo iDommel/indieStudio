@@ -32,6 +32,11 @@ namespace indie
 
         ///@brief Handle the various bonuses
         void handleBonus();
+        /**
+         * @brief Generate a bomb and add it to the entities list
+         * @param manager The scene manager
+         */
+        void generateBomb(SceneManager &manager);
 
         ///@brief gets the player ID
         int getId() const;

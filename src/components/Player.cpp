@@ -17,6 +17,7 @@
 #include "String.hpp"
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
+#include "Bomb.hpp"
 
 namespace indie
 {
@@ -40,7 +41,7 @@ namespace indie
             _blastPower++;*/
     }
 
-    void Player::moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = true;
@@ -48,7 +49,7 @@ namespace indie
         move(vel);
     }
 
-    void Player::stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = false;
@@ -56,42 +57,42 @@ namespace indie
         move(vel);
     }
 
-    void Player::moveLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = true;
         move(vel);
     }
 
-    void Player::stopLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = false;
         move(vel);
     }
 
-    void Player::moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = true;
         move(vel);
     }
 
-    void Player::stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = false;
         move(vel);
     }
 
-    void Player::moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = true;
         move(vel);
     }
 
-    void Player::stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = false;
@@ -121,5 +122,14 @@ namespace indie
     int Player::getNbBomb() const
     {
         return _nbBomb;
+    }
+
+    void Player::generateBomb(SceneManager &manager)
+    {
+        std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+
+        if (bomb)
+            bomb->addComponent(std::make_shared<Bomb>(_blastPower));
+        manager.getCurrentScene().addEntity(bomb);
     }
 }
