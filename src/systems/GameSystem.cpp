@@ -39,7 +39,7 @@ namespace indie
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.addScene(createPauseMenu(sceneManager), SceneManager::SceneType::PAUSE);
-        sceneManager.setCurrentScene(SceneManager::SceneType::PAUSE);
+        sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
         AudioDevice::getMasterVolume() += 50;
     }
 
@@ -210,6 +210,8 @@ namespace indie
                     mousePosition.y > pos->y && mousePosition.y < pos->y + sprite->getY()) {
                     if (scenetype == SceneManager::SceneType::PREVIOUS)
                         sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
+                    else if (scenetype == SceneManager::SceneType::PAUSE)
+                        sceneManger.setCurrentScene(scenetype, true);
                     else
                         sceneManger.setCurrentScene(scenetype);
                 }
@@ -318,7 +320,6 @@ namespace indie
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
             [](SceneManager &scenemanager) {
                 scenemanager.setCurrentScene(SceneManager::SceneType::PAUSE);
-                std::cout << "---------- space released" << std::endl;
             },
             std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
 
@@ -519,6 +520,5 @@ namespace indie
 
     void GameSystem::printStuff(SceneManager &)
     {
-        std::cout << "GameSystem::printStuff" << std::endl;
     }
 }
