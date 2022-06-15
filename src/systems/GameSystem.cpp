@@ -172,12 +172,12 @@ namespace indie
         std::cout << "GameSystem::destroy" << std::endl;
     }
 
-    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
+    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, float heigh, float width)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path);
         std::shared_ptr<Position> component2 = std::make_shared<Position>(position);
-        std::shared_ptr<Rect> component3 = std::make_shared<Rect>(0, 0, heigh, width);
+        std::shared_ptr<Rect> component3 = std::make_shared<Rect>(0.0, 0.0, heigh, width);
 
         entity->addComponent(component2)
             .addComponent(component)
