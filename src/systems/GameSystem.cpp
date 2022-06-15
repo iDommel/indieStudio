@@ -139,7 +139,7 @@ namespace indie
         std::cout << "GameSystem::destroy" << std::endl;
     }
 
-    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
+    std::shared_ptr<Entity> GameSystem::createImage(std::string path, Position position, int heigh, int width)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path, heigh, width);
@@ -381,11 +381,11 @@ namespace indie
             .addComponent(component);
 
         scene->addEntity(entity1);
-        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 500 / 2 - 18), 120, 36);
-        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/help.png", Position(0, 0), 80, 80);
-        std::shared_ptr<Entity> entity6 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 500 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
 
         createSceneEvent(entity2, SceneManager::SceneType::GAME);
         createSceneEvent(entity3, SceneManager::SceneType::SOUND);
@@ -400,9 +400,9 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createSoundMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSoundMenu, this));
-        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
-        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/minus.png", Position(220, 250), 80, 80);
-        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/plus.png", Position(500, 250), 80, 80);
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/minus.png", Position(220, 250), 80, 80);
+        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/plus.png", Position(500, 250), 80, 80);
         std::shared_ptr<Entity> entity5 = createText("Sound Menu", Position(250, 50), 50);
         std::shared_ptr<Entity> entity6 = createText("Master Volume", Position(300, 200), 25);
         std::shared_ptr<Entity> entity7 = createText("50", Position(370, 250), 80);
@@ -418,7 +418,7 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createHelpMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createHelpMenu, this));
-        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("How to play", Position(250, 50), 50);
 
         std::shared_ptr<Entity> entity4 = createText("Welcome in our game: Boomberman made by Indie Studio.", Position(10, 150), 25);
@@ -435,7 +435,7 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createControllerMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createControllerMenu, this));
-        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("Controller Menu", Position(200, 50), 50);
         std::shared_ptr<Entity> entity4 = createText("Player 1", Position(50, 150), 25);
         std::shared_ptr<Entity> entity5 = createText("Player 2", Position(500, 150), 25);
