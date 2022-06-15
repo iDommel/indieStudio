@@ -96,6 +96,25 @@ namespace indie
         return scene;
     }
 
+    void GameSystem::updatePlayers(SceneManager &sceneManager, uint64_t dt)
+    {
+        auto players = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER];
+        for (auto &player : players) {
+            auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
+            auto lastPos = *pos;
+            auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
+            auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
+            auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
+
+            (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
+            (*hitbox) += *vel * (float)(dt / 1000.0f);
+            if (!_collideSystem.getColliders(player).empty()) {
+                (*pos) = lastPos;
+                (*hitbox) -= *vel * (float)(dt / 1000.0f);
+            }
+        }
+    }
+
     void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
     {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();

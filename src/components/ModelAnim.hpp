@@ -15,14 +15,13 @@ namespace indie
     class ModelAnim : public Component
     {
     public:
-
         /**
          * @brief Construct a new ModelAnim component
          * @param filepath Path to the file containing the animation
          * @param currentFrame Current frame of the animation
          */
         ModelAnim(std::string const &filepath, int currentFrame = 0)
-            : _filepath(filepath), _currFrame(currentFrame) { _type = IComponent::Type::ANIMATION; };
+            : Component(IComponent::Type::ANIMATION), _filepath(filepath), _currFrame(currentFrame){};
 
         /// @brief Get the animation filepath
         std::string getAnimPath() { return _filepath; };

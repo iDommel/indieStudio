@@ -9,7 +9,6 @@
 #define GAME_SYSTEM_HPP
 
 #include "ISystem.hpp"
-#include "SceneManager.hpp"
 #include "CollideSystem.hpp"
 
 namespace indie
