@@ -345,50 +345,6 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
-    // std::unique_ptr<indie::IScene> GameSystem::createScene()
-    // {
-    //     ButtonCallbacks spaceCallbacks(
-    //         std::bind(&GameSystem::printStuff, this, std::placeholders::_1),
-    //         [](SceneManager &scenemanager) {
-    //             scenemanager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
-    //             std::cout << "---------- space released" << std::endl;
-    //         },
-    //         std::bind(&GameSystem::printStuff, this, std::placeholders::_1));
-
-    //     std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-    //     std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-    //     std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-    //     std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-    //     std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
-    //     std::shared_ptr<Component> component3 = std::make_shared<Component>();
-
-    //     std::shared_ptr<Entity> e = std::make_shared<Entity>();
-    //     std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
-    //     std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
-    //     std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
-
-    //     std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
-    //     std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
-    //     std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-
-    //     std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-    //     listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
-    //     component3->setType(Component::Type::HITBOX);
-
-    //     entity2->addComponent(component)
-    //         .addComponent(component4)
-    //         .addComponent(component3)
-    //         .addComponent(component5)
-    //         .addComponent(listener);
-
-    //     e->addComponent(rect)
-    //         .addComponent(pos)
-    //         .addComponent(sprite);
-
-    //     e2->addComponent(pos2)
-    //         .addComponent(model);
-    // }
-
     std::shared_ptr<IEntity> GameSystem::createCamera(Vector3 camPos, Vector3 camTarget)
     {
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
