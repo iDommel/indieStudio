@@ -18,6 +18,8 @@
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
 #include "Bomb.hpp"
+#include "Sphere.hpp"
+#include "GameSystem.hpp"
 
 namespace indie
 {
@@ -132,6 +134,7 @@ namespace indie
         if (bomb) {
             bomb->addComponent(std::make_shared<Bomb>(_blastPower));
             bomb->addComponent(std::make_shared<Position>(pos->x, pos->y, pos->z));
+            bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE));
         }
         manager.getCurrentScene().addEntity(bomb);
     }
