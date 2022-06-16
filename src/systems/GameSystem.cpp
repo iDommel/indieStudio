@@ -120,6 +120,11 @@ namespace indie
             for (auto &collider : _collideSystem.getColliders(explosion)) {
                 if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
                     sceneManager.getCurrentScene().removeEntity(collider);
+                else if (collider->hasTag(IEntity::Tags::BOMB)) {
+                    auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
+                    auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
+                    bombComp->explode(sceneManager, {pos->x, pos->y, pos->z});
+                }
             }
         }
     }
