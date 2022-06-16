@@ -55,7 +55,7 @@ namespace indie
         Vector3 pos = {x, 0, y};
         BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
 
-        wall->addComponent(std::make_shared<Position>(x, 2, y))
+        wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Hitbox>(true))
             // .addComponent(std::make_shared<Cube>(size, BROWN)
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
