@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "CameraComponent.hpp"
+#include "GamepadStickCallbacks.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
@@ -168,17 +169,46 @@ namespace indie
             [player, playerEntity](SceneManager &manager) {
                 player->stopDown(manager, playerEntity, 1);
             });
+
+        GamepadStickCallbacks moveHorizontalStickCallbacks(
+            [player, playerEntity](SceneManager &manager, float) {
+                player->moveLeft(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopRight(manager, playerEntity, 1);
+                player->stopLeft(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager, float) {
+                player->moveRight(manager, playerEntity, 1);
+            });
+        GamepadStickCallbacks moveVerticalStickCallbacks(
+            [player, playerEntity](SceneManager &manager, float) {
+                player->moveUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopDown(manager, playerEntity, 1);
+                player->stopUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager, float) {
+                player->moveDown(manager, playerEntity, 1);
+            });
         playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
-        playerListener->addKeyboard
-            playerEntity->addComponent(player)
-                .addComponent(playerPos)
-                .addComponent(playerVel)
-                .addComponent(playerListener)
-                .addComponent(playerHitbox)
-                .addComponent(model);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_UP, moveUpCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_RIGHT, moveRightCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_DOWN, moveDownCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_LEFT, moveLeftCallbacks);
+        playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_X, moveHorizontalStickCallbacks);
+        playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_Y, moveVerticalStickCallbacks);
+
+        playerEntity->addComponent(player)
+            .addComponent(playerPos)
+            .addComponent(playerVel)
+            .addComponent(playerListener)
+            .addComponent(playerHitbox)
+            .addComponent(model);
         scene.addEntity(playerEntity);
     }
 

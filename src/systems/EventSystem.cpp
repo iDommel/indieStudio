@@ -51,8 +51,8 @@ namespace indie
                 wasPressed = true;
             }
             if (it.second.released && Window::isKeyReleased(it.first)) {
-                wasPressed = false;
                 it.second.released(manager);
+                wasPressed = false;
             }
             if (it.second.up && wasPressed && Window::isKeyUp(it.first)) {
                 it.second.up(manager);
@@ -83,26 +83,37 @@ namespace indie
     void EventSystem::handleGamepad(SceneManager &manager, std::shared_ptr<EventListener> listener, int nb)
     {
         for (auto &it : listener->getGamepadMappings(nb)) {
+            bool wasPressed = false;
             if (it.second.pressed && Window::isGamepadButtonPressed(nb, it.first)) {
                 it.second.pressed(manager);
-                break;
-            }
-            if (it.second.down && Window::isGamepadButtonDown(nb, it.first)) {
-                it.second.down(manager);
-                break;
+                wasPressed = true;
             }
             if (it.second.released && Window::isGamepadButtonReleased(nb, it.first)) {
                 it.second.released(manager);
-                break;
+                wasPressed = true;
+            }
+            if (it.second.down && Window::isGamepadButtonDown(nb, it.first)) {
+                it.second.down(manager);
+                wasPressed = false;
+            }
+            if (it.second.up && wasPressed && Window::isGamepadButtonUp(nb, it.first)) {
+                it.second.up(manager);
             }
         }
     }
 
-    void EventSystem::handleGamepadSticks(SceneManager &, std::shared_ptr<EventListener> listener, int nb)
+    void EventSystem::handleGamepadSticks(SceneManager &manager, std::shared_ptr<EventListener> listener, int nb)
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
-            if (it.second)
-                it.second(Window::getGamepadAxisMovement(nb, it.first));
+            float value = Window::getGamepadAxisMovement(nb, it.first);
+            bool wasPressed = false;
+            if (value > 0.0f) {
+                it.second._positive(manager, value);
+            }
+            if (value < 0.0f) {
+                it.second._negative(manager, value);
+            } else
+                it.second._null(manager);
         }
     }
 
