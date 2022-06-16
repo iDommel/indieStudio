@@ -11,9 +11,9 @@
 namespace indie
 {
 
-    EventListener::EventListener() : Component()
+    EventListener::EventListener() : Component(Type::EVT_LISTENER)
     {
-        _type = Type::EVT_LISTENER;
+        _isInitialized = true;
     }
 
     EventListener::~EventListener()

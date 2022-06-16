@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <array>
+#include "raylib.h"
 
 #include "IScene.hpp"
 #include "Entity.hpp"
@@ -19,7 +20,8 @@
 #include "GameSystem.hpp"
 #include "Model3D.hpp"
 
-namespace indie {
+namespace indie
+{
 
     static const std::vector<std::string> tilesFilepaths = {
         "assets/ground_asset/sand_asset_basic/basicBeach",
@@ -38,8 +40,7 @@ namespace indie {
         "assets/ground_asset/sand_asset_basic/basicBeach",
         "assets/ground_asset/sand_asset_basic/basicBeach",
         "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach"
-    };
+        "assets/ground_asset/sand_asset_basic/basicBeach"};
 
     static const std::string tilesFilepath = "assets/ground_asset/sand_asset_basic/basicBeach";
     static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
@@ -108,7 +109,7 @@ namespace indie {
         int nb = std::rand() % tilesFilepaths.size();
 
         groundTile->addComponent(std::make_shared<Position>(x, 0, y))
-                    .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
+            .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
         return groundTile;
     }
 

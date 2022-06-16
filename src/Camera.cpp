@@ -29,16 +29,11 @@ Camera::Camera(Vector3 target, Vector3 position)
     Vector3 up = {0.0f, 1.0f, 0.0f};
     _camera = std::make_shared <Camera3D>();
     _camera->target = target;
-    std::cout << "target: " << _camera->target.x << " " << _camera->target.y << " " << _camera->target.z << std::endl;
     _camera->position = position;
-    std::cout << "position: " << _camera->position.x << " " << _camera->position.y << " " << _camera->position.z << std::endl;
     _camera->up = up;
     _camera->fovy = 45.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
-    #ifdef DEBUG
-        std::cerr << "\tIndiCam::Camera(Vector3 target, Vector3 position) called" << std::endl;
-    #endif
 }
 
 Camera::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position)
@@ -53,9 +48,6 @@ Camera::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> positio
     _camera->fovy = 100.0f;
     _camera->projection = CAMERA_PERSPECTIVE;
     _id = getNewId();
-    #ifdef DEBUG
-        std::cerr << "\tIndiCam::Camera(std::shared_ptr<Vector3> target, std::shared_ptr<Vector3> position) called" << std::endl;
-    #endif
 }
 
 void Camera::setSnapMode(bool snapMode)

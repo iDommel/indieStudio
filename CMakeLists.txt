@@ -46,6 +46,10 @@ target_sources(${PROJECT_NAME}
 
         src/components/Component.cpp
         src/components/EventListener.cpp
+        src/components/Player.cpp
+        src/components/Position.cpp
+        src/components/AVector.cpp
+        src/components/Velocity.cpp
         src/components/HitboxComponent.cpp
         src/components/CameraComponent.cpp
         src/components/Sphere.cpp

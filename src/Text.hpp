@@ -15,8 +15,10 @@ struct Vector2;
 struct Color;
 struct Font;
 
-namespace indie {
-class Text {
+namespace indie
+{
+    class Text
+    {
     public:
         Text(const std::string &text, const std::string &fileName = "");
         ~Text();
@@ -92,6 +94,6 @@ class Text {
         std::string _text;
         std::unique_ptr<Font> _font;
         bool _isLoaded;
-};
+    };
 }
 #endif /* !TEXT_HPP_ */

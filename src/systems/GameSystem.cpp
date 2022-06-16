@@ -10,24 +10,24 @@
 #include <functional>
 #include <iostream>
 
-#include "Position.hpp"
-#include "Sprite.hpp"
-#include "Rect.hpp"
+#include "CameraComponent.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
+#include "Grid.hpp"
 #include "HitboxComponent.hpp"
 #include "AudioDevice.hpp"
-#include "Scene.hpp"
-#include "String.hpp"
 #include "Model3D.hpp"
-#include "Grid.hpp"
-#include "CameraComponent.hpp"
+#include "Player.hpp"
+#include "Position.hpp"
+#include "Rect.hpp"
+#include "Scene.hpp"
+#include "Sprite.hpp"
+#include "String.hpp"
+#include "Velocity.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
 #include "raylib.h"
-#include "Position.hpp"
-#include "Window.hpp"
 
 namespace indie
 {
@@ -43,6 +43,7 @@ namespace indie
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
+        _collideSystem.init(sceneManager);
         AudioDevice::getMasterVolume() += 50;
     }
 
@@ -105,7 +106,7 @@ namespace indie
         }
     }
 
-    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t delta)
+    void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
         int firstText = 9;
         for (auto &scene : sceneManager.getScenes()) {
@@ -117,9 +118,23 @@ namespace indie
             }
         }
         if (sceneManager.getCurrentSceneType() == SceneManager::SceneType::SPLASH) {
-            timeElasped += delta;
+            timeElasped += dt;
             if (timeElasped > 3000) {
                 sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
+            }
+        }
+        static int i = 0;
+
+        i++;
+        updatePlayers(sceneManager, dt);
+        _collideSystem.update(sceneManager, dt);
+        auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
+        for (auto &renderable : renderables) {
+            if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
+                auto component = Component::castComponent<ModelAnim>((*renderable)[IComponent::Type::ANIMATION]);
+                component->getCurrentFrame()++;
+                if (component->getCurrentFrame() >= component->getNbFrames())
+                    component->getCurrentFrame() = 0;
             }
         }
         // static int i = 0;
@@ -170,6 +185,7 @@ namespace indie
     void GameSystem::destroy()
     {
         std::cout << "GameSystem::destroy" << std::endl;
+        _collideSystem.destroy();
     }
 
     std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
@@ -201,7 +217,7 @@ namespace indie
     void GameSystem::createSoundEvent(std::shared_ptr<Entity> &entity, std::string value) {
         MouseCallbacks mouseCallbacks(
             [value, entity](SceneManager &sceneManger, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR , IComponent::Type::RECT});
+                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::POSITION , IComponent::Type::RECT});
                 auto pos = Component::castComponent<Position>(comp[1]);
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
                 auto rect = Component::castComponent<Rect>(comp[2]);
@@ -237,7 +253,7 @@ namespace indie
     {
         MouseCallbacks mouseCallbacks(
             [scenetype, entity](SceneManager &sceneManger, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR , IComponent::Type::RECT});
+                auto comp = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::POSITION , IComponent::Type::RECT});
                 auto pos = Component::castComponent<Position>(comp[1]);
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
                 auto rect = Component::castComponent<Rect>(comp[2]);
@@ -262,7 +278,7 @@ namespace indie
     {
         MouseCallbacks mouseCallbacks(
             [entity, button, id_player, this](SceneManager &sceneManager, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
+                auto comp = entity->getFilteredComponents({ IComponent::Type::POSITION });
                 auto pos = Component::castComponent<Position>(comp[0]);
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
@@ -273,7 +289,7 @@ namespace indie
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [entity, button, id_player](SceneManager &sceneManager, Vector2 /*mousePosition*/) {
-                auto component = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+                auto component = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
                 auto comp = component->getFilteredComponents({ IComponent::Type::PLAYER});
                 auto player = Component::castComponent<Player>(comp[0]);
                 std::string get = "";
@@ -334,40 +350,53 @@ namespace indie
         return cam;
     }
 
-    std::unique_ptr<indie::IScene> GameSystem::createScene()
+    void GameSystem::updatePlayers(SceneManager &sceneManager, uint64_t dt)
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 4 * 3, 200.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE + 50};
-        Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
+        auto players = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER];
+        for (auto &player : players) {
+            auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
+            auto lastPos = *pos;
+            auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
+            auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
+            auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
 
-        std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
-        std::shared_ptr<String> text = std::make_shared<String>("The below sprite entity has a hitbox of 250,250");
-
-        std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
-
-        std::shared_ptr<Entity> e = std::make_shared<Entity>();
-        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
-        std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
-        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
-
-        std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-        std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
-
-
-        scene->addEntities({entity2, e, e4, e2, e3});
-        scene->addEntities({createCamera(camPos,camTarget)});
-        generateMap("assets/maps/map2.txt", *scene);
-        return scene;
+            (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
+            (*hitbox) += *vel * (float)(dt / 1000.0f);
+            if (!_collideSystem.getColliders(player).empty()) {
+                (*pos) = lastPos;
+                (*hitbox) -= *vel * (float)(dt / 1000.0f);
+            }
+        }
     }
+
+    //     std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
+    //     std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
+    //     std::shared_ptr<String> text = std::make_shared<String>("The below sprite entity has a hitbox of 250,250");
+
+    //     std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
+    //     std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
+    //     std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
+
+    //     std::shared_ptr<Entity> e = std::make_shared<Entity>();
+    //     std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
+    //     std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
+    //     std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
+
+    //     std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
+    //     std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
+    //     std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+
+    //     std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
+    //     std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
+    //     std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
+    //     std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
+
+
+    //     scene->addEntities({entity2, e, e4, e2, e3});
+    //     scene->addEntities({createCamera(camPos,camTarget)});
+    //     generateMap("assets/maps/map2.txt", *scene);
+    //     return scene;
+    // }
 
     std::unique_ptr<indie::IScene> GameSystem::createMainMenu()
     {
@@ -445,25 +474,14 @@ namespace indie
         std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
         std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
 
-
-        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D");
-        std::shared_ptr<Entity> entity16 = std::make_shared<Entity>();
-
-        entity16->addComponent(player);
-
-        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L");
-        std::shared_ptr<Entity> entity17 = std::make_shared<Entity>();
-
-        entity17->addComponent(player2);
-
-        std::shared_ptr<Entity> entity12 = createText(player->getUp(), Position(100, 200), 20);
-        std::shared_ptr<Entity> entity13 = createText(player->getLeft(), Position(100, 230), 20);
-        std::shared_ptr<Entity> entity14 = createText(player->getRight(), Position(100, 260), 20);
-        std::shared_ptr<Entity> entity15 = createText(player->getDown(), Position(100, 290), 20);
-        std::shared_ptr<Entity> entity18 = createText(player2->getUp(), Position(600, 200), 20);
-        std::shared_ptr<Entity> entity19 = createText(player2->getLeft(), Position(600, 230), 20);
-        std::shared_ptr<Entity> entity20 = createText(player2->getRight(), Position(600, 260), 20);
-        std::shared_ptr<Entity> entity21 = createText(player2->getDown(), Position(600, 290), 20);
+        std::shared_ptr<Entity> entity12 = createText("", Position(100, 200), 20);
+        std::shared_ptr<Entity> entity13 = createText("", Position(100, 230), 20);
+        std::shared_ptr<Entity> entity14 = createText("", Position(100, 260), 20);
+        std::shared_ptr<Entity> entity15 = createText("", Position(100, 290), 20);
+        std::shared_ptr<Entity> entity18 = createText("", Position(600, 200), 20);
+        std::shared_ptr<Entity> entity19 = createText("", Position(600, 230), 20);
+        std::shared_ptr<Entity> entity20 = createText("", Position(600, 260), 20);
+        std::shared_ptr<Entity> entity21 = createText("", Position(600, 290), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
         createBindingsEvent(entity12, 0, 0);
@@ -477,21 +495,119 @@ namespace indie
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
-        scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity17, entity18, entity19, entity20, entity21});
+        scene->addEntities({entity12, entity13, entity14, entity15, entity18, entity19, entity20, entity21});
         return scene;
     }
 
-    void GameSystem::loadEntity(std::shared_ptr<IEntity>)
+    std::unique_ptr<IScene> GameSystem::createScene()
     {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
+
+        std::shared_ptr<Entity> modelEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
+        std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
+        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
+        modelEntity->addComponent(pos2)
+            .addComponent(model)
+            .addComponent(anim)
+            .addComponent(hitbox);
+
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
+        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
+        scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
+        return scene;
     }
 
-    void GameSystem::unloadEntity(std::shared_ptr<IEntity>)
+    void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
     {
+        std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> playerPos = std::make_shared<Position>(pos);
+        std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
+        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(true);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+        std::shared_ptr<Player> player = std::make_shared<Player>(id, "Z", "S", "Q", "D");
+        std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
+
+        ButtonCallbacks moveRightCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->moveRight(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopRight(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->moveRight(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopRight(manager, playerEntity, 1);
+            });
+        ButtonCallbacks moveLeftCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->moveLeft(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopLeft(manager, playerEntity, 17);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->moveLeft(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopLeft(manager, playerEntity, 17);
+            });
+        ButtonCallbacks moveUpCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->moveUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->moveUp(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopUp(manager, playerEntity, 1);
+            });
+        ButtonCallbacks moveDownCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->moveDown(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopDown(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->moveDown(manager, playerEntity, 1);
+            },
+            [player, playerEntity](SceneManager &manager) {
+                player->stopDown(manager, playerEntity, 1);
+            });
+        playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
+
+        playerEntity->addComponent(player)
+            .addComponent(playerPos)
+            .addComponent(playerVel)
+            .addComponent(playerListener)
+            .addComponent(playerHitbox)
+            .addComponent(model);
+        scene.addEntity(playerEntity);
+    }
+
+    void GameSystem::loadEntity(std::shared_ptr<IEntity> entity)
+    {
+        _collideSystem.loadEntity(entity);
+    }
+
+    void GameSystem::unloadEntity(std::shared_ptr<IEntity> entity)
+    {
+        _collideSystem.unloadEntity(entity);
     }
 
     void GameSystem::changeBindings(SceneManager &sceneManager, int id_player, int button)
     {
-        auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][id_player];
+        auto entity = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
         auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
         auto player = Component::castComponent<Player>(component[0]);
         switch (button) {

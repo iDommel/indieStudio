@@ -9,6 +9,7 @@
 #define SPRITEHPP
 
 #include <string>
+
 #include "Component.hpp"
 
 namespace indie
@@ -22,7 +23,10 @@ namespace indie
          * @param str Text to display
          */
         String(const std::string &str, const std::string &fontFile = "", float fontSize = 10.0f)
-            : _value(str), _fontFile(fontFile), _fontSize(fontSize) { _type = Type::TEXT; }
+            : Component(Type::TEXT), _value(str), _fontFile(fontFile), _fontSize(fontSize)
+        {
+            _isInitialized = true;
+        }
 
         /// @brief Returns component text reference
         std::string &getValue() { return _value; }
@@ -35,7 +39,6 @@ namespace indie
         std::string _value;
         std::string _fontFile;
         float _fontSize;
-        bool _isInitialized = true;
     };
 
 }

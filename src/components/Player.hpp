@@ -5,35 +5,93 @@
 ** player
 */
 
-#ifndef PLAYHER_H
-    #define PLAYHER_H
+#ifndef PLAYER_HPP_
+#define PLAYER_HPP_
 
-    #include "Component.hpp"
+#include "Component.hpp"
+#include "EventListener.hpp"
+#include "SceneManager.hpp"
 
-    namespace indie {
-        class Player : public Component {
-            public:
-                Player(std::string _up, std::string _down, std::string _left, std::string _right) : UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right) { _type = Type::PLAYER; }
-                std::string getUp() { return UP; }
-                std::string getDown() { return DOWN; }
-                std::string getLeft() { return LEFT; }
-                std::string getRight() { return RIGHT; }
-                void setUP(std::string _up) { UP = _up; }
-                void setDOWN(std::string _down) { DOWN = _down; }
-                void setLEFT(std::string _left) { LEFT = _left; }
-                void setRIGHT(std::string _right) { RIGHT = _right; }
+namespace indie
+{
+    class Velocity;
 
-                int changeUp;
-                int changeDown;
-                int changeLeft;
-                int changeRight;
-            protected:
-            private:
-                std::string UP;
-                std::string DOWN;
-                std::string LEFT;
-                std::string RIGHT;
+    class Player : public Component
+    {
+    public:
+        enum class Keys {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT,
+            BOMB
         };
-    }
 
-#endif /* !PLAYHER_H */
+        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right);
+        ~Player();
+
+        ///@brief Handle the various bonuses
+        void handleBonus();
+
+        ///@brief gets the player ID
+        int getId() const;
+
+        ///@brief gets the current player speed
+        int getSpeed() const;
+
+        ///@brief gets the current maximum number of bomb a player can drop
+        int getNbBomb() const;
+
+        /// @brief sets the velocity of the player to its speed value to the right
+        void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 to the right
+        void stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value to the left
+        void moveLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 to the left
+        void stopLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value upwards
+        void moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 upwards
+        void stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to its speed value downwards
+        void moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+        /// @brief sets the velocity of the player to 0 downwards
+        void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
+
+        std::string getUp() { return UP; }
+        std::string getDown() { return DOWN; }
+        std::string getLeft() { return LEFT; }
+        std::string getRight() { return RIGHT; }
+        void setUP(std::string _up) { UP = _up; }
+        void setDOWN(std::string _down) { DOWN = _down; }
+        void setLEFT(std::string _left) { LEFT = _left; }
+        void setRIGHT(std::string _right) { RIGHT = _right; }
+
+        int changeUp;
+        int changeDown;
+        int changeLeft;
+        int changeRight;
+    protected:
+    private:
+        void move(std::shared_ptr<Velocity> vel);
+        int _nbBomb;
+        int _blastPower;
+        int _speed;
+        int _id;
+        bool _isUp;
+        bool _isDown;
+        bool _isLeft;
+        bool _isRight;
+        static const int _defaultSpeed = 40;
+        static const int _defaultNbBomb = 3;
+        static const int _defaultBlastPower = 1;
+        std::string UP;
+        std::string DOWN;
+        std::string LEFT;
+        std::string RIGHT;
+    };
+
+}
+
+#endif /* !PLAYER_HPP_ */

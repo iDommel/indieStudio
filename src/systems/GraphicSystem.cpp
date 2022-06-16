@@ -5,20 +5,24 @@
 ** GraphicSystem.cpp
 */
 #include <iostream>
+
 #include "raylib.h"
 
 #include "GraphicSystem.hpp"
-#include "Texture2D.hpp"
-#include "Sprite.hpp"
-#include "Position.hpp"
-#include "Rect.hpp"
-#include "Model3D.hpp"
+#include <iostream>
+
 #include "CameraComponent.hpp"
-#include "Shape3D.hpp"
-#include "Sphere.hpp"
 #include "Cube.hpp"
 #include "Grid.hpp"
+#include "Model3D.hpp"
+#include "Position.hpp"
+#include "Rect.hpp"
+#include "Shape3D.hpp"
+#include "Sphere.hpp"
+#include "Sprite.hpp"
 #include "String.hpp"
+#include "Texture2D.hpp"
+#include "HitboxComponent.hpp"
 #include "ModelAnim.hpp"
 #include "ModelAnimation.hpp"
 
@@ -57,10 +61,9 @@ namespace indie
         _window->clearBackground(RAYWHITE);
 
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CAMERA]) {
-            auto camComponents = e->getFilteredComponents({ IComponent::Type::CAMERA });
-            if (camComponents.size() == 0)
-                continue;
-            auto cam = Component::castComponent<CameraComponent>(camComponents[0]);
+            auto camComponent = (*e)[IComponent::Type::CAMERA];
+
+            auto cam = Component::castComponent<CameraComponent>(camComponent);
             cam->getCamera().beginDrawScope();
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
                 displayModel(e);
@@ -70,6 +73,8 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+                displayCollidable(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -134,25 +139,25 @@ namespace indie
 
     void GraphicSystem::displaySprite(std::shared_ptr<IEntity> &entity) const
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::SPRITE, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::SPRITE, IComponent::Type::POSITION});
         auto sprite = Component::castComponent<Sprite>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
 
         try {
-            auto rect = entity->getFilteredComponents({ IComponent::Type::RECT });
-            auto r = Component::castComponent<Rect>(rect[0]);
+            auto rect = (*entity)[IComponent::Type::RECT];
+            auto r = Component::castComponent<Rect>(rect);
             Vector2 p = {pos->x, pos->y};
 
             _textures.at(sprite->getValue()).first->setRect(r->left, r->top, r->width, r->height);
             _textures.at(sprite->getValue()).first->drawRec(p);
-        } catch (std::invalid_argument &) {
+        } catch (std::runtime_error &) {
             _textures.at(sprite->getValue()).first->draw(pos->x, pos->y);
         }
     }
 
     void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity)
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::MODEL, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::MODEL, IComponent::Type::POSITION});
         auto model = Component::castComponent<Model3D>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
         Vector3 position = {pos->x, pos->y, pos->z};
@@ -160,21 +165,43 @@ namespace indie
         if ((*entity)[IComponent::Type::ANIMATION] != nullptr) {
             auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
             _animations[anim->getAnimPath()].first->updateModelAnimation(*_models[model->getModelPath()].first, anim->getCurrentFrame());
-            Vector3 x = { 1.0f, 0.0f, 0.0f };
-            Vector3 x2 = { 1.0f, 1.0f, 1.0f };
+            Vector3 x = {1.0f, 0.0f, 0.0f};
+            Vector3 x2 = {1.0f, 1.0f, 1.0f};
             _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, x2, WHITE);
         } else
             _models.at(model->getModelPath()).first->draw(position, WHITE);
     }
 
+    void GraphicSystem::displayCollidable(std::shared_ptr<IEntity> &entity) const
+    {
+        auto components = entity->getFilteredComponents({IComponent::Type::HITBOX});
+        auto hitbox = Component::castComponent<Hitbox>(components[0]);
+        if (hitbox->is3D())
+            ::DrawBoundingBox(hitbox->getBBox(), RED);
+    }
+
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
     {
         auto model = Component::castComponent<Model3D>((*entity)[IComponent::Type::MODEL]);
+        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
 
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
         else
             _models[model->getModelPath()] = std::make_pair(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
+        // if (hitbox->is3D() && !hitbox->isInitialized()) {
+        //     auto box = _models[model->getModelPath()].first->getBoundingBox();
+        //     std::cout << model->getModelPath() << std::endl;
+        //     auto pos = hitbox->getBBox().max;
+        //     std::cout << "ici" << std::endl;
+        //     box.max.x += pos.x;
+        //     box.max.y += pos.y;
+        //     box.max.z += pos.z;
+        //     box.min.x += pos.x;
+        //     box.min.y += pos.y;
+        //     box.min.z += pos.z;
+        //     hitbox->setBBox(box);
+        // }
 
         if ((*entity)[IComponent::Type::ANIMATION] != nullptr)
             loadModelAnimation(entity);
@@ -192,14 +219,14 @@ namespace indie
 
     void GraphicSystem::displaySphere(std::shared_ptr<IEntity> &entity) const
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::SPHERE, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::SPHERE, IComponent::Type::POSITION});
 
         if (components.size() != 2)
             throw std::runtime_error("GraphicSystem::displaySphere could not get component Sphere & Vector from entity");
 
         auto sphere = Component::castComponent<Sphere>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
-        Vector3 position = { pos->x, pos->y, pos->z };
+        Vector3 position = {pos->x, pos->y, pos->z};
 
         Shape3D::drawSphere(position, sphere->getRadius(), sphere->getColor());
     }
@@ -213,17 +240,17 @@ namespace indie
 
     void GraphicSystem::displayCube(std::shared_ptr<IEntity> &entity) const
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::CUBE, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::CUBE, IComponent::Type::POSITION});
         auto cube = Component::castComponent<Cube>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
-        Vector3 position = { pos->x, pos->y, pos->z };
+        Vector3 position = {pos->x, pos->y, pos->z};
 
         Shape3D::drawCube(position, cube->getSize(), cube->getColor());
     }
 
     void GraphicSystem::displayText(std::shared_ptr<IEntity> &entity) const
     {
-        auto components = entity->getFilteredComponents({ IComponent::Type::TEXT, IComponent::Type::VECTOR });
+        auto components = entity->getFilteredComponents({IComponent::Type::TEXT, IComponent::Type::POSITION});
         auto text = Component::castComponent<String>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
 
