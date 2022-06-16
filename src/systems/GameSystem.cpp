@@ -295,28 +295,28 @@ namespace indie
                 std::string get = "";
                 char input = 0;
 
-                if (player->changeUp == true) {
+                if (player->changeUp == 1) {
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
                         player->setUP(get);
                         player->changeUp = 2;
                     }
-                } else if (player->changeLeft == true) {
+                } else if (player->changeLeft == 1) {
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
                         player->setLEFT(get);
                         player->changeLeft = 2;
                     }
-                } else if (player->changeRight == true) {
+                } else if (player->changeRight == 1) {
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
                         player->setRIGHT(get);
                         player->changeRight = 2;
                     }
-                } else if (player->changeDown == true) {
+                } else if (player->changeDown == 1) {
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
