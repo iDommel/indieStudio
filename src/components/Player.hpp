@@ -70,7 +70,7 @@ namespace indie
         bool _isDown;
         bool _isLeft;
         bool _isRight;
-        static const int _defaultSpeed = 40;
+        static const int _defaultSpeed = 60;
         static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 1;
     };
