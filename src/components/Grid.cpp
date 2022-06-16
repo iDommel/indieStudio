@@ -5,14 +5,15 @@
 ** Grid.cpp
 */
 
-#include "raylib.h"
 #include "Grid.hpp"
+
+#include "raylib.h"
 
 namespace indie
 {
-    Grid::Grid(int slices, float spacing) : _slices(slices), _spacing(spacing)
+    Grid::Grid(int slices, float spacing) : Component(Type::GRID), _slices(slices), _spacing(spacing)
     {
-        _type = Type::GRID;
+        _isInitialized = true;
     }
 
     int &Grid::getSlices()

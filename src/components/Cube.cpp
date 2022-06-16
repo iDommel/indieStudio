@@ -10,9 +10,9 @@
 
 namespace indie
 {
-    Cube::Cube(Vector3 size, Color color) : _size(size), _color(color)
+    Cube::Cube(Vector3 size, Color color) : Component(Type::CUBE), _size(size), _color(color)
     {
-        _type = Type::CUBE;
+        _isInitialized = true;
     }
 
     Color &Cube::getColor()

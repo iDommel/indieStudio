@@ -6,13 +6,15 @@
 */
 
 #include "CameraComponent.hpp"
+
 #include "raylib.h"
 
 namespace indie
 {
-    CameraComponent::CameraComponent(Vector3 target, Vector3 position) : _camera(target, position)
+    CameraComponent::CameraComponent(Vector3 target, Vector3 position)
+        : Component(Type::CAMERA), _camera(target, position)
     {
-        _type = Type::CAMERA;
+        _isInitialized = true;
     }
 
     Camera &CameraComponent::getCamera() { return _camera; }
