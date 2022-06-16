@@ -42,7 +42,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
-        sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
+        sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
         _collideSystem.init(sceneManager);
         AudioDevice::getMasterVolume() += 50;
     }

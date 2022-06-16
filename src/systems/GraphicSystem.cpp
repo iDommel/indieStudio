@@ -183,28 +183,34 @@ namespace indie
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
     {
         auto model = Component::castComponent<Model3D>((*entity)[IComponent::Type::MODEL]);
-        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        auto boxComponent = (*entity)[IComponent::Type::HITBOX];
+        std::shared_ptr<indie::Hitbox> hitbox = nullptr;
 
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
         else
             _models[model->getModelPath()] = std::make_pair(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
-        // if (hitbox->is3D() && !hitbox->isInitialized()) {
-        //     auto box = _models[model->getModelPath()].first->getBoundingBox();
-        //     std::cout << model->getModelPath() << std::endl;
-        //     auto pos = hitbox->getBBox().max;
-        //     std::cout << "ici" << std::endl;
-        //     box.max.x += pos.x;
-        //     box.max.y += pos.y;
-        //     box.max.z += pos.z;
-        //     box.min.x += pos.x;
-        //     box.min.y += pos.y;
-        //     box.min.z += pos.z;
-        //     hitbox->setBBox(box);
-        // }
-
         if ((*entity)[IComponent::Type::ANIMATION] != nullptr)
             loadModelAnimation(entity);
+        if (boxComponent == nullptr)
+            return;
+        hitbox = Component::castComponent<Hitbox>(boxComponent);
+        if (hitbox->is3D() && !hitbox->isInitialized()) {
+            auto box = _models[model->getModelPath()].first->getBoundingBox();
+            std::cout << "path:" << model->getModelPath() << std::endl;
+            std::cout << "size.x " << box.max.x - box.min.x << std::endl;
+            std::cout << "size.y " << box.max.y - box.min.y << std::endl;
+            std::cout << "size.z " << box.max.z - box.min.z << std::endl;
+            auto pos = hitbox->getBBox().max;
+            std::cout << "ici" << std::endl;
+            box.max.x += pos.x;
+            box.max.y += pos.y;
+            box.max.z += pos.z;
+            box.min.x += pos.x;
+            box.min.y += pos.y;
+            box.min.z += pos.z;
+            hitbox->setBBox(box);
+        }
     }
 
     void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)
