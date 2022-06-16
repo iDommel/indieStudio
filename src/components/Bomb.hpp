@@ -9,6 +9,9 @@
 #define BOMB_HPP_
 
 #include "Component.hpp"
+#include "SceneManager.hpp"
+
+struct Vector3;
 
 namespace indie {
 
@@ -18,7 +21,7 @@ class Bomb: public Component{
         ~Bomb();
 
         ///@brief Explode the bomb after a certain amount of time
-        void explode();
+        void explode(SceneManager &sceneManager, Vector3 position);
 
         /**
          * @brief Set the timer of the bomb

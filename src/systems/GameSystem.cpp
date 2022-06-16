@@ -43,10 +43,6 @@ namespace indie
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
-        static int i = 0;
-        static int j = 0;
-
-        i++;
         updatePlayers(sceneManager, dt);
         updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
@@ -101,9 +97,11 @@ namespace indie
 
         for (auto &bomb : bombs) {
             auto comp = Component::castComponent<Bomb>((*bomb)[IComponent::Type::BOMB]);
+            auto pos = Component::castComponent<Position>((*bomb)[IComponent::Type::POSITION]);
+            Vector3 vec = {pos->x, pos->y, pos->z};
             comp->setTimer(comp->getTimer() - dt);
             if (comp->getTimer() <= 0) {
-                comp->explode();
+                comp->explode(sceneManager, vec);
                 sceneManager.getCurrentScene().removeEntity(bomb);
             }
         }
@@ -193,7 +191,7 @@ namespace indie
             });
         ButtonCallbacks bombCallbacks(
             [player, playerEntity](SceneManager &manager) {
-                player->generateBomb(manager);
+                player->generateBomb(manager, playerEntity);
             },
             [player, playerEntity](SceneManager &) {},
             [player, playerEntity](SceneManager &) {},

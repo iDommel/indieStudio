@@ -120,7 +120,7 @@ namespace indie
 
     /// ------- 3D -------
 
-    BoundingBox CollideSystem::makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos) const
+    BoundingBox CollideSystem::makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos)
     {
         const Vector3 &min = {pos.x, pos.y, pos.z};
         const Vector3 &max = {pos.x + size.x, pos.y + size.y, pos.z + size.z};

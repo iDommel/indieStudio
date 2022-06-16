@@ -124,12 +124,15 @@ namespace indie
         return _nbBomb;
     }
 
-    void Player::generateBomb(SceneManager &manager)
+    void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+        auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
 
-        if (bomb)
+        if (bomb) {
             bomb->addComponent(std::make_shared<Bomb>(_blastPower));
+            bomb->addComponent(std::make_shared<Position>(pos->x, pos->y, pos->z));
+        }
         manager.getCurrentScene().addEntity(bomb);
     }
 }
