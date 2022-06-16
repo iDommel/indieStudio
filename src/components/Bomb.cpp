@@ -48,10 +48,10 @@ void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
     std::cout << "BOUM" << std::endl;
     std::shared_ptr<Entity> explosion = std::make_shared<Entity>();
     std::shared_ptr<Entity> explosion2 = std::make_shared<Entity>();
-    Vector3 exSize = {_blastPower * GAME_TILE_SIZE, 5.0f, GAME_TILE_SIZE};
-    Vector3 exPos = {pos.x - (exSize.x - GAME_TILE_SIZE) / 2, pos.y, pos.z};
-    Vector3 ex2Size = {GAME_TILE_SIZE, 5,  _blastPower * GAME_TILE_SIZE};
-    Vector3 ex2Pos = {pos.x, pos.y, pos.z - (ex2Size.z - GAME_TILE_SIZE) / 2};
+    Vector3 exSize = {_blastPower * GAME_TILE_SIZE - 2, 5.0f, GAME_TILE_SIZE - 2};
+    Vector3 exPos = {pos.x - (exSize.x - GAME_TILE_SIZE) / 2 - GAME_TILE_SIZE/2 + 1, pos.y, pos.z - GAME_TILE_SIZE/2 + 1};
+    Vector3 ex2Size = {GAME_TILE_SIZE - 2, 5,  _blastPower * GAME_TILE_SIZE - 2};
+    Vector3 ex2Pos = {pos.x - GAME_TILE_SIZE/2 + 1, pos.y, pos.z - (ex2Size.z - GAME_TILE_SIZE) / 2 - GAME_TILE_SIZE/2};
 
     auto c = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(exSize, exPos));
     auto timer = std::make_shared<Timer>(EXPLOSION_TIMER);

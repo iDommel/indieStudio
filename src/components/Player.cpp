@@ -10,6 +10,7 @@
 #include "raylib.h"
 
 #include <functional>
+#include <cmath>
 
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
@@ -133,7 +134,7 @@ namespace indie
 
         if (bomb) {
             bomb->addComponent(std::make_shared<Bomb>(_blastPower));
-            bomb->addComponent(std::make_shared<Position>(pos->x, pos->y, pos->z));
+            bomb->addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE));
             bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE));
         }
         manager.getCurrentScene().addEntity(bomb);
