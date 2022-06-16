@@ -32,7 +32,7 @@ bool indie::ModelAnimation::isValid(::Model model)
 
 int indie::ModelAnimation::getFrameCount()
 {
-    if (_isLoaded)
+    if (anims != NULL)
         return (anims[0].frameCount);
     return (0);
 }
