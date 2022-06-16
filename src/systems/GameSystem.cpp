@@ -26,6 +26,7 @@
 #include "Velocity.hpp"
 #include "Bomb.hpp"
 #include "Timer.hpp"
+#include "Destructible.hpp"
 #include "CameraComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
@@ -117,7 +118,7 @@ namespace indie
             }
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
-                if (collider->hasTag(IEntity::Tags::PLAYER))
+                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
                     sceneManager.getCurrentScene().removeEntity(collider);
             }
         }
@@ -152,6 +153,7 @@ namespace indie
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
+        std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
         ButtonCallbacks moveRightCallbacks(
             [player, playerEntity](SceneManager &manager) {
@@ -223,7 +225,8 @@ namespace indie
             .addComponent(playerVel)
             .addComponent(playerListener)
             .addComponent(playerHitbox)
-            .addComponent(model);
+            .addComponent(model)
+            .addComponent(destruct);
         scene.addEntity(playerEntity);
     }
 
