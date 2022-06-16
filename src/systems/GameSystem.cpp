@@ -73,6 +73,13 @@ namespace indie
                 value->getValue() = players->getDown();
                 players->changeDown = 0;
             }
+            if (players->changeBomb == 2 || players->changeBomb == 0) {
+                auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 4];
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
+                auto value = Component::castComponent<String>(text[0]);
+                value->getValue() = players->getBomb();
+                players->changeBomb = 0;
+            }
         }
     }
     
@@ -98,6 +105,11 @@ namespace indie
             auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
             auto text = Component::castComponent<String>(test[0]);
             text->getValue() = "|";
+        } else if (players->changeBomb == 1) {
+            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 4];
+            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
+            auto text = Component::castComponent<String>(test[0]);
+            text->getValue() = "|";
         }
     }
 
@@ -109,7 +121,7 @@ namespace indie
                 auto players = Component::castComponent<Player>(e->getFilteredComponents({ IComponent::Type::PLAYER })[0]);
                 updateTextBindings(sceneManager, players, firstText);
                 replaceTextBindings(sceneManager, players, firstText);
-                firstText += 4;
+                firstText += 5;
             }
         }
         // static int i = 0;
@@ -258,6 +270,8 @@ namespace indie
                             player->changeRight = 0;
                             player->changeUp = 0;
                             break;
+                        case 4:
+                            player->changeBomb = 1;
                     }
                 }
             },
@@ -297,6 +311,13 @@ namespace indie
                         get.assign(1, input);
                         player->setDOWN(get);
                         player->changeDown = 2;
+                    }
+                } else if (player->changeBomb == true) {
+                    input = Window::getKeyPressed();
+                    if (input != 0) {
+                        get.assign(1, input);
+                        player->setBOMB(get);
+                        player->changeBomb = 2;
                     }
                 }
             });
@@ -366,12 +387,12 @@ namespace indie
 
         e4->addComponent(grid);
 
-        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D");
+        std::shared_ptr<Player> player = std::make_shared<Player>("Z", "S", "Q", "D", "W");
         std::shared_ptr<Entity> entity16 = std::make_shared<Entity>();
 
         entity16->addComponent(player);
 
-        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L");
+        std::shared_ptr<Player> player2 = std::make_shared<Player>("I", "J", "K", "L", "O");
         std::shared_ptr<Entity> entity17 = std::make_shared<Entity>();
 
         entity17->addComponent(player2);
@@ -451,32 +472,36 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createText("Player 2", Position(500, 150), 25);
         std::shared_ptr<Entity> entity6 = createText("Player 3", Position(50, 400), 25);
         std::shared_ptr<Entity> entity7 = createText("Player 4", Position(500, 400), 25);
-        std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 200), 20);
-        std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
-        std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
-        std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
+        std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(10, 200), 20);
+        std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(10, 450), 20);
+        std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(500, 200), 20);
+        std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(500, 450), 20);
         std::shared_ptr<Entity> entity12 = createText("", Position(100, 200), 20);
         std::shared_ptr<Entity> entity13 = createText("", Position(100, 230), 20);
         std::shared_ptr<Entity> entity14 = createText("", Position(100, 260), 20);
         std::shared_ptr<Entity> entity15 = createText("", Position(100, 290), 20);
+        std::shared_ptr<Entity> entity16 = createText("", Position(100, 320), 20);
         std::shared_ptr<Entity> entity18 = createText("", Position(600, 200), 20);
         std::shared_ptr<Entity> entity19 = createText("", Position(600, 230), 20);
         std::shared_ptr<Entity> entity20 = createText("", Position(600, 260), 20);
         std::shared_ptr<Entity> entity21 = createText("", Position(600, 290), 20);
+        std::shared_ptr<Entity> entity22 = createText("", Position(600, 320), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
         createBindingsEvent(entity12, 0, 0);
         createBindingsEvent(entity13, 0, 1);
         createBindingsEvent(entity14, 0, 2);
         createBindingsEvent(entity15, 0, 3);
+        createBindingsEvent(entity16, 0, 4);
         createBindingsEvent(entity18, 1, 0);
         createBindingsEvent(entity19, 1, 1);
         createBindingsEvent(entity20, 1, 2);
         createBindingsEvent(entity21, 1, 3);
+        createBindingsEvent(entity22, 1, 4);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
-        scene->addEntities({entity12, entity13, entity14, entity15, entity18, entity19, entity20, entity21});
+        scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity18, entity19, entity20, entity21, entity22});
         return scene;
     }
 
