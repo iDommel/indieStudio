@@ -26,14 +26,10 @@
 #include "String.hpp"
 #include "Velocity.hpp"
 #include "CameraComponent.hpp"
-<<<<<<< HEAD
 #include "SoundComponent.hpp"
 #include "MusicComponent.hpp"
-=======
 #include "ModelAnim.hpp"
 #include "Window.hpp"
->>>>>>> origin/dev
-#include "raylib.h"
 namespace indie
 {
 
@@ -43,11 +39,7 @@ namespace indie
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
-<<<<<<< HEAD
-        // indie::AudioDevice audioDevice;
-=======
         _collideSystem.init(sceneManager);
->>>>>>> origin/dev
     }
 
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
@@ -77,76 +69,9 @@ namespace indie
 
     std::shared_ptr<IEntity> GameSystem::createCamera(Vector3 camPos, Vector3 camTarget)
     {
-<<<<<<< HEAD
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
-        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> component = std::make_shared<Position>(10, 10);
-        std::shared_ptr<Sprite> component4 = std::make_shared<Sprite>("test_pictures/raylib_logo.png");
-        std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
-        std::shared_ptr<SoundComponent> soundComponent = std::make_shared<SoundComponent>("sound_det");
-        std::shared_ptr<SoundComponent> soundComponent2 = std::make_shared<SoundComponent>("sound_expl");
-        std::shared_ptr<Rect> component5 = std::make_shared<Rect>(0, 0, 250, 250);
-        std::shared_ptr<Component> component3 = std::make_shared<Component>();
-        std::shared_ptr<Entity> e = std::make_shared<Entity>();
-        std::shared_ptr<Rect> rect  = std::make_shared<Rect>(0, 0, 0, 0);
-        std::shared_ptr<Position> pos = std::make_shared<Position>(500, 500);
-        std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>("test_pictures/scarfy.png", 6);
-        std::shared_ptr<Entity> e2 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos2 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-
-=======
->>>>>>> origin/dev
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
         std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
 
-<<<<<<< HEAD
-        std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
-        std::shared_ptr<String> text = std::make_shared<String>("The below sprite entity has a hitbox of 250,250");
-
-        std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
-        std::shared_ptr<Entity> soundEntity = std::make_shared<Entity>();
-        std::shared_ptr<Entity> soundEntity2 = std::make_shared<Entity>();
-
-        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-
-        soundEntity->addComponent(soundComponent)
-            .addComponent(listener);
-
-        soundEntity2->addComponent(soundComponent2)
-            .addComponent(listener);
-        
-        ButtonCallbacks spaceCallbacks(
-            [soundEntity2](SceneManager &) {
-                auto comp = Component::castComponent<SoundComponent>((*soundEntity2)[Component::Type::SOUND]);
-                if (comp->getSoundState() == Sound::SoundState::PLAYING)
-                    comp->setSoundState(Sound::SoundState::PAUSED);
-                else
-                    comp->setSoundState(Sound::SoundState::PLAYING);
-            },
-            [](SceneManager &) {},
-            [](SceneManager &) {});
-
-        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
-        component3->setType(Component::Type::HITBOX);
-
-        entity2->addComponent(component)
-            .addComponent(component4)
-            .addComponent(component3)
-            .addComponent(component5);
-
-        e->addComponent(rect)
-            .addComponent(pos)
-            .addComponent(sprite);
-
-        e2->addComponent(pos2)
-            .addComponent(model);
-
-=======
->>>>>>> origin/dev
         cam->addComponent(camera);
         return cam;
     }
@@ -170,9 +95,6 @@ namespace indie
         }
     }
 
-<<<<<<< HEAD
-        scene->addEntities({entity2, e, e2, cam, e3, e4, soundEntity});
-=======
     std::unique_ptr<IScene> GameSystem::createScene()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
@@ -190,8 +112,32 @@ namespace indie
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
         createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
         scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
->>>>>>> origin/dev
+        createMusic(*scene);
+        createSound(*scene);
         return scene;
+    }
+
+    void GameSystem::createMusic(Scene &scene)
+    {
+        std::shared_ptr<Entity> musicEntity = std::make_shared<Entity>();
+        std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
+
+        musicEntity->addComponent(musicComponent);
+        scene.addEntities({musicEntity});
+    }
+
+    void GameSystem::createSound(Scene &scene)
+    {
+        std::shared_ptr<Entity> soundEntity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> soundEntity2 = std::make_shared<Entity>();
+        std::shared_ptr<SoundComponent> soundComponent = std::make_shared<SoundComponent>("sound_det");
+        std::shared_ptr<SoundComponent> soundComponent2 = std::make_shared<SoundComponent>("sound_expl");
+
+        soundEntity->addComponent(soundComponent);
+        scene.addEntities({soundEntity});
+
+        soundEntity2->addComponent(soundComponent2);
+        scene.addEntities({soundEntity2});
     }
 
     void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)

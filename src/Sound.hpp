@@ -51,9 +51,11 @@ namespace indie
          * @param volume Volume value
          */
         void setVolume(float volume);
-        SoundState _state = SoundState::PAUSED;
+
+        SoundState &getSound() { return _state; };
 
     private:
+        SoundState _state = SoundState::PAUSED;
         std::unique_ptr<::Sound> _sound;
     };
 

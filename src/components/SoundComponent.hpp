@@ -17,15 +17,15 @@ namespace indie
     class SoundComponent : public Component
     {
     public:
-        SoundComponent(std::string str) : sound(str) { _type = IComponent::Type::SOUND; };
+        SoundComponent(std::string str) : Component(Type::SOUND), sound(str) {};
 
         std::string getValue() const { return sound; };
         void setSoundState(Sound::SoundState state) { _newState = state; };
         Sound::SoundState getSoundState() { return _newState; };
-        Sound::SoundState _newState = Sound::SoundState::PLAYING;
-        std::string sound;
 
     private:
+        Sound::SoundState _newState = Sound::SoundState::PLAYING;
+        std::string sound;
     };
 }
 

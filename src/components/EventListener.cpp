@@ -5,9 +5,9 @@
 ** EventListener
 */
 
+#include "raylib.h"
 #include "EventListener.hpp"
 
-#include "raylib.h"
 namespace indie
 {
 

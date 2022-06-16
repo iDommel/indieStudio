@@ -5,6 +5,7 @@
 ** EventSystem.cpp
 */
 
+#include "raylib.h"
 #include "EventSystem.hpp"
 
 #include <algorithm>

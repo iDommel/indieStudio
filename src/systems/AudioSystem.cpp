@@ -68,30 +68,30 @@ namespace indie
 
     void AudioSystem::manageMusic(MusicComponent &musicComponent)
     {
-        _musics[musicComponent.music]->updateMusic();
-        if (musicComponent._newState == _musics[musicComponent.music]->_state)
+        _musics[musicComponent.getValue()]->updateMusic();
+        if (musicComponent.getMusicState() == _musics[musicComponent.getValue()]->getMusic())
             return;
         std::cout << "AudioSystem::manageMusic" << std::endl;
-        if (musicComponent._newState == Music::MusicState::PLAY) {
-            _musics[musicComponent.music]->playMusic();
-        } else if (musicComponent._newState == Music::MusicState::PAUSE)
-            _musics[musicComponent.music]->pauseMusic();
-        else if (musicComponent._newState == Music::MusicState::STOP)
-            _musics[musicComponent.music]->stopMusic();
-        _musics[musicComponent.music]->_state = musicComponent._newState;
+        if (musicComponent.getMusicState() == Music::MusicState::PLAY) {
+            _musics[musicComponent.getValue()]->playMusic();
+        } else if (musicComponent.getMusicState() == Music::MusicState::PAUSE)
+            _musics[musicComponent.getValue()]->pauseMusic();
+        else if (musicComponent.getMusicState() == Music::MusicState::STOP)
+            _musics[musicComponent.getValue()]->stopMusic();
+        _musics[musicComponent.getValue()]->getMusic() = musicComponent.getMusicState();
     }
 
      void AudioSystem::manageSound(SoundComponent &soundComponent)
     {
-         if (soundComponent._newState == _sounds[soundComponent.sound]->_state)
+         if (soundComponent.getSoundState() == _sounds[soundComponent.getValue()]->getSound())
              return;
          std::cout << "AudioSystem::manageSound" << std::endl;
-         if (soundComponent._newState == Sound::SoundState::PLAYING)
-             _sounds[soundComponent.sound]->play();
-         else if (soundComponent._newState == Sound::SoundState::PAUSED)
-             _sounds[soundComponent.sound]->pause();
-         else if (soundComponent._newState == Sound::SoundState::STOPPED)
-             _sounds[soundComponent.sound]->stop();
-         _sounds[soundComponent.sound]->_state = soundComponent._newState;
+         if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
+             _sounds[soundComponent.getValue()]->play();
+         else if (soundComponent.getSoundState() == Sound::SoundState::PAUSED)
+             _sounds[soundComponent.getValue()]->pause();
+         else if (soundComponent.getSoundState() == Sound::SoundState::STOPPED)
+             _sounds[soundComponent.getValue()]->stop();
+         _sounds[soundComponent.getValue()]->getSound() = soundComponent.getSoundState();
     }
 }
