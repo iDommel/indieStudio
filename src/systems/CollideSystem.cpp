@@ -53,7 +53,7 @@ namespace indie
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
         std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
-        std::cout << "CollideSystem::init" << std::endl;
+        std::cerr << "CollideSystem::init" << std::endl;
         if (collidables.empty())
             return;
         preInit(sceneManager);
@@ -70,7 +70,7 @@ namespace indie
 
     void CollideSystem::destroy()
     {
-        std::cout << "CollideSystem::destroy" << std::endl;
+        std::cerr << "CollideSystem::destroy" << std::endl;
         _collidables3D.clear();
         _collidables2D.clear();
     }

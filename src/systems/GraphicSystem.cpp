@@ -33,7 +33,7 @@ namespace indie
     }
     void GraphicSystem::init(SceneManager &sceneManager)
     {
-        std::cout << "GraphicSystem::init" << std::endl;
+        std::cerr << "GraphicSystem::init" << std::endl;
         _window = std::make_unique<Window>(800, 600, FLAG_WINDOW_RESIZABLE, "Indie Studio");
 
         for (auto &scene : sceneManager.getScenes()) {
@@ -81,18 +81,18 @@ namespace indie
 
     void GraphicSystem::destroy()
     {
-        std::cout << "GraphicSystem::destroy" << std::endl;
+        std::cerr << "GraphicSystem::destroy" << std::endl;
     }
 
     void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cout << "loadEntity" << std::endl;
+        std::cerr << "loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
-            std::cout << "loadSprite" << std::endl;
+            std::cerr << "loadSprite" << std::endl;
             loadSprite(entity);
         }
         if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
-            std::cout << "loadModel" << std::endl;
+            std::cerr << "loadModel" << std::endl;
             loadModel(entity);
         }
     }

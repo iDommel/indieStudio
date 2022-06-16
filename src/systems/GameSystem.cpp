@@ -5,6 +5,7 @@
 ** GameSystem.cpp
 */
 
+#include "raylib.h"
 #include "GameSystem.hpp"
 
 #include <functional>
@@ -27,13 +28,12 @@
 #include "CameraComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
-#include "raylib.h"
 namespace indie
 {
 
     void GameSystem::init(indie::SceneManager &sceneManager)
     {
-        std::cout << "GameSystem::init" << std::endl;
+        std::cerr << "GameSystem::init" << std::endl;
 
         sceneManager.addScene(createScene(), SceneManager::SceneType::GAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::GAME);
@@ -61,7 +61,7 @@ namespace indie
 
     void GameSystem::destroy()
     {
-        std::cout << "GameSystem::destroy" << std::endl;
+        std::cerr << "GameSystem::destroy" << std::endl;
         _collideSystem.destroy();
     }
 
@@ -201,6 +201,6 @@ namespace indie
 
     void GameSystem::printStuff(SceneManager &)
     {
-        std::cout << "GameSystem::printStuff" << std::endl;
+        std::cerr << "GameSystem::printStuff" << std::endl;
     }
 }

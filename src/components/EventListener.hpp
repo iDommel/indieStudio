@@ -7,6 +7,7 @@
 
 #ifndef EVENTLISTENER_HPP_
 #define EVENTLISTENER_HPP_
+
 #include <functional>
 #include <map>
 
@@ -17,7 +18,6 @@
 
 namespace indie
 {
-
     /// @brief EventListener is a class to describe what to do when an event is detected.
     /// you can add a callback to an event by using the different add<>Event methods.
     class EventListener : public Component

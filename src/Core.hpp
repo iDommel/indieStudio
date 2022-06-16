@@ -28,8 +28,8 @@ namespace indie
         enum class SystemType {
             GAME,
             EVENT,
-            GRAPHIC,
             AUDIO,
+            GRAPHIC,
             /// sub-system of game system
             COLLIDE
         };

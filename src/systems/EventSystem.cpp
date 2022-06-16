@@ -5,6 +5,7 @@
 ** EventSystem.cpp
 */
 
+#include "raylib.h"
 #include "EventSystem.hpp"
 
 #include <algorithm>
@@ -16,7 +17,7 @@ namespace indie
 {
     void EventSystem::init(SceneManager &sceneManager)
     {
-        std::cout << "EventSystem init" << std::endl;
+        std::cerr << "EventSystem init" << std::endl;
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CALLABLE]) {
             auto listener = Component::castComponent<EventListener>((*e)[IComponent::Type::EVT_LISTENER]);
             if (listener)
@@ -108,7 +109,7 @@ namespace indie
 
     void EventSystem::destroy()
     {
-        std::cout << "EventSystem destroy" << std::endl;
+        std::cerr << "EventSystem destroy" << std::endl;
     }
 
     void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)

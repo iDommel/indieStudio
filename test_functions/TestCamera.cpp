@@ -7,6 +7,8 @@
 #include <exception>
 #include <iostream>
 
+#include "raylib.h"
+
 #include "Camera.hpp"
 #include "EventListener.hpp"
 #include "Shape3D.hpp"
