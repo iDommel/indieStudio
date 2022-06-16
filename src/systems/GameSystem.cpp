@@ -170,28 +170,28 @@ namespace indie
                 player->stopDown(manager, playerEntity, 1);
             });
 
-        GamepadStickCallbacks moveHorizontalStickCallbacks(
-            [player, playerEntity](SceneManager &manager, float) {
-                player->moveLeft(manager, playerEntity, 1);
-            },
-            [player, playerEntity](SceneManager &manager) {
-                player->stopRight(manager, playerEntity, 1);
-                player->stopLeft(manager, playerEntity, 1);
-            },
-            [player, playerEntity](SceneManager &manager, float) {
-                player->moveRight(manager, playerEntity, 1);
-            });
-        GamepadStickCallbacks moveVerticalStickCallbacks(
-            [player, playerEntity](SceneManager &manager, float) {
-                player->moveUp(manager, playerEntity, 1);
-            },
-            [player, playerEntity](SceneManager &manager) {
-                player->stopDown(manager, playerEntity, 1);
-                player->stopUp(manager, playerEntity, 1);
-            },
-            [player, playerEntity](SceneManager &manager, float) {
-                player->moveDown(manager, playerEntity, 1);
-            });
+        // GamepadStickCallbacks moveHorizontalStickCallbacks(
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveLeft(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager) {
+        //         player->stopRight(manager, playerEntity, 1);
+        //         player->stopLeft(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveRight(manager, playerEntity, 1);
+        //     });
+        // GamepadStickCallbacks moveVerticalStickCallbacks(
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveUp(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager) {
+        //         player->stopDown(manager, playerEntity, 1);
+        //         player->stopUp(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveDown(manager, playerEntity, 1);
+        //     });
         playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
@@ -200,8 +200,8 @@ namespace indie
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_RIGHT, moveRightCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_DOWN, moveDownCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_LEFT, moveLeftCallbacks);
-        playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_X, moveHorizontalStickCallbacks);
-        playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_Y, moveVerticalStickCallbacks);
+        // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_X, moveHorizontalStickCallbacks);
+        // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_Y, moveVerticalStickCallbacks);
 
         playerEntity->addComponent(player)
             .addComponent(playerPos)
