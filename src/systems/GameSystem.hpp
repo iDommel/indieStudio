@@ -46,13 +46,16 @@ namespace indie
         std::unique_ptr<IScene> createSoundMenu();
         std::unique_ptr<IScene> createHelpMenu();
         std::unique_ptr<IScene> createControllerMenu();
+        std::unique_ptr<IScene> createPreGameMenu();
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
         std::shared_ptr<Entity> createImage(std::string path, Position position, int heigh, int width);
         std::shared_ptr<Entity> createText(std::string text, Position position, float fontSize);
         void createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button);
+        void createNumberEvent(std::shared_ptr<Entity> &entity, int nbr_player);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
+        int nbr_player;
     };
 
 }

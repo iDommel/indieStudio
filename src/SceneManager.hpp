@@ -28,7 +28,8 @@ namespace indie
             HELP,
             PAUSE,
             SOUND,
-            NB_SCENES
+            NB_SCENES,
+            PREGAME
         };
 
         /**

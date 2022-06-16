@@ -38,6 +38,7 @@ namespace indie
         sceneManager.addScene(createSoundMenu(), SceneManager::SceneType::SOUND);
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
+        sceneManager.addScene(createPreGameMenu(), SceneManager::SceneType::PREGAME);
         sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
         AudioDevice::getMasterVolume() += 50;
     }
@@ -329,6 +330,34 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
+    void GameSystem::createNumberEvent(std::shared_ptr<Entity> &entity, int _nbr_player)
+    {
+        MouseCallbacks selector(
+            [entity, _nbr_player, this](SceneManager &sceneManager, Vector2 mousePosition) {
+                auto comp = entity->getFilteredComponents({ IComponent::Type::VECTOR });
+                auto pos = Component::castComponent<Position>(comp[0]);
+
+                if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
+                    mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
+                    std::shared_ptr<Entity> entity = createImage("assets/MainMenu/circle.png", Position(pos->x - 30, pos->y - 20), 80, 80);
+                    std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
+
+                    createSceneEvent(entity2, SceneManager::SceneType::GAME);
+                    sceneManager.getCurrentScene().addEntities({entity, entity2});
+                    nbr_player = _nbr_player;
+                }
+            },
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {},
+            [](SceneManager &, Vector2 /*mousePosition*/) {});
+        
+        std::shared_ptr<EventListener> eventListener = std::make_shared<EventListener>();
+
+        eventListener->addMouseEvent(MOUSE_BUTTON_LEFT, selector);
+        
+        entity->addComponent(eventListener);
+    }
+
     std::unique_ptr<indie::IScene> GameSystem::createScene()
     {
         ButtonCallbacks spaceCallbacks(
@@ -418,7 +447,7 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
 
-        createSceneEvent(entity2, SceneManager::SceneType::GAME);
+        createSceneEvent(entity2, SceneManager::SceneType::PREGAME);
         createSceneEvent(entity3, SceneManager::SceneType::SOUND);
         createSceneEvent(entity4, SceneManager::SceneType::CONTROLLER);
         createSceneEvent(entity5, SceneManager::SceneType::HELP);
@@ -502,6 +531,26 @@ namespace indie
         scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
         scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity18, entity19, entity20, entity21, entity22});
+        return scene;
+    }
+
+    std::unique_ptr<indie::IScene> GameSystem::createPreGameMenu()
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPreGameMenu, this));
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity3 = createText("Number of player", Position(250, 150), 35);
+        std::shared_ptr<Entity> entity4 = createText("1", Position(250, 250), 50);
+        std::shared_ptr<Entity> entity5 = createText("2", Position(350, 250), 50);
+        std::shared_ptr<Entity> entity6 = createText("3", Position(450, 250), 50);
+        std::shared_ptr<Entity> entity7 = createText("4", Position(550, 250), 50);
+    
+        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createNumberEvent(entity4, 1);
+        createNumberEvent(entity5, 2);
+        createNumberEvent(entity6, 3);
+        createNumberEvent(entity7, 4);
+
+        scene->addEntities({entity2, entity3 ,entity4, entity5, entity6, entity7});
         return scene;
     }
 
