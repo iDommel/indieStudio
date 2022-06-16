@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "CameraComponent.hpp"
+#include "GamepadStickCallbacks.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
@@ -45,7 +46,6 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
         static int i = 0;
-        static int j = 0;
 
         i++;
         updatePlayers(sceneManager, dt);
@@ -99,21 +99,15 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
 
-        std::shared_ptr<Entity> modelEntity = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
-        std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
-        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
-        modelEntity->addComponent(pos2)
-            .addComponent(model)
-            .addComponent(anim)
-            .addComponent(hitbox);
+        Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
+        Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {10, 0, 10});
-        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {0, 0, 0});
-        scene->addEntities({modelEntity, createCamera({50.0f, 50.0f, 50.0f}, {0.0f, 10.0f, 0.0f})});
         createMusic(*scene);
         createSound(*scene);
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
+        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
+        generateMap("assets/maps/map2.txt", *scene);
+        scene->addEntities({createCamera(camPos, camTarget)});
         return scene;
     }
 
@@ -202,10 +196,39 @@ namespace indie
             [player, playerEntity](SceneManager &manager) {
                 player->stopDown(manager, playerEntity, 1);
             });
+
+        // GamepadStickCallbacks moveHorizontalStickCallbacks(
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveLeft(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager) {
+        //         player->stopRight(manager, playerEntity, 1);
+        //         player->stopLeft(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveRight(manager, playerEntity, 1);
+        //     });
+        // GamepadStickCallbacks moveVerticalStickCallbacks(
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveUp(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager) {
+        //         player->stopDown(manager, playerEntity, 1);
+        //         player->stopUp(manager, playerEntity, 1);
+        //     },
+        //     [player, playerEntity](SceneManager &manager, float) {
+        //         player->moveDown(manager, playerEntity, 1);
+        //     });
         playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_UP, moveUpCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_RIGHT, moveRightCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_DOWN, moveDownCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_LEFT, moveLeftCallbacks);
+        // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_X, moveHorizontalStickCallbacks);
+        // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_Y, moveVerticalStickCallbacks);
 
         playerEntity->addComponent(player)
             .addComponent(playerPos)
