@@ -19,6 +19,7 @@ set(CMAKE_CXX_STANDARD 17)
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
+        src/ModelAnimation.cpp
         src/Music.cpp
         src/Texture2D.cpp
         src/Camera.cpp
@@ -35,26 +36,39 @@ target_sources(${PROJECT_NAME}
         src/MouseCallbacks.cpp
         src/GamepadStickCallbacks.cpp
         src/Sound.cpp
+        src/generateMap.cpp
 
         src/systems/AudioSystem.cpp
         src/systems/GraphicSystem.cpp
         src/systems/GameSystem.cpp
         src/systems/EventSystem.cpp
+        src/systems/CollideSystem.cpp
 
         src/components/Component.cpp
         src/components/EventListener.cpp
+        src/components/Player.cpp
+        src/components/Position.cpp
+        src/components/AVector.cpp
+        src/components/Velocity.cpp
+        src/components/HitboxComponent.cpp
+        src/components/CameraComponent.cpp
+        src/components/Sphere.cpp
+        src/components/Cube.cpp
+        src/components/Grid.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp
         test_functions/TestTextures.cpp
+        test_functions/TestCollisions.cpp
+        test_functions/TestModelsCollision.cpp
         test_functions/TestMusic.cpp
         test_functions/TestAudioDevice.cpp
         test_functions/TestSound.cpp
+        test_functions/TestModelAnimation.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        src/**
         src/components
         src/exceptions
         src/systems
