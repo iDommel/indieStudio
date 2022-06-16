@@ -13,8 +13,10 @@
 #include "GameSystem.hpp"
 #include "Entity.hpp"
 #include "HitboxComponent.hpp"
+#include "Timer.hpp"
 
-#define BOMB_TIMER 2000
+#define BOMB_TIMER      2000
+#define EXPLOSION_TIMER 1000
 
 namespace indie {
 
@@ -52,10 +54,14 @@ void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
     Vector3 ex2Pos = {pos.x, pos.y, pos.z - (ex2Size.z - GAME_TILE_SIZE) / 2};
 
     auto c = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(exSize, exPos));
+    auto timer = std::make_shared<Timer>(EXPLOSION_TIMER);
     auto c2 = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(ex2Size, ex2Pos));
+    auto timer2 = std::make_shared<Timer>(EXPLOSION_TIMER);
 
-    explosion->addComponent(c);
-    explosion2->addComponent(c2);
+    explosion->addComponent(c)
+                .addComponent(timer);
+    explosion2->addComponent(c2)
+                .addComponent(timer2);
     sceneManager.getCurrentScene().addEntities({explosion, explosion2});
 }
 

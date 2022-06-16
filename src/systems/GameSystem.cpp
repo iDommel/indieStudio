@@ -25,6 +25,7 @@
 #include "String.hpp"
 #include "Velocity.hpp"
 #include "Bomb.hpp"
+#include "Timer.hpp"
 #include "CameraComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
@@ -94,6 +95,7 @@ namespace indie
     void GameSystem::updateBombs(SceneManager &sceneManager, uint64_t dt)
     {
         auto bombs = sceneManager.getCurrentScene()[IEntity::Tags::BOMB];
+        auto explosions = sceneManager.getCurrentScene()[IEntity::Tags::TIMED];
 
         for (auto &bomb : bombs) {
             auto comp = Component::castComponent<Bomb>((*bomb)[IComponent::Type::BOMB]);
@@ -103,6 +105,14 @@ namespace indie
             if (comp->getTimer() <= 0) {
                 comp->explode(sceneManager, vec);
                 sceneManager.getCurrentScene().removeEntity(bomb);
+            }
+        }
+
+        for (auto &explosion : explosions) {
+            auto comp = Component::castComponent<Timer>((*explosion)[IComponent::Type::TIMER]);
+            comp->getTime() -= dt;
+            if (comp->getTime() <= 0) {
+                sceneManager.getCurrentScene().removeEntity(explosion);
             }
         }
     }

@@ -30,7 +30,8 @@ namespace indie
             CALLABLE,
             PLAYER,
             CAMERA,
-            BOMB
+            BOMB,
+            TIMED
         };
 
         virtual ~IEntity() = default;

@@ -38,7 +38,9 @@ namespace indie
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
         {Entity::Tags::BOMB,
-         {{IComponent::Type::BOMB}}}
+         {{IComponent::Type::BOMB}}},
+        {Entity::Tags::TIMED,
+         {{IComponent::Type::TIMER}}}
     };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
