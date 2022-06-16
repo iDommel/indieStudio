@@ -96,18 +96,9 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
 
-        // std::shared_ptr<Entity> modelEntity = std::make_shared<Entity>();
-        // std::shared_ptr<Position> pos2 = std::make_shared<Position>(20, 0, 20);
-        // std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
-        // std::shared_ptr<ModelAnim> anim = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
-        // std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
-        // modelEntity->addComponent(pos2)
-        //     .addComponent(model)
-        //     .addComponent(anim)
-        //     .addComponent(hitbox);
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
         createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
         generateMap("assets/maps/map2.txt", *scene);
@@ -181,13 +172,13 @@ namespace indie
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
-
-        playerEntity->addComponent(player)
-            .addComponent(playerPos)
-            .addComponent(playerVel)
-            .addComponent(playerListener)
-            .addComponent(playerHitbox)
-            .addComponent(model);
+        playerListener->addKeyboard
+            playerEntity->addComponent(player)
+                .addComponent(playerPos)
+                .addComponent(playerVel)
+                .addComponent(playerListener)
+                .addComponent(playerHitbox)
+                .addComponent(model);
         scene.addEntity(playerEntity);
     }
 
