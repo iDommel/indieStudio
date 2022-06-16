@@ -6,6 +6,7 @@
 */
 
 #include "raylib.h"
+#include <iostream>
 
 #include "Sound.hpp"
 #include "exceptions/SoundError.hpp"

@@ -5,6 +5,7 @@
 ** GameSystem.cpp
 */
 
+#include "raylib.h"
 #include "GameSystem.hpp"
 
 #include <functional>
@@ -26,9 +27,10 @@
 #include "String.hpp"
 #include "Velocity.hpp"
 #include "CameraComponent.hpp"
+#include "SoundComponent.hpp"
+#include "MusicComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
-#include "raylib.h"
 namespace indie
 {
 
@@ -100,11 +102,36 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
+        createMusic(*scene);
+        createSound(*scene);
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
         createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget)});
         return scene;
+    }
+
+    void GameSystem::createMusic(Scene &scene)
+    {
+        std::shared_ptr<Entity> musicEntity = std::make_shared<Entity>();
+        std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
+
+        musicEntity->addComponent(musicComponent);
+        scene.addEntities({musicEntity});
+    }
+
+    void GameSystem::createSound(Scene &scene)
+    {
+        std::shared_ptr<Entity> soundEntity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> soundEntity2 = std::make_shared<Entity>();
+        std::shared_ptr<SoundComponent> soundComponent = std::make_shared<SoundComponent>("sound_det");
+        std::shared_ptr<SoundComponent> soundComponent2 = std::make_shared<SoundComponent>("sound_expl");
+
+        soundEntity->addComponent(soundComponent);
+        scene.addEntities({soundEntity});
+
+        soundEntity2->addComponent(soundComponent2);
+        scene.addEntities({soundEntity2});
     }
 
     void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
