@@ -113,6 +113,12 @@ namespace indie
             comp->getTime() -= dt;
             if (comp->getTime() <= 0) {
                 sceneManager.getCurrentScene().removeEntity(explosion);
+                continue;
+            }
+
+            for (auto &collider : _collideSystem.getColliders(explosion)) {
+                if (collider->hasTag(IEntity::Tags::PLAYER))
+                    sceneManager.getCurrentScene().removeEntity(collider);
             }
         }
     }
