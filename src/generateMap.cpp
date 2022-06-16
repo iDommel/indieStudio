@@ -21,6 +21,7 @@
 #include "Model3D.hpp"
 #include "Cube.hpp"
 #include "Destructible.hpp"
+#include "GameSystem.hpp"
 
 namespace indie
 {
@@ -104,15 +105,18 @@ namespace indie
         return 0;
     }
 
-    static std::shared_ptr<IEntity> createSpawn(int x, int y)
+    void GameSystem::createSpawn(int x, int y, IScene &scene)
     {
         static unsigned int nb = 0;
-        std::shared_ptr<Entity> spawn = std::make_shared<Entity>();
+        static int keys[2][5] = {
+            {KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END},
+            {KEY_D, KEY_A, KEY_W, KEY_S, KEY_E},
+        };
 
+        if (nb >= 2)
+            return;
+        createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE, 0, y * GAME_TILE_SIZE});
         nb++;
-        spawn->addComponent(std::make_shared<Position>(x, 0, y));
-        spawn->addComponent(std::make_shared<Sprite>("o"));
-        return spawn;
     }
 
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)
@@ -160,9 +164,8 @@ namespace indie
                 } else if (line[i] == 'H') {
                     scene.addEntity(createIndestructibleWall(i * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleWallFile));
                     map[y][i] = line[i];
-                }
-                // else if (line[i] == 'o')
-                //     scene.addEntity(createSpawn(i, y));
+                } else if (line[i] == 'o')
+                    createSpawn(i, y, scene);
             }
         }
         file.close();
