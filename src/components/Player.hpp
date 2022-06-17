@@ -64,6 +64,11 @@ namespace indie
         /// @brief sets the velocity of the player to 0 downwards
         void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
 
+        /// @brief horizontal movement for gamepad sticks
+        void moveHorizontal(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
+        /// @brief verticcal movement for gamepad sticks
+        void moveVertical(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
+
         std::string getUp() { return UP; }
         std::string getDown() { return DOWN; }
         std::string getLeft() { return LEFT; }
@@ -77,6 +82,7 @@ namespace indie
         int changeDown;
         int changeLeft;
         int changeRight;
+
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
