@@ -47,9 +47,10 @@ namespace indie
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.addScene(createPreGameMenu(), SceneManager::SceneType::PREGAME);
+        sceneManager.addScene(createPauseMenu(sceneManager), SceneManager::SceneType::PAUSE);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
-        AudioDevice::getMasterVolume() += 50;
+        AudioDevice::getMasterVolume() += 0.5;
     }
 
     void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
@@ -231,14 +232,14 @@ namespace indie
                     auto comp2 = sceneManger.getCurrentScene()[IEntity::Tags::TEXT][2];
                     auto text = comp2->getFilteredComponents({ IComponent::Type::TEXT });
                     auto value2 = Component::castComponent<String>(text[0]);
-                    if (AudioDevice::getMasterVolume() < 100 && value == "+") {
-                        AudioDevice::getMasterVolume() += 10;
+                    if (AudioDevice::getMasterVolume() < 1 && value == "+") {
+                        AudioDevice::getMasterVolume() += 0.1;
                         AudioDevice::setVolume(AudioDevice::getMasterVolume());
-                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
-                    } else if (AudioDevice::getMasterVolume()  > 0 && value == "-") {
-                        AudioDevice::getMasterVolume() -= 10;
+                        value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
+                    } else if (AudioDevice::getMasterVolume() >= 0.1 && value == "-") {
+                        AudioDevice::getMasterVolume() -= 0.1;
                         AudioDevice::setVolume(AudioDevice::getMasterVolume() );
-                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
+                        value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
                     }
                 }
             },
@@ -264,7 +265,10 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->width &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
-                    sceneManger.setCurrentScene(scenetype);
+                    if (scenetype == SceneManager::SceneType::PREVIOUS)
+                        sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
+                    else
+                        sceneManger.setCurrentScene(scenetype);
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
@@ -378,14 +382,6 @@ namespace indie
         std::shared_ptr<Entity> cam = std::make_shared<Entity>();
         std::shared_ptr<CameraComponent> camera = std::make_shared<CameraComponent>(camTarget, camPos);
 
-        std::shared_ptr<Entity> e3 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos3 = std::make_shared<Position>(10, 0, 0);
-        std::shared_ptr<String> text = std::make_shared<String>("The below sprite entity has a hitbox of 250,250");
-
-        std::shared_ptr<Entity> e4 = std::make_shared<Entity>();
-        std::shared_ptr<Position> pos4 = std::make_shared<Position>(0, 0, 0);
-        std::shared_ptr<Grid> grid = std::make_shared<Grid>(10, 1.0f);
-
         cam->addComponent(camera);
         return cam;
     }
@@ -446,7 +442,7 @@ namespace indie
         std::shared_ptr<Entity> entity6 = createText("Master Volume", Position(300, 200), 25);
         std::shared_ptr<Entity> entity7 = createText("50", Position(370, 250), 80);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
         createSoundEvent(entity3, "-");
         createSoundEvent(entity4, "+");
 
@@ -465,7 +461,7 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createText("You will be able to plant water bombs to destroy destructible\nblocks and maybe get some boosts.", Position(10, 250), 25);
         std::shared_ptr<Entity> entity6 = createText("If your bombs hit an opponent you will kill him.\nThe goal is to be the last man standing.", Position(10, 350), 25);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
 
         scene->addEntities({entity2, entity3, entity4, entity5, entity6});
         return scene;
@@ -495,7 +491,7 @@ namespace indie
         std::shared_ptr<Entity> entity21 = createText("", Position(600, 290), 20);
         std::shared_ptr<Entity> entity22 = createText("", Position(600, 320), 20);
 
-        createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
+        createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
         createBindingsEvent(entity12, 0, 0);
         createBindingsEvent(entity13, 0, 1);
         createBindingsEvent(entity14, 0, 2);
@@ -538,7 +534,19 @@ namespace indie
 
     std::unique_ptr<IScene> GameSystem::createScene()
     {
+        ButtonCallbacks pauseCallbacks(
+            [](SceneManager &) {},
+            [](SceneManager &scenemanager) {
+                scenemanager.setCurrentScene(SceneManager::SceneType::PAUSE);
+            },
+            [](SceneManager &){},
+            [](SceneManager &){});
+
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createScene, this));
+        std::shared_ptr<Entity> entity2 = std::make_shared<Entity>();
+        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
+        listener->addKeyboardEvent(KEY_P, pauseCallbacks);
+        entity2->addComponent(listener);
 
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
@@ -548,8 +556,31 @@ namespace indie
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
         createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
         generateMap("assets/maps/map2.txt", *scene);
-        scene->addEntities({createCamera(camPos, camTarget)});
+        scene->addEntities({createCamera(camPos, camTarget), entity2});
         return scene;
+    }
+
+    std::unique_ptr<IScene> GameSystem::createPauseMenu(SceneManager &sceneManager)
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPauseMenu, this, std::ref(sceneManager)));
+
+        std::shared_ptr<Entity> entity = createText("Pause", Position(325, 50), 50);
+        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/resume_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 550 / 2 - 18), 120, 28);
+
+        createSceneEvent(entity2, SceneManager::SceneType::GAME);
+        createSceneEvent(entity3, SceneManager::SceneType::SOUND);
+        createSceneEvent(entity4, SceneManager::SceneType::CONTROLLER);
+        createSceneEvent(entity5, SceneManager::SceneType::HELP);
+        createSceneEvent(entity6, SceneManager::SceneType::NONE);
+        createSceneEvent(entity7, SceneManager::SceneType::MAIN_MENU);
+
+        scene->addEntities({entity, entity2, entity3, entity4, entity5, entity6, entity7});
+        return (scene);
     }
 
     void GameSystem::createMusic(Scene &scene)
