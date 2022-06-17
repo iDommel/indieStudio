@@ -47,7 +47,6 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = true;
-        std::cout << "moveRight" << std::endl;
         move(vel);
     }
 
@@ -55,7 +54,6 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = false;
-        std::cout << "stopLeft" << std::endl;
         move(vel);
     }
 
@@ -105,11 +103,6 @@ namespace indie
     {
         vel->z = (_speed * _isDown) + (-_speed * _isUp);
         vel->x = (_speed * _isRight) + (-_speed * _isLeft);
-        std::cout << "isDown: " << _isDown << std::endl;
-        std::cout << "isUp: " << _isUp << std::endl;
-        std::cout << "isRight: " << _isRight << std::endl;
-        std::cout << "isLeft: " << _isLeft << std::endl;
-        std::cout << "velocity: " << vel->x << " " << vel->y << " " << vel->z << std::endl;
     }
     int Player::getId() const
     {

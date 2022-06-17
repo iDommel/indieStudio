@@ -20,9 +20,7 @@ namespace indie
 
     void AudioSystem::init(SceneManager &)
     {
-        std::cout << "AudioSystem::init" << std::endl;
         if (AudioDevice::isReady()) {
-            std::cout << "AudioSystem::init done" << std::endl;
             AudioDevice::setVolume(100);
         }
         _musics.emplace(std::string("music.ogg"), std::make_unique<Music>("resources/Music.ogg"));
