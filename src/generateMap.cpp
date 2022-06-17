@@ -117,7 +117,7 @@ namespace indie
 
         if (nb >= 4)
             return;
-        createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE, 0, y * GAME_TILE_SIZE});
+        createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
         nb++;
     }
 
