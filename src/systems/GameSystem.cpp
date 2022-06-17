@@ -254,8 +254,6 @@ namespace indie
                     mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     if (scenetype == SceneManager::SceneType::PREVIOUS)
                         sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
-                    else if (scenetype == SceneManager::SceneType::PAUSE)
-                        sceneManger.setCurrentScene(scenetype, true);
                     else
                         sceneManger.setCurrentScene(scenetype);
                 }
