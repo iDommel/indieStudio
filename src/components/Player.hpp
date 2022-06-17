@@ -27,7 +27,7 @@ namespace indie
             BOMB
         };
 
-        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right);
+        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb);
         ~Player();
 
         ///@brief Handle the various bonuses
@@ -71,15 +71,18 @@ namespace indie
         std::string getDown() { return DOWN; }
         std::string getLeft() { return LEFT; }
         std::string getRight() { return RIGHT; }
+        std::string getBomb() { return BOMB; }
         void setUP(std::string _up) { UP = _up; }
         void setDOWN(std::string _down) { DOWN = _down; }
         void setLEFT(std::string _left) { LEFT = _left; }
         void setRIGHT(std::string _right) { RIGHT = _right; }
+        void setBOMB(std::string _bomb) { BOMB = _bomb; }
 
         int changeUp;
         int changeDown;
         int changeLeft;
         int changeRight;
+        int changeBomb;
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
@@ -98,6 +101,7 @@ namespace indie
         std::string LEFT;
         std::string RIGHT;
         std::vector<std::shared_ptr<IEntity>> _bombs;
+        std::string BOMB;
     };
 
 }
