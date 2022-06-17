@@ -39,7 +39,7 @@ namespace indie
         void handleMouse(SceneManager &, std::shared_ptr<EventListener> listener);
         void handleGamepad(SceneManager &, std::shared_ptr<EventListener> listener, int nb);
         void handleGamepadSticks(SceneManager &, std::shared_ptr<EventListener> listener, int nb);
-        std::vector<std::shared_ptr<EventListener>> _listeners;
+        std::map<int, std::vector<std::shared_ptr<EventListener>>> _listeners;
     };
 
 }

@@ -19,12 +19,12 @@
 
 namespace indie
 {
-    void CollideSystem::preInit(SceneManager &sceneManager)
+    void CollideSystem::preInit(IScene &scene)
     {
-        auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
-        std::shared_ptr<indie::Rect> rect = nullptr;
-        std::shared_ptr<indie::Position> pos = nullptr;
-        std::shared_ptr<indie::IComponent> maybeUninitialized = nullptr;
+        auto collidables = scene[IEntity::Tags::COLLIDABLE];
+        std::shared_ptr<Rect> rect = nullptr;
+        std::shared_ptr<Position> pos = nullptr;
+        std::shared_ptr<IComponent> maybeUninitialized = nullptr;
 
         for (auto &collidable : collidables) {
             if (!collidable->hasComponent(IComponent::Type::POSITION) || !collidable->hasComponent(IComponent::Type::HITBOX))
@@ -49,22 +49,24 @@ namespace indie
 
     void CollideSystem::init(SceneManager &sceneManager)
     {
-        auto collidables = sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE];
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
         std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
         std::cout << "CollideSystem::init" << std::endl;
-        if (collidables.empty())
-            return;
-        preInit(sceneManager);
-        for (auto &collidable : collidables) {
-            if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr)
-                continue;
-            hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
-            if (hitbox->is3D())
-                _collidables3D.push_back(std::make_pair(collidable, hitbox));
-            else
-                _collidables2D.push_back(std::make_pair(collidable, hitbox));
+        for (auto &scene : sceneManager.getScenes()) {
+            auto collidables = (*scene.second)[IEntity::Tags::COLLIDABLE];
+            if (collidables.empty())
+                return;
+            preInit((*scene.second));
+            for (auto &collidable : collidables) {
+                if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr)
+                    continue;
+                hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
+                if (hitbox->is3D())
+                    _collidables3D.push_back(std::make_pair(collidable, hitbox));
+                else
+                    _collidables2D.push_back(std::make_pair(collidable, hitbox));
+            }
         }
     }
 

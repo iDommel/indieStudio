@@ -8,22 +8,27 @@
 #ifndef AUDIODEVICE_HPP_
 #define AUDIODEVICE_HPP_
 
-namespace indie {
-    class AudioDevice {
-        public:
-            ///  @brief Constructor a new audio device
-            AudioDevice();
-            ///  @brief Destruct the audio device:: close the audio device
-            ~AudioDevice();
-            ///  @brief isReady:: Check if the audio device is playing
-            bool isReady();
-            ///  @brief Set music volume
-            void setVolume(float volume);
+namespace indie
+{
+    class AudioDevice
+    {
+    public:
+        ///  @brief Constructor a new audio device
+        AudioDevice();
+        ///  @brief Destruct the audio device:: close the audio device
+        ~AudioDevice();
+        /// @brief Init audio device
+        void initAudio();
+        ///  @brief isReady:: Check if the audio device is playing
+        static bool isReady();
+        ///  @brief Set music volume
+        static void setVolume(float volume);
 
-        protected:
-        private:
+        static int &getMasterVolume() {static int masterVolume; return masterVolume;};
+    protected:
+    private:
+        static int masterVolume;
     };
 }
-
 
 #endif /* !AUDIODEVICE_HPP_ */

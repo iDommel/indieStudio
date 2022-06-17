@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2022
-** indieStudio
+** Indie
 ** File description:
-** Player
+** player
 */
 
 #ifndef PLAYER_HPP_
@@ -27,7 +27,7 @@ namespace indie
             BOMB
         };
 
-        Player(int id);
+        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right);
         ~Player();
 
         ///@brief Handle the various bonuses
@@ -64,6 +64,19 @@ namespace indie
         /// @brief sets the velocity of the player to 0 downwards
         void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
 
+        std::string getUp() { return UP; }
+        std::string getDown() { return DOWN; }
+        std::string getLeft() { return LEFT; }
+        std::string getRight() { return RIGHT; }
+        void setUP(std::string _up) { UP = _up; }
+        void setDOWN(std::string _down) { DOWN = _down; }
+        void setLEFT(std::string _left) { LEFT = _left; }
+        void setRIGHT(std::string _right) { RIGHT = _right; }
+
+        int changeUp;
+        int changeDown;
+        int changeLeft;
+        int changeRight;
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
@@ -78,6 +91,10 @@ namespace indie
         static const int _defaultSpeed = 60;
         static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 3;
+        std::string UP;
+        std::string DOWN;
+        std::string LEFT;
+        std::string RIGHT;
     };
 
 }

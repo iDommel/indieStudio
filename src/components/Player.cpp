@@ -4,10 +4,9 @@
 ** File description:
 ** Player
 */
-
+#include "raylib.h"
 #include "Player.hpp"
 
-#include "raylib.h"
 
 #include <functional>
 #include <cmath>
@@ -25,7 +24,7 @@
 namespace indie
 {
 
-    Player::Player(int id) : Component(Type::PLAYER), _id(id)
+    Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right)
     {
         _nbBomb = _defaultNbBomb;
         _blastPower = _defaultBlastPower;
