@@ -14,11 +14,22 @@
 #include "Position.hpp"
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "CollideSystem.hpp"
+
+#define GAME_MAP_WIDTH 15
+#define GAME_MAP_HEIGHT 15
+#define GAME_TILE_SIZE 12
+#define GAME_NB_INDESTRUCTIBLE_WALL 0  //(GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 7
+#define GAME_NB_DESTRUCTIBLE_WALL (GAME_MAP_WIDTH * GAME_MAP_HEIGHT) / 3
+
+struct Vector3;
 
 namespace indie
 {
 
     class IEntity;
+    class Scene;
+    class Position;
 
     class GameSystem : public ISystem
     {
@@ -38,10 +49,11 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void printStuff(SceneManager &);
+        void changeBindings(SceneManager &SceneManager, int id_player, int button);
 
     private:
         std::unique_ptr<IScene> createScene();
+        std::unique_ptr<IScene> createSplashScreen();
         std::unique_ptr<IScene> createMainMenu();
         std::unique_ptr<IScene> createSoundMenu();
         std::unique_ptr<IScene> createHelpMenu();
@@ -56,6 +68,15 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         int nbr_player = 4;
+        int timeElasped;
+        void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos);
+        void updatePlayers(SceneManager &scene, uint64_t dt);
+        CollideSystem _collideSystem;
+        std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
+        /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
+        static void generateMap(const std::string &filename, IScene &scene);
+        static void createMusic(Scene &scene);
+        static void createSound(Scene &scene);
     };
 
 }

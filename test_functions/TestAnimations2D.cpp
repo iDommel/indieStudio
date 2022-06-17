@@ -5,7 +5,7 @@
 ** TestAnimations2D
 */
 
-#include <raylib.h>
+#include "raylib.h"
 
 #include "Texture2D.hpp"
 

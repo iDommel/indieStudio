@@ -6,7 +6,7 @@
 */
 #include "Window.hpp"
 
-#include <raylib.h>
+#include "raylib.h"
 
 namespace indie
 {

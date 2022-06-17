@@ -34,4 +34,14 @@ namespace indie
     {
         DrawModelEx(*ptr.get(), position, rotationAxis, rotationAngle, scale, tint);
     }
+
+    BoundingBox Model::getBoundingBox(void)
+    {
+        return ::GetModelBoundingBox(*ptr);
+    }
+
+    ::Model &Model::getModel()
+    {
+        return *ptr;
+    }
 }

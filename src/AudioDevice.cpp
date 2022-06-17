@@ -5,7 +5,7 @@
 ** AudioDevice
 */
 
-#include <raylib.h>
+#include "raylib.h"
 
 #include "AudioDevice.hpp"
 #include "exceptions/AudioDeviceError.hpp"

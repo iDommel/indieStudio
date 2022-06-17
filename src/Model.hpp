@@ -11,8 +11,10 @@
     struct Model;
     struct Vector3;
     struct Color;
+    struct BoundingBox;
 
     #include <memory>
+    #include <string>
 
 namespace indie {
 
@@ -45,6 +47,14 @@ namespace indie {
              * @param tint Color of the model (WHITE = using texture loaded)
              */
             void drawRotate(Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
+            /**
+             * @brief Get the boudning box of the model (should be updated with a pos to make an hitbox)
+             * @return The bounding box of the model
+             */
+            BoundingBox getBoundingBox(void);
+
+            ::Model &getModel();
+
         private:
             ///@brief Pointer to the model struct of raylib
             std::unique_ptr <::Model> ptr;

@@ -58,6 +58,14 @@ namespace indie
         virtual bool hasTag(Tags tag) const = 0;
 
         /**
+         * @brief checks if an entity has a given component
+         *
+         * @param type the type to check
+         * @return true if it has it, false if it doesn't
+         */
+        virtual bool hasComponent(IComponent::Type type) const = 0;
+
+        /**
          * @brief Get components of given types
          * @param components Vector of components types to search for
          * @return Returns a vector of components of the given types in the same order

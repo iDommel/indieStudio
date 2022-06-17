@@ -10,21 +10,20 @@
 
 #include <tuple>
 
-#include "Component.hpp"
+#include "AVector.hpp"
 
 namespace indie
 {
 
-    class Position : public Component
+    class Position : public AVector
     {
     public:
-        Position(float newX, float newY, float newZ = 0) : x(newX), y(newY), z(newZ) { _type = IComponent::Type::VECTOR; }
-
-        void setPosition(float newX, float newY, float newZ) { x = newX; y = newY; z = newZ; }
-
-        float x;
-        float y;
-        float z;
+        Position(float x, float y, float z = 0);
+        Position(const Position &other);
+        Position(const Position &&other);
+        void operator=(const Position &other);
+        Position(const AVector &other);
+        void operator=(const AVector &other);
     };
 }
 
