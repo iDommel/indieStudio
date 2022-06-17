@@ -37,6 +37,7 @@ namespace indie
          * @param manager The scene manager
          */
         void generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity);
+        void updateBombsVec();
 
         ///@brief gets the player ID
         int getId() const;
@@ -46,6 +47,8 @@ namespace indie
 
         ///@brief gets the current maximum number of bomb a player can drop
         int getNbBomb() const;
+        ///@brief Sets the current maximum number of bomb a player can drop
+        void setNbBomb(int newNbBomb);
 
         /// @brief sets the velocity of the player to its speed value to the right
         void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
@@ -83,7 +86,7 @@ namespace indie
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
-        int _nbBomb;
+        size_t _nbBombMax = 3;
         int _blastPower;
         int _speed;
         int _id;
@@ -92,12 +95,12 @@ namespace indie
         bool _isLeft = false;
         bool _isRight = false;
         static const int _defaultSpeed = 60;
-        static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 3;
         std::string UP;
         std::string DOWN;
         std::string LEFT;
         std::string RIGHT;
+        std::vector<std::shared_ptr<IEntity>> _bombs;
         std::string BOMB;
     };
 
