@@ -79,11 +79,11 @@ namespace indie
         int _blastPower;
         int _speed;
         int _id;
-        bool _isUp;
-        bool _isDown;
-        bool _isLeft;
-        bool _isRight;
-        static const int _defaultSpeed = 40;
+        bool _isUp = false;
+        bool _isDown = false;
+        bool _isLeft = false;
+        bool _isRight = false;
+        static const int _defaultSpeed = 60;
         static const int _defaultNbBomb = 3;
         static const int _defaultBlastPower = 1;
         std::string UP;

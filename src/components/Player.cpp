@@ -4,10 +4,9 @@
 ** File description:
 ** Player
 */
-
+#include "raylib.h"
 #include "Player.hpp"
 
-#include "raylib.h"
 
 #include <functional>
 

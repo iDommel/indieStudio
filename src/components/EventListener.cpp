@@ -5,9 +5,9 @@
 ** EventListener
 */
 
+#include "raylib.h"
 #include "EventListener.hpp"
 
-#include "raylib.h"
 namespace indie
 {
 
@@ -68,9 +68,9 @@ namespace indie
         _gamepadMap[gamepad].erase(oldKey);
     }
 
-    void EventListener::addGamepadStickEvent(int gamepad, int axis, std::function<void(float)> func)
+    void EventListener::addGamepadStickEvent(int gamepad, int axis, GamepadStickCallbacks callbacks)
     {
-        _gamepadStickMap[gamepad][axis] = func;
+        _gamepadStickMap[gamepad][axis] = callbacks;
     }
 
     void EventListener::removeGamepadStickEvent(int gamepad, int axis)
@@ -98,7 +98,7 @@ namespace indie
         return _gamepadMap[gamepad];
     }
 
-    std::map<int, std::function<void(float)>> &EventListener::getGamepadStickMappings(int gamepad)
+    std::map<int, GamepadStickCallbacks> &EventListener::getGamepadStickMappings(int gamepad)
     {
         return _gamepadStickMap[gamepad];
     }
