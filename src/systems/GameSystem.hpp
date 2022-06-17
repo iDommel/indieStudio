@@ -55,7 +55,7 @@ namespace indie
         void createNumberEvent(std::shared_ptr<Entity> &entity, int nbr_player);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
-        int nbr_player;
+        int nbr_player = 4;
     };
 
 }

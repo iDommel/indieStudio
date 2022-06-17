@@ -339,11 +339,12 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
-                    std::shared_ptr<Entity> entity = createImage("assets/MainMenu/circle.png", Position(pos->x - 30, pos->y - 20), 80, 80);
-                    std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
-
-                    createSceneEvent(entity2, SceneManager::SceneType::GAME);
-                    sceneManager.getCurrentScene().addEntities({entity, entity2});
+                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2];
+                    auto component = entity->getFilteredComponents({ IComponent::Type::VECTOR });
+                    auto pos1 = Component::castComponent<Position>(component[0]);
+                    
+                    pos1->x = pos->x - 30;
+                    pos1->y = pos->y - 20;
                     nbr_player = _nbr_player;
                 }
             },
@@ -543,14 +544,17 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createText("2", Position(350, 250), 50);
         std::shared_ptr<Entity> entity6 = createText("3", Position(450, 250), 50);
         std::shared_ptr<Entity> entity7 = createText("4", Position(550, 250), 50);
+        std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 36);
+        std::shared_ptr<Entity> entity9 = createImage("assets/MainMenu/circle.png", Position(520, 230), 80, 80);
     
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
         createNumberEvent(entity4, 1);
         createNumberEvent(entity5, 2);
         createNumberEvent(entity6, 3);
         createNumberEvent(entity7, 4);
+        createSceneEvent(entity8, SceneManager::SceneType::GAME);
 
-        scene->addEntities({entity2, entity3 ,entity4, entity5, entity6, entity7});
+        scene->addEntities({entity2, entity3 ,entity4, entity5, entity6, entity7 ,entity8, entity9});
         return scene;
     }
 
