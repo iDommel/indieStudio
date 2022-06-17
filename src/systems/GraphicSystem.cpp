@@ -197,12 +197,7 @@ namespace indie
         hitbox = Component::castComponent<Hitbox>(boxComponent);
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
-            std::cout << "path:" << model->getModelPath() << std::endl;
-            std::cout << "size.x " << box.max.x - box.min.x << std::endl;
-            std::cout << "size.y " << box.max.y - box.min.y << std::endl;
-            std::cout << "size.z " << box.max.z - box.min.z << std::endl;
             auto pos = hitbox->getBBox().max;
-            std::cout << "ici" << std::endl;
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;
