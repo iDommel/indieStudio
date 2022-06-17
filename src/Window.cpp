@@ -180,4 +180,16 @@ namespace indie
     {
         SetExitKey(key);
     }
+
+    int Window::getScreenWidth()
+    {
+        int position = GetScreenWidth();
+        return (position);
+    }
+
+    int Window::getScreenHeight()
+    {
+        int position = GetScreenHeight();
+        return (position);
+    }
 }

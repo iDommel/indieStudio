@@ -55,6 +55,7 @@ target_sources(${PROJECT_NAME}
         src/components/Sphere.cpp
         src/components/Cube.cpp
         src/components/Grid.cpp
+        src/components/Bomb.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp

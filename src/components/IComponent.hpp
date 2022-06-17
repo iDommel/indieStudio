@@ -35,6 +35,9 @@ namespace indie
             CUBE,
             GRID,
             ANIMATION,
+            BOMB,
+            TIMER,
+            DESTRUCTIBLE,
             TYPE_NB
         };
         virtual const Type &getType() const = 0;

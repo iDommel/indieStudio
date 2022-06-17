@@ -57,7 +57,7 @@ namespace indie
          * @param position Position of the bounding box corner used as origin
          * @return Newly created BoundingBox
          **/
-        BoundingBox makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos) const;
+        static BoundingBox makeBBoxFromSizePos(const Vector3 &size, const Vector3 &pos);
 
         /**
          * @brief Update a bounding box from a model with his position
@@ -217,7 +217,7 @@ namespace indie
         bool check2DCollision(const Vector2 &center, float radius, const Vector2 &point) const;
 
     private:
-        void preInit(SceneManager &sceneManager);
+        void preInit(IScene &scene);
 
         std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
         std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;

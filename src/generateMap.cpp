@@ -20,6 +20,8 @@
 #include "GameSystem.hpp"
 #include "Model3D.hpp"
 #include "Cube.hpp"
+#include "Destructible.hpp"
+#include "GameSystem.hpp"
 
 namespace indie
 {
@@ -57,6 +59,7 @@ namespace indie
 
         wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Hitbox>(true))
+            .addComponent(std::make_shared<Destructible>())
             // .addComponent(std::make_shared<Cube>(size, BROWN)
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
@@ -102,15 +105,20 @@ namespace indie
         return 0;
     }
 
-    static std::shared_ptr<IEntity> createSpawn(int x, int y)
+    void GameSystem::createSpawn(int x, int y, IScene &scene)
     {
         static unsigned int nb = 0;
-        std::shared_ptr<Entity> spawn = std::make_shared<Entity>();
+        static int keys[4][5] = {
+            {KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END},
+            {KEY_D, KEY_A, KEY_W, KEY_S, KEY_E},
+            {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
+            {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
+        };
 
+        if (nb >= 4)
+            return;
+        createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
         nb++;
-        spawn->addComponent(std::make_shared<Position>(x, 0, y));
-        spawn->addComponent(std::make_shared<Sprite>("o"));
-        return spawn;
     }
 
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)
@@ -158,9 +166,8 @@ namespace indie
                 } else if (line[i] == 'H') {
                     scene.addEntity(createIndestructibleWall(i * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleWallFile));
                     map[y][i] = line[i];
-                }
-                // else if (line[i] == 'o')
-                //     scene.addEntity(createSpawn(i, y));
+                } else if (line[i] == 'o')
+                    createSpawn(i, y, scene);
             }
         }
         file.close();

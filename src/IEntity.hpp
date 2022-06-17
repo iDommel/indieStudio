@@ -29,8 +29,11 @@ namespace indie
             AUDIBLE,
             CALLABLE,
             BONUS,
-            PLAYER,
             CAMERA,
+            BOMB,
+            TIMED,
+            DESTRUCTIBLE,
+            PLAYER
         };
 
         virtual ~IEntity() = default;

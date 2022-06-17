@@ -15,6 +15,7 @@ indie::AudioDevice::AudioDevice()
     InitAudioDevice();
     if (isReady() != true)
         throw AudioDeviceError("AudioDevice already initialized");
+    setVolume(50);
 }
 
 indie::AudioDevice::~AudioDevice()
