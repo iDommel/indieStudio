@@ -21,7 +21,10 @@ void testBasicCollisions(void)
     InitWindow(screenWidth, screenHeight, "raylib [models] example - box collisions");
 
     // Define the camera to look into our 3d world
-    Camera camera = { { 0.0f, 10.0f, 10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
+    Vector3 a = { 0.0f, 10.0f, 10.0f };
+    Vector3 b = { 0.0f, 0.0f, 0.0f };
+    Vector3 c = { 0.0f, 1.0f, 0.0f };
+    Camera camera = {a, b, c, 45.0f, 0 };
 
     Vector3 playerPosition = { 0.0f, 1.0f, 2.0f };
     Vector3 playerSize = { 1.0f, 2.0f, 1.0f };
@@ -74,31 +77,21 @@ void testBasicCollisions(void)
         collision = false;
         collision2d = false;
 
+        Vector3 d = { playerPosition.x - playerSize.x / 2, playerPosition.y - playerSize.y / 2, playerPosition.z - playerSize.z / 2 };
+        Vector3 e = { playerPosition.x + playerSize.x / 2, playerPosition.y + playerSize.y / 2, playerPosition.z + playerSize.z / 2 };
+        BoundingBox one = { d, e };
+        d = { enemyBoxPos.x - enemyBoxSize.x / 2, enemyBoxPos.y - enemyBoxSize.y / 2, enemyBoxPos.z - enemyBoxSize.z / 2 };
+        e = { enemyBoxPos.x + enemyBoxSize.x / 2, enemyBoxPos.y + enemyBoxSize.y / 2, enemyBoxPos.z + enemyBoxSize.z / 2 };
+        BoundingBox two = { d, e };
         // Check collisions player vs enemy-box
-        if (collideSystem.check3DCollision(
-            (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
-                                     playerPosition.y - playerSize.y/2,
-                                     playerPosition.z - playerSize.z/2 },
-                          (Vector3){ playerPosition.x + playerSize.x/2,
-                                     playerPosition.y + playerSize.y/2,
-                                     playerPosition.z + playerSize.z/2 }},
-            (BoundingBox){(Vector3){ enemyBoxPos.x - enemyBoxSize.x/2,
-                                     enemyBoxPos.y - enemyBoxSize.y/2,
-                                     enemyBoxPos.z - enemyBoxSize.z/2 },
-                          (Vector3){ enemyBoxPos.x + enemyBoxSize.x/2,
-                                     enemyBoxPos.y + enemyBoxSize.y/2,
-                                     enemyBoxPos.z + enemyBoxSize.z/2 }}))
+        if (collideSystem.check3DCollision(one, two))
             collision = true;
 
+        d = { playerPosition.x - playerSize.x / 2, playerPosition.y - playerSize.y / 2, playerPosition.z - playerSize.z / 2 };
+        e = { playerPosition.x + playerSize.x / 2, playerPosition.y + playerSize.y / 2, playerPosition.z + playerSize.z / 2 };
+        one = { d, e };
         // Check collisions player vs enemy-sphere
-        if (collideSystem.check3DCollision(
-            (BoundingBox){(Vector3){ playerPosition.x - playerSize.x/2,
-                                     playerPosition.y - playerSize.y/2,
-                                     playerPosition.z - playerSize.z/2 },
-                          (Vector3){ playerPosition.x + playerSize.x/2,
-                                     playerPosition.y + playerSize.y/2,
-                                     playerPosition.z + playerSize.z/2 }},
-            enemySpherePos, enemySphereSize))
+        if (collideSystem.check3DCollision(one, enemySpherePos, enemySphereSize))
                 collision = true;
 
          // Check collisions player vs rectangle

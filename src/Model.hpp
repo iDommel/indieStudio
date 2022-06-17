@@ -14,6 +14,7 @@
     struct BoundingBox;
 
     #include <memory>
+    #include <string>
 
 namespace indie {
 
@@ -51,6 +52,9 @@ namespace indie {
              * @return The bounding box of the model
              */
             BoundingBox getBoundingBox(void);
+
+            ::Model &getModel();
+
         private:
             ///@brief Pointer to the model struct of raylib
             std::unique_ptr <::Model> ptr;

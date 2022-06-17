@@ -14,7 +14,6 @@
 #include "Component.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "MouseCallbacks.hpp"
-#include "raylib.h"
 namespace indie
 {
 
@@ -91,9 +90,9 @@ namespace indie
          *
          * @param gamepad the gamepad fow which the events are listened to
          * @param axis the stick aswell as the axis to listen to
-         * @param func a function that will be called on every update to react to the stick position
+         * @param callbacks
          */
-        void addGamepadStickEvent(int gamepad, int axis, std::function<void(float)> func);
+        void addGamepadStickEvent(int gamepad, int axis, GamepadStickCallbacks callbacks);
         /**
          * @brief unbinds a GamepadStickAxis
          *
@@ -114,7 +113,7 @@ namespace indie
         /// @brief gets a reference to the gamepad mappings of a specified gamepad
         std::map<GamepadButton, ButtonCallbacks> &getGamepadMappings(int gamepad);
         /// @brief gets a reference to the gamepad stick mappings of a specified gamepad
-        std::map<int, std::function<void(float)>> &getGamepadStickMappings(int gamepad);
+        std::map<int, GamepadStickCallbacks> &getGamepadStickMappings(int gamepad);
 
     protected:
     private:
@@ -122,8 +121,7 @@ namespace indie
         std::map<char, ButtonCallbacks> _keyboardCharMap;
         std::map<MouseButton, MouseCallbacks> _mouseMap;
         std::map<int, std::map<GamepadButton, ButtonCallbacks>> _gamepadMap;
-        std::map<int, std::map<int, std::function<void(float)>>> _gamepadStickMap;
-        bool _isInitialized = true;
+        std::map<int, std::map<int, GamepadStickCallbacks>> _gamepadStickMap;
     };
 }  // namespace indie
 

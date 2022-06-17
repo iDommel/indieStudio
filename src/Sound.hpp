@@ -52,9 +52,11 @@ namespace indie
          */
         void setVolume(float volume);
 
+        SoundState &getSound() { return _state; };
+
     private:
+        SoundState _state = SoundState::PAUSED;
         std::unique_ptr<::Sound> _sound;
-        SoundState _state = SoundState::STOPPED;
     };
 
 }

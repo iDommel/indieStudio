@@ -14,5 +14,6 @@ void testTextures(void);
 void TestAnimations2D(void);
 void testBasicCollisions(void);
 void testModelsCollision(void);
+void test_raylib_modelAnimation();
 
 #endif /* !TESTHEADERS_HPP_ */

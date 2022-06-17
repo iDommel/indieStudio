@@ -40,6 +40,8 @@ namespace indie
 
     void Scene::removeEntity(std::shared_ptr<IEntity> entity)
     {
+        if (!entity)
+            return;
         for (auto &tag : entity->getTags()) {
             auto it = std::find(_taggedEntities[tag].begin(), _taggedEntities[tag].end(), entity);
             if (it != _taggedEntities[tag].end())

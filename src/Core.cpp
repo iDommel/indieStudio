@@ -8,6 +8,7 @@
 #include "Core.hpp"
 
 #include <chrono>
+#include <thread>
 
 #include "raylib.h"
 #include "systems/AudioSystem.hpp"
@@ -24,7 +25,6 @@ namespace indie
         _systems[SystemType::AUDIO] = std::make_unique<AudioSystem>();
         _systems[SystemType::GAME] = std::make_unique<GameSystem>();
         _systems[SystemType::EVENT] = std::make_unique<EventSystem>();
-        _systems[SystemType::COLLIDE] = std::make_unique<CollideSystem>();
     }
 
     void Core::mainLoop()
@@ -39,8 +39,10 @@ namespace indie
         while (!_sceneManager.getShouldClose()) {
             auto time = std::chrono::high_resolution_clock::now();
             auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(time - clock).count();
-            if (deltaTime < UPDATE_DELTA)
+            if (deltaTime < UPDATE_DELTA) {
+                // std::this_thread::sleep_for(std::chrono::milliseconds(UPDATE_DELTA - deltaTime));
                 continue;
+            }
             _systems[SystemType::EVENT]->update(_sceneManager, deltaTime);
             _systems[SystemType::GAME]->update(_sceneManager, deltaTime);
             _systems[SystemType::GRAPHIC]->update(_sceneManager, deltaTime);

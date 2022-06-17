@@ -5,15 +5,15 @@
 ** Sphere.cpp
 */
 
-
 #include "raylib.h"
+
 #include "Sphere.hpp"
 
 namespace indie
 {
-    Sphere::Sphere(float radius, Color color) : _radius(radius), _color(color)
+    Sphere::Sphere(float radius, Color color) : Component(Type::SPHERE), _radius(radius), _color(color)
     {
-        _type = Type::SPHERE;
+        _isInitialized = true;
     }
 
     Color &Sphere::getColor()
