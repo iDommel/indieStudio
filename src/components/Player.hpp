@@ -27,7 +27,7 @@ namespace indie
             BOMB
         };
 
-        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right);
+        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb);
         ~Player();
 
         ///@brief Handle the various bonuses

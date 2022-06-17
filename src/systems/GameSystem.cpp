@@ -47,7 +47,7 @@ namespace indie
         sceneManager.addScene(createHelpMenu(), SceneManager::SceneType::HELP);
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.addScene(createPreGameMenu(), SceneManager::SceneType::PREGAME);
-        sceneManager.addScene(createPauseMenu(sceneManager), SceneManager::SceneType::PAUSE);
+        sceneManager.addScene(createPauseMenu(), SceneManager::SceneType::PAUSE);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
         AudioDevice::getMasterVolume() += 0.5;
@@ -127,8 +127,8 @@ namespace indie
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
         int firstText = 9;
-        for (auto &scene : sceneManager.getScenes()) {
-            for (auto &e : (*scene.second)[IEntity::Tags::PLAYER]) {
+        if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::CONTROLLER) {
+            for (auto &e : sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER]) {
                 auto players = Component::castComponent<Player>(e->getFilteredComponents({ IComponent::Type::PLAYER })[0]);
                 updateTextBindings(sceneManager, players, firstText);
                 replaceTextBindings(sceneManager, players, firstText);
@@ -560,17 +560,18 @@ namespace indie
         return scene;
     }
 
-    std::unique_ptr<IScene> GameSystem::createPauseMenu(SceneManager &sceneManager)
+    std::unique_ptr<IScene> GameSystem::createPauseMenu()
     {
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPauseMenu, this, std::ref(sceneManager)));
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPauseMenu, this));
 
         std::shared_ptr<Entity> entity = createText("Pause", Position(325, 50), 50);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/resume_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
         std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
         std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
         std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
-        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 550 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 800 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 600 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/pause.png", Position(0, 0), 800, 600);
 
         createSceneEvent(entity2, SceneManager::SceneType::GAME);
         createSceneEvent(entity3, SceneManager::SceneType::SOUND);
@@ -579,7 +580,7 @@ namespace indie
         createSceneEvent(entity6, SceneManager::SceneType::NONE);
         createSceneEvent(entity7, SceneManager::SceneType::MAIN_MENU);
 
-        scene->addEntities({entity, entity2, entity3, entity4, entity5, entity6, entity7});
+        scene->addEntities({entity8, entity, entity2, entity3, entity4, entity5, entity6, entity7});
         return (scene);
     }
 
@@ -613,7 +614,7 @@ namespace indie
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
         std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(true);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-        std::shared_ptr<Player> player = std::make_shared<Player>(id, "Z", "S", "Q", "D");
+        std::shared_ptr<Player> player = std::make_shared<Player>(id, "Z", "S", "Q", "D", "A");
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
 
         ButtonCallbacks moveRightCallbacks(
