@@ -72,10 +72,6 @@ namespace indie
             sceneManager.getCurrentScene().removeEntity(sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]);
         }*/
 
-        //Check if there is any bonus
-        for (auto &bonus : sceneManager.getCurrentScene()[IEntity::Tags::BONUS]) {
-            auto comp = Component::castComponent<Bonus>((*bonus)[IComponent::Type::BONUS]);
-            std::cout << "Bonuuuuuuuss !!!!!" << std::endl;
         updatePlayers(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
@@ -140,13 +136,30 @@ namespace indie
         return scene;
     }
 
+    void GameSystem::createBonus(Scene &scene) {
+        std::shared_ptr<Entity> bonus = std::make_shared<Entity>();
+        std::shared_ptr<Position> bonusPos = std::make_shared<Position>(500, 100);
+        std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(true);
+
+        bonus->addComponent(bonusPos)
+            .addComponent(bonusHitbox);
+        scene.addEntity(bonus);
+    }
+
+    void GameSystem::updateBonuses(SceneManager &sceneManager, uint64_t dt)
+    {
+        for (auto &bonus : sceneManager.getCurrentScene()[IEntity::Tags::BONUS]) {
+            auto comp = Component::castComponent<Bonus>((*bonus)[IComponent::Type::BONUS]);
+            std::cout << "Bonuuuuuuuss !!!!!" << std::endl;
+        }
+    }
+
+
     void GameSystem::createMusic(Scene &scene)
     {
         std::shared_ptr<Entity> musicEntity = std::make_shared<Entity>();
         std::shared_ptr<MusicComponent> musicComponent = std::make_shared<MusicComponent>("music.ogg");
 
-        std::shared_ptr<EventListener> listener = std::make_shared<EventListener>();
-        listener->addKeyboardEvent(KEY_SPACE, spaceCallbacks);
         musicEntity->addComponent(musicComponent);
         scene.addEntities({musicEntity});
     }
