@@ -28,8 +28,8 @@ namespace indie
             COLLIDABLE,
             AUDIBLE,
             CALLABLE,
-            PLAYER,
             CAMERA,
+            PLAYER
         };
 
         virtual ~IEntity() = default;

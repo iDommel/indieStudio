@@ -9,6 +9,11 @@
 #define GAME_SYSTEM_HPP
 
 #include "ISystem.hpp"
+#include "SceneManager.hpp"
+#include "Scene.hpp"
+#include "Position.hpp"
+#include "Entity.hpp"
+#include "Player.hpp"
 #include "CollideSystem.hpp"
 
 #define GAME_MAP_WIDTH 15
@@ -44,10 +49,23 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void printStuff(SceneManager &);
+        void changeBindings(SceneManager &SceneManager, int id_player, int button);
 
     private:
         std::unique_ptr<IScene> createScene();
+        std::unique_ptr<IScene> createSplashScreen();
+        std::unique_ptr<IScene> createMainMenu();
+        std::unique_ptr<IScene> createSoundMenu();
+        std::unique_ptr<IScene> createHelpMenu();
+        std::unique_ptr<IScene> createControllerMenu();
+        void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
+        void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
+        std::shared_ptr<Entity> createButton(std::string path, Position position, int heigh, int width);
+        std::shared_ptr<Entity> createText(std::string text, Position position, float fontSize);
+        void createBindingsEvent(std::shared_ptr<Entity> &entity, int id_player, int button);
+        void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
+        void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
+        int timeElasped;
         void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;

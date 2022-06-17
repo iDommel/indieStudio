@@ -27,12 +27,12 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
-            PLAYER,
             RECT,
             CAMERA,
             SPHERE,
             CUBE,
             GRID,
+            PLAYER,
             ANIMATION,
             TYPE_NB
         };

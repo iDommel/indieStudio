@@ -4,6 +4,7 @@
 ** File description:
 ** GraphicSystem.cpp
 */
+#include <iostream>
 
 #include "raylib.h"
 
@@ -39,15 +40,19 @@ namespace indie
         for (auto &scene : sceneManager.getScenes()) {
             for (auto &entity : (*scene.second)[IEntity::Tags::SPRITE_2D])
                 loadSprite(entity);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
+            for (auto &e : (*scene.second)[IEntity::Tags::RENDERABLE_3D])
                 loadModel(e);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::TEXT])
+            for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
         }
     }
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
+        for (auto &scene : sceneManager.getScenes()) {
+            for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
+                loadText(e);
+        }
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
@@ -197,6 +202,7 @@ namespace indie
             std::cout << "size.y " << box.max.y - box.min.y << std::endl;
             std::cout << "size.z " << box.max.z - box.min.z << std::endl;
             auto pos = hitbox->getBBox().max;
+            std::cout << "ici" << std::endl;
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;
