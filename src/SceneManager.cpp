@@ -9,6 +9,8 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
+
 namespace indie
 {
     void SceneManager::addScene(std::unique_ptr<IScene> scene, SceneType sceneType)

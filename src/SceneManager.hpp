@@ -27,6 +27,8 @@ namespace indie
             CONTROLLER,
             HELP,
             PAUSE,
+            OPTION,
+            SPLASH,
             SOUND,
             NB_SCENES,
             PREVIOUS

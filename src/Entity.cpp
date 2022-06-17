@@ -15,17 +15,17 @@ namespace indie
 
     const std::map<Entity::Tags, std::vector<std::vector<IComponent::Type>>> Entity::entityTags = {
         {IEntity::Tags::SPRITE_2D,
-        {{IComponent::Type::SPRITE, IComponent::Type::VECTOR}}},
+         {{IComponent::Type::SPRITE, IComponent::Type::POSITION}}},
         {Entity::Tags::TEXT,
-         {{IComponent::Type::TEXT, IComponent::Type::VECTOR}}},
+         {{IComponent::Type::TEXT, IComponent::Type::POSITION}}},
         {Entity::Tags::RENDERABLE_3D,
-         {{IComponent::Type::VECTOR, IComponent::Type::MODEL}}},
+         {{IComponent::Type::POSITION, IComponent::Type::MODEL}}},
         {Entity::Tags::GRID,
          {{IComponent::Type::GRID}}},
         {Entity::Tags::CUBE,
-          {{IComponent::Type::VECTOR, IComponent::Type::CUBE}}},
+         {{IComponent::Type::POSITION, IComponent::Type::CUBE}}},
         {Entity::Tags::SPHERE,
-         {{IComponent::Type::VECTOR, IComponent::Type::SPHERE}}},
+         {{IComponent::Type::POSITION, IComponent::Type::SPHERE}}},
         {Entity::Tags::AUDIBLE,
          {{IComponent::Type::MUSIC},
           {IComponent::Type::SOUND}}},
@@ -35,8 +35,9 @@ namespace indie
          {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}},
-        {IEntity::Tags::PLAYER,
-        {{IComponent::Type::PLAYER}}}};
+        {Entity::Tags::PLAYER,
+         {{IComponent::Type::PLAYER}}},
+    };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {
@@ -45,7 +46,6 @@ namespace indie
         IComponent::Type type = component->getType();
         _componentsType.push_back(type);
         _components[type] = component;
-        // _components.insert(std::make_pair(component->getType(), std::move(component)));
         for (auto &tag : entityTags) {
             if (this->hasTag(tag.first))
                 continue;
@@ -78,6 +78,11 @@ namespace indie
         return (std::find(_tags.begin(), _tags.end(), tag) != _tags.end());
     }
 
+    bool Entity::hasComponent(IComponent::Type type) const
+    {
+        return (std::find(_componentsType.begin(), _componentsType.end(), type) != _componentsType.end());
+    }
+
     std::map<IComponent::Type, std::shared_ptr<IComponent>> &Entity::getComponents()
     {
         return _components;
@@ -97,8 +102,12 @@ namespace indie
 
     std::shared_ptr<IComponent> &Entity::operator[](IComponent::Type type)
     {
-        if (_components.find(type) == _components.end())
-            throw std::runtime_error("Entity: Component type not found");
-        return _components.at(type);
+        static std::shared_ptr<IComponent> null = nullptr;
+
+        if (type >= IComponent::Type::TYPE_NB)
+            throw std::invalid_argument("Entity: Component type not found");
+        if (_components.find(type) != _components.end())
+            return _components.at(type);
+        return null;
     }
 }
