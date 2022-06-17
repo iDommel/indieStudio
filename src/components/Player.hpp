@@ -32,6 +32,11 @@ namespace indie
 
         ///@brief Handle the various bonuses
         void handleBonus();
+        /**
+         * @brief Generate a bomb and add it to the entities list
+         * @param manager The scene manager
+         */
+        void generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity);
 
         ///@brief gets the player ID
         int getId() const;
@@ -85,7 +90,7 @@ namespace indie
         bool _isRight = false;
         static const int _defaultSpeed = 60;
         static const int _defaultNbBomb = 3;
-        static const int _defaultBlastPower = 1;
+        static const int _defaultBlastPower = 3;
         std::string UP;
         std::string DOWN;
         std::string LEFT;

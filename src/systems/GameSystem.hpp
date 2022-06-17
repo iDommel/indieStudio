@@ -67,12 +67,14 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         int timeElasped;
-        void createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos);
+        static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
+        void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
         static void generateMap(const std::string &filename, IScene &scene);
+        static void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
     };

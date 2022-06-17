@@ -9,6 +9,7 @@
 
 
 #include <functional>
+#include <cmath>
 
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
@@ -16,6 +17,9 @@
 #include "String.hpp"
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
+#include "Bomb.hpp"
+#include "Sphere.hpp"
+#include "GameSystem.hpp"
 
 namespace indie
 {
@@ -39,56 +43,56 @@ namespace indie
             _blastPower++;*/
     }
 
-    void Player::moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = true;
         move(vel);
     }
 
-    void Player::stopRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = false;
         move(vel);
     }
 
-    void Player::moveLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = true;
         move(vel);
     }
 
-    void Player::stopLeft(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = false;
         move(vel);
     }
 
-    void Player::moveUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = true;
         move(vel);
     }
 
-    void Player::stopUp(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = false;
         move(vel);
     }
 
-    void Player::moveDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::moveDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = true;
         move(vel);
     }
 
-    void Player::stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT)
+    void Player::stopDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = false;
@@ -113,5 +117,21 @@ namespace indie
     int Player::getNbBomb() const
     {
         return _nbBomb;
+    }
+
+    void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
+    {
+        std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+        auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
+
+        if (bomb) {
+            Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+            Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
+            bomb->addComponent(std::make_shared<Bomb>(_blastPower));
+            bomb->addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE));
+            bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
+                .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
+        }
+        manager.getCurrentScene().addEntity(bomb);
     }
 }

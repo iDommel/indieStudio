@@ -27,6 +27,9 @@
 #include "Sprite.hpp"
 #include "String.hpp"
 #include "Velocity.hpp"
+#include "Bomb.hpp"
+#include "Timer.hpp"
+#include "Destructible.hpp"
 #include "CameraComponent.hpp"
 #include "SoundComponent.hpp"
 #include "MusicComponent.hpp"
@@ -128,10 +131,8 @@ namespace indie
                 sceneManager.setCurrentScene(SceneManager::SceneType::MAIN_MENU);
             }
         }
-        static int i = 0;
-
-        i++;
         updatePlayers(sceneManager, dt);
+        updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
         for (auto &renderable : renderables) {
@@ -349,9 +350,50 @@ namespace indie
 
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
             (*hitbox) += *vel * (float)(dt / 1000.0f);
-            if (!_collideSystem.getColliders(player).empty()) {
-                (*pos) = lastPos;
-                (*hitbox) -= *vel * (float)(dt / 1000.0f);
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos) = lastPos;
+                    (*hitbox) -= *vel * (float)(dt / 1000.0f);
+                    break;
+                }
+            }
+        }
+    }
+
+    void GameSystem::updateBombs(SceneManager &sceneManager, uint64_t dt)
+    {
+        auto bombs = sceneManager.getCurrentScene()[IEntity::Tags::BOMB];
+        auto explosions = sceneManager.getCurrentScene()[IEntity::Tags::TIMED];
+
+        for (auto &bomb : bombs) {
+            auto comp = Component::castComponent<Bomb>((*bomb)[IComponent::Type::BOMB]);
+            auto pos = Component::castComponent<Position>((*bomb)[IComponent::Type::POSITION]);
+            Vector3 vec = {pos->x, pos->y, pos->z};
+            comp->setTimer(comp->getTimer() - dt);
+            if (comp->getTimer() <= 0) {
+                comp->explode(sceneManager, vec);
+                sceneManager.getCurrentScene().removeEntity(bomb);
+            }
+        }
+
+        for (auto &explosion : explosions) {
+            auto comp = Component::castComponent<Timer>((*explosion)[IComponent::Type::TIMER]);
+            comp->getTime() -= dt;
+            if (comp->getTime() <= 0) {
+                sceneManager.getCurrentScene().removeEntity(explosion);
+                continue;
+            }
+
+            for (auto &collider : _collideSystem.getColliders(explosion)) {
+                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                else if (collider->hasTag(IEntity::Tags::BOMB)) {
+                    auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
+                    auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
+                    Vector3 vec = {pos->x, pos->y, pos->z};
+                    bombComp->explode(sceneManager, vec);
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                }
             }
         }
     }
@@ -476,10 +518,9 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
+        // createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
         createSound(*scene);
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
-        createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
         return scene;
@@ -531,7 +572,7 @@ namespace indie
         scene.addEntities({soundEntity2});
     }
 
-    void GameSystem::createPlayer(Scene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int id, Position pos)
+    void GameSystem::createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos)
     {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(pos);
@@ -540,6 +581,7 @@ namespace indie
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id, "Z", "S", "Q", "D");
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
+        std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
         ButtonCallbacks moveRightCallbacks(
             [player, playerEntity](SceneManager &manager) {
@@ -593,37 +635,23 @@ namespace indie
             [player, playerEntity](SceneManager &manager) {
                 player->stopDown(manager, playerEntity, 1);
             });
-
-        // GamepadStickCallbacks moveHorizontalStickCallbacks(
-        //     [player, playerEntity](SceneManager &manager, float) {
-        //         player->moveLeft(manager, playerEntity, 1);
-        //     },
-        //     [player, playerEntity](SceneManager &manager) {
-        //         player->stopRight(manager, playerEntity, 1);
-        //         player->stopLeft(manager, playerEntity, 1);
-        //     },
-        //     [player, playerEntity](SceneManager &manager, float) {
-        //         player->moveRight(manager, playerEntity, 1);
-        //     });
-        // GamepadStickCallbacks moveVerticalStickCallbacks(
-        //     [player, playerEntity](SceneManager &manager, float) {
-        //         player->moveUp(manager, playerEntity, 1);
-        //     },
-        //     [player, playerEntity](SceneManager &manager) {
-        //         player->stopDown(manager, playerEntity, 1);
-        //         player->stopUp(manager, playerEntity, 1);
-        //     },
-        //     [player, playerEntity](SceneManager &manager, float) {
-        //         player->moveDown(manager, playerEntity, 1);
-        //     });
+        ButtonCallbacks bombCallbacks(
+            [player, playerEntity](SceneManager &manager) {
+                player->generateBomb(manager, playerEntity);
+            },
+            [player, playerEntity](SceneManager &) {},
+            [player, playerEntity](SceneManager &) {},
+            [player, playerEntity](SceneManager &) {});
         playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
         playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)keyBomb, bombCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_UP, moveUpCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_RIGHT, moveRightCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_DOWN, moveDownCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_LEFT, moveLeftCallbacks);
+        playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_RIGHT_FACE_LEFT, bombCallbacks);
         // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_X, moveHorizontalStickCallbacks);
         // playerListener->addGamepadStickEvent(id - 1, GAMEPAD_AXIS_LEFT_Y, moveVerticalStickCallbacks);
 
@@ -632,7 +660,8 @@ namespace indie
             .addComponent(playerVel)
             .addComponent(playerListener)
             .addComponent(playerHitbox)
-            .addComponent(model);
+            .addComponent(model)
+            .addComponent(destruct);
         scene.addEntity(playerEntity);
     }
 
