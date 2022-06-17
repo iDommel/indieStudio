@@ -18,7 +18,9 @@ namespace indie
     public:
         ButtonCallbacks();
         /**
-         * @brief Construct a new Button Callbacks object
+         * @brief Construct a new Button Callbacks object, every callback has a
+         *  reference to the scenemenager and a pointer to the entity it should
+         *  act on, if any.
          *
          * @param pressed callback to be called when a button is pressed
          * @param released callback to be called when a button is released
@@ -27,11 +29,13 @@ namespace indie
         ButtonCallbacks(
             std::function<void(SceneManager &)> pressed,
             std::function<void(SceneManager &)> released,
-            std::function<void(SceneManager &)> down);
+            std::function<void(SceneManager &)> down,
+            std::function<void(SceneManager &)> up);
         ~ButtonCallbacks();
         std::function<void(SceneManager &)> pressed;
         std::function<void(SceneManager &)> released;
         std::function<void(SceneManager &)> down;
+        std::function<void(SceneManager &)> up;
 
     protected:
     private:

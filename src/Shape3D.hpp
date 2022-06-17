@@ -27,20 +27,20 @@ namespace indie
          * @param radius raduis of the sphere
          * @param color Color of the sphere
          */
-        void drawSphere(Vector3 centerPos, float radius, Color color);
+        static void drawSphere(Vector3 centerPos, float radius, Color color);
         /**
          * @brief Draw cube
          * @param position position of the center of the sphere
          * @param size size {x, y, z} of the cube
          * @param color Color of the cube
          */
-        void drawCube(Vector3 position, Vector3 size, Color color);
+        static void drawCube(Vector3 position, Vector3 size, Color color);
         /**
          * @brief Draw grid
          * @param slices size of the grid
          * @param spacing size of one slice
          */
-        void drawGrid(int slices, float spacing);
+        static void drawGrid(int slices, float spacing);
     };
 }
 
