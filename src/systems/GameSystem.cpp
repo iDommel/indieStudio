@@ -10,6 +10,7 @@
 
 #include <functional>
 #include <iostream>
+#include <cstdlib>
 
 #include "CameraComponent.hpp"
 #include "GamepadStickCallbacks.hpp"
@@ -28,6 +29,7 @@
 #include "String.hpp"
 #include "Bonus.hpp"
 #include "Model3D.hpp"
+#include "Sphere.hpp"
 #include "Grid.hpp"
 #include "Velocity.hpp"
 #include "Bomb.hpp"
@@ -146,17 +148,6 @@ namespace indie
                     component->getCurrentFrame() = 0;
             }
         }
-        // static int i = 0;
-        // static int j = 0;
-
-        // i++;
-        // if (i % 3 == 0) {
-        //     auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
-        //     auto r = Component::castComponent<Rect>(components[0]);
-        //     r->left = r->width * j;
-        //     if (++j > 5)
-        //         j = 0;
-        // }
     }
 
     std::unique_ptr<IScene> GameSystem::createSplashScreen()
@@ -359,6 +350,11 @@ namespace indie
                     (*hitbox) -= *vel * (float)(dt / 1000.0f);
                     break;
                 }
+                if (collider->hasTag(IEntity::Tags::BONUS)) {
+                    auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
+                    (*playerComp).handleBonus(*bonusComp);
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                }
             }
         }
     }
@@ -388,8 +384,13 @@ namespace indie
             }
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
-                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
+                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
+                    auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
+                    int chance = rand() % 4;
                     sceneManager.getCurrentScene().removeEntity(collider);
+                    if (chance == 3)
+                        createBonus(sceneManager.getCurrentScene(), *tempPos);
+                }
                 else if (collider->hasTag(IEntity::Tags::BOMB)) {
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
@@ -405,7 +406,7 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createMainMenu, this));
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
+        std::shared_ptr<SprGAME_TILE_SIZE / 3ite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
         std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - 400, 600 / 2 - 300);
 
         entity1->addComponent(component2)
@@ -552,17 +553,37 @@ namespace indie
         return scene;
     }
 
-    void GameSystem::createBonus(Scene &scene) {
+    void GameSystem::createBonus(IScene &scene, const Position &pos) {
         std::shared_ptr<Entity> bonus = std::make_shared<Entity>();
-        std::shared_ptr<Position> bonusPos = std::make_shared<Position>(500, 100);
-        std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(true);
+        std::shared_ptr<Bonus> bonusComp = nullptr;
+        std::shared_ptr<Position> bonusPos = std::make_shared<Position>(pos);
+        std::shared_ptr<Sphere> bonusSphere = nullptr;
+        Vector3 size = {GAME_TILE_SIZE / 3, GAME_TILE_SIZE / 3, GAME_TILE_SIZE / 3};
+        Vector3 spherePos = {pos.x, pos.y, pos.z};
+        std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, spherePos));
 
-        bonus->addComponent(bonusPos)
+        switch (rand() % 3) {
+            case 0:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::BOMB);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, BLACK);
+                break;
+            case 1:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::SPEED);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, GREEN);
+                break;
+            case 2:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::POWER);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, BLUE);
+                break;
+        }
+        bonus->addComponent(bonusComp)
+            .addComponent(bonusSphere)
+            .addComponent(bonusPos)
             .addComponent(bonusHitbox);
         scene.addEntity(bonus);
     }
 
-    void GameSystem::updateBonuses(SceneManager &sceneManager, uint64_t dt)
+    void GameSystem::updateBonuses(SceneManager &sceneManager, uint64_t)
     {
         for (auto &bonus : sceneManager.getCurrentScene()[IEntity::Tags::BONUS]) {
             auto comp = Component::castComponent<Bonus>((*bonus)[IComponent::Type::BONUS]);

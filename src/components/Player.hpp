@@ -15,6 +15,7 @@
 namespace indie
 {
     class Velocity;
+    class Bonus;
 
     class Player : public Component
     {
@@ -30,8 +31,11 @@ namespace indie
         Player(int id, std::string _up, std::string _down, std::string _left, std::string _right);
         ~Player();
 
-        ///@brief Handle the various bonuses
-        void handleBonus();
+        /**
+         * @brief Handle the various bonuses
+         * @param bonus The Bonus that was given to the player
+         */
+        void handleBonus(const Bonus &bonus);
         /**
          * @brief Generate a bomb and add it to the entities list
          * @param manager The scene manager

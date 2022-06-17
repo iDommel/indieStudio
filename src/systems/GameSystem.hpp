@@ -73,7 +73,7 @@ namespace indie
         void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
-        void createBonus(Scene &scene);
+        void createBonus(IScene &scene, const Position &pos);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
         static void generateMap(const std::string &filename, IScene &scene);
         static void createSpawn(int x, int y, IScene &scene);

@@ -18,6 +18,7 @@
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
 #include "Bomb.hpp"
+#include "Bonus.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
 
@@ -35,12 +36,14 @@ namespace indie
     {
     }
 
-    void Player::handleBonus(/*bonus*/)
+    void Player::handleBonus(const Bonus &bonus)
     {
-        /*if (bonus == nbBomb)
+        if (bonus.getBonusType() == Bonus::Type::BOMB)
             _nbBomb++;
-        else if (bonus == blastPower)
-            _blastPower++;*/
+        else if (bonus.getBonusType() == Bonus::Type::SPEED)
+            _speed += 20;
+        else if (bonus.getBonusType() == Bonus::Type::POWER)
+            _blastPower++;
     }
 
     void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
