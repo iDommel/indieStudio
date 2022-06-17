@@ -133,9 +133,12 @@ namespace indie
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
 
         if (bomb) {
+            Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+            Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
             bomb->addComponent(std::make_shared<Bomb>(_blastPower));
             bomb->addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE));
-            bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE));
+            bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
+                .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
         }
         manager.getCurrentScene().addEntity(bomb);
     }

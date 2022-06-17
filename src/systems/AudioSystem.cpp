@@ -31,12 +31,12 @@ namespace indie
 
     void AudioSystem::loadEntity(std::shared_ptr<IEntity>)
     {
-        std::cout << "AudioSystem::loadEntity" << std::endl;
+        // std::cout << "AudioSystem::loadEntity" << std::endl;
     }
 
     void AudioSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
-        std::cout << "AudioSystem::unloadEntity" << std::endl;
+        // std::cout << "AudioSystem::unloadEntity" << std::endl;
     }
 
 }

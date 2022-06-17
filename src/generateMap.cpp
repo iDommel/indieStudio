@@ -108,12 +108,14 @@ namespace indie
     void GameSystem::createSpawn(int x, int y, IScene &scene)
     {
         static unsigned int nb = 0;
-        static int keys[2][5] = {
+        static int keys[4][5] = {
             {KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END},
             {KEY_D, KEY_A, KEY_W, KEY_S, KEY_E},
+            {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
+            {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
         };
 
-        if (nb >= 2)
+        if (nb >= 4)
             return;
         createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE, 0, y * GAME_TILE_SIZE});
         nb++;

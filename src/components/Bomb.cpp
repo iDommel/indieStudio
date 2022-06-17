@@ -15,8 +15,8 @@
 #include "HitboxComponent.hpp"
 #include "Timer.hpp"
 
-#define BOMB_TIMER      2000
-#define EXPLOSION_TIMER 1000
+#define BOMB_TIMER      3000
+#define EXPLOSION_TIMER 500
 
 namespace indie {
 
@@ -45,7 +45,6 @@ uint64_t Bomb::getTimer() const
 
 void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
 {
-    std::cout << "BOUM" << std::endl;
     std::shared_ptr<Entity> explosion = std::make_shared<Entity>();
     std::shared_ptr<Entity> explosion2 = std::make_shared<Entity>();
     Vector3 exSize = {_blastPower * GAME_TILE_SIZE - 2, 5.0f, GAME_TILE_SIZE - 2};

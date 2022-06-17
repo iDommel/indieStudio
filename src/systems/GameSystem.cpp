@@ -87,9 +87,12 @@ namespace indie
 
             (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
             (*hitbox) += *vel * (float)(dt / 1000.0f);
-            if (!_collideSystem.getColliders(player).empty()) {
-                (*pos) = lastPos;
-                (*hitbox) -= *vel * (float)(dt / 1000.0f);
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos) = lastPos;
+                    (*hitbox) -= *vel * (float)(dt / 1000.0f);
+                    break;
+                }
             }
         }
     }
@@ -124,7 +127,9 @@ namespace indie
                 else if (collider->hasTag(IEntity::Tags::BOMB)) {
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
-                    bombComp->explode(sceneManager, {pos->x, pos->y, pos->z});
+                    Vector3 vec = {pos->x, pos->y, pos->z};
+                    bombComp->explode(sceneManager, vec);
+                    sceneManager.getCurrentScene().removeEntity(collider);
                 }
             }
         }
@@ -137,6 +142,7 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
+        // createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget)});
         return scene;
