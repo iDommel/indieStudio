@@ -32,5 +32,7 @@ bool indie::ModelAnimation::isValid(::Model model)
 
 int indie::ModelAnimation::getFrameCount()
 {
-    return (anims[0].frameCount);
+    if (anims != NULL)
+        return (anims[0].frameCount);
+    return (0);
 }

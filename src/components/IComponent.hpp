@@ -27,13 +27,16 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
-            PLAYER,
             RECT,
             CAMERA,
             SPHERE,
             CUBE,
             GRID,
+            PLAYER,
             ANIMATION,
+            BOMB,
+            TIMER,
+            DESTRUCTIBLE,
             TYPE_NB
         };
         virtual Type getType() const = 0;

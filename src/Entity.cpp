@@ -37,6 +37,12 @@ namespace indie
          {{IComponent::Type::EVT_LISTENER}}},
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
+        {Entity::Tags::BOMB,
+         {{IComponent::Type::BOMB}}},
+        {Entity::Tags::TIMED,
+         {{IComponent::Type::TIMER}}},
+        {Entity::Tags::DESTRUCTIBLE,
+         {{IComponent::Type::DESTRUCTIBLE}}}
     };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
