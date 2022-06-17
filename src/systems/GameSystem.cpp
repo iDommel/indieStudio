@@ -361,6 +361,7 @@ namespace indie
                     break;
                 }
             }
+            playerComp->updateBombsVec();
         }
     }
 
@@ -395,6 +396,7 @@ namespace indie
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
                     Vector3 vec = {pos->x, pos->y, pos->z};
+                    bombComp->setTimer(0);
                     bombComp->explode(sceneManager, vec);
                     sceneManager.getCurrentScene().removeEntity(collider);
                 }

@@ -26,7 +26,6 @@ namespace indie
 
     Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right)
     {
-        _nbBomb = _defaultNbBomb;
         _blastPower = _defaultBlastPower;
         _speed = _defaultSpeed;
     }
@@ -47,7 +46,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = true;
-        std::cout << "moveRight" << std::endl;
+        // std::cout << "moveRight" << std::endl;
         move(vel);
     }
 
@@ -55,7 +54,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = false;
-        std::cout << "stopLeft" << std::endl;
+        // std::cout << "stopLeft" << std::endl;
         move(vel);
     }
 
@@ -105,11 +104,11 @@ namespace indie
     {
         vel->z = (_speed * _isDown) + (-_speed * _isUp);
         vel->x = (_speed * _isRight) + (-_speed * _isLeft);
-        std::cout << "isDown: " << _isDown << std::endl;
-        std::cout << "isUp: " << _isUp << std::endl;
-        std::cout << "isRight: " << _isRight << std::endl;
-        std::cout << "isLeft: " << _isLeft << std::endl;
-        std::cout << "velocity: " << vel->x << " " << vel->y << " " << vel->z << std::endl;
+        // std::cout << "isDown: " << _isDown << std::endl;
+        // std::cout << "isUp: " << _isUp << std::endl;
+        // std::cout << "isRight: " << _isRight << std::endl;
+        // std::cout << "isLeft: " << _isLeft << std::endl;
+        // std::cout << "velocity: " << vel->x << " " << vel->y << " " << vel->z << std::endl;
     }
     int Player::getId() const
     {
@@ -123,22 +122,41 @@ namespace indie
 
     int Player::getNbBomb() const
     {
-        return _nbBomb;
+        return _nbBombMax;
+    }
+
+    void Player::setNbBomb(int newNbBomb)
+    {
+        _nbBombMax = newNbBomb;
     }
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
+        std::cout << _bombs.size() << std::endl;
+        if (_bombs.size() >= _nbBombMax)
+            return;
+
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
+        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+        Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
 
-        if (bomb) {
-            Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-            Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
-            bomb->addComponent(std::make_shared<Bomb>(_blastPower));
-            bomb->addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE));
-            bomb->addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
-                .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
-        }
+        bomb->addComponent(std::make_shared<Bomb>(_blastPower))
+            .addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE))
+            .addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
+            .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
+        _bombs.push_back(bomb);
         manager.getCurrentScene().addEntity(bomb);
+    }
+
+    void Player::updateBombsVec()
+    {
+        for (auto bomb = _bombs.begin(); bomb != _bombs.end();) {
+            auto b = Component::castComponent<Bomb>((**bomb)[IComponent::Type::BOMB]);
+            if (b->getTimer() <= 0)
+                bomb = _bombs.erase(std::find(_bombs.begin(), _bombs.end(), *bomb));
+            else
+                bomb++;
+        }
     }
 }
