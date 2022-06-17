@@ -49,7 +49,7 @@ namespace indie
         sceneManager.addScene(createPauseMenu(sceneManager), SceneManager::SceneType::PAUSE);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
-        AudioDevice::getMasterVolume() += 50;
+        AudioDevice::getMasterVolume() += 0.5;
     }
 
     void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
@@ -219,14 +219,14 @@ namespace indie
                     auto comp2 = sceneManger.getCurrentScene()[IEntity::Tags::TEXT][2];
                     auto text = comp2->getFilteredComponents({ IComponent::Type::TEXT });
                     auto value2 = Component::castComponent<String>(text[0]);
-                    if (AudioDevice::getMasterVolume() < 100 && value == "+") {
-                        AudioDevice::getMasterVolume() += 10;
+                    if (AudioDevice::getMasterVolume() < 1 && value == "+") {
+                        AudioDevice::getMasterVolume() += 0.1;
                         AudioDevice::setVolume(AudioDevice::getMasterVolume());
-                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
-                    } else if (AudioDevice::getMasterVolume()  > 0 && value == "-") {
-                        AudioDevice::getMasterVolume() -= 10;
+                        value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
+                    } else if (AudioDevice::getMasterVolume() >= 0.1 && value == "-") {
+                        AudioDevice::getMasterVolume() -= 0.1;
                         AudioDevice::setVolume(AudioDevice::getMasterVolume() );
-                        value2->getValue() = std::to_string(AudioDevice::getMasterVolume());
+                        value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
                     }
                 }
             },
