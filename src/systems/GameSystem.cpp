@@ -267,7 +267,10 @@ namespace indie
                     mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     if (scenetype == SceneManager::SceneType::PREVIOUS)
                         sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
-                    else
+                    else if (scenetype == SceneManager::SceneType::NONE) {
+                        std::cout << "No scene" << std::endl;
+                        exit(0);
+                    } else
                         sceneManger.setCurrentScene(scenetype);
                 }
             },
