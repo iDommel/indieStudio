@@ -29,6 +29,9 @@ namespace indie
             AUDIBLE,
             CALLABLE,
             CAMERA,
+            BOMB,
+            TIMED,
+            DESTRUCTIBLE,
             PLAYER
         };
 

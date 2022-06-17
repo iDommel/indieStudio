@@ -34,6 +34,9 @@ namespace indie
             GRID,
             PLAYER,
             ANIMATION,
+            BOMB,
+            TIMER,
+            DESTRUCTIBLE,
             TYPE_NB
         };
         virtual Type getType() const = 0;

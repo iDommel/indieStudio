@@ -63,7 +63,7 @@ namespace indie
 
     void AudioSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
-        std::cout << "AudioSystem::unloadEntity" << std::endl;
+        // std::cout << "AudioSystem::unloadEntity" << std::endl;
     }
 
     void AudioSystem::manageMusic(MusicComponent &musicComponent)
