@@ -51,13 +51,9 @@ namespace indie
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 pos = {x, 0, y};
-        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
 
         wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Hitbox>(true))
-            // .addComponent(std::make_shared<Cube>(size, BROWN)
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
     }
@@ -65,11 +61,8 @@ namespace indie
     static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 pos = {x, 0, y};
-        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
+
         wall->addComponent(std::make_shared<Position>(x, 0, y))
-            // .addComponent(std::make_shared<Cube>(size, GREEN))
             .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"))
             .addComponent(std::make_shared<Hitbox>(true));
         return wall;
@@ -104,10 +97,8 @@ namespace indie
 
     static std::shared_ptr<IEntity> createSpawn(int x, int y)
     {
-        static unsigned int nb = 0;
         std::shared_ptr<Entity> spawn = std::make_shared<Entity>();
 
-        nb++;
         spawn->addComponent(std::make_shared<Position>(x, 0, y));
         spawn->addComponent(std::make_shared<Sprite>("o"));
         return spawn;
@@ -116,7 +107,6 @@ namespace indie
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)
     {
         std::shared_ptr<Entity> groundTile = std::make_shared<Entity>();
-        int nb = std::rand() % tilesFilepaths.size();
 
         groundTile->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));

@@ -107,7 +107,6 @@ namespace indie
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
             float value = Window::getGamepadAxisMovement(nb, it.first);
-            bool wasPressed = false;
             if (value > 0.0f) {
                 it.second._positive(manager, value);
             }
