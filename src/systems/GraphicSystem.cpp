@@ -68,8 +68,8 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
-                displayCollidable(e);
+            // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+            //     displayCollidable(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -178,14 +178,24 @@ namespace indie
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)
     {
         auto model = Component::castComponent<Model3D>((*entity)[IComponent::Type::MODEL]);
-        auto hitbox = Component::castComponent<Hitbox>((*entity)[IComponent::Type::HITBOX]);
+        auto boxComponent = (*entity)[IComponent::Type::HITBOX];
+        std::shared_ptr<indie::Hitbox> hitbox = nullptr;
 
         if (_models.find(model->getModelPath()) != _models.end())
             _models[model->getModelPath()].second++;
         else
             _models[model->getModelPath()] = std::make_pair(std::make_unique<Model>(model->getModelPath(), model->getTexturePath()), 1);
+        if ((*entity)[IComponent::Type::ANIMATION] != nullptr)
+            loadModelAnimation(entity);
+        if (boxComponent == nullptr)
+            return;
+        hitbox = Component::castComponent<Hitbox>(boxComponent);
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
+            std::cerr << "path:" << model->getModelPath() << std::endl;
+            std::cerr << "size.x " << box.max.x - box.min.x << std::endl;
+            std::cerr << "size.y " << box.max.y - box.min.y << std::endl;
+            std::cerr << "size.z " << box.max.z - box.min.z << std::endl;
             auto pos = hitbox->getBBox().max;
             box.max.x += pos.x;
             box.max.y += pos.y;
@@ -195,9 +205,6 @@ namespace indie
             box.min.z += pos.z;
             hitbox->setBBox(box);
         }
-
-        if ((*entity)[IComponent::Type::ANIMATION] != nullptr)
-            loadModelAnimation(entity);
     }
 
     void GraphicSystem::unloadModel(std::shared_ptr<IEntity> &entity)

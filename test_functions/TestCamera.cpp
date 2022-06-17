@@ -6,6 +6,7 @@
 */
 #include <exception>
 #include <iostream>
+#include "raylib.h"
 
 #include "raylib.h"
 

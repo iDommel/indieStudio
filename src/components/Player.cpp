@@ -5,9 +5,9 @@
 ** Player
 */
 
-#include "raylib.h"
-
 #include <functional>
+
+#include "raylib.h"
 
 #include "Player.hpp"
 #include "ButtonCallbacks.hpp"
