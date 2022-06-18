@@ -57,7 +57,6 @@ void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
     Vector3 targetEast = {pos.x + ((_blastPower - 2) * GAME_TILE_SIZE), 5.0f, pos.z};
     Vector3 targetWest = {pos.x - ((_blastPower - 2) * GAME_TILE_SIZE), 5.0f, pos.z};
 
-    std::cout << "Blast power: " << _blastPower << std::endl;
     auto c = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(exSize, exPos));
     auto timer = std::make_shared<Timer>(EXPLOSION_TIMER);
     auto c2 = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(ex2Size, ex2Pos));
