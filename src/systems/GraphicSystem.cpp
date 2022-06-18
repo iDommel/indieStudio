@@ -24,6 +24,7 @@
 #include "HitboxComponent.hpp"
 #include "ModelAnim.hpp"
 #include "ModelAnimation.hpp"
+#include "ParticleCloud.hpp"
 
 namespace indie
 {
@@ -68,6 +69,8 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
+            for (auto&e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
+                displayParticles(e);
             // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
             //     displayCollidable(e);
             cam->getCamera().endDrawScope();
@@ -150,6 +153,19 @@ namespace indie
         }
     }
 
+    void GraphicSystem::displayParticles(std::shared_ptr<IEntity> &entity) const
+    {
+        static auto sphere = Sphere(1, RED);
+        auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
+        std::shared_ptr<indie::ParticleCloud> particlesCloud  = nullptr;
+
+        if (particlesCloudEntity == nullptr)
+            return;
+        particlesCloud = Component::castComponent<ParticleCloud>(particlesCloudEntity);
+        for (auto &position : particlesCloud->getPos())
+            Shape3D::drawSphere(position, sphere.getRadius(), sphere.getColor());
+    }
+
     void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity)
     {
         auto components = entity->getFilteredComponents({IComponent::Type::MODEL, IComponent::Type::POSITION});
@@ -192,11 +208,8 @@ namespace indie
         hitbox = Component::castComponent<Hitbox>(boxComponent);
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
-            std::cerr << "path:" << model->getModelPath() << std::endl;
-            std::cerr << "size.x " << box.max.x - box.min.x << std::endl;
-            std::cerr << "size.y " << box.max.y - box.min.y << std::endl;
-            std::cerr << "size.z " << box.max.z - box.min.z << std::endl;
             auto pos = hitbox->getBBox().max;
+
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;

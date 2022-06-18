@@ -29,6 +29,7 @@
 #include "CameraComponent.hpp"
 #include "SoundComponent.hpp"
 #include "MusicComponent.hpp"
+#include "ParticleCloud.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
 namespace indie
@@ -106,9 +107,21 @@ namespace indie
         createSound(*scene);
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, 1, {GAME_TILE_SIZE + 1, 0, GAME_TILE_SIZE + 1});
         createPlayer(*scene, KEY_D, KEY_A, KEY_W, KEY_S, 2, {-10, 0, -20});
+        createParticles(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget)});
         return scene;
+    }
+
+    void GameSystem::createParticles(Scene &scene)
+    {
+        std::shared_ptr<Entity> particle = std::make_shared<Entity>();
+        Vector3 start = {100, 100, 100};
+        Vector3 end = {0, 0, 0};
+        std::shared_ptr<ParticleCloud> particleCloud = std::make_shared<ParticleCloud>(start, end, 1, 1, 10, 4000);
+
+        particle->addComponent(particleCloud);
+        scene.addEntity({particle});
     }
 
     void GameSystem::createMusic(Scene &scene)

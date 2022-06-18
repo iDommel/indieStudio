@@ -56,6 +56,7 @@ namespace indie
         static void generateMap(const std::string &filename, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
+        static void createParticles(Scene &scene);
     };
 
 }

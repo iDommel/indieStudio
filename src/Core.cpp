@@ -16,6 +16,7 @@
 #include "systems/GameSystem.hpp"
 #include "systems/GraphicSystem.hpp"
 #include "systems/CollideSystem.hpp"
+#include "systems/ParticlesSystem.hpp"
 namespace indie
 {
 
@@ -24,6 +25,7 @@ namespace indie
         _systems[SystemType::AUDIO] = std::make_unique<AudioSystem>();
         _systems[SystemType::GAME] = std::make_unique<GameSystem>();
         _systems[SystemType::EVENT] = std::make_unique<EventSystem>();
+        _systems[SystemType::PARTICLE] = std::make_unique<ParticlesSystem>();
         _systems[SystemType::GRAPHIC] = std::make_unique<GraphicSystem>();
     }
 
@@ -46,6 +48,7 @@ namespace indie
             _systems[SystemType::EVENT]->update(_sceneManager, deltaTime);
             _systems[SystemType::GAME]->update(_sceneManager, deltaTime);
             _systems[SystemType::AUDIO]->update(_sceneManager, deltaTime);
+            _systems[SystemType::PARTICLE]->update(_sceneManager, deltaTime);
             _systems[SystemType::GRAPHIC]->update(_sceneManager, deltaTime);
             clock = time;
         }

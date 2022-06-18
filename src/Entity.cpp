@@ -37,6 +37,8 @@ namespace indie
          {{IComponent::Type::EVT_LISTENER}}},
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
+        {Entity::Tags::AESTHETIC,
+         {{IComponent::Type::PARTICLES}}}
     };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)

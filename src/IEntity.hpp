@@ -20,6 +20,7 @@ namespace indie
     public:
         enum class Tags {
             RENDERABLE_3D,
+            AESTHETIC,
             SPRITE_2D,
             SPHERE,
             CUBE,

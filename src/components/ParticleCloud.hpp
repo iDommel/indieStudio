@@ -20,12 +20,16 @@ namespace indie {
 
 /**
  * @brief Uniformly distributed random number generator
+ * @tparam Any ord type (floating point will be truncated)
+ * @return A random number between range_from and range_to as a long int
 **/
 template<typename T>
-T random(T range_from, T range_to) {
+long int random(T range_from, T range_to) {
     std::random_device                  rand_dev;
     std::mt19937                        generator(rand_dev());
-    std::uniform_int_distribution<T>    distr(range_from, range_to);
+    if (range_from > range_to)
+        std::swap(range_from, range_to);
+    std::uniform_int_distribution<long int>  distr((long int)range_from, (long int)range_to);
     return distr(generator);
 }
 
@@ -42,12 +46,27 @@ class ParticleCloud : public Component {
         **/
         ParticleCloud(Vector3 start, Vector3 end, double nbParticles, double curvature, double dispersion, float lifeTime);
         ~ParticleCloud();
-
+        
+        /**
+         * @brief Update the cloud lifeTime
+         * @param deltaTime The time since the last update
+        **/
+        void addTime(uint64_t time);
+        /**
+         * @brief Get positions of particules to print
+         * @return std::vector<Vector3> The positions of particules to print
+        **/
+        std::vector<Vector3> getPos(void) const;
+        /**
+         * @brief Ask if the cloud lifeTime is over
+         * @return true If the cloud lifeTime is over
+         */
+        bool isAlive(void) const;
     protected:
     private:
         std::vector<std::vector<Vector3>> _bezierCurves;
-        float _lifeTime = 0;
-        float _timeToLive;
+        uint64_t _lifeTime = 0;
+        uint64_t _timeToLive;
 };
 }
 

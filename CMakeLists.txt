@@ -43,6 +43,7 @@ target_sources(${PROJECT_NAME}
         src/systems/GameSystem.cpp
         src/systems/EventSystem.cpp
         src/systems/CollideSystem.cpp
+        src/systems/ParticlesSystem.cpp
 
         src/components/Component.cpp
         src/components/EventListener.cpp
@@ -55,6 +56,7 @@ target_sources(${PROJECT_NAME}
         src/components/Sphere.cpp
         src/components/Cube.cpp
         src/components/Grid.cpp
+        src/components/ParticleCloud.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp

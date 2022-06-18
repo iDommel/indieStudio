@@ -30,6 +30,7 @@ namespace indie
             EVENT,
             AUDIO,
             GRAPHIC,
+            PARTICLE,
             /// sub-system of game system
             COLLIDE
         };
