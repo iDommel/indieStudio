@@ -51,6 +51,7 @@ namespace indie
         sceneManager.addScene(createControllerMenu(), SceneManager::SceneType::CONTROLLER);
         sceneManager.addScene(createPreGameMenu(), SceneManager::SceneType::PREGAME);
         sceneManager.addScene(createPauseMenu(), SceneManager::SceneType::PAUSE);
+        sceneManager.addScene(createEndMenu(), SceneManager::SceneType::END);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
         AudioDevice::getMasterVolume() += 0.5;
@@ -155,6 +156,19 @@ namespace indie
                 if (component->getCurrentFrame() >= component->getNbFrames())
                     component->getCurrentFrame() = 0;
             }
+        }
+        if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
+            std::string result = "You win !";
+            if (nbr_player == 0) {
+                result = "Draw !";
+            } else if (nbr_player == 1) {
+                result = "Player 1 win !";
+            } else 
+                return;
+            std::shared_ptr<Entity> entity = createText(result, Position(280, 100), 40);
+
+            sceneManager.getScene(SceneManager::SceneType::END)[IEntity::Tags::TEXT].push_back(entity);
+            sceneManager.setCurrentScene(SceneManager::SceneType::END);
         }
         // static int i = 0;
         // static int j = 0;
@@ -361,7 +375,7 @@ namespace indie
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
-                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][2];
+                    auto entity = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][3];
                     auto component = entity->getFilteredComponents({ IComponent::Type::POSITION });
                     auto pos1 = Component::castComponent<Position>(component[0]);
                     
@@ -480,6 +494,7 @@ namespace indie
     std::unique_ptr<indie::IScene> GameSystem::createSoundMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createSoundMenu, this));
+        std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/minus.png", Position(220, 250), 80, 80);
         std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/plus.png", Position(500, 250), 80, 80);
@@ -491,13 +506,14 @@ namespace indie
         createSoundEvent(entity3, "-");
         createSoundEvent(entity4, "+");
 
-        scene->addEntities({entity2, entity3, entity4, entity5, entity6 ,entity7});
+        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6 ,entity7});
         return scene;
     }
 
     std::unique_ptr<indie::IScene> GameSystem::createHelpMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createHelpMenu, this));
+        std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("How to play", Position(250, 50), 50);
 
@@ -508,13 +524,14 @@ namespace indie
 
         createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
 
-        scene->addEntities({entity2, entity3, entity4, entity5, entity6});
+        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6});
         return scene;
     }
 
     std::unique_ptr<indie::IScene> GameSystem::createControllerMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createControllerMenu, this));
+        std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("Controller Menu", Position(200, 50), 50);
         std::shared_ptr<Entity> entity4 = createText("Player 1", Position(50, 150), 25);
@@ -535,6 +552,16 @@ namespace indie
         std::shared_ptr<Entity> entity20 = createText("", Position(600, 260), 20);
         std::shared_ptr<Entity> entity21 = createText("", Position(600, 290), 20);
         std::shared_ptr<Entity> entity22 = createText("", Position(600, 320), 20);
+        std::shared_ptr<Entity> entity23 = createText("", Position(100, 450), 20);
+        std::shared_ptr<Entity> entity24 = createText("", Position(100, 480), 20);
+        std::shared_ptr<Entity> entity25 = createText("", Position(100, 510), 20);
+        std::shared_ptr<Entity> entity26 = createText("", Position(100, 540), 20);
+        std::shared_ptr<Entity> entity27 = createText("", Position(100, 570), 20);
+        std::shared_ptr<Entity> entity28 = createText("", Position(600, 450), 20);
+        std::shared_ptr<Entity> entity29 = createText("", Position(600, 480), 20);
+        std::shared_ptr<Entity> entity30 = createText("", Position(600, 510), 20);
+        std::shared_ptr<Entity> entity31 = createText("", Position(600, 540), 20);
+        std::shared_ptr<Entity> entity32 = createText("", Position(600, 570), 20);
 
         createSceneEvent(entity2, SceneManager::SceneType::PREVIOUS);
         createBindingsEvent(entity12, 0, 0);
@@ -548,15 +575,17 @@ namespace indie
         createBindingsEvent(entity21, 1, 3);
         createBindingsEvent(entity22, 1, 4);
 
-        scene->addEntities({entity2, entity3, entity4, entity5, entity6, entity7});
+        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6, entity7});
         scene->addEntities({entity8, entity9, entity10, entity11});
         scene->addEntities({entity12, entity13, entity14, entity15, entity16, entity18, entity19, entity20, entity21, entity22});
+        scene->addEntities({entity23, entity24, entity25, entity26, entity27, entity28, entity29, entity30, entity31, entity32});
         return scene;
     }
 
     std::unique_ptr<indie::IScene> GameSystem::createPreGameMenu()
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPreGameMenu, this));
+        std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("Number of player", Position(250, 150), 35);
         std::shared_ptr<Entity> entity4 = createText("1", Position(250, 250), 50);
@@ -573,7 +602,7 @@ namespace indie
         createNumberEvent(entity7, 4);
         createSceneEvent(entity8, SceneManager::SceneType::GAME);
 
-        scene->addEntities({entity2, entity3 ,entity4, entity5, entity6, entity7 ,entity8, entity9});
+        scene->addEntities({entity1, entity2, entity3 ,entity4, entity5, entity6, entity7 ,entity8, entity9});
         return scene;
     }
 
@@ -625,6 +654,30 @@ namespace indie
         createSceneEvent(entity7, SceneManager::SceneType::MAIN_MENU);
 
         scene->addEntities({entity8, entity, entity2, entity3, entity4, entity5, entity6, entity7});
+        return (scene);
+    }
+
+    std::unique_ptr<IScene> GameSystem::createEndMenu()
+    {
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createEndMenu, this));
+        std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/pause.png", Position(0, 0), 800, 600);
+        std::shared_ptr<Entity> entity2 = createText("End", Position(350, 25), 50);
+        std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 800 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 600 / 2 - 18), 120, 28);
+
+        createSceneEvent(entity3, SceneManager::SceneType::PREGAME);
+        createSceneEvent(entity4, SceneManager::SceneType::SOUND);
+        createSceneEvent(entity5, SceneManager::SceneType::CONTROLLER);
+        createSceneEvent(entity6, SceneManager::SceneType::HELP);
+        createSceneEvent(entity7, SceneManager::SceneType::NONE);
+        createSceneEvent(entity8, SceneManager::SceneType::MAIN_MENU);
+
+        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6, entity7, entity8});
+
         return (scene);
     }
 
@@ -752,6 +805,8 @@ namespace indie
     void GameSystem::unloadEntity(std::shared_ptr<IEntity> entity)
     {
         _collideSystem.unloadEntity(entity);
+        if (entity->hasComponent(IComponent::Type::PLAYER))
+            nbr_player -= 1;
     }
 
     void GameSystem::changeBindings(SceneManager &sceneManager, int id_player, int button)
