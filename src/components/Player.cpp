@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <cmath>
+#include <algorithm>
 
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
