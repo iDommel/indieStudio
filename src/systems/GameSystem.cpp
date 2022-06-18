@@ -36,7 +36,6 @@
 #include "MusicComponent.hpp"
 #include "ModelAnim.hpp"
 #include "Window.hpp"
-#include "Radar.hpp"
 
 namespace indie
 {
@@ -149,6 +148,7 @@ namespace indie
             }
         }
         updatePlayers(sceneManager, dt);
+        _aiSystem.update(sceneManager, dt);
         updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
@@ -659,7 +659,7 @@ namespace indie
 
     void GameSystem::createAIPlayer(IScene &scene, int id, Position pos)
     {
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> player = std::make_shared<Entity>();
         std::shared_ptr<Position> aiPos = std::make_shared<Position>(pos);
         std::shared_ptr<Velocity> vel = std::make_shared<Velocity>(0, 0);
         std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
@@ -669,16 +669,18 @@ namespace indie
 
         Vector3 radarSize = {GAME_TILE_SIZE * 5, GAME_TILE_SIZE, GAME_TILE_SIZE * 5};
         Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
-        std::shared_ptr<Radar> radar = std::make_shared<Radar>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
+        std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
+        std::shared_ptr<Entity> radar = std::make_shared<Entity>();
 
-        entity->addComponent(aiPos)
+        player->addComponent(aiPos)
             .addComponent(vel)
             .addComponent(hitbox)
             .addComponent(model)
             .addComponent(aiComponent)
-            .addComponent(destruct)
-            .addComponent(radar);
-        scene.addEntity(entity);
+            .addComponent(destruct);
+        radar->addComponent(radarBox);
+        scene.addEntities({player, radar});
+        aiComponent->setRadar(radar);
     }
 
     void GameSystem::createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos)

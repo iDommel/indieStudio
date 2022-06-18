@@ -9,12 +9,16 @@
 #define AISystem_HPP_
 
 #include "ISystem.hpp"
+#include "CollideSystem.hpp"
 
 namespace indie
 {
     class AISystem : public ISystem
     {
     public:
+
+        AISystem(CollideSystem &collideSystem);
+
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -23,6 +27,7 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
+        CollideSystem &_collideSystem;
     };
 }
 

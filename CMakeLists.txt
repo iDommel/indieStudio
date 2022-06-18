@@ -57,7 +57,6 @@ target_sources(${PROJECT_NAME}
         src/components/Cube.cpp
         src/components/Grid.cpp
         src/components/Bomb.cpp
-        src/components/Radar.cpp
         src/components/AIPlayer.cpp
 
         test_functions/TestAnimations2D.cpp

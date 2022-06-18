@@ -57,6 +57,16 @@ namespace indie
         _nbBombMax = newNbBomb;
     }
 
+    void AIPlayer::setRadar(std::shared_ptr<IEntity> radar)
+    {
+        _radar = radar;
+    }
+
+    std::shared_ptr<IEntity> AIPlayer::getRadar() const
+    {
+        return _radar;
+    }
+
     void AIPlayer::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
         if (_bombs.size() >= _nbBombMax)

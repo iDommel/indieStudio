@@ -44,7 +44,7 @@ namespace indie
         {Entity::Tags::DESTRUCTIBLE,
          {{IComponent::Type::DESTRUCTIBLE}}},
         {Entity::Tags::AI,
-         {{IComponent::Type::VELOCITY, IComponent::Type::AI, IComponent::Type::RADAR}}}
+         {{IComponent::Type::VELOCITY, IComponent::Type::AI}}}
     };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)

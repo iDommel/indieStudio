@@ -36,7 +36,7 @@ namespace indie
     {
     public:
 
-        GameSystem() { nbr_player = 4; };
+        GameSystem() : _aiSystem(_collideSystem) { nbr_player = 4; };
 
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;

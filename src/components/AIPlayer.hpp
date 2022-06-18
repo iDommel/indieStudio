@@ -42,6 +42,9 @@ namespace indie
         ///@brief Sets the current maximum number of bomb a player can drop
         void setNbBomb(int newNbBomb);
 
+        void setRadar(std::shared_ptr<IEntity> radar);
+        std::shared_ptr<IEntity> getRadar() const;
+
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
@@ -50,6 +53,7 @@ namespace indie
         int _speed = 60;
         int _id;
         std::vector<std::shared_ptr<IEntity>> _bombs;
+        std::shared_ptr<IEntity> _radar;
     };
 
 }

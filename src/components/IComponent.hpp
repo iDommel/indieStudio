@@ -38,7 +38,6 @@ namespace indie
             TIMER,
             DESTRUCTIBLE,
             AI,
-            RADAR,
             TYPE_NB
         };
         virtual Type getType() const = 0;
