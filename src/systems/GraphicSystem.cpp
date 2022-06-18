@@ -160,7 +160,7 @@ namespace indie
 
     void GraphicSystem::displayParticles(std::shared_ptr<IEntity> &entity) const
     {
-        static auto sphere = Sphere(1, RED);
+        static auto sphere = Sphere(0.2, BLUE);
         auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
         std::shared_ptr<indie::ParticleCloud> particlesCloud  = nullptr;
 

@@ -11,18 +11,27 @@
 
 namespace indie {
 ParticleCloud::ParticleCloud(Vector3 start, Vector3 end, double nbParticles,
-double curvature, double dispersion, float lifeTime):
+int curvature, double dispersion, float lifeTime):
 Component(Type::PARTICLES), _timeToLive(lifeTime)
 {
     Vector3 pos = {0, 0, 0};
+    Vector3 lenght = {end.x - start.x, end.y - start.y, end.z - start.z};
+    Vector3 chunkSize = {lenght.x / curvature, lenght.y / curvature, lenght.z / curvature};
 
     for (double i = 0; i < nbParticles; i++) {
         std::vector<Vector3> particleParams;
         particleParams.push_back(end);
-        for (double j = curvature; j > 0; j--) {
-            pos.x = random(start.x, end.x);
-            pos.y = random(start.y, end.y);
-            pos.z = random(start.z, end.z);
+        for (int j = 1; j < curvature * 2; j++) {
+            Vector3 lastPos = particleParams[j - 1];
+            if (j % 2 == 0) {
+                pos.x = end.x - (chunkSize.x * (j / 2));
+                pos.y = end.y - (chunkSize.y * (j / 2));
+                pos.z = end.z - (chunkSize.z * (j / 2));
+            } else {
+                pos.x = random(end.x - (chunkSize.x * (1 + j / 2)), lastPos.x);
+                pos.y = random(end.y - (chunkSize.y * (1 + j / 2)), lastPos.y);
+                pos.z = random(end.z - (chunkSize.z * (1 + j / 2)), lastPos.z);
+            }
             particleParams.push_back(pos);
         }
         particleParams.push_back(start);
@@ -30,23 +39,26 @@ Component(Type::PARTICLES), _timeToLive(lifeTime)
     }
 }
 
-static Vector3 getPt(Vector3 one, Vector3 two, float percent)
+static Vector3 getPt(Vector3 one, Vector3 two, int percent)
 {
     Vector3 result = {0, 0, 0};
+    float realPercent = (float)percent / 100;
 
-    result.x = one.x + ((two.x - one.x) * percent);
-    result.y = one.y + ((two.y - one.y) * percent);
-    result.z = one.z + ((two.z - one.z) * percent);
+    result.x = one.x + ((two.x - one.x) * realPercent);
+    result.y = one.y + ((two.y - one.y) * realPercent);
+    result.z = one.z + ((two.z - one.z) * realPercent);
     return (result);
 }
 
 static Vector3 computeBeziers(std::vector<Vector3> curveParams, float percent)
 {
-    auto p1 = getPt(curveParams[0], curveParams[1], percent);
-    auto p2 = getPt(curveParams[1], curveParams[2], percent);
-    auto pos = getPt(p1, p2, percent);
+    float chunkSize = 100 / (curveParams.size() / 2);
+    int actualChunk = ((int)(percent) / (int)(chunkSize)) * 2;
+    int actualPercent = (int)((percent / chunkSize) * 100) % 100;
+    auto p1 = getPt(curveParams[actualChunk], curveParams[actualChunk + 1], actualPercent);
+    auto p2 = getPt(curveParams[actualChunk + 1], curveParams[actualChunk + 2], actualPercent);
+    auto pos = getPt(p1, p2, actualPercent);
 
-    // if (curveParams.size() > 3)
     return (pos);
 }
 
@@ -55,7 +67,7 @@ std::vector<Vector3> ParticleCloud::getPos(void) const
     std::vector<Vector3> positions;
 
     for (auto &curve : _bezierCurves)
-        positions.push_back(computeBeziers(curve, (_lifeTime / (_timeToLive * 1.0f))));
+        positions.push_back(computeBeziers(curve, ((_lifeTime * 1.0f) / (_timeToLive * 1.0f)) * 100.0f));
     return positions;
 }
 

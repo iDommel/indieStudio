@@ -626,7 +626,7 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
-        // createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
+        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
         createSound(*scene);
         createParticles(*scene);
@@ -640,7 +640,7 @@ namespace indie
         std::shared_ptr<Entity> particle = std::make_shared<Entity>();
         Vector3 start = {100, 100, 100};
         Vector3 end = {0, 0, 0};
-        std::shared_ptr<ParticleCloud> particleCloud = std::make_shared<ParticleCloud>(start, end, 1, 1, 10, 4000);
+        std::shared_ptr<ParticleCloud> particleCloud = std::make_shared<ParticleCloud>(start, end, 20, 2, -1, 5000);
 
         particle->addComponent(particleCloud);
         scene.addEntity({particle});

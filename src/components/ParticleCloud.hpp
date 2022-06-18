@@ -44,7 +44,7 @@ class ParticleCloud : public Component {
          * @param dispersion The dispersion of the cloud, like a radius around the followed curve
          * @param lifeTime The lifetime of the cloud, each particule will reach the end vector after this time
         **/
-        ParticleCloud(Vector3 start, Vector3 end, double nbParticles, double curvature, double dispersion, float lifeTime);
+        ParticleCloud(Vector3 start, Vector3 end, double nbParticles, int curvature, double dispersion, float lifeTime);
         ~ParticleCloud();
         
         /**
