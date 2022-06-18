@@ -9,6 +9,7 @@
 
 
 #include <functional>
+#include <algorithm>
 #include <cmath>
 
 #include "ButtonCallbacks.hpp"
@@ -27,8 +28,9 @@ namespace indie
 
     Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right), BOMB(_bomb)
     {
-        _blastPower = _defaultBlastPower;
+        _nbBomb = _nbBombMax;
         _speed = _defaultSpeed;
+        _blastPower = _defaultBlastPower;
     }
 
     Player::~Player()

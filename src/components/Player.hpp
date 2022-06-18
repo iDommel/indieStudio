@@ -91,6 +91,7 @@ namespace indie
     private:
         void move(std::shared_ptr<Velocity> vel);
         size_t _nbBombMax = 3;
+        int _nbBomb;
         int _blastPower;
         int _speed;
         int _id;
