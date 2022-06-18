@@ -255,7 +255,7 @@ namespace indie
         auto text = Component::castComponent<String>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
 
-        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLUE);
+        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLACK);
     }
 
     void GraphicSystem::loadText(std::shared_ptr<IEntity> &entity)

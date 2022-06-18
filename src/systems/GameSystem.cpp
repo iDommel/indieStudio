@@ -38,6 +38,56 @@
 
 namespace indie
 {
+    const std::string GameSystem::getBinding(int keyboard)
+    {
+        return (_bindings.find(keyboard)->second);
+    }
+
+    int GameSystem::getTag(std::string key)
+    {
+        for (auto e = _bindings.begin(); e != _bindings.end(); e++)
+            if (e->second == key)
+                return (e->first);
+        return (0);
+    }
+
+    const std::map <int, std::string> GameSystem::_bindings = {
+        {KEY_DOWN, "down"},
+        {KEY_UP, "up"},
+        {KEY_LEFT, "left"},
+        {KEY_RIGHT, "right"},
+        {KEY_SPACE, "space"},
+        {KEY_ENTER, "enter"},
+        {KEY_BACKSPACE, "backspace"},
+        {KEY_ESCAPE, "escape"},
+        {KEY_END, "end"},
+        {KEY_A, "A"},
+        {KEY_B, "B"},
+        {KEY_C, "C"},
+        {KEY_D, "D"},
+        {KEY_E, "E"},
+        {KEY_F, "F"},
+        {KEY_G, "G"},
+        {KEY_H, "H"},
+        {KEY_I, "I"},
+        {KEY_J, "J"},
+        {KEY_K, "K"},
+        {KEY_L, "L"},
+        {KEY_M, "M"},
+        {KEY_N, "N"},
+        {KEY_O, "O"},
+        {KEY_P, "P"},
+        {KEY_Q, "Q"},
+        {KEY_R, "R"},
+        {KEY_S, "S"},
+        {KEY_T, "T"},
+        {KEY_U, "U"},
+        {KEY_V, "V"},
+        {KEY_W, "W"},
+        {KEY_X, "X"},
+        {KEY_Y, "Y"},
+        {KEY_Z, "Z"}
+    };
 
     void GameSystem::init(indie::SceneManager &sceneManager)
     {
@@ -54,7 +104,7 @@ namespace indie
         sceneManager.addScene(createEndMenu(), SceneManager::SceneType::END);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
-        AudioDevice::getMasterVolume() += 0.5;
+        AudioDevice::getMasterVolume() = 0.5;
     }
 
     void GameSystem::replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
@@ -62,36 +112,36 @@ namespace indie
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::CONTROLLER) {
             if (players->changeUp == 2 || players->changeUp == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
-                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-                auto value = Component::castComponent<String>(text[0]);
+                auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
                 value->getValue() = players->getUp();
                 players->changeUp = 0;
             }
             if (players->changeLeft == 2 || players->changeLeft == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
-                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-                auto value = Component::castComponent<String>(text[0]);
+                auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
                 value->getValue() = players->getLeft();
                 players->changeLeft = 0;
             } 
             if (players->changeRight == 2 || players->changeRight == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
-                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-                auto value = Component::castComponent<String>(text[0]);
+                auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
                 value->getValue() = players->getRight();
                 players->changeRight = 0;
             }
             if (players->changeDown == 2 || players->changeDown == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
-                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-                auto value = Component::castComponent<String>(text[0]);
+                auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
                 value->getValue() = players->getDown();
                 players->changeDown = 0;
             }
             if (players->changeBomb == 2 || players->changeBomb == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 4];
-                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
-                auto value = Component::castComponent<String>(text[0]);
+                auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
                 value->getValue() = players->getBomb();
                 players->changeBomb = 0;
             }
@@ -101,30 +151,30 @@ namespace indie
     void GameSystem::updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
     {
         if (players->changeUp == 1) {
-            auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
-            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto text = Component::castComponent<String>(test[0]);
-            text->getValue() = "|";
+            auto entity = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText];
+            auto text = (*entity)[IComponent::Type::TEXT];
+            auto value = Component::castComponent<String>(text);
+            value->getValue() = "|";
         } else if (players->changeLeft == 1) {
             auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
-            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto text = Component::castComponent<String>(test[0]);
-            text->getValue() = "|";
+            auto text = (*components)[IComponent::Type::TEXT];
+            auto value = Component::castComponent<String>(text);
+            value->getValue() = "|";
         } else if (players->changeRight == 1) {
             auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
-            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto text = Component::castComponent<String>(test[0]);
-            text->getValue() = "|";
+            auto text = (*components)[IComponent::Type::TEXT];
+            auto value = Component::castComponent<String>(text);
+            value->getValue() = "|";
         } else if (players->changeDown == 1) {
             auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 3];
-            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto text = Component::castComponent<String>(test[0]);
-            text->getValue() = "|";
+            auto text = (*components)[IComponent::Type::TEXT];
+                auto value = Component::castComponent<String>(text);
+            value->getValue() = "|";
         } else if (players->changeBomb == 1) {
             auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 4];
-            auto test = components->getFilteredComponents({ IComponent::Type::TEXT});
-            auto text = Component::castComponent<String>(test[0]);
-            text->getValue() = "|";
+            auto text = (*components)[IComponent::Type::TEXT];
+            auto value = Component::castComponent<String>(text);
+            value->getValue() = "|";
         }
     }
 
@@ -133,7 +183,7 @@ namespace indie
         int firstText = 9;
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::CONTROLLER) {
             for (auto &e : sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER]) {
-                auto players = Component::castComponent<Player>(e->getFilteredComponents({ IComponent::Type::PLAYER })[0]);
+                auto players = Component::castComponent<Player>((*e)[IComponent::Type::PLAYER]);
                 updateTextBindings(sceneManager, players, firstText);
                 replaceTextBindings(sceneManager, players, firstText);
                 firstText += 5;
@@ -245,8 +295,8 @@ namespace indie
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->width &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     auto comp2 = sceneManger.getCurrentScene()[IEntity::Tags::TEXT][2];
-                    auto text = comp2->getFilteredComponents({ IComponent::Type::TEXT });
-                    auto value2 = Component::castComponent<String>(text[0]);
+                    auto text = (*comp2)[IComponent::Type::TEXT];
+                    auto value2 = Component::castComponent<String>(text);
                     if (AudioDevice::getMasterVolume() < 1 && value == "+") {
                         AudioDevice::getMasterVolume() += 0.1;
                         AudioDevice::setVolume(AudioDevice::getMasterVolume());
@@ -304,8 +354,8 @@ namespace indie
     {
         MouseCallbacks mouseCallbacks(
             [entity, button, id_player, this](SceneManager &sceneManager, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::POSITION });
-                auto pos = Component::castComponent<Position>(comp[0]);
+                auto comp = (*entity)[IComponent::Type::POSITION];
+                auto pos = Component::castComponent<Position>(comp);
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 20) {
@@ -316,8 +366,9 @@ namespace indie
             [](SceneManager &, Vector2 /*mousePosition*/) {},
             [entity, button, id_player](SceneManager &sceneManager, Vector2 /*mousePosition*/) {
                 auto component = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
-                auto comp = component->getFilteredComponents({ IComponent::Type::PLAYER});
+                auto comp = component->getFilteredComponents({ IComponent::Type::PLAYER, IComponent::Type::EVT_LISTENER });
                 auto player = Component::castComponent<Player>(comp[0]);
+                auto event = Component::castComponent<EventListener>(comp[1]);
                 std::string get = "";
                 char input = 0;
 
@@ -325,6 +376,7 @@ namespace indie
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
+                        event->replaceKeyboardEvent((KeyboardKey)player->getTagUp(), (KeyboardKey)GameSystem::getTag(get));
                         player->setUP(get);
                         player->changeUp = 2;
                     }
@@ -332,6 +384,7 @@ namespace indie
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
+                        event->replaceKeyboardEvent((KeyboardKey)player->getTagLeft(), (KeyboardKey)GameSystem::getTag(get));
                         player->setLEFT(get);
                         player->changeLeft = 2;
                     }
@@ -339,6 +392,7 @@ namespace indie
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
+                        event->replaceKeyboardEvent((KeyboardKey)player->getTagRight(), (KeyboardKey)GameSystem::getTag(get));
                         player->setRIGHT(get);
                         player->changeRight = 2;
                     }
@@ -346,6 +400,7 @@ namespace indie
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
+                        event->replaceKeyboardEvent((KeyboardKey)player->getTagDown(), (KeyboardKey)GameSystem::getTag(get));
                         player->setDOWN(get);
                         player->changeDown = 2;
                     }
@@ -353,6 +408,7 @@ namespace indie
                     input = Window::getKeyPressed();
                     if (input != 0) {
                         get.assign(1, input);
+                        event->replaceKeyboardEvent((KeyboardKey)player->getTagBomb(), (KeyboardKey)GameSystem::getTag(get));
                         player->setBOMB(get);
                         player->changeBomb = 2;
                     }
@@ -370,14 +426,14 @@ namespace indie
     {
         MouseCallbacks selector(
             [entity, _nbr_player, this](SceneManager &sceneManager, Vector2 mousePosition) {
-                auto comp = entity->getFilteredComponents({ IComponent::Type::POSITION });
-                auto pos = Component::castComponent<Position>(comp[0]);
+                auto comp = (*entity)[IComponent::Type::POSITION];
+                auto pos = Component::castComponent<Position>(comp);
 
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + 50 &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + 50) {
                     auto entity = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][3];
-                    auto component = entity->getFilteredComponents({ IComponent::Type::POSITION });
-                    auto pos1 = Component::castComponent<Position>(component[0]);
+                    auto component = (*entity)[IComponent::Type::POSITION];
+                    auto pos1 = Component::castComponent<Position>(component);
                     
                     pos1->x = pos->x - 30;
                     pos1->y = pos->y - 20;
@@ -711,7 +767,7 @@ namespace indie
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
         std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(true);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
-        std::shared_ptr<Player> player = std::make_shared<Player>(id, "Z", "S", "Q", "D", "A");
+        std::shared_ptr<Player> player = std::make_shared<Player>(id, keyUp, keyDown, keyLeft, keyRight, keyBomb);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
@@ -774,11 +830,11 @@ namespace indie
             [player, playerEntity](SceneManager &) {},
             [player, playerEntity](SceneManager &) {},
             [player, playerEntity](SceneManager &) {});
-        playerListener->addKeyboardEvent((KeyboardKey)keyUp, moveUpCallbacks);
-        playerListener->addKeyboardEvent((KeyboardKey)keyLeft, moveLeftCallbacks);
-        playerListener->addKeyboardEvent((KeyboardKey)keyRight, moveRightCallbacks);
-        playerListener->addKeyboardEvent((KeyboardKey)keyDown, moveDownCallbacks);
-        playerListener->addKeyboardEvent((KeyboardKey)keyBomb, bombCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)player->getTagUp(), moveUpCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)player->getTagLeft(), moveLeftCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)player->getTagRight(), moveRightCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)player->getTagDown(), moveDownCallbacks);
+        playerListener->addKeyboardEvent((KeyboardKey)player->getTagBomb(), bombCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_UP, moveUpCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_RIGHT, moveRightCallbacks);
         playerListener->addGamepadEvent(id - 1, (GamepadButton)GAMEPAD_BUTTON_LEFT_FACE_DOWN, moveDownCallbacks);
@@ -812,8 +868,8 @@ namespace indie
     void GameSystem::changeBindings(SceneManager &sceneManager, int id_player, int button)
     {
         auto entity = sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER][id_player];
-        auto component = entity->getFilteredComponents({ IComponent::Type::PLAYER});
-        auto player = Component::castComponent<Player>(component[0]);
+        auto component = (*entity)[IComponent::Type::PLAYER];
+        auto player = Component::castComponent<Player>(component);
         switch (button) {
             case 0:
                 player->changeUp = 1;

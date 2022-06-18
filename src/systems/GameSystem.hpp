@@ -26,7 +26,6 @@ struct Vector3;
 
 namespace indie
 {
-
     class IEntity;
     class Scene;
     class Position;
@@ -49,7 +48,9 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void changeBindings(SceneManager &SceneManager, int id_player, int button);
+        static const std::string getBinding(int keyboard);
+
+        static int getTag(std::string key);
 
     private:
         std::unique_ptr<IScene> createScene();
@@ -61,6 +62,7 @@ namespace indie
         std::unique_ptr<IScene> createPreGameMenu();
         std::unique_ptr<IScene> createPauseMenu();
         std::unique_ptr<IScene> createEndMenu();
+        void changeBindings(SceneManager &SceneManager, int id_player, int button);
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
         std::shared_ptr<Entity> createImage(std::string path, Position position, int heigh, int width);
@@ -71,18 +73,18 @@ namespace indie
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         int nbr_player = 4;
         int timeElasped;
-        static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
+        void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
-        static void generateMap(const std::string &filename, IScene &scene);
-        static void createSpawn(int x, int y, IScene &scene);
+        void generateMap(const std::string &filename, IScene &scene);
+        void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
+        static const std::map <int, std::string> _bindings;
     };
-
 }
 
 #endif /* GAME_SYSTEM_HPP */

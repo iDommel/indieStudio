@@ -27,7 +27,7 @@ namespace indie
             BOMB
         };
 
-        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb);
+        Player(int id, int _up, int _down, int _left, int _right, int _bomb);
         ~Player();
 
         ///@brief Handle the various bonuses
@@ -64,16 +64,21 @@ namespace indie
         /// @brief sets the velocity of the player to 0 downwards
         void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
 
-        std::string getUp() { return UP; }
-        std::string getDown() { return DOWN; }
-        std::string getLeft() { return LEFT; }
-        std::string getRight() { return RIGHT; }
-        std::string getBomb() { return BOMB; }
-        void setUP(std::string _up) { UP = _up; }
-        void setDOWN(std::string _down) { DOWN = _down; }
-        void setLEFT(std::string _left) { LEFT = _left; }
-        void setRIGHT(std::string _right) { RIGHT = _right; }
-        void setBOMB(std::string _bomb) { BOMB = _bomb; }
+        std::string getUp();
+        std::string getDown();
+        std::string getLeft();
+        std::string getRight();
+        std::string getBomb();
+        int getTagUp();
+        int getTagDown();
+        int getTagLeft();
+        int getTagRight();
+        int getTagBomb();
+        void setUP(std::string _up);
+        void setDOWN(std::string _down);
+        void setLEFT(std::string _left);
+        void setRIGHT(std::string _right);
+        void setBOMB(std::string _bomb);
 
         int changeUp;
         int changeDown;
