@@ -30,9 +30,15 @@
 namespace indie
 {
 
-    Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right), BOMB(_bomb)
+    Player::Player(int id, int _up, int _down, int _left, int _right, int _bomb) : Component(Type::PLAYER), _id(id)
     {
+        UP = GameSystem::getBinding(_up);
+        DOWN = GameSystem::getBinding(_down);
+        LEFT = GameSystem::getBinding(_left);
+        RIGHT = GameSystem::getBinding(_right);
+        BOMB = GameSystem::getBinding(_bomb);
         _nbBomb = _defaultNbBomb;
+        _blastPower = _defaultBlastPower;
         _speed = _defaultSpeed;
         _blastPower = _defaultBlastPower;
     }
@@ -174,5 +180,80 @@ namespace indie
             else
                 bomb++;
         }
+    }
+
+    std::string Player::getUp() 
+    {
+        return UP;
+    }
+
+    std::string Player::getDown()
+    {
+        return DOWN;
+    }
+
+    std::string Player::getLeft()
+    {
+        return LEFT;
+    }
+
+    std::string Player::getRight()
+    {
+        return RIGHT;
+    }
+
+    std::string Player::getBomb()
+    {
+        return BOMB;
+    }
+
+    int Player::getTagUp() 
+    {
+        return GameSystem::getTag(UP); 
+    }
+
+    int Player::getTagDown()
+    { 
+        return GameSystem::getTag(DOWN); 
+    }
+
+    int Player::getTagLeft()
+    { 
+        return GameSystem::getTag(LEFT); 
+    }
+
+    int Player::getTagRight() 
+    { 
+        return GameSystem::getTag(RIGHT);
+    }
+
+    int Player::getTagBomb()
+    { 
+        return GameSystem::getTag(BOMB);
+    }
+
+    void Player::setUP(std::string _up)
+    {
+        UP = _up;
+    }
+
+    void Player::setDOWN(std::string _down)
+    { 
+        DOWN = _down;
+    }
+
+    void Player::setLEFT(std::string _left)
+    { 
+        LEFT = _left;
+    }
+
+    void Player::setRIGHT(std::string _right)
+    { 
+        RIGHT = _right;
+    }
+    
+    void Player::setBOMB(std::string _bomb)
+    { 
+        BOMB = _bomb;
     }
 }

@@ -50,10 +50,10 @@ namespace indie
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &scene : sceneManager.getScenes()) {
+        for (auto &scene : sceneManager.getScenes())
             for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
-        }
+
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
@@ -108,8 +108,9 @@ namespace indie
     {
         if (entity->hasTag(IEntity::Tags::SPRITE_2D))
             unloadSprite(entity);
-        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D))
+        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
             unloadModel(entity);
+        }
     }
 
     void GraphicSystem::loadSprite(std::shared_ptr<IEntity> &entity)
@@ -213,7 +214,6 @@ namespace indie
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
             auto pos = hitbox->getBBox().max;
-
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;
@@ -271,7 +271,7 @@ namespace indie
         auto text = Component::castComponent<String>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
 
-        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLUE);
+        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLACK);
     }
 
     void GraphicSystem::loadText(std::shared_ptr<IEntity> &entity)

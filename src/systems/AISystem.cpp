@@ -27,6 +27,13 @@ namespace indie
 
     void AISystem::update(SceneManager &manager, uint64_t deltaTime)
     {
+        for (auto &e : manager.getCurrentScene()[IEntity::Tags::AI]) {
+            auto ai = Component::castComponent<AIPlayer>((*e)[Component::Type::AI]);
+
+            // std::cout << "RADAR: " << _collideSystem.getColliders(ai->getRadar()).size() << std::endl;
+            // for (auto &collider : _collideSystem.getColliders()) {
+            // }
+        }
     }
 
     void AISystem::destroy()

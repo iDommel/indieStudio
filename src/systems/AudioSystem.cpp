@@ -53,9 +53,6 @@ namespace indie
 
     void AudioSystem::loadEntity(std::shared_ptr<IEntity>entity)
     {
-        if (entity->hasTag(IEntity::Tags::AUDIBLE)) {
-            std::cerr << "AudioSystem::loadEntity" << std::endl;
-        }
     }
 
     void AudioSystem::unloadEntity(std::shared_ptr<IEntity>)
@@ -67,7 +64,6 @@ namespace indie
         _musics[musicComponent.getValue()]->updateMusic();
         if (musicComponent.getMusicState() == _musics[musicComponent.getValue()]->getMusic())
             return;
-        std::cerr << "AudioSystem::manageMusic" << std::endl;
         if (musicComponent.getMusicState() == Music::MusicState::PLAY) {
             _musics[musicComponent.getValue()]->playMusic();
         } else if (musicComponent.getMusicState() == Music::MusicState::PAUSE)
@@ -81,7 +77,6 @@ namespace indie
     {
          if (soundComponent.getSoundState() == _sounds[soundComponent.getValue()]->getSound())
              return;
-         std::cerr << "AudioSystem::manageSound" << std::endl;
          if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
              _sounds[soundComponent.getValue()]->play();
          else if (soundComponent.getSoundState() == Sound::SoundState::PAUSED)
