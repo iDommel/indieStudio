@@ -208,11 +208,14 @@ namespace indie
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
-            std::string result = "You win !";
+            std::string result = "Player ";
             if (nbr_player == 0) {
                 result = "Draw !";
             } else if (nbr_player == 1) {
-                result = "Player 1 win !";
+                auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][0];
+                auto comp = Component::castComponent<Player>((*entity)[IComponent::Type::PLAYER]);
+                result.append(std::to_string(comp->getId()));
+                result.append(" won !");
             } else 
                 return;
             std::shared_ptr<Entity> entity = createText(result, Position(280, 100), 40);
@@ -220,17 +223,6 @@ namespace indie
             sceneManager.getScene(SceneManager::SceneType::END)[IEntity::Tags::TEXT].push_back(entity);
             sceneManager.setCurrentScene(SceneManager::SceneType::END);
         }
-        // static int i = 0;
-        // static int j = 0;
-
-        // i++;
-        // if (i % 3 == 0) {
-        //     auto components = sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D][1]->getFilteredComponents({ IComponent::Type::RECT });
-        //     auto r = Component::castComponent<Rect>(components[0]);
-        //     r->left = r->width * j;
-        //     if (++j > 5)
-        //         j = 0;
-        // }
     }
 
     std::unique_ptr<IScene> GameSystem::createSplashScreen()
