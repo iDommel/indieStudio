@@ -34,8 +34,8 @@ namespace indie
             handleMouse(sceneManager, listener);
             for (int i = 0; i < _maxGamepads; i++) {
                 if (Window::isGamepadAvailable(i)) {
-                    handleGamepadSticks(sceneManager, listener, i);
                     handleGamepad(sceneManager, listener, i);
+                    handleGamepadSticks(sceneManager, listener, i);
                 }
             }
         }
@@ -113,7 +113,14 @@ namespace indie
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
             float value = Window::getGamepadAxisMovement(nb, it.first);
-            it.second(manager, value);
+            bool wasPressed = false;
+            if (value > 0.0f) {
+                it.second._positive(manager, value);
+            }
+            if (value < 0.0f) {
+                it.second._negative(manager, value);
+            } else
+                it.second._null(manager);
         }
     }
 

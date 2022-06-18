@@ -31,7 +31,6 @@ namespace indie
             SPLASH,
             SOUND,
             NB_SCENES,
-            PREGAME,
             PREVIOUS
         };
 
