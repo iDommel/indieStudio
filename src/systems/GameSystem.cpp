@@ -11,6 +11,7 @@
 #include <functional>
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 
 #include "CameraComponent.hpp"
 #include "GamepadStickCallbacks.hpp"
@@ -419,15 +420,15 @@ namespace indie
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-                    (*pos).z = lastPos.z;
-                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
-                    break;
-                }
                 if (collider->hasTag(IEntity::Tags::BONUS)) {
                     auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
                     (*playerComp).handleBonus(*bonusComp);
                     sceneManager.getCurrentScene().removeEntity(collider);
+                }
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos).z = lastPos.z;
+                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+                    break;
                 }
             }
             playerComp->updateBombsVec();
@@ -460,11 +461,13 @@ namespace indie
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
                 if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
-                    auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
-                    int chance = rand() % 4;
+                    if (!collider->hasTag(IEntity::Tags::PLAYER)) {
+                        auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
+                        int chance = rand() % 4;
+                        if (chance == 3)
+                            createBonus(sceneManager.getCurrentScene(), *tempPos);
+                    }
                     sceneManager.getCurrentScene().removeEntity(collider);
-                    if (chance == 3)
-                        createBonus(sceneManager.getCurrentScene(), *tempPos);
                 }
                 else if (collider->hasTag(IEntity::Tags::BOMB)) {
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
@@ -482,7 +485,7 @@ namespace indie
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createMainMenu, this));
         std::shared_ptr<Entity> entity1 = std::make_shared<Entity>();
-        std::shared_ptr<SprGAME_TILE_SIZE / 3ite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
+        std::shared_ptr<Sprite> component = std::make_shared<Sprite>("assets/MainMenu/menu.png");
         std::shared_ptr<Position> component2 = std::make_shared<Position>(800 / 2 - 400, 600 / 2 - 300);
 
         entity1->addComponent(component2)
@@ -661,8 +664,8 @@ namespace indie
         std::shared_ptr<Bonus> bonusComp = nullptr;
         std::shared_ptr<Position> bonusPos = std::make_shared<Position>(pos);
         std::shared_ptr<Sphere> bonusSphere = nullptr;
-        Vector3 size = {GAME_TILE_SIZE / 3, GAME_TILE_SIZE / 3, GAME_TILE_SIZE / 3};
-        Vector3 spherePos = {pos.x, pos.y, pos.z};
+        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+        Vector3 spherePos = {std::roundf(pos.x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos.y, std::roundf(pos.z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
         std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, spherePos));
 
         switch (rand() % 3) {
@@ -676,7 +679,7 @@ namespace indie
                 break;
             case 2:
                 bonusComp = std::make_shared<Bonus>(Bonus::Type::POWER);
-                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, BLUE);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, RED);
                 break;
         }
         bonus->addComponent(bonusComp)

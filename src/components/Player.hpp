@@ -96,7 +96,6 @@ namespace indie
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
-        size_t _nbBombMax = 3;
         int _nbBomb;
         int _blastPower;
         int _speed;
@@ -105,6 +104,7 @@ namespace indie
         bool _isDown = false;
         bool _isLeft = false;
         bool _isRight = false;
+        static const int _defaultNbBomb = 1;
         static const int _defaultSpeed = 60;
         static const int _defaultBlastPower = 3;
         std::string UP;
