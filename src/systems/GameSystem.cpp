@@ -463,7 +463,7 @@ namespace indie
                 if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
                     if (!collider->hasTag(IEntity::Tags::PLAYER)) {
                         auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
-                        int chance = rand() % 4;
+                        int chance = std::rand() % 4;
                         if (chance == 3)
                             createBonus(sceneManager.getCurrentScene(), *tempPos);
                     }
@@ -668,7 +668,7 @@ namespace indie
         Vector3 spherePos = {std::roundf(pos.x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos.y, std::roundf(pos.z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
         std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, spherePos));
 
-        switch (rand() % 3) {
+        switch (std::rand() % 3) {
             case 0:
                 bonusComp = std::make_shared<Bonus>(Bonus::Type::BOMB);
                 bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, BLACK);
