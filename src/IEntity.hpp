@@ -28,6 +28,7 @@ namespace indie
             COLLIDABLE,
             AUDIBLE,
             CALLABLE,
+            BONUS,
             CAMERA,
             BOMB,
             TIMED,

@@ -27,12 +27,13 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
+            BONUS,
+            PLAYER,
             RECT,
             CAMERA,
             SPHERE,
             CUBE,
             GRID,
-            PLAYER,
             ANIMATION,
             BOMB,
             TIMER,
@@ -41,7 +42,7 @@ namespace indie
             RADAR,
             TYPE_NB
         };
-        virtual Type getType() const = 0;
+        virtual const Type &getType() const = 0;
         virtual bool isInitialized() const = 0;
     };
 

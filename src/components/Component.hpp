@@ -19,10 +19,9 @@ namespace indie
     class Component : public IComponent
     {
     public:
-        Component(Type type);
-        Type getType() const override;
+        Component(const Type &type);
 
-        void setType(Type type) { _type = type; };
+        const Type &getType() const override;
 
         bool isInitialized() const override { return _isInitialized; };
 

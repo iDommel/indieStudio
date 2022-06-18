@@ -35,6 +35,8 @@ namespace indie
          {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}},
+        {Entity::Tags::BONUS,
+         {{IComponent::Type::BONUS, IComponent::Type::POSITION}}},
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
         {Entity::Tags::BOMB,
