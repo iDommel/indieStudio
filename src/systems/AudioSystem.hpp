@@ -16,7 +16,6 @@
 
 namespace indie
 {
-
     class AudioSystem : public ISystem
     {
     public:

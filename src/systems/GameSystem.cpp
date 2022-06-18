@@ -12,16 +12,16 @@
 
 #include <functional>
 #include <iostream>
+#include <cstdlib>
+#include <cmath>
 
 #include "CameraComponent.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "Core.hpp"
 #include "Entity.hpp"
 #include "EventListener.hpp"
-#include "Grid.hpp"
 #include "HitboxComponent.hpp"
 #include "AudioDevice.hpp"
-#include "Model3D.hpp"
 #include "Player.hpp"
 #include "AIPlayer.hpp"
 #include "Position.hpp"
@@ -29,6 +29,10 @@
 #include "Scene.hpp"
 #include "Sprite.hpp"
 #include "String.hpp"
+#include "Bonus.hpp"
+#include "Model3D.hpp"
+#include "Sphere.hpp"
+#include "Grid.hpp"
 #include "Velocity.hpp"
 #include "Bomb.hpp"
 #include "Timer.hpp"
@@ -495,6 +499,11 @@ namespace indie
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
+                if (collider->hasTag(IEntity::Tags::BONUS)) {
+                    auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
+                    (*playerComp).handleBonus(*bonusComp);
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                }
                 if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
                     (*pos).z = lastPos.z;
                     (*hitbox) -= splitVel * (float)(dt / 1000.0f);
@@ -530,8 +539,15 @@ namespace indie
             }
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
-                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
+                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
+                    if (!collider->hasTag(IEntity::Tags::PLAYER)) {
+                        auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
+                        int chance = std::rand() % 4;
+                        if (chance == 3)
+                            createBonus(sceneManager.getCurrentScene(), *tempPos);
+                    }
                     sceneManager.getCurrentScene().removeEntity(collider);
+                }
                 else if (collider->hasTag(IEntity::Tags::BOMB)) {
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
@@ -754,6 +770,45 @@ namespace indie
 
         return (scene);
     }
+
+    void GameSystem::createBonus(IScene &scene, const Position &pos) {
+        std::shared_ptr<Entity> bonus = std::make_shared<Entity>();
+        std::shared_ptr<Bonus> bonusComp = nullptr;
+        std::shared_ptr<Position> bonusPos = std::make_shared<Position>(pos);
+        std::shared_ptr<Sphere> bonusSphere = nullptr;
+        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
+        Vector3 spherePos = {std::roundf(pos.x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos.y, std::roundf(pos.z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
+        std::shared_ptr<Hitbox> bonusHitbox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, spherePos));
+
+        switch (std::rand() % 3) {
+            case 0:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::BOMB);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, BLACK);
+                break;
+            case 1:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::SPEED);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, GREEN);
+                break;
+            case 2:
+                bonusComp = std::make_shared<Bonus>(Bonus::Type::POWER);
+                bonusSphere = std::make_shared<Sphere>(GAME_TILE_SIZE / 3, RED);
+                break;
+        }
+        bonus->addComponent(bonusComp)
+            .addComponent(bonusSphere)
+            .addComponent(bonusPos)
+            .addComponent(bonusHitbox);
+        scene.addEntity(bonus);
+    }
+
+    void GameSystem::updateBonuses(SceneManager &sceneManager, uint64_t)
+    {
+        for (auto &bonus : sceneManager.getCurrentScene()[IEntity::Tags::BONUS]) {
+            auto comp = Component::castComponent<Bonus>((*bonus)[IComponent::Type::BONUS]);
+            std::cout << "Bonuuuuuuuss !!!!!" << std::endl;
+        }
+    }
+
 
     void GameSystem::createMusic(Scene &scene)
     {

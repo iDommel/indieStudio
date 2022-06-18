@@ -84,10 +84,12 @@ namespace indie
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
+        void updateBonuses(SceneManager &scene, uint64_t dt);
         void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
         AISystem _aiSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
+        void createBonus(IScene &scene, const Position &pos);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
         void generateMap(const std::string &filename, IScene &scene);
         void createSpawn(int x, int y, IScene &scene);
