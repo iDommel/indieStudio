@@ -52,11 +52,7 @@ namespace indie
         for (auto &scene : sceneManager.getScenes())
             for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
-            
-        for (auto &scene : sceneManager.getScenes()) {
-            for (auto &e : (*scene.second)[IEntity::Tags::RENDERABLE_3D])
-                loadModel(e);
-        }
+
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;

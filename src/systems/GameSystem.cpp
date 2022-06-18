@@ -213,7 +213,10 @@ namespace indie
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
-            // std::cout << nbr_player << std::endl;
+            for (auto &e : sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER]) {
+                auto players = Component::castComponent<Velocity>((*e)[IComponent::Type::VELOCITY]);
+                std::cout << "Velocity :" << players->x << " " << players->y << std::endl;
+            }
             std::string result = "Player ";
             if (nbr_player == 0) {
                 result = "Draw !";
@@ -475,15 +478,17 @@ namespace indie
             splitVel.z = 0;
 
             // check for collisions on the x axis
+            std::cout << "id " << playerComp->getId() << std::endl;
+            std::cout << "velocity update player :" << vel->x << std::endl;
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
-            for (auto &collider : _collideSystem.getColliders(player)) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-                    (*pos).x = lastPos.x;
-                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
-                    break;
-                }
-            }
+            // for (auto &collider : _collideSystem.getColliders(player)) {
+            //     if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+            //         (*pos).x = lastPos.x;
+            //         (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+            //         break;
+            //     }
+            // }
 
             // check for collisions on the z axis
             splitVel.z = (*vel).z;
@@ -491,13 +496,13 @@ namespace indie
 
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
-            for (auto &collider : _collideSystem.getColliders(player)) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-                    (*pos).z = lastPos.z;
-                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
-                    break;
-                }
-            }
+            // for (auto &collider : _collideSystem.getColliders(player)) {
+            //     if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+            //         (*pos).z = lastPos.z;
+            //         (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+            //         break;
+            //     }
+            // }
             playerComp->updateBombsVec();
         }
     }
@@ -828,6 +833,7 @@ namespace indie
             },
             [player, playerEntity](SceneManager &manager) {
                 player->moveRight(manager, playerEntity, 1);
+                std::cout << "velocity in player :" <<  Component::castComponent<Velocity>((*playerEntity)[IComponent::Type::VELOCITY])->x << std::endl;
             },
             [player, playerEntity](SceneManager &manager) {
                 player->stopRight(manager, playerEntity, 1);

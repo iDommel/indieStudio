@@ -88,7 +88,7 @@ namespace indie
             {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
             {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
         };
-        if (nb < nbr_player) {
+        if (nb < 1) {
             createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
             std::cout << "Player " << nb << " created" << std::endl;
             nb++;
