@@ -5,6 +5,8 @@
 ** SceneManager.cpp
 */
 
+#include "raylib.h"
+#include "GameSystem.hpp"
 #include "SceneManager.hpp"
 
 #include <iostream>
@@ -35,6 +37,8 @@ namespace indie
         _currentScene = sceneType;
         getCurrentSceneType() = sceneType;
         if (getPreviousSceneType() == SceneType::GAME && _currentScene != SceneType::PAUSE) {
+            GameSystem::setNbrPlayer(4);
+            std::cout << "Nbr player: " << GameSystem::getNbrPlayer() << std::endl;
             auto addEntityCallback = _scenes[SceneType::GAME]->getAddEntityCallback();
             auto removeEntityCallback = _scenes[SceneType::GAME]->getRemoveEntityCallback();
             _scenes[SceneType::GAME] = _scenes[SceneType::GAME]->initScene();
@@ -52,6 +56,12 @@ namespace indie
             _scenes[SceneType::CONTROLLER] = _scenes[SceneType::CONTROLLER]->initScene();
             _scenes[SceneType::CONTROLLER]->setAddEntityCallback(addEntityCallback);
             _scenes[SceneType::CONTROLLER]->setRemoveEntityCallback(removeEntityCallback);
+        } else if (getPreviousSceneType() == SceneType::PREGAME) {
+            auto addEntityCallback = _scenes[SceneType::PREGAME]->getAddEntityCallback();
+            auto removeEntityCallback = _scenes[SceneType::PREGAME]->getRemoveEntityCallback();
+            _scenes[SceneType::PREGAME] = _scenes[SceneType::PREGAME]->initScene();
+            _scenes[SceneType::PREGAME]->setAddEntityCallback(addEntityCallback);
+            _scenes[SceneType::PREGAME]->setRemoveEntityCallback(removeEntityCallback);
         } 
 
         auto addEntityCallback = _scenes[_currentScene]->getAddEntityCallback();

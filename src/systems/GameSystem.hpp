@@ -56,6 +56,10 @@ namespace indie
 
         static int getTag(std::string key);
 
+        static unsigned int getNbrPlayer() { return nbr_player; };
+
+        static void setNbrPlayer(unsigned int nbr) { nbr_player = nbr; };
+
     private:
         std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createSplashScreen();
