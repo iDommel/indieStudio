@@ -76,7 +76,7 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         static unsigned int nbr_player;
-        int timeElasped;
+        int timeElasped = 0;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);

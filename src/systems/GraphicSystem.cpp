@@ -91,7 +91,6 @@ namespace indie
 
     void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cout << "loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
             std::cout << "loadSprite" << std::endl;
             loadSprite(entity);
@@ -106,8 +105,9 @@ namespace indie
     {
         if (entity->hasTag(IEntity::Tags::SPRITE_2D))
             unloadSprite(entity);
-        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D))
+        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
             unloadModel(entity);
+        }
     }
 
     void GraphicSystem::loadSprite(std::shared_ptr<IEntity> &entity)
@@ -198,6 +198,9 @@ namespace indie
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
             auto pos = hitbox->getBBox().max;
+            std::cout << "box max : " << box.max.x << " " << box.max.y << " " << box.max.z << std::endl;
+            std::cout << "box min : " << box.min.x << " " << box.min.y << " " << box.min.z << std::endl;
+            std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;

@@ -7,6 +7,8 @@
 
 #include "raylib.h"
 #include "GameSystem.hpp"
+#include "EventSystem.hpp"
+#include "CollideSystem.hpp"
 
 #include <functional>
 #include <iostream>
@@ -213,10 +215,6 @@ namespace indie
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
-            for (auto &e : sceneManager.getScene(SceneManager::SceneType::GAME)[IEntity::Tags::PLAYER]) {
-                auto players = Component::castComponent<Velocity>((*e)[IComponent::Type::VELOCITY]);
-                std::cout << "Velocity :" << players->x << " " << players->y << std::endl;
-            }
             std::string result = "Player ";
             if (nbr_player == 0) {
                 result = "Draw !";
@@ -337,9 +335,10 @@ namespace indie
                     else if (scenetype == SceneManager::SceneType::NONE) {
                         std::cout << "No scene" << std::endl;
                         exit(0);
-                    } else if (scenetype == SceneManager::SceneType::GAME) {
+                    } else if (scenetype == SceneManager::SceneType::GAME && sceneManager.getCurrentSceneType() != SceneManager::SceneType::PAUSE) {
                         sceneManager.setCurrentScene(SceneManager::SceneType::GAME, true);
-                        _collideSystem.init(sceneManager);
+                        _collideSystem.reloadCollidables3D(sceneManager);
+                        EventSystem::reloadScene(sceneManager, SceneManager::SceneType::GAME);
                     } else
                         sceneManager.setCurrentScene(scenetype);
                 }
@@ -478,31 +477,30 @@ namespace indie
             splitVel.z = 0;
 
             // check for collisions on the x axis
-            std::cout << "id " << playerComp->getId() << std::endl;
-            std::cout << "velocity update player :" << vel->x << std::endl;
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
-            // for (auto &collider : _collideSystem.getColliders(player)) {
-            //     if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-            //         (*pos).x = lastPos.x;
-            //         (*hitbox) -= splitVel * (float)(dt / 1000.0f);
-            //         break;
-            //     }
-            // }
+            auto colliders = _collideSystem.getColliders(player);
+            for (auto &collider : colliders) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos).x = lastPos.x;
+                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+                    break;
+                }
+            }
 
             // check for collisions on the z axis
             splitVel.z = (*vel).z;
             splitVel.x = 0;
-
+            colliders = _collideSystem.getColliders(player);
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
-            // for (auto &collider : _collideSystem.getColliders(player)) {
-            //     if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-            //         (*pos).z = lastPos.z;
-            //         (*hitbox) -= splitVel * (float)(dt / 1000.0f);
-            //         break;
-            //     }
-            // }
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos).z = lastPos.z;
+                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+                    break;
+                }
+            }
             playerComp->updateBombsVec();
         }
     }
@@ -745,20 +743,14 @@ namespace indie
         std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/pause.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createText("End", Position(350, 25), 50);
         std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 800 / 2 - 18), 120, 28);
         std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 600 / 2 - 18), 120, 28);
 
         createSceneEvent(entity3, SceneManager::SceneType::PREGAME);
-        createSceneEvent(entity4, SceneManager::SceneType::SOUND);
-        createSceneEvent(entity5, SceneManager::SceneType::CONTROLLER);
-        createSceneEvent(entity6, SceneManager::SceneType::HELP);
         createSceneEvent(entity7, SceneManager::SceneType::NONE);
         createSceneEvent(entity8, SceneManager::SceneType::MAIN_MENU);
 
-        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6, entity7, entity8});
+        scene->addEntities({entity1, entity2, entity3, entity7, entity8});
 
         return (scene);
     }
@@ -796,6 +788,7 @@ namespace indie
         std::shared_ptr<AIPlayer> aiComponent = std::make_shared<AIPlayer>(id);
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
+
         // Vector3 radarSize = {GAME_TILE_SIZE * 5, GAME_TILE_SIZE, GAME_TILE_SIZE * 5};
         Vector3 radarSize = {0, 0, 0};
         Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
@@ -818,7 +811,8 @@ namespace indie
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(pos);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
-        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(true);
+        BoundingBox towerBoundingBox = {{pos.x - 4.2, pos.y + 0, pos.z - 4.0}, {pos.x + 4.2,pos.y + 23, pos.z + 4.0}};
+        std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(towerBoundingBox);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id, keyUp, keyDown, keyLeft, keyRight, keyBomb);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
@@ -833,7 +827,6 @@ namespace indie
             },
             [player, playerEntity](SceneManager &manager) {
                 player->moveRight(manager, playerEntity, 1);
-                std::cout << "velocity in player :" <<  Component::castComponent<Velocity>((*playerEntity)[IComponent::Type::VELOCITY])->x << std::endl;
             },
             [player, playerEntity](SceneManager &manager) {
                 player->stopRight(manager, playerEntity, 1);

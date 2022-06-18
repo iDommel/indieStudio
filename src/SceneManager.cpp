@@ -34,8 +34,32 @@ namespace indie
         getPreviousSceneType() = _currentScene;
         _currentScene = sceneType;
         getCurrentSceneType() = sceneType;
+        if (getPreviousSceneType() == SceneType::GAME && _currentScene != SceneType::PAUSE) {
+            auto addEntityCallback = _scenes[SceneType::GAME]->getAddEntityCallback();
+            auto removeEntityCallback = _scenes[SceneType::GAME]->getRemoveEntityCallback();
+            _scenes[SceneType::GAME] = _scenes[SceneType::GAME]->initScene();
+            _scenes[SceneType::GAME]->setAddEntityCallback(addEntityCallback);
+            _scenes[SceneType::GAME]->setRemoveEntityCallback(removeEntityCallback);
+        } else if (getPreviousSceneType() == SceneType::END) {
+            auto addEntityCallback = _scenes[SceneType::END]->getAddEntityCallback();
+            auto removeEntityCallback = _scenes[SceneType::END]->getRemoveEntityCallback();
+            _scenes[SceneType::END] = _scenes[SceneType::END]->initScene();
+            _scenes[SceneType::END]->setAddEntityCallback(addEntityCallback);
+            _scenes[SceneType::END]->setRemoveEntityCallback(removeEntityCallback);
+        } else if (getPreviousSceneType() == SceneType::CONTROLLER) {
+            auto addEntityCallback = _scenes[SceneType::CONTROLLER]->getAddEntityCallback();
+            auto removeEntityCallback = _scenes[SceneType::CONTROLLER]->getRemoveEntityCallback();
+            _scenes[SceneType::CONTROLLER] = _scenes[SceneType::CONTROLLER]->initScene();
+            _scenes[SceneType::CONTROLLER]->setAddEntityCallback(addEntityCallback);
+            _scenes[SceneType::CONTROLLER]->setRemoveEntityCallback(removeEntityCallback);
+        } 
+
+        auto addEntityCallback = _scenes[_currentScene]->getAddEntityCallback();
+        auto removeEntityCallback = _scenes[_currentScene]->getRemoveEntityCallback();
         if (initScene) {
             _scenes[_currentScene] = _scenes[_currentScene]->initScene();
+            _scenes[_currentScene]->setAddEntityCallback(addEntityCallback);
+            _scenes[_currentScene]->setRemoveEntityCallback(removeEntityCallback);
         }
     }
 

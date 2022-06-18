@@ -218,6 +218,8 @@ namespace indie
 
         void preInit(IScene &scene);
 
+        void reloadCollidables3D(SceneManager &sceneManager);
+
     private:
 
         std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
