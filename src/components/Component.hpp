@@ -42,7 +42,7 @@ namespace indie
         }
 
     protected:
-        Type _type;
+        Type _type = Type::TYPE_NB;
         bool _isInitialized = false;
     };
 
