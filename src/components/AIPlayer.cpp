@@ -33,8 +33,8 @@ namespace indie
 
     void AIPlayer::move(std::shared_ptr<Velocity> vel)
     {
-        // vel->z = (_speed * _isDown) + (-_speed * _isUp);
-        // vel->x = (_speed * _isRight) + (-_speed * _isLeft);
+        vel->z = (_speed * _isDown) + (-_speed * _isUp);
+        vel->x = (_speed * _isRight) + (-_speed * _isLeft);
     }
 
     int AIPlayer::getId() const
@@ -67,18 +67,73 @@ namespace indie
         return _radar;
     }
 
-    void AIPlayer::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
+    void AIPlayer::moveRight(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isRight = true;
+        move(vel);
+    }
+
+    void AIPlayer::stopRight(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isRight = false;
+        move(vel);
+    }
+
+    void AIPlayer::moveLeft(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isLeft = true;
+        move(vel);
+    }
+
+    void AIPlayer::stopLeft(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isLeft = false;
+        move(vel);
+    }
+
+    void AIPlayer::moveUp(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isUp = true;
+        move(vel);
+    }
+
+    void AIPlayer::stopUp(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isUp = false;
+        move(vel);
+    }
+
+    void AIPlayer::moveDown(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isDown = true;
+        move(vel);
+    }
+
+    void AIPlayer::stopDown(std::shared_ptr<IEntity> entity)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        _isDown = false;
+        move(vel);
+    }
+
+    void AIPlayer::generateBomb(SceneManager &manager, Vector3 &pos)
     {
         if (_bombs.size() >= _nbBombMax)
             return;
 
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
-        auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
+        Vector3 bPos = {pos.x - GAME_TILE_SIZE/2, pos.y, pos.z - GAME_TILE_SIZE/2};
 
         bomb->addComponent(std::make_shared<Bomb>(_blastPower))
-            .addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE))
+            .addComponent(std::make_shared<Position>(pos.x, pos.y, pos.z))
             .addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
             .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
         _bombs.push_back(bomb);
