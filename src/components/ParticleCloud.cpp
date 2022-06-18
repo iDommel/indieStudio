@@ -46,7 +46,7 @@ static Vector3 computeBeziers(std::vector<Vector3> curveParams, float percent)
     auto p2 = getPt(curveParams[1], curveParams[2], percent);
     auto pos = getPt(p1, p2, percent);
 
-    if (curveParams.size() > 3)
+    // if (curveParams.size() > 3)
     return (pos);
 }
 

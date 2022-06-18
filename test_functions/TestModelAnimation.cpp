@@ -32,7 +32,6 @@ void test_raylib_modelAnimation()
         if (IsKeyDown(KEY_SPACE))
         {
             animFrameCounter++;
-            std::cerr << "animFrameCounter: " << animFrameCounter << std::endl;
             anim.updateModelAnimation(*model, animFrameCounter);
             if (animFrameCounter >= anim.getFrameCount()) animFrameCounter = 0;
         }

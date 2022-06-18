@@ -52,6 +52,7 @@ namespace indie
         void displayCube(std::shared_ptr<IEntity> &entity) const;
         void displayParticles(std::shared_ptr<IEntity> &entity) const;
         void displayCollidable(std::shared_ptr<IEntity> &entity) const;
+        void displayRadar(std::shared_ptr<IEntity> &entity) const;
 
         void loadText(std::shared_ptr<IEntity> &entity);
         void unloadText(std::shared_ptr<IEntity> &entity);

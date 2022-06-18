@@ -27,6 +27,7 @@ namespace indie
             MUSIC,
             SOUND,
             EVT_LISTENER,
+            BONUS,
             PLAYER,
             RECT,
             CAMERA,
@@ -35,9 +36,13 @@ namespace indie
             GRID,
             ANIMATION,
             PARTICLES,
+            BOMB,
+            TIMER,
+            DESTRUCTIBLE,
+            AI,
             TYPE_NB
         };
-        virtual Type getType() const = 0;
+        virtual const Type &getType() const = 0;
         virtual bool isInitialized() const = 0;
     };
 

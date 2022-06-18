@@ -44,6 +44,7 @@ target_sources(${PROJECT_NAME}
         src/systems/EventSystem.cpp
         src/systems/CollideSystem.cpp
         src/systems/ParticlesSystem.cpp
+        src/systems/AISystem.cpp
 
         src/components/Component.cpp
         src/components/EventListener.cpp
@@ -57,6 +58,8 @@ target_sources(${PROJECT_NAME}
         src/components/Cube.cpp
         src/components/Grid.cpp
         src/components/ParticleCloud.cpp
+        src/components/Bomb.cpp
+        src/components/AIPlayer.cpp
 
         test_functions/TestAnimations2D.cpp
         test_functions/TestCamera.cpp

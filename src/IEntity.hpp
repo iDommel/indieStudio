@@ -29,8 +29,13 @@ namespace indie
             COLLIDABLE,
             AUDIBLE,
             CALLABLE,
-            PLAYER,
+            BONUS,
             CAMERA,
+            BOMB,
+            TIMED,
+            DESTRUCTIBLE,
+            PLAYER,
+            AI
         };
 
         virtual ~IEntity() = default;

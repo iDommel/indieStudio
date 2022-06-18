@@ -24,7 +24,7 @@ namespace indie
          * @param nbFrame number of frames in the picture, default is 0 (means no rect update)
          */
         Sprite(std::string str, int nbFrame = 0)
-            : Component(IComponent::Type::SPRITE), _value(str), _nbFrame(nbFrame)
+            : Component(Type::SPRITE), _value(str), _nbFrame(nbFrame)
         {
             _isInitialized = true;
         }

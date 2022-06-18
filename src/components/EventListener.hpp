@@ -93,7 +93,7 @@ namespace indie
          * @param axis the stick aswell as the axis to listen to
          * @param callbacks
          */
-        void addGamepadStickEvent(int gamepad, int axis, GamepadStickCallbacks callbacks);
+        void addGamepadStickEvent(int gamepad, int axis, std::function<void(SceneManager &, float)> callbacks);
         /**
          * @brief unbinds a GamepadStickAxis
          *
@@ -114,7 +114,7 @@ namespace indie
         /// @brief gets a reference to the gamepad mappings of a specified gamepad
         std::map<GamepadButton, ButtonCallbacks> &getGamepadMappings(int gamepad);
         /// @brief gets a reference to the gamepad stick mappings of a specified gamepad
-        std::map<int, GamepadStickCallbacks> &getGamepadStickMappings(int gamepad);
+        std::map<int, std::function<void(SceneManager &, float)>> &getGamepadStickMappings(int gamepad);
 
     protected:
     private:
@@ -122,7 +122,8 @@ namespace indie
         std::map<char, ButtonCallbacks> _keyboardCharMap;
         std::map<MouseButton, MouseCallbacks> _mouseMap;
         std::map<int, std::map<GamepadButton, ButtonCallbacks>> _gamepadMap;
-        std::map<int, std::map<int, GamepadStickCallbacks>> _gamepadStickMap;
+
+        std::map<int, std::map<int, std::function<void(SceneManager &, float)>>> _gamepadStickMap;
     };
 }  // namespace indie
 

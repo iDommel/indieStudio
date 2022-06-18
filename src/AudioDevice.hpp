@@ -24,8 +24,10 @@ namespace indie
         ///  @brief Set music volume
         static void setVolume(float volume);
 
+        static float &getMasterVolume() {static float masterVolume; return masterVolume;};
     protected:
     private:
+        static float masterVolume;
     };
 }
 

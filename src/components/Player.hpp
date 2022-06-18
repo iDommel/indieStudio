@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2022
-** indieStudio
+** Indie
 ** File description:
-** Player
+** player
 */
 
 #ifndef PLAYER_HPP_
@@ -15,6 +15,7 @@
 namespace indie
 {
     class Velocity;
+    class Bonus;
 
     class Player : public Component
     {
@@ -27,11 +28,20 @@ namespace indie
             BOMB
         };
 
-        Player(int id);
+        Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb);
         ~Player();
 
-        ///@brief Handle the various bonuses
-        void handleBonus();
+        /**
+         * @brief Handle the various bonuses
+         * @param bonus The Bonus that was given to the player
+         */
+        void handleBonus(const Bonus &bonus);
+        /**
+         * @brief Generate a bomb and add it to the entities list
+         * @param manager The scene manager
+         */
+        void generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity);
+        void updateBombsVec();
 
         ///@brief gets the player ID
         int getId() const;
@@ -41,6 +51,8 @@ namespace indie
 
         ///@brief gets the current maximum number of bomb a player can drop
         int getNbBomb() const;
+        ///@brief Sets the current maximum number of bomb a player can drop
+        void setNbBomb(int newNbBomb);
 
         /// @brief sets the velocity of the player to its speed value to the right
         void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
@@ -59,6 +71,28 @@ namespace indie
         /// @brief sets the velocity of the player to 0 downwards
         void stopDown(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
 
+        /// @brief horizontal movement for gamepad sticks
+        void moveHorizontal(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
+        /// @brief verticcal movement for gamepad sticks
+        void moveVertical(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
+
+        std::string getUp() { return UP; }
+        std::string getDown() { return DOWN; }
+        std::string getLeft() { return LEFT; }
+        std::string getRight() { return RIGHT; }
+        std::string getBomb() { return BOMB; }
+        void setUP(std::string _up) { UP = _up; }
+        void setDOWN(std::string _down) { DOWN = _down; }
+        void setLEFT(std::string _left) { LEFT = _left; }
+        void setRIGHT(std::string _right) { RIGHT = _right; }
+        void setBOMB(std::string _bomb) { BOMB = _bomb; }
+
+        int changeUp;
+        int changeDown;
+        int changeLeft;
+        int changeRight;
+        int changeBomb;
+
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
@@ -70,9 +104,15 @@ namespace indie
         bool _isDown = false;
         bool _isLeft = false;
         bool _isRight = false;
+        static const int _defaultNbBomb = 1;
         static const int _defaultSpeed = 60;
-        static const int _defaultNbBomb = 3;
-        static const int _defaultBlastPower = 1;
+        static const int _defaultBlastPower = 3;
+        std::string UP;
+        std::string DOWN;
+        std::string LEFT;
+        std::string RIGHT;
+        std::vector<std::shared_ptr<IEntity>> _bombs;
+        std::string BOMB;
     };
 
 }

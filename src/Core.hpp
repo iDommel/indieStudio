@@ -32,7 +32,9 @@ namespace indie
             GRAPHIC,
             PARTICLE,
             /// sub-system of game system
-            COLLIDE
+            COLLIDE,
+            /// sub-system of game system
+            AI
         };
 
         Core();

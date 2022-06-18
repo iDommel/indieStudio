@@ -20,14 +20,12 @@ namespace indie
 
     void AudioSystem::init(SceneManager &)
     {
-        std::cerr << "AudioSystem::init" << std::endl;
         if (AudioDevice::isReady()) {
-            std::cerr << "AudioSystem::init done" << std::endl;
             AudioDevice::setVolume(100);
         }
-        _musics.emplace(std::string("music.ogg"), std::make_unique<Music>("resources/Music.ogg"));
-        _sounds.emplace(std::string("sound_det"), std::make_unique<Sound>("resources/Detonation.ogg"));
-        _sounds.emplace(std::string("sound_expl"), std::make_unique<Sound>("resources/Explosion.ogg"));
+        _musics.emplace(std::string("music.ogg"), std::make_unique<Music>("assets/sounds/Music.ogg"));
+        _sounds.emplace(std::string("sound_det"), std::make_unique<Sound>("assets/sounds/Detonation.ogg"));
+        _sounds.emplace(std::string("sound_expl"), std::make_unique<Sound>("assets/sounds/Explosion.ogg"));
     }
 
     void AudioSystem::update(SceneManager &sceneManager, uint64_t)
@@ -63,7 +61,6 @@ namespace indie
 
     void AudioSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
-        std::cerr << "AudioSystem::unloadEntity" << std::endl;
     }
 
     void AudioSystem::manageMusic(MusicComponent &musicComponent)
