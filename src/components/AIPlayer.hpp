@@ -76,7 +76,7 @@ namespace indie
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
-        size_t _nbBombMax = 3;
+        size_t _nbBombMax = 1;
         int _blastPower = 3;
         int _speed = 60;
         int _id;
