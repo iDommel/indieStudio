@@ -628,7 +628,6 @@ namespace indie
 
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
-        createSound(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
         return scene;
@@ -705,20 +704,6 @@ namespace indie
 
         musicEntity->addComponent(musicComponent);
         scene.addEntities({musicEntity});
-    }
-
-    void GameSystem::createSound(Scene &scene)
-    {
-        std::shared_ptr<Entity> soundEntity = std::make_shared<Entity>();
-        std::shared_ptr<Entity> soundEntity2 = std::make_shared<Entity>();
-        std::shared_ptr<SoundComponent> soundComponent = std::make_shared<SoundComponent>("sound_det");
-        std::shared_ptr<SoundComponent> soundComponent2 = std::make_shared<SoundComponent>("sound_expl");
-
-        soundEntity->addComponent(soundComponent);
-        scene.addEntities({soundEntity});
-
-        soundEntity2->addComponent(soundComponent2);
-        scene.addEntities({soundEntity2});
     }
 
     void GameSystem::createAIPlayer(IScene &scene, int id, Position pos)

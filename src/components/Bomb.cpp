@@ -15,6 +15,7 @@
 #include "HitboxComponent.hpp"
 #include "Timer.hpp"
 #include "ParticleCloud.hpp"
+#include "SoundComponent.hpp"
 
 #define BOMB_TIMER      3000
 #define EXPLOSION_TIMER 500
@@ -62,6 +63,8 @@ void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
     auto c2 = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(ex2Size, ex2Pos));
     auto timer2 = std::make_shared<Timer>(EXPLOSION_TIMER);
 
+    std::shared_ptr<Entity> sonicBoom = std::make_shared<Entity>();
+    sonicBoom->addComponent(std::make_shared<SoundComponent>("sound_expl"));
     std::shared_ptr<Entity> boom1 = std::make_shared<Entity>();
     boom1->addComponent(std::make_shared<ParticleCloud>(targetNorth, pos, 10, 2, -1, EXPLOSION_TIMER));
     std::shared_ptr<Entity> boom2 = std::make_shared<Entity>();
@@ -71,11 +74,9 @@ void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
     std::shared_ptr<Entity> boom4 = std::make_shared<Entity>();
     boom4->addComponent(std::make_shared<ParticleCloud>(targetWest, pos, 10, 2, -1, EXPLOSION_TIMER));
 
-    explosion->addComponent(c)
-                .addComponent(timer);
-    explosion2->addComponent(c2)
-                .addComponent(timer2);
-    sceneManager.getCurrentScene().addEntities({explosion, explosion2, boom1, boom2, boom3, boom4});
+    explosion->addComponents({c, timer});
+    explosion2->addComponents({c2, timer2});
+    sceneManager.getCurrentScene().addEntities({explosion, explosion2, boom1, boom2, boom3, boom4, sonicBoom});
 }
 
 }
