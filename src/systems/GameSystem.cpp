@@ -629,22 +629,11 @@ namespace indie
         createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
         createSound(*scene);
-        createParticles(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
         return scene;
     }
 
-    void GameSystem::createParticles(Scene &scene)
-    {
-        std::shared_ptr<Entity> particle = std::make_shared<Entity>();
-        Vector3 start = {100, 100, 100};
-        Vector3 end = {0, 0, 0};
-        std::shared_ptr<ParticleCloud> particleCloud = std::make_shared<ParticleCloud>(start, end, 20, 2, -1, 5000);
-
-        particle->addComponent(particleCloud);
-        scene.addEntity({particle});
-    }
 
     std::unique_ptr<IScene> GameSystem::createPauseMenu()
     {

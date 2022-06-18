@@ -26,6 +26,10 @@ void ParticlesSystem::init(SceneManager &)
 void ParticlesSystem::update(SceneManager &manager, uint64_t deltaTime)
 {
     for (auto &particlesCloud : manager.getCurrentScene()[IEntity::Tags::AESTHETIC]) {
+        if (particlesCloud == nullptr || !particlesCloud->hasComponent(Component::Type::PARTICLES)) {
+            manager.getCurrentScene().removeEntity(particlesCloud);
+            continue;
+        }
         auto particleCloud = Component::castComponent<ParticleCloud>((*particlesCloud)[IComponent::Type::PARTICLES]);
         if (!particleCloud)
             continue;

@@ -94,7 +94,6 @@ namespace indie
 
     void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cerr << "loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
             std::cerr << "loadSprite" << std::endl;
             loadSprite(entity);
@@ -160,7 +159,7 @@ namespace indie
 
     void GraphicSystem::displayParticles(std::shared_ptr<IEntity> &entity) const
     {
-        static auto sphere = Sphere(0.2, BLUE);
+        static auto sphere = Sphere(1, BLUE);
         auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
         std::shared_ptr<indie::ParticleCloud> particlesCloud  = nullptr;
 

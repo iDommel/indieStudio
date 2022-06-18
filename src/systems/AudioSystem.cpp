@@ -53,7 +53,6 @@ namespace indie
 
     void AudioSystem::loadEntity(std::shared_ptr<IEntity>entity)
     {
-        std::cerr << "AudioSystem::loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::AUDIBLE)) {
             std::cerr << "AudioSystem::loadEntity" << std::endl;
         }
