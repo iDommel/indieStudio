@@ -8,6 +8,7 @@
 #include "Player.hpp"
 
 #include <functional>
+#include <algorithm>
 #include <cmath>
 #include <algorithm>
 
@@ -18,6 +19,7 @@
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
 #include "Bomb.hpp"
+#include "Bonus.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
 
@@ -26,20 +28,23 @@ namespace indie
 
     Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right), BOMB(_bomb)
     {
-        _blastPower = _defaultBlastPower;
+        _nbBomb = _defaultNbBomb;
         _speed = _defaultSpeed;
+        _blastPower = _defaultBlastPower;
     }
 
     Player::~Player()
     {
     }
 
-    void Player::handleBonus(/*bonus*/)
+    void Player::handleBonus(const Bonus &bonus)
     {
-        /*if (bonus == nbBomb)
+        if (bonus.getBonusType() == Bonus::Type::BOMB)
             _nbBomb++;
-        else if (bonus == blastPower)
-            _blastPower++;*/
+        else if (bonus.getBonusType() == Bonus::Type::SPEED)
+            _speed += 20;
+        else if (bonus.getBonusType() == Bonus::Type::POWER)
+            _blastPower++;
     }
 
     void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
@@ -128,17 +133,17 @@ namespace indie
 
     int Player::getNbBomb() const
     {
-        return _nbBombMax;
+        return _nbBomb;
     }
 
     void Player::setNbBomb(int newNbBomb)
     {
-        _nbBombMax = newNbBomb;
+        _nbBomb = newNbBomb;
     }
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
-        if (_bombs.size() >= _nbBombMax)
+        if (_bombs.size() >= _nbBomb)
             return;
 
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
