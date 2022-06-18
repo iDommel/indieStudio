@@ -42,7 +42,9 @@ namespace indie
         {Entity::Tags::TIMED,
          {{IComponent::Type::TIMER}}},
         {Entity::Tags::DESTRUCTIBLE,
-         {{IComponent::Type::DESTRUCTIBLE}}}
+         {{IComponent::Type::DESTRUCTIBLE}}},
+        {Entity::Tags::UI,
+         {{IComponent::Type::UI}}},
     };
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)

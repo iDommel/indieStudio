@@ -60,6 +60,7 @@ namespace indie
         std::unique_ptr<IScene> createControllerMenu();
         std::unique_ptr<IScene> createPreGameMenu();
         std::unique_ptr<IScene> createPauseMenu();
+        static void createPlayerUI(IScene &, std::shared_ptr<IEntity>);
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
         std::shared_ptr<Entity> createImage(std::string path, Position position, int heigh, int width);
@@ -71,6 +72,7 @@ namespace indie
         int nbr_player = 4;
         int timeElasped;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
+        void updatePlayerUI(SceneManager &, std::vector<std::shared_ptr<IEntity>> &);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
@@ -80,6 +82,7 @@ namespace indie
         static void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
+        static const Position _uiPos[4];
     };
 
 }

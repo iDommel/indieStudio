@@ -165,4 +165,9 @@ namespace indie
                 bomb++;
         }
     }
+
+    int Player::getBlastPower() const
+    {
+        return _blastPower;
+    }
 }

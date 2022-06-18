@@ -1,0 +1,54 @@
+/*
+** EPITECH PROJECT, 2022
+** indieStudio
+** File description:
+** UIComponent
+*/
+
+#include "raylib.h"
+#include "UIComponent.hpp"
+
+namespace indie
+{
+
+    UIComponent::UIComponent(std::shared_ptr<IEntity> player, std::shared_ptr<IEntity> text) : Component(Type::UI)
+    {
+        _player = Component::castComponent<Player>((*player)[Component::Type::PLAYER]);
+        _text = Component::castComponent<String>((*text)[IComponent::Type::TEXT]);
+        _textToDestroy = text;
+        int id = _player->getId();
+        int nbBombs = _player->getNbBomb();
+        int speed = _player->getSpeed();
+        int power = _player->getBlastPower();
+        std::string displayString = "Player " + std::to_string(id) + ":\nBombs : " + std::to_string(nbBombs) + "\nSpeed : " + std::to_string(speed) + "\nBlast Power : " + std::to_string(power);
+        _text->getValue() = displayString;
+    }
+
+    UIComponent::~UIComponent()
+    {
+    }
+
+    void UIComponent::update()
+    {
+        if (_player && _text && !_player->isDead()) {
+            int id = _player->getId();
+            int nbBombs = _player->getNbBomb();
+            int speed = _player->getSpeed();
+            int power = _player->getBlastPower();
+            std::string displayString = "Player " + std::to_string(id) + ":\nBombs : " + std::to_string(nbBombs) + "\nSpeed : " + std::to_string(speed) + "\nBlast Power : " + std::to_string(power);
+            _text->getValue() = displayString;
+        } else {
+            _shouldBeDestroyed = true;
+        }
+    }
+
+    bool UIComponent::shouldBeDestroyed() const
+    {
+        return _shouldBeDestroyed;
+    }
+
+    std::shared_ptr<IEntity> UIComponent::getTextToDestroy()
+    {
+        return _textToDestroy;
+    }
+}  // namespace indie

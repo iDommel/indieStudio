@@ -11,6 +11,7 @@
 #include <functional>
 #include <iostream>
 
+#include "UIComponent.hpp"
 #include "CameraComponent.hpp"
 #include "GamepadStickCallbacks.hpp"
 #include "Core.hpp"
@@ -127,6 +128,24 @@ namespace indie
         }
     }
 
+    void GameSystem::updatePlayerUI(SceneManager &sceneManager, std::vector<std::shared_ptr<IEntity>> &ui_elems)
+    {
+        std::vector<std::shared_ptr<IEntity>> to_destroy;
+        if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
+            for (auto &ui_elem : ui_elems) {
+                auto component = Component::castComponent<UIComponent>((*ui_elem)[IComponent::Type::UI]);
+                component->update();
+                if (component->shouldBeDestroyed() && component->getTextToDestroy()) {
+                    to_destroy.push_back(component->getTextToDestroy());
+                    to_destroy.push_back(ui_elem);
+                }
+            }
+        }
+        for (auto &e : to_destroy) {
+            sceneManager.getCurrentScene().removeEntity(e);
+        }
+    }
+
     void GameSystem::update(indie::SceneManager &sceneManager, uint64_t dt)
     {
         int firstText = 9;
@@ -145,6 +164,7 @@ namespace indie
             }
         }
         updatePlayers(sceneManager, dt);
+        updatePlayerUI(sceneManager, sceneManager.getCurrentScene()[IEntity::Tags::UI]);
         updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
@@ -456,9 +476,13 @@ namespace indie
             }
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
-                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE))
+                if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
+                    if (collider->hasTag(IEntity::Tags::PLAYER)) {
+                        auto player = Component::castComponent<Player>((*collider)[IComponent::Type::PLAYER]);
+                        player->kill();
+                    }
                     sceneManager.getCurrentScene().removeEntity(collider);
-                else if (collider->hasTag(IEntity::Tags::BOMB)) {
+                } else if (collider->hasTag(IEntity::Tags::BOMB)) {
                     auto bombComp = Component::castComponent<Bomb>((*collider)[IComponent::Type::BOMB]);
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
                     Vector3 vec = {pos->x, pos->y, pos->z};
@@ -671,6 +695,30 @@ namespace indie
         scene.addEntities({soundEntity2});
     }
 
+    const Position GameSystem::_uiPos[4] = {
+        Position(0, 0),
+        Position(800 - 80, 0),
+        Position(0, 600 - 80),
+        Position(800 - 80, 600 - 80)};
+
+    void GameSystem::createPlayerUI(IScene &scene, std::shared_ptr<IEntity> player)
+    {
+        std::shared_ptr<Player> playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
+        int id = playerComp->getId();
+        std::shared_ptr<Entity> textEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> uiPos = std::make_shared<Position>(_uiPos[id]);
+        std::shared_ptr<String> uiText = std::make_shared<String>("", "", 16.0f);
+
+        std::shared_ptr<Entity> uiEntity = std::make_shared<Entity>();
+
+        textEntity->addComponent(uiPos)
+            .addComponent(uiText);
+        std::shared_ptr<UIComponent> uiComponent = std::make_shared<UIComponent>(player, textEntity);
+        uiEntity->addComponent(uiComponent);
+
+        scene.addEntities({textEntity, uiEntity});
+    }
+
     void GameSystem::createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos)
     {
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
@@ -767,6 +815,7 @@ namespace indie
             .addComponent(playerHitbox)
             .addComponent(model)
             .addComponent(destruct);
+        createPlayerUI(scene, playerEntity);
         scene.addEntity(playerEntity);
     }
 
