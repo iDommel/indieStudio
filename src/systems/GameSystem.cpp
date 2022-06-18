@@ -320,7 +320,7 @@ namespace indie
     void GameSystem::createSceneEvent(std::shared_ptr<Entity> &entity, SceneManager::SceneType scenetype)
     {
         MouseCallbacks mouseCallbacks(
-            [scenetype, entity](SceneManager &sceneManger, Vector2 mousePosition) {
+            [scenetype, entity, this](SceneManager &sceneManager, Vector2 mousePosition) {
                 auto comp = entity->getFilteredComponents({IComponent::Type::SPRITE, IComponent::Type::POSITION, IComponent::Type::RECT});
                 auto pos = Component::castComponent<Position>(comp[1]);
                 auto sprite = Component::castComponent<Sprite>(comp[0]);
@@ -329,14 +329,15 @@ namespace indie
                 if (mousePosition.x > pos->x && mousePosition.x < pos->x + rect->width &&
                     mousePosition.y > pos->y && mousePosition.y < pos->y + rect->height) {
                     if (scenetype == SceneManager::SceneType::PREVIOUS)
-                        sceneManger.setCurrentScene(SceneManager::getPreviousSceneType());
+                        sceneManager.setCurrentScene(SceneManager::getPreviousSceneType());
                     else if (scenetype == SceneManager::SceneType::NONE) {
                         std::cout << "No scene" << std::endl;
                         exit(0);
                     } else if (scenetype == SceneManager::SceneType::GAME) {
-                        sceneManger.setCurrentScene(SceneManager::SceneType::GAME);
+                        sceneManager.setCurrentScene(SceneManager::SceneType::GAME, true);
+                        _collideSystem.init(sceneManager);
                     } else
-                        sceneManger.setCurrentScene(scenetype);
+                        sceneManager.setCurrentScene(scenetype);
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},

@@ -88,13 +88,16 @@ namespace indie
             {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
             {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
         };
-
-        std::cout << "Player " << nb << std::endl;
-        if (nb <= nbr_player)
+        if (nb < nbr_player) {
             createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
-        else
+            nb++;
+        } else if (nb < 4) {
             createAIPlayer(scene, nb, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
-        nb++;
+            nb++;
+        } else {
+            nb = 0;
+            createSpawn(x, y, scene);
+        }
     }
 
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)
