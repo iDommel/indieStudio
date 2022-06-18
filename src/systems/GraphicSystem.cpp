@@ -49,9 +49,13 @@ namespace indie
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &scene : sceneManager.getScenes()) {
+        for (auto &scene : sceneManager.getScenes())
             for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
+            
+        for (auto &scene : sceneManager.getScenes()) {
+            for (auto &e : (*scene.second)[IEntity::Tags::RENDERABLE_3D])
+                loadModel(e);
         }
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
@@ -73,8 +77,8 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
-            // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
-            //     displayCollidable(e);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+                displayCollidable(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])

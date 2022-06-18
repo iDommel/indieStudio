@@ -213,6 +213,7 @@ namespace indie
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
+            // std::cout << nbr_player << std::endl;
             std::string result = "Player ";
             if (nbr_player == 0) {
                 result = "Draw !";
