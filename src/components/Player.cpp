@@ -7,10 +7,10 @@
 #include "raylib.h"
 #include "Player.hpp"
 
-
 #include <functional>
 #include <algorithm>
 #include <cmath>
+#include <algorithm>
 
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
@@ -82,6 +82,18 @@ namespace indie
         move(vel);
     }
 
+    void Player::moveHorizontal(SceneManager &, std::shared_ptr<IEntity> entity, float value)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        vel->x = (_speed * value);
+    }
+
+    void Player::moveVertical(SceneManager &, std::shared_ptr<IEntity> entity, float value)
+    {
+        auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        vel->z = (_speed * value);
+    }
+
     void Player::stopUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
@@ -108,6 +120,7 @@ namespace indie
         vel->z = (_speed * _isDown) + (-_speed * _isUp);
         vel->x = (_speed * _isRight) + (-_speed * _isLeft);
     }
+
     int Player::getId() const
     {
         return _id;
@@ -130,14 +143,13 @@ namespace indie
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
-        std::cout << _bombs.size() << std::endl;
         if (_bombs.size() >= _nbBombMax)
             return;
 
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE/2};
+        Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
 
         bomb->addComponent(std::make_shared<Bomb>(_blastPower))
             .addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE))
