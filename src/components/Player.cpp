@@ -138,7 +138,6 @@ namespace indie
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
-        std::cout << _bombs.size() << std::endl;
         if (_bombs.size() >= _nbBombMax)
             return;
 

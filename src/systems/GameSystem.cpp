@@ -21,6 +21,7 @@
 #include "AudioDevice.hpp"
 #include "Model3D.hpp"
 #include "Player.hpp"
+#include "AIPlayer.hpp"
 #include "Position.hpp"
 #include "Rect.hpp"
 #include "Scene.hpp"
@@ -38,6 +39,7 @@
 
 namespace indie
 {
+    unsigned int GameSystem::nbr_player;
 
     void GameSystem::init(indie::SceneManager &sceneManager)
     {
@@ -53,6 +55,7 @@ namespace indie
         sceneManager.addScene(createPauseMenu(), SceneManager::SceneType::PAUSE);
         sceneManager.setCurrentScene(SceneManager::SceneType::SPLASH);
         _collideSystem.init(sceneManager);
+        _aiSystem.init(sceneManager);
         AudioDevice::getMasterVolume() += 0.5;
     }
 
@@ -145,6 +148,7 @@ namespace indie
             }
         }
         updatePlayers(sceneManager, dt);
+        _aiSystem.update(sceneManager, dt);
         updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
@@ -669,6 +673,32 @@ namespace indie
 
         soundEntity2->addComponent(soundComponent2);
         scene.addEntities({soundEntity2});
+    }
+
+    void GameSystem::createAIPlayer(IScene &scene, int id, Position pos)
+    {
+        std::shared_ptr<Entity> player = std::make_shared<Entity>();
+        std::shared_ptr<Position> aiPos = std::make_shared<Position>(pos);
+        std::shared_ptr<Velocity> vel = std::make_shared<Velocity>(0, 0);
+        std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+        std::shared_ptr<AIPlayer> aiComponent = std::make_shared<AIPlayer>(id);
+        std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
+
+        Vector3 radarSize = {GAME_TILE_SIZE * 5, GAME_TILE_SIZE, GAME_TILE_SIZE * 5};
+        Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
+        std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
+        std::shared_ptr<Entity> radar = std::make_shared<Entity>();
+
+        player->addComponent(aiPos)
+            .addComponent(vel)
+            .addComponent(hitbox)
+            .addComponent(model)
+            .addComponent(aiComponent)
+            .addComponent(destruct);
+        radar->addComponent(radarBox);
+        scene.addEntities({player, radar});
+        aiComponent->setRadar(radar);
     }
 
     void GameSystem::createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos)

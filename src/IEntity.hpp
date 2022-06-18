@@ -32,7 +32,8 @@ namespace indie
             BOMB,
             TIMED,
             DESTRUCTIBLE,
-            PLAYER
+            PLAYER,
+            AI
         };
 
         virtual ~IEntity() = default;
