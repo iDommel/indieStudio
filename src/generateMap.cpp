@@ -34,9 +34,10 @@ namespace indie
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
+        BoundingBox boundingBox = {{x - GAME_TILE_SIZE / 2, -GAME_TILE_SIZE / 2, y - GAME_TILE_SIZE / 2}, {x + GAME_TILE_SIZE / 2, 0, y + GAME_TILE_SIZE / 2}};
 
         wall->addComponent(std::make_shared<Position>(x, 0, y))
-            .addComponent(std::make_shared<Hitbox>(true))
+            .addComponent(std::make_shared<Hitbox>(boundingBox))
             .addComponent(std::make_shared<Destructible>())
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
@@ -45,10 +46,11 @@ namespace indie
     static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
+        BoundingBox boundingBox = {{x - GAME_TILE_SIZE / 2, -GAME_TILE_SIZE / 2, y - GAME_TILE_SIZE / 2}, {x + GAME_TILE_SIZE / 2, 0, y + GAME_TILE_SIZE / 2}};
 
         wall->addComponent(std::make_shared<Position>(x * 1.0f, 0, y * 1.0f))
             .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"))
-            .addComponent(std::make_shared<Hitbox>(true));
+            .addComponent(std::make_shared<Hitbox>(boundingBox));
         return wall;
     }
 
@@ -88,12 +90,18 @@ namespace indie
             {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
             {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
         };
-
-        if (nb < 2)
+        if (nb < nbr_player) {
             createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
-        else
+            std::cout << "Player " << nb << " created" << std::endl;
+            nb++;
+        } else if (nb < 4) {
             createAIPlayer(scene, nb, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
-        nb++;
+            std::cout << "IA " << nb << " created" << std::endl;
+            nb++;
+        } else {
+            nb = 0;
+            createSpawn(x, y, scene);
+        }
     }
 
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)

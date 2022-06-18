@@ -61,6 +61,11 @@ namespace indie
          * @param callback Callback function
          */
         void setRemoveEntityCallback(std::function<void(std::shared_ptr<IEntity>)> callback);
+        
+        std::function<void(std::shared_ptr<IEntity>)> getAddEntityCallback() {return _addEntityCallback;};
+
+        std::function<void(std::shared_ptr<IEntity>)> getRemoveEntityCallback() {return _removeEntityCallback;};
+        
         /**
          * @brief retrieves the entities for a given tag
          *

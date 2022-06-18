@@ -30,7 +30,7 @@ namespace indie
         for (auto &e : manager.getCurrentScene()[IEntity::Tags::AI]) {
             auto ai = Component::castComponent<AIPlayer>((*e)[Component::Type::AI]);
 
-            std::cout << "RADAR: " << _collideSystem.getColliders(ai->getRadar()).size() << std::endl;
+            // std::cout << "RADAR: " << _collideSystem.getColliders(ai->getRadar()).size() << std::endl;
             // for (auto &collider : _collideSystem.getColliders()) {
             // }
         }
