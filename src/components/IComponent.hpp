@@ -37,6 +37,7 @@ namespace indie
             BOMB,
             TIMER,
             DESTRUCTIBLE,
+            AI,
             TYPE_NB
         };
         virtual Type getType() const = 0;
