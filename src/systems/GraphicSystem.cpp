@@ -25,6 +25,7 @@
 #include "HitboxComponent.hpp"
 #include "ModelAnim.hpp"
 #include "ModelAnimation.hpp"
+#include "Radar.hpp"
 
 namespace indie
 {
@@ -75,6 +76,8 @@ namespace indie
                 displayCube(e);
             // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
             //     displayCollidable(e);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AI])
+                displayRadar(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -178,6 +181,13 @@ namespace indie
         auto hitbox = Component::castComponent<Hitbox>(components[0]);
         if (hitbox->is3D())
             ::DrawBoundingBox(hitbox->getBBox(), RED);
+    }
+
+    void GraphicSystem::displayRadar(std::shared_ptr<IEntity> &entity) const
+    {
+        auto components = entity->getFilteredComponents({IComponent::Type::RADAR});
+        auto hitbox = Component::castComponent<Radar>(components[0]);
+        ::DrawBoundingBox(hitbox->getBBox(), RED);
     }
 
     void GraphicSystem::loadModel(std::shared_ptr<IEntity> &entity)

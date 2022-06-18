@@ -15,6 +15,7 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "CollideSystem.hpp"
+#include "AISystem.hpp"
 
 #define GAME_MAP_WIDTH 15
 #define GAME_MAP_HEIGHT 15
@@ -34,6 +35,9 @@ namespace indie
     class GameSystem : public ISystem
     {
     public:
+
+        GameSystem() { nbr_player = 4; };
+
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
         void destroy() final;
@@ -68,12 +72,14 @@ namespace indie
         void createNumberEvent(std::shared_ptr<Entity> &entity, int nbr_player);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
-        int nbr_player = 4;
+        static unsigned int nbr_player;
         int timeElasped;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
+        static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         void updateBombs(SceneManager &scene, uint64_t dt);
         CollideSystem _collideSystem;
+        AISystem _aiSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
         static void generateMap(const std::string &filename, IScene &scene);

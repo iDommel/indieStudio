@@ -26,25 +26,6 @@
 namespace indie
 {
 
-    static const std::vector<std::string> tilesFilepaths = {
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach",
-        "assets/ground_asset/sand_asset_basic/basicBeach"};
-
     static const std::string tilesFilepath = "assets/ground_asset/sand_asset_basic/basicBeach";
     static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
     static const std::string indestructibleWallFile = "assets/wall asset/plamier_wall/palmier_wall_1";
@@ -53,14 +34,10 @@ namespace indie
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 pos = {x, 0, y};
-        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
 
         wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Hitbox>(true))
             .addComponent(std::make_shared<Destructible>())
-            // .addComponent(std::make_shared<Cube>(size, BROWN)
             .addComponent(std::make_shared<Model3D>(wallFilepath + ".obj", wallFilepath + ".png"));
         return wall;
     }
@@ -68,11 +45,8 @@ namespace indie
     static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
-        Vector3 pos = {x, 0, y};
-        BoundingBox bbox = {pos, {pos.x + size.x, pos.y + size.y, pos.z + size.z}};
-        wall->addComponent(std::make_shared<Position>(x, 0, y))
-            // .addComponent(std::make_shared<Cube>(size, GREEN))
+
+        wall->addComponent(std::make_shared<Position>(x * 1.0f, 0, y * 1.0f))
             .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"))
             .addComponent(std::make_shared<Hitbox>(true));
         return wall;
@@ -115,16 +89,16 @@ namespace indie
             {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}
         };
 
-        if (nb >= 4)
-            return;
-        createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
+        if (nb < 2)
+            createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
+        else
+            createAIPlayer(scene, nb, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
         nb++;
     }
 
     static std::shared_ptr<IEntity> createGroundTile(int x, int y)
     {
         std::shared_ptr<Entity> groundTile = std::make_shared<Entity>();
-        int nb = std::rand() % tilesFilepaths.size();
 
         groundTile->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Model3D>(tilesFilepath + ".obj", tilesFilepath + ".png"));
