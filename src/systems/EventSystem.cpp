@@ -113,9 +113,6 @@ namespace indie
     {
         for (auto &it : listener->getGamepadStickMappings(nb)) {
             float value = Window::getGamepadAxisMovement(nb, it.first);
-
-            bool wasPressed = false;
-            std::cout << "value : " << value << std::endl;
             it.second(manager, value);
         }
     }

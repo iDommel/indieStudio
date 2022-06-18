@@ -348,13 +348,30 @@ namespace indie
             auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
             auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
             auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
+            auto splitVel = *vel;
+            splitVel.z = 0;
 
-            (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
-            (*hitbox) += *vel * (float)(dt / 1000.0f);
+            // check for collisions on the x axis
+            (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
+            (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
                 if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
-                    (*pos) = lastPos;
-                    (*hitbox) -= *vel * (float)(dt / 1000.0f);
+                    (*pos).x = lastPos.x;
+                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
+                    break;
+                }
+            }
+
+            // check for collisions on the z axis
+            splitVel.z = (*vel).z;
+            splitVel.x = 0;
+
+            (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
+            (*hitbox) += splitVel * (float)(dt / 1000.0f);
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                    (*pos).z = lastPos.z;
+                    (*hitbox) -= splitVel * (float)(dt / 1000.0f);
                     break;
                 }
             }
