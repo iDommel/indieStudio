@@ -47,11 +47,12 @@ namespace indie
          {{IComponent::Type::TIMER}}},
         {Entity::Tags::DESTRUCTIBLE,
          {{IComponent::Type::DESTRUCTIBLE}}},
+        {Entity::Tags::UI,
+         {{IComponent::Type::UI}}},
         {Entity::Tags::RADAR,
          {{IComponent::Type::RADAR}}},
         {Entity::Tags::AI,
-         {{IComponent::Type::VELOCITY, IComponent::Type::AI, IComponent::Type::POSITION}}}
-    };
+         {{IComponent::Type::VELOCITY, IComponent::Type::AI, IComponent::Type::POSITION}}}};
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {
