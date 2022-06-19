@@ -486,7 +486,11 @@ namespace indie
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
+                if (collider->hasTag(IEntity::Tags::BONUS)) {
+                    auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
+                    (*playerComp).handleBonus(*bonusComp);
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                } else if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
                     (*pos).x = lastPos.x;
                     (*hitbox) -= splitVel * (float)(dt / 1000.0f);
                     break;
@@ -503,8 +507,7 @@ namespace indie
                     auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
                     (*playerComp).handleBonus(*bonusComp);
                     sceneManager.getCurrentScene().removeEntity(collider);
-                }
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+                } else if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
                     (*pos).z = lastPos.z;
                     (*hitbox) -= splitVel * (float)(dt / 1000.0f);
                     break;
@@ -538,7 +541,6 @@ namespace indie
                     (*pos) = lastPos;
                     (*hitbox) -= *vel * (float)(dt / 1000.0f);
                     (*radarHitbox) -= *vel * (float)(dt / 1000.0f);
-                    std::cout << "stoped" << std::endl;
                     break;
                 }
             }
