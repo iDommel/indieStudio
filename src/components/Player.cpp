@@ -37,6 +37,11 @@ namespace indie
         LEFT = GameSystem::getBinding(_left);
         RIGHT = GameSystem::getBinding(_right);
         BOMB = GameSystem::getBinding(_bomb);
+        changeBomb = 0;
+        changeDown = 0;
+        changeUp = 0;
+        changeLeft = 0;
+        changeRight = 0;
         _nbBomb = _defaultNbBomb;
         _blastPower = _defaultBlastPower;
         _speed = _defaultSpeed;

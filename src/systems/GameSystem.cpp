@@ -722,21 +722,19 @@ namespace indie
         std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("Number of player", Position(250, 150), 35);
-        std::shared_ptr<Entity> entity4 = createText("1", Position(250, 250), 50);
-        std::shared_ptr<Entity> entity5 = createText("2", Position(350, 250), 50);
-        std::shared_ptr<Entity> entity6 = createText("3", Position(450, 250), 50);
-        std::shared_ptr<Entity> entity7 = createText("4", Position(550, 250), 50);
+        std::shared_ptr<Entity> entity5 = createText("2", Position(300, 250), 50);
+        std::shared_ptr<Entity> entity6 = createText("3", Position(400, 250), 50);
+        std::shared_ptr<Entity> entity7 = createText("4", Position(500, 250), 50);
         std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity9 = createImage("assets/MainMenu/circle.png", Position(520, 230), 80, 80);
+        std::shared_ptr<Entity> entity9 = createImage("assets/MainMenu/circle.png", Position(470, 230), 80, 80);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        createNumberEvent(entity4, 1);
         createNumberEvent(entity5, 2);
         createNumberEvent(entity6, 3);
         createNumberEvent(entity7, 4);
         createSceneEvent(entity8, SceneManager::SceneType::GAME);
 
-        scene->addEntities({entity1, entity2, entity3 ,entity4, entity5, entity6, entity7 ,entity8, entity9});
+        scene->addEntities({entity1, entity2, entity3 , entity5, entity6, entity7 ,entity8, entity9});
         return scene;
     }
 
@@ -759,7 +757,6 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
