@@ -54,21 +54,21 @@ namespace indie
         std::shared_ptr<IEntity> getRadar() const;
 
         /// @brief sets the velocity of the player to its speed value to the right
-        void moveRight(std::shared_ptr<IEntity> entity);
+        void moveRight(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to 0 to the right
-        void stopRight(std::shared_ptr<IEntity> entity);
+        void stopRight(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to its speed value to the left
-        void moveLeft(std::shared_ptr<IEntity> entity);
+        void moveLeft(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to 0 to the left
-        void stopLeft(std::shared_ptr<IEntity> entity);
+        void stopLeft(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to its speed value upwards
-        void moveUp(std::shared_ptr<IEntity> entity);
+        void moveUp(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to 0 upwards
-        void stopUp(std::shared_ptr<IEntity> entity);
+        void stopUp(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to its speed value downwards
-        void moveDown(std::shared_ptr<IEntity> entity);
+        void moveDown(std::shared_ptr<IEntity> &entity);
         /// @brief sets the velocity of the player to 0 downwards
-        void stopDown(std::shared_ptr<IEntity> entity);
+        void stopDown(std::shared_ptr<IEntity> &entity);
 
         bool _isUp = false;
         bool _isDown = false;

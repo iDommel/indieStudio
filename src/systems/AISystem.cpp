@@ -41,8 +41,16 @@ namespace indie
             return;
         deltaLastUpdate = 0;
         for (auto e : manager.getCurrentScene()[IEntity::Tags::AI]) {
-            auto ai = Component::castComponent<AIPlayer>((*e)[Component::Type::AI]);
-            auto pos = Component::castComponent<Position>((*e)[Component::Type::POSITION]);
+            if (!e)
+                continue;
+            auto &aiEntity = (*e)[Component::Type::AI];
+            auto &positionEntity = (*e)[Component::Type::POSITION];
+            if (!aiEntity || !positionEntity)
+                continue;
+            auto ai = Component::castComponent<AIPlayer>(aiEntity);
+            auto pos = Component::castComponent<Position>(positionEntity);
+            if (!ai || !pos)
+                continue;
             int map[5][5] = {{MAP_EMPTY}};
 
             loadMap(*ai, map, *pos, e);
@@ -50,7 +58,7 @@ namespace indie
         }
     }
 
-    void AISystem::loadMap(AIPlayer &ai, int map[5][5], Position &player, std::shared_ptr<IEntity> me)
+    void AISystem::loadMap(AIPlayer &ai, int map[5][5], Position &player, std::shared_ptr<IEntity> &me)
     {
         // std::cout << (player.x / GAME_TILE_SIZE) << " " << (player.z / GAME_TILE_SIZE) << std::endl;
         float px = (player.x / GAME_TILE_SIZE);
@@ -78,11 +86,10 @@ namespace indie
                 loadExplosionInMap(map, collider, px, pz);
             std::shared_ptr<Position> pos;
 
-            try {
-                pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
-            } catch (std::exception &e) {
+            auto colliderComponent = (*collider)[IComponent::Type::POSITION];
+            if (!colliderComponent)
                 continue;
-            }
+            pos = Component::castComponent<Position>(colliderComponent);
 
             if (collider->hasTag(IEntity::Tags::COLLIDABLE) && collider != me) {
 
@@ -134,7 +141,7 @@ namespace indie
         }
     }
 
-    void AISystem::moveAI(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> entity, SceneManager &sceneManager)
+    void AISystem::moveAI(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> &entity, SceneManager &sceneManager)
     {
         int pos = 2;
 
@@ -170,7 +177,7 @@ namespace indie
 
     }
 
-    bool AISystem::escape(AIPlayer &ai, int map[5][5], std::shared_ptr<IEntity> entity)
+    bool AISystem::escape(AIPlayer &ai, int map[5][5], std::shared_ptr<IEntity> &entity)
     {
         int pos = 2;
         std::vector<DIRECTION> dirs;
@@ -227,7 +234,7 @@ namespace indie
         return true;
     }
 
-    void AISystem::changeDir(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> entity)
+    void AISystem::changeDir(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> &entity)
     {
         int pos = 2;
         std::vector<DIRECTION> dirs;

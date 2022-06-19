@@ -76,56 +76,56 @@ namespace indie
         return _radar;
     }
 
-    void AIPlayer::moveRight(std::shared_ptr<IEntity> entity)
+    void AIPlayer::moveRight(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = true;
         move(vel);
     }
 
-    void AIPlayer::stopRight(std::shared_ptr<IEntity> entity)
+    void AIPlayer::stopRight(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isRight = false;
         move(vel);
     }
 
-    void AIPlayer::moveLeft(std::shared_ptr<IEntity> entity)
+    void AIPlayer::moveLeft(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = true;
         move(vel);
     }
 
-    void AIPlayer::stopLeft(std::shared_ptr<IEntity> entity)
+    void AIPlayer::stopLeft(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isLeft = false;
         move(vel);
     }
 
-    void AIPlayer::moveUp(std::shared_ptr<IEntity> entity)
+    void AIPlayer::moveUp(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = true;
         move(vel);
     }
 
-    void AIPlayer::stopUp(std::shared_ptr<IEntity> entity)
+    void AIPlayer::stopUp(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isUp = false;
         move(vel);
     }
 
-    void AIPlayer::moveDown(std::shared_ptr<IEntity> entity)
+    void AIPlayer::moveDown(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = true;
         move(vel);
     }
 
-    void AIPlayer::stopDown(std::shared_ptr<IEntity> entity)
+    void AIPlayer::stopDown(std::shared_ptr<IEntity> &entity)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         _isDown = false;

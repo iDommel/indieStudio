@@ -227,10 +227,10 @@ namespace indie
         }
         updatePlayers(sceneManager, dt);
         updatePlayerUI(sceneManager, sceneManager.getCurrentScene()[IEntity::Tags::UI]);
-        updateBombs(sceneManager, dt);
-        _collideSystem.update(sceneManager, dt);
         _aiSystem.update(sceneManager, dt);
         updateAIs(sceneManager, dt);
+        updateBombs(sceneManager, dt);
+        _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
         for (auto &renderable : renderables) {
             if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
