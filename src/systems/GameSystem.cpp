@@ -237,9 +237,16 @@ namespace indie
         for (auto &renderable : renderables) {
             if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
                 auto component = Component::castComponent<ModelAnim>((*renderable)[IComponent::Type::ANIMATION]);
-                component->getCurrentFrame()++;
-                if (component->getCurrentFrame() >= component->getNbFrames())
-                    component->getCurrentFrame() = 0;
+                if (renderable->hasComponent({IComponent::Type::VELOCITY}) && renderable->hasComponent({IComponent::Type::PLAYER})) {
+                    auto velocity = Component::castComponent<Velocity>((*renderable)[IComponent::Type::VELOCITY]);
+                    if (velocity->x != 0 || velocity->z != 0) {
+                        component->getCurrentFrame()++;
+                    }
+                } else {
+                    component->getCurrentFrame()++;
+                    if (component->getCurrentFrame() >= component->getNbFrames())
+                        component->getCurrentFrame() = 0;
+                }
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
@@ -885,8 +892,9 @@ namespace indie
         std::shared_ptr<Position> aiPos = std::make_shared<Position>(pos);
         std::shared_ptr<Velocity> vel = std::make_shared<Velocity>(0, 0);
         std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 2.0f);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 3.0f);
         std::shared_ptr<ModelAnim> modelAnim = std::make_shared<ModelAnim>("assets_test/final_anim.iqm", 0);
+        // modelAnim->getNbFrames() += 32;
         std::shared_ptr<AIPlayer> aiComponent = std::make_shared<AIPlayer>(id);
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
@@ -941,8 +949,9 @@ namespace indie
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
         BoundingBox towerBoundingBox = {{pos.x - 4.2f, pos.y + 0.0f, pos.z - 4.0f}, {pos.x + 4.2f, pos.y + 23.0f, pos.z + 4.0f}};
         std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(towerBoundingBox);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 2.0f);
-        std::shared_ptr<ModelAnim> modelAnim = std::make_shared<ModelAnim>("assets_test/final_anim.iqm", 0);
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 3.0f);
+        std::shared_ptr<ModelAnim> modelAnim = std::make_shared<ModelAnim>("assets_test/final_anim.iqm", 1);
+        // modelAnim->getNbFrames() += 32;
         std::shared_ptr<Player> player = std::make_shared<Player>(id, keyUp, keyDown, keyLeft, keyRight, keyBomb);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
