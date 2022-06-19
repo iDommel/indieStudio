@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "components/IComponent.hpp"
+
 namespace indie
 {
 

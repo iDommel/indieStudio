@@ -6,6 +6,7 @@
 */
 
 #include "raylib.h"
+
 #include "Text.hpp"
 
 namespace indie

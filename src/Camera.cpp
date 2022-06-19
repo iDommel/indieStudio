@@ -5,16 +5,12 @@
 ** Camera
 */
 
-#include "Camera.hpp"
-
 #include "raylib.h"
+
 #include <memory>
 #include <iostream>
 
-/* #ifndef DEBUG
-    #define DEBUG
-    #include <iostream>
-#endif */
+#include "Camera.hpp"
 
 static int getNewId(void)
 {
@@ -96,25 +92,16 @@ void Camera::update(void)
         _camera->position = *_positionSnap;
     }
     UpdateCamera(_camera.get());
-    #ifdef DEBUG
-        std::cerr << "\tIndiCam::update(void) called" << std::endl;
-    #endif
 }
 
 void Camera::beginDrawScope(void)
 {
     BeginMode3D(*(_camera.get()));
-    #ifdef DEBUG
-        std::cerr << "\tIndiCam::beginDrawScope(void) called" << std::endl;
-    #endif
 }
 
 void Camera::endDrawScope(void)
 {
     EndMode3D();
-    #ifdef DEBUG
-        std::cerr << "\tIndiCam::endDrawScope(void) called" << std::endl;
-    #endif
 }
 
 Camera::~Camera()

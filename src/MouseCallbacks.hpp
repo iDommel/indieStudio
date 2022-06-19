@@ -11,7 +11,9 @@
 #include <functional>
 
 #include "SceneManager.hpp"
+
 struct Vector2;
+
 namespace indie
 {
     /// @brief Class to group all four callbacks for a mouse event

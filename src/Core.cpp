@@ -5,18 +5,19 @@
 ** Core.cpp
 */
 
-#include "Core.hpp"
+#include "raylib.h"
 
 #include <chrono>
 #include <thread>
 
-#include "raylib.h"
+#include "Core.hpp"
 #include "systems/AudioSystem.hpp"
 #include "systems/EventSystem.hpp"
 #include "systems/GameSystem.hpp"
 #include "systems/GraphicSystem.hpp"
 #include "systems/CollideSystem.hpp"
 #include "systems/ParticlesSystem.hpp"
+
 namespace indie
 {
 
@@ -35,7 +36,6 @@ namespace indie
 
         for (auto &system : _systems)
             system.second->init(_sceneManager);
-
         _sceneManager.setAddEntityCallback(std::bind(&Core::loadEntity, this, std::placeholders::_1));
         _sceneManager.setRemoveEntityCallback(std::bind(&Core::unloadEntity, this, std::placeholders::_1));
         while (!_sceneManager.getShouldClose()) {

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2022
+** indieStudio
+** File description:
+** Shape3D
+*/
+
 #ifndef SHAPE3DH
 #define SHAPE3DH
 

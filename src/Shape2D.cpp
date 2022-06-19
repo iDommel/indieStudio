@@ -1,4 +1,12 @@
+/*
+** EPITECH PROJECT, 2022
+** indieStudio
+** File description:
+** Shape2D
+*/
+
 #include "raylib.h"
+
 #include "Shape2D.hpp"
 
 namespace indie
