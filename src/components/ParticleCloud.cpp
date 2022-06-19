@@ -6,12 +6,13 @@
 */
 
 #include "raylib.h"
-#include "ParticleCloud.hpp"
+
 #include <iostream>
 
+#include "ParticleCloud.hpp"
+
 namespace indie {
-ParticleCloud::ParticleCloud(Vector3 start, Vector3 end, double nbParticles,
-int curvature, double, float lifeTime):
+ParticleCloud::ParticleCloud(Vector3 start, Vector3 end, double nbParticles, int curvature, double, float lifeTime):
 Component(Type::PARTICLES), _timeToLive(lifeTime)
 {
     Vector3 pos = {0, 0, 0};

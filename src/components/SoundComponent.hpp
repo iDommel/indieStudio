@@ -9,6 +9,7 @@
 #define SOUNDCOMPONENT_HPP_
 
 #include <string>
+
 #include "Component.hpp"
 #include "Sound.hpp"
 
@@ -22,7 +23,7 @@ namespace indie
         std::string getValue() const { return sound; };
         void setSoundState(Sound::SoundState state) { _newState = state; };
         Sound::SoundState getSoundState() { return _newState; };
-        bool shouldUdate() const { return _justRequested; };
+        bool shouldUpdate() const { return _justRequested; };
         void justUpdated() { _justRequested = false; };
 
     private:

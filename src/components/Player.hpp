@@ -106,6 +106,7 @@ namespace indie
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
+
         int _nbBomb;
         int _blastPower;
         int _speed;

@@ -5,13 +5,13 @@
 ** AISystem.cpp
 */
 
-#include <cmath>
 #include "raylib.h"
 
+#include <cmath>
+
+#include "GameSystem.hpp"
 #include "AISystem.hpp"
 #include "SceneManager.hpp"
-#include "GameSystem.hpp"
-
 #include "Position.hpp"
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
@@ -46,7 +46,6 @@ namespace indie
 
     void AISystem::loadMap(AIPlayer &ai, std::array<std::array<char, 5>, 5> &map, Position &player, std::shared_ptr<IEntity> me)
     {
-        // std::cout << (player.x / GAME_TILE_SIZE) << " " << (player.z / GAME_TILE_SIZE) << std::endl;
         float px = (player.x / GAME_TILE_SIZE);
         float pz = (player.z / GAME_TILE_SIZE);
 
@@ -65,7 +64,6 @@ namespace indie
             px = std::floor(px);
         ai.tileX = px;
         ai.tileY = pz;
-        // std::cout << "pz = " << pz << " px = " << px << std::endl;
 
         for (auto &collider : _collideSystem.getColliders(ai.getRadar())) {
             if (collider->hasTag(IEntity::Tags::TIMED))
@@ -173,22 +171,8 @@ namespace indie
         Vector2 pos = {2, 2};
         std::vector<DIRECTION> dirs;
 
-        if (map[pos.y][pos.x] != MAP_BOMB) {
+        if (map[pos.y][pos.x] != MAP_BOMB)
             return false;
-        }
-
-        // displayMap(map);
-
-        // if (ai._isUp && (map[pos.y - 1][pos.x] == MAP_BOMB || map[pos.y - 1][pos.x] == MAP_EMPTY))
-        //     return true;
-        // else if (ai._isDown && (map[pos.y + 1][pos.x] == MAP_BOMB || map[pos.y + 1][pos.x] == MAP_EMPTY))
-        //     return true;
-        // else if (ai._isLeft && (map[pos.y][pos.x - 1] == MAP_BOMB || map[pos.y][pos.x - 1] == MAP_EMPTY))
-        //     return true;
-        // else if (ai._isRight && (map[pos.y][pos.x + 1] == MAP_BOMB || map[pos.y][pos.x + 1] == MAP_EMPTY))
-        //     return true;
-
-
         if (map[pos.y - 1][pos.x] == MAP_EMPTY)
             dirs.push_back(DIRECTION::UP);
         if (map[pos.y + 1][pos.x] == MAP_EMPTY)
@@ -220,8 +204,6 @@ namespace indie
             ai.moveLeft(entity);
         else if (dirs[dir] == DIRECTION::RIGHT)
             ai.moveRight(entity);
-
-        // std::cout << "DIR: " << (int)dirs[dir] << std::endl << std::endl;
         return true;
     }
 
@@ -250,8 +232,6 @@ namespace indie
             ai.moveLeft(entity);
         else if (dirs[dir] == DIRECTION::RIGHT)
             ai.moveRight(entity);
-
-        // std::cout << "DIR: " << (int)dirs[dir] << std::endl << std::endl;
     }
 
     void AISystem::poseBomb(AIPlayer &ai, SceneManager &sceneManager, std::array<std::array<char, 5>, 5> &map)
@@ -269,24 +249,7 @@ namespace indie
         (map[y + 1][x - 1] != MAP_EMPTY || (map[y + 1][x] != MAP_EMPTY && map[y][x - 1] != MAP_EMPTY)) &&
         (map[y + 1][x + 1] != MAP_EMPTY || (map[y + 1][x] != MAP_EMPTY && map[y][x + 1] != MAP_EMPTY)))
             return;
-
-        // if ((map[y + 1][x + 1] != MAP_EMPTY && !(map[y + 1][x] == MAP_EMPTY || map[y][x + 1] == MAP_EMPTY)) &&
-        // (map[y - 1][x - 1] != MAP_EMPTY && !(map[y - 1][x] == MAP_EMPTY || map[y][x - 1] == MAP_EMPTY)) &&
-        // (map[y + 1][x - 1] != MAP_EMPTY && !(map[y + 1][x] == MAP_EMPTY || map[y][x - 1] == MAP_EMPTY)) &&
-        // (map[y - 1][x + 1] != MAP_EMPTY && !(map[y - 1][x] == MAP_EMPTY || map[y][x + 1] == MAP_EMPTY)))
-        //     return;
         ai.generateBomb(sceneManager, posBomb);
-        // displayMap(map);
-    }
-
-    void AISystem::displayMap(std::array<std::array<char, 5>, 5> &map)
-    {
-        for (auto &i : map) {
-            for (auto &j : i)
-                std::cout << (int)j << " ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
     }
 
     void AISystem::destroy()

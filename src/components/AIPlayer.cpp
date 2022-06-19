@@ -5,13 +5,12 @@
 ** Player
 */
 #include "raylib.h"
-#include "AIPlayer.hpp"
-
 
 #include <functional>
 #include <cmath>
 #include <algorithm>
 
+#include "AIPlayer.hpp"
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
 #include "Position.hpp"
@@ -20,13 +19,11 @@
 #include "Bomb.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
-#include <algorithm>
 #include "Bonus.hpp"
 #include "Model3D.hpp"
 
 namespace indie
 {
-
     AIPlayer::AIPlayer(int id) : Component(Type::AI), _id(id)
     {
     }

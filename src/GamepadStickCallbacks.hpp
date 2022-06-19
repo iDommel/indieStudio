@@ -36,6 +36,6 @@ namespace indie
     protected:
     private:
     };
-}  // namespace indie
+} 
 
 #endif /* !GAMEPADCALLBACKS_HPP_ */

@@ -9,9 +9,9 @@
 
 namespace indie
 {
-    Velocity::Velocity(float x, float y, float z)
-        : AVector(Component::Type::VELOCITY, x, y, z)
+    Velocity::Velocity(float x, float y, float z):
+    AVector(Component::Type::VELOCITY, x, y, z)
     {
     }
 
-}  // namespace indie
+}

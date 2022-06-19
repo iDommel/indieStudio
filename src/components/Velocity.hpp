@@ -9,6 +9,7 @@
 #define VELOCITY_HPP_
 
 #include "AVector.hpp"
+
 namespace indie
 {
     class Velocity : public AVector
@@ -16,6 +17,6 @@ namespace indie
     public:
         Velocity(float x, float y, float z = 0);
     };
-}  // namespace indie
+} 
 
 #endif /* !VELOCITY_HPP_ */

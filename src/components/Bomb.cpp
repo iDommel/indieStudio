@@ -5,10 +5,9 @@
 ** Bomb
 */
 
-#include <iostream>
-#include "Bomb.hpp"
 #include "raylib.h"
 
+#include "Bomb.hpp"
 #include "CollideSystem.hpp"
 #include "GameSystem.hpp"
 #include "Entity.hpp"
@@ -82,62 +81,40 @@ static void createParticlesVertical(SceneManager &sceneManager, Vector3 pos, int
     }
 }
 
-void Bomb::explode(SceneManager &sceneManager, Vector3 pos, CollideSystem &collideSystem)
+void Bomb::explode(SceneManager &sceneManager, Vector3 pos)
 {
-    float range = _blastPower * GAME_TILE_SIZE - 2;
     std::shared_ptr<Entity> explosion = std::make_shared<Entity>();
     std::shared_ptr<Entity> explosion2 = std::make_shared<Entity>();
-    // Vector3 exSize = {range, 5.0f, GAME_TILE_SIZE - 2};
-    // Vector3 exPos = {pos.x - (exSize.x - GAME_TILE_SIZE) / 2 + 1, pos.y, pos.z + 1};
-    // Vector3 ex2Size = {GAME_TILE_SIZE - 2, 5,  range};
-    // Vector3 ex2Pos = {pos.x + 1, pos.y, pos.z - (ex2Size.z - GAME_TILE_SIZE) / 2};
-    // std::shared_ptr<Entity> explosion = std::make_shared<Entity>();
-    // std::shared_ptr<Entity> explosion2 = std::make_shared<Entity>();
-    // Vector3 exSize = {_blastPower * GAME_TILE_SIZE - 2, 5.0f, GAME_TILE_SIZE - 2};
-    // Vector3 exPos = {pos.x - (exSize.x - GAME_TILE_SIZE) / 2 - GAME_TILE_SIZE/2 + 1, pos.y, pos.z - GAME_TILE_SIZE/2 + 1};
-    // Vector3 ex2Size = {GAME_TILE_SIZE - 2, 5,  _blastPower * GAME_TILE_SIZE - 2};
-    // Vector3 ex2Pos = {pos.x - GAME_TILE_SIZE/2 + 1, pos.y, pos.z - (ex2Size.z - GAME_TILE_SIZE) / 2 - GAME_TILE_SIZE/2};
     std::shared_ptr<Entity> sonicBoom = std::make_shared<Entity>();
 
-    calculateExplosionRadius(sceneManager.getCurrentScene(), collideSystem, pos);
+    calculateExplosionRadius(sceneManager.getCurrentScene(), pos);
     sonicBoom->addComponent(std::make_shared<SoundComponent>("sound_expl"));
     sceneManager.getCurrentScene().addEntities({sonicBoom});
     createParticlesHorizontal(sceneManager, pos, _blastPower);
     createParticlesVertical(sceneManager, pos, _blastPower);
 }
 
-void Bomb::calculateExplosionRadius(IScene &scene, CollideSystem &collideSystem, Vector3 pos)
+void Bomb::calculateExplosionRadius(IScene &scene, Vector3 pos)
 {
-        float range = GAME_TILE_SIZE * _blastPower - 2;
-        Vector3 radarSize = {range, GAME_TILE_SIZE, range};
-        Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
-        std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
-        std::shared_ptr<Entity> radar = std::make_shared<Entity>();
-        std::shared_ptr<Radar> radarR = std::make_shared<Radar>();
+    float range = GAME_TILE_SIZE * _blastPower - 2;
+    Vector3 radarSize = {range, GAME_TILE_SIZE, range};
+    Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
+    std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
+    std::shared_ptr<Entity> radar = std::make_shared<Entity>();
+    std::shared_ptr<Radar> radarR = std::make_shared<Radar>();
 
-        float demiTile = GAME_TILE_SIZE / 2;
-        Vector3 sizeX = {range, 5.0f, GAME_TILE_SIZE - 2};
-        Vector3 posX = {pos.x - (range - GAME_TILE_SIZE)/2 - demiTile, pos.y, pos.z - demiTile};
-        Vector3 sizeZ = {GAME_TILE_SIZE - 2, 5.0f, range};
-        Vector3 posZ = {pos.x - demiTile, pos.y, pos.z - (range - GAME_TILE_SIZE)/2 - demiTile};
+    float demiTile = GAME_TILE_SIZE / 2;
+    Vector3 sizeX = {range, 5.0f, GAME_TILE_SIZE - 2};
+    Vector3 posX = {pos.x - (range - GAME_TILE_SIZE)/2 - demiTile, pos.y, pos.z - demiTile};
+    Vector3 sizeZ = {GAME_TILE_SIZE - 2, 5.0f, range};
+    Vector3 posZ = {pos.x - demiTile, pos.y, pos.z - (range - GAME_TILE_SIZE)/2 - demiTile};
 
-        radar->addComponent(radarR)
-            .addComponent(radarBox);
-        scene.addEntity(radar);
-
-        for (auto collider : collideSystem.getColliders(radar)) {
-            if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE) || collider->hasTag(IEntity::Tags::BOMB) ||
-            collider->hasTag(IEntity::Tags::RADAR) || collider->hasTag(IEntity::Tags::BONUS) || collider->hasTag(IEntity::Tags::TIMED)) {
-                continue;
-            }
-            auto posComp = Component::castComponent<Position>((*collider)[Component::Type::POSITION]);
-            std::cout << "Wall" << std::endl;
-            Vector3 wallPos = {std::round(posComp->x / GAME_TILE_SIZE), 0.0f, std::round(posComp->z / GAME_TILE_SIZE)};
-        }
-
-        createExplosion(posX, sizeX, scene);
-        createExplosion(posZ, sizeZ, scene);
-        scene.removeEntity(radar);
+    radar->addComponent(radarR)
+        .addComponent(radarBox);
+    scene.addEntity(radar);
+    createExplosion(posX, sizeX, scene);
+    createExplosion(posZ, sizeZ, scene);
+    scene.removeEntity(radar);
 }
 
 void Bomb::createExplosion(Vector3 pos, Vector3 size, IScene &scene)

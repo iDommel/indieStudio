@@ -6,6 +6,7 @@
 */
 
 #include "raylib.h"
+
 #include "EventListener.hpp"
 
 namespace indie
@@ -103,4 +104,4 @@ namespace indie
         return _gamepadStickMap[gamepad];
     }
 
-}  // namespace indie
+}

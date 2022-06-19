@@ -5,8 +5,9 @@
 ** AudioSystem.cpp
 */
 
-#include <iostream>
 #include "raylib.h"
+
+#include <iostream>
 
 #include "AudioSystem.hpp"
 #include "Sound.hpp"
@@ -75,7 +76,7 @@ namespace indie
 
     void AudioSystem::manageSound(SoundComponent &soundComponent)
     {
-        if (!soundComponent.shouldUdate())
+        if (!soundComponent.shouldUpdate())
             return;
         if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
             _sounds[soundComponent.getValue()]->play();

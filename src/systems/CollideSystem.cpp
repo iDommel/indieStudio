@@ -5,12 +5,11 @@
 ** collideSystem
 */
 
-#include "CollideSystem.hpp"
-
 #include "raylib.h"
 
 #include <iostream>
 
+#include "CollideSystem.hpp"
 #include "GraphicSystem.hpp"
 #include "Position.hpp"
 #include "Rect.hpp"
@@ -52,7 +51,6 @@ namespace indie
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
         std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
-        std::cout << "CollideSystem::init" << std::endl;
         for (auto &scene : sceneManager.getScenes()) {
             auto collidables = (*scene.second)[IEntity::Tags::COLLIDABLE];
             if (collidables.empty())
@@ -244,13 +242,13 @@ namespace indie
 
     void CollideSystem::reloadCollidables3D(SceneManager &sceneManager)
     {
-        _collidables3D.clear();
         std::shared_ptr<indie::Hitbox> hitbox = nullptr;
         std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
 
-        std::cout << "CollideSystem::init" << std::endl;
+        _collidables3D.clear();
         for (auto &scene : sceneManager.getScenes()) {
             auto collidables = (*scene.second)[IEntity::Tags::COLLIDABLE];
+
             if (collidables.empty())
                 return;
             preInit((*scene.second));

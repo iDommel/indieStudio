@@ -9,12 +9,12 @@
 #define AVECTOR_HPP_
 
 #include <tuple>
+
 #include "Component.hpp"
+
 namespace indie
 {
-
     class AVector : public Component
-
     {
     public:
         AVector(Component::Type type, float x, float y, float z = 0);
@@ -30,6 +30,6 @@ namespace indie
         float y;
         float z;
     };
-}  // namespace indie
+}
 
 #endif /* !AVECTOR_HPP_ */

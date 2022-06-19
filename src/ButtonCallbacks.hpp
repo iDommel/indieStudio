@@ -40,6 +40,6 @@ namespace indie
     protected:
     private:
     };
-}  // namespace indie
+} 
 
 #endif /* !BUTTONCALLBACKS_HPP_ */

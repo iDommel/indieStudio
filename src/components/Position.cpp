@@ -9,20 +9,20 @@
 
 namespace indie
 {
-    Position::Position(float x, float y, float z)
-        : AVector(Component::Type::POSITION, x, y, z)
+    Position::Position(float x, float y, float z):
+    AVector(Component::Type::POSITION, x, y, z)
     {
         _isInitialized = true;
     }
 
-    Position::Position(const Position &other)
-        : AVector(Component::Type::POSITION, other.x, other.y, other.z)
+    Position::Position(const Position &other):
+        AVector(Component::Type::POSITION, other.x, other.y, other.z)
     {
         _isInitialized = true;
     }
 
-    Position::Position(const Position &&other)
-        : AVector(Component::Type::POSITION, other.x, other.y, other.z)
+    Position::Position(const Position &&other):
+    AVector(Component::Type::POSITION, other.x, other.y, other.z)
     {
         _isInitialized = true;
     }
@@ -41,9 +41,9 @@ namespace indie
         z = other.z;
     }
 
-    Position::Position(const AVector &other)
-        : AVector(Component::Type::POSITION, other.x, other.y, other.z)
+    Position::Position(const AVector &other):
+    AVector(Component::Type::POSITION, other.x, other.y, other.z)
     {
         _isInitialized = true;
     }
-}  // namespace indie
+}

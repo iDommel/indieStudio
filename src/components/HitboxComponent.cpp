@@ -5,15 +5,15 @@
 ** Hitbox
 */
 
+#include "raylib.h"
+
 #include "HitboxComponent.hpp"
 #include "AVector.hpp"
-#include "raylib.h"
 
 namespace indie
 {
     Hitbox::Hitbox(BoundingBox box, Vector3 pos) : Component(Type::HITBOX),
-                                                   _box(std::make_unique<BoundingBox>(box)),
-                                                   _is3D(true)
+    _box(std::make_unique<BoundingBox>(box)), _is3D(true)
     {
         _box->min = {pos.x + _box->min.x, pos.y + _box->min.y, pos.z + _box->min.z};
         _box->max = {pos.x + _box->max.x, pos.y + _box->max.y, pos.z + _box->max.z};

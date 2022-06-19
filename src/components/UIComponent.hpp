@@ -7,6 +7,7 @@
 
 #ifndef UICOMPONENT_HPP_
 #define UICOMPONENT_HPP_
+
 #include "Player.hpp"
 #include "String.hpp"
 
@@ -29,6 +30,6 @@ namespace indie
         std::shared_ptr<IEntity> _textToDestroy;
         bool _shouldBeDestroyed = false;
     };
-}  // namespace indie
+}
 
 #endif /* !UICOMPONENT_HPP_ */

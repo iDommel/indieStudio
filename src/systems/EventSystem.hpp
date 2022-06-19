@@ -35,12 +35,13 @@ namespace indie
         static void reloadScene(SceneManager &manager, SceneManager::SceneType sceneType);
 
     private:
-        /// @brief this number is from looking into the source files from the raylib
-        const int _maxGamepads = 4;
         void handleKeyboard(SceneManager &, std::shared_ptr<EventListener> listener);
         void handleMouse(SceneManager &, std::shared_ptr<EventListener> listener);
         void handleGamepad(SceneManager &, std::shared_ptr<EventListener> listener, int nb);
         void handleGamepadSticks(SceneManager &, std::shared_ptr<EventListener> listener, int nb);
+
+        /// @brief this number is from looking into the source files from the raylib
+        const int _maxGamepads = 4;
         static std::map<int, std::vector<std::shared_ptr<EventListener>>> _listeners;
     };
 

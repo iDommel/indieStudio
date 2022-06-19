@@ -6,6 +6,7 @@
 */
 
 #include "raylib.h"
+
 #include "Cube.hpp"
 
 namespace indie

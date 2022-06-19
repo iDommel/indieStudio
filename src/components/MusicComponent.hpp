@@ -9,6 +9,7 @@
 #define MUSICCOMPONENT_HPP_
 
 #include <string>
+
 #include "Component.hpp"
 #include "Music.hpp"
 

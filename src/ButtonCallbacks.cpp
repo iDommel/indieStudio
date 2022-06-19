@@ -16,8 +16,8 @@ namespace indie
     ButtonCallbacks::ButtonCallbacks(std::function<void(SceneManager &)> pressed,
                                      std::function<void(SceneManager &)> released,
                                      std::function<void(SceneManager &)> down,
-                                     std::function<void(SceneManager &)> up)
-        : pressed(pressed),
+                                     std::function<void(SceneManager &)> up):
+    pressed(pressed),
           released(released),
           down(down),
           up(up)
@@ -27,4 +27,4 @@ namespace indie
     ButtonCallbacks::~ButtonCallbacks()
     {
     }
-}  // namespace indie
+} 

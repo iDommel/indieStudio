@@ -6,19 +6,20 @@
 */
 
 #include "raylib.h"
-#include "EventSystem.hpp"
 
 #include <algorithm>
 
 #include "Component.hpp"
 #include "EventListener.hpp"
 #include "Window.hpp"
+#include "EventSystem.hpp"
+
 namespace indie
 {
     std::map<int, std::vector<std::shared_ptr<EventListener>>> EventSystem::_listeners;
+
     void EventSystem::init(SceneManager &sceneManager)
     {
-        std::cout << "EventSystem init" << std::endl;
         for (auto &index : sceneManager.getSceneTypeList()) {
             for (auto &entity : sceneManager.getScene(index)[IEntity::Tags::CALLABLE]) {
                 auto listener = Component::castComponent<EventListener>((*entity)[IComponent::Type::EVT_LISTENER]);
