@@ -33,8 +33,9 @@ namespace indie
 
     static std::shared_ptr<IEntity> createWall(int x, int y)
     {
+        float halfSize = GAME_TILE_SIZE / 2;
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        BoundingBox boundingBox = {{x - GAME_TILE_SIZE / 2, -GAME_TILE_SIZE / 2, y - GAME_TILE_SIZE / 2}, {x + GAME_TILE_SIZE / 2, 0, y + GAME_TILE_SIZE / 2}};
+        BoundingBox boundingBox = {{x - halfSize, -halfSize, y - halfSize}, {x + halfSize, 0, y + halfSize}};
 
         wall->addComponent(std::make_shared<Position>(x, 0, y))
             .addComponent(std::make_shared<Hitbox>(boundingBox))
@@ -45,8 +46,9 @@ namespace indie
 
     static std::shared_ptr<IEntity> createIndestructibleWall(int x, int y, const std::string &filename)
     {
+        float halfSize = GAME_TILE_SIZE / 2;
         std::shared_ptr<Entity> wall = std::make_shared<Entity>();
-        BoundingBox boundingBox = {{x - GAME_TILE_SIZE / 2, -GAME_TILE_SIZE / 2, y - GAME_TILE_SIZE / 2}, {x + GAME_TILE_SIZE / 2, 0, y + GAME_TILE_SIZE / 2}};
+        BoundingBox boundingBox = {{x - halfSize, -halfSize, y - halfSize}, {x + halfSize, 0, y + halfSize}};
 
         wall->addComponent(std::make_shared<Position>(x * 1.0f, 0, y * 1.0f))
             .addComponent(std::make_shared<Model3D>(filename + ".obj", filename + ".png"))
