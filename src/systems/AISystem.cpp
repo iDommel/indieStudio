@@ -159,7 +159,7 @@ namespace indie
             return;
 
         auto position = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
-        poseBomb(ai, sceneManager, *position, map);
+        poseBomb(ai, sceneManager, map);
         changeDir(map, ai, entity);
 
     }
@@ -250,7 +250,7 @@ namespace indie
         // std::cout << "DIR: " << (int)dirs[dir] << std::endl << std::endl;
     }
 
-    void AISystem::poseBomb(AIPlayer &ai, SceneManager &sceneManager, Position &pos, std::array<std::array<char, 5>, 5> &map)
+    void AISystem::poseBomb(AIPlayer &ai, SceneManager &sceneManager, std::array<std::array<char, 5>, 5> &map)
     {
         int y = 2;
         int x = 2;

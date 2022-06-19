@@ -496,7 +496,6 @@ namespace indie
             // check for collisions on the z axis
             splitVel.z = (*vel).z;
             splitVel.x = 0;
-            colliders = _collideSystem.getColliders(player);
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
