@@ -36,7 +36,7 @@ namespace indie
         if (bonus.getBonusType() == Bonus::Type::BOMB)
             _nbBombMax++;
         else if (bonus.getBonusType() == Bonus::Type::SPEED)
-            _speed += 20;
+            _speed += 10;
         else if (bonus.getBonusType() == Bonus::Type::POWER)
             _blastPower++;
     }
