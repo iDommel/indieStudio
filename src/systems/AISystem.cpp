@@ -32,8 +32,14 @@ namespace indie
     {
     }
 
-    void AISystem::update(SceneManager &manager, uint64_t)
+    void AISystem::update(SceneManager &manager, uint64_t dt)
     {
+        static uint64_t deltaLastUpdate = 0;
+
+        deltaLastUpdate += dt;
+        if (deltaLastUpdate < 50)
+            return;
+        deltaLastUpdate = 0;
         for (auto e : manager.getCurrentScene()[IEntity::Tags::AI]) {
             auto ai = Component::castComponent<AIPlayer>((*e)[Component::Type::AI]);
             auto pos = Component::castComponent<Position>((*e)[Component::Type::POSITION]);
@@ -275,7 +281,7 @@ namespace indie
         // displayMap(map);
     }
 
-    void AISystem::displayMap(int map[5][5])
+    void AISystem::displayMap(int [5][5])
     {
         /* for (auto &i : map) {
             for (auto &j : i)
