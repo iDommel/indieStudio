@@ -32,7 +32,7 @@ namespace indie
     void UIComponent::update()
     {
         const int offset = 20;
-        const int textWidth = 200;
+        const int textWidth = 150;
         const Position uiPos[4] = {
             Position(offset, offset),
             Position(Window::getScreenWidth() - (textWidth + offset), offset),
