@@ -73,16 +73,16 @@ namespace indie
         _musics[musicComponent.getValue()]->getMusic() = musicComponent.getMusicState();
     }
 
-     void AudioSystem::manageSound(SoundComponent &soundComponent)
+    void AudioSystem::manageSound(SoundComponent &soundComponent)
     {
-         if (soundComponent.getSoundState() == _sounds[soundComponent.getValue()]->getSound())
-             return;
-         if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
-             _sounds[soundComponent.getValue()]->play();
-         else if (soundComponent.getSoundState() == Sound::SoundState::PAUSED)
-             _sounds[soundComponent.getValue()]->pause();
-         else if (soundComponent.getSoundState() == Sound::SoundState::STOPPED)
-             _sounds[soundComponent.getValue()]->stop();
-         _sounds[soundComponent.getValue()]->getSound() = soundComponent.getSoundState();
+        if (!soundComponent.shouldUdate())
+            return;
+        if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
+            _sounds[soundComponent.getValue()]->play();
+        else if (soundComponent.getSoundState() == Sound::SoundState::PAUSED)
+            _sounds[soundComponent.getValue()]->pause();
+        else if (soundComponent.getSoundState() == Sound::SoundState::STOPPED)
+            _sounds[soundComponent.getValue()]->stop();
+        soundComponent.justUpdated();
     }
 }
