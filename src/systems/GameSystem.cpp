@@ -100,6 +100,8 @@ namespace indie
 
     unsigned int GameSystem::nbr_player;
 
+    unsigned int GameSystem::nbr_ai;
+
     void GameSystem::init(indie::SceneManager &sceneManager)
     {
         std::cerr << "GameSystem::init" << std::endl;
@@ -235,23 +237,34 @@ namespace indie
         for (auto &renderable : renderables) {
             if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
                 auto component = Component::castComponent<ModelAnim>((*renderable)[IComponent::Type::ANIMATION]);
-                component->getCurrentFrame()++;
-                if (component->getCurrentFrame() >= component->getNbFrames())
-                    component->getCurrentFrame() = 0;
+                if (renderable->hasComponent({IComponent::Type::VELOCITY}) && renderable->hasComponent({IComponent::Type::PLAYER})) {
+                    auto velocity = Component::castComponent<Velocity>((*renderable)[IComponent::Type::VELOCITY]);
+                    if (velocity->x != 0 || velocity->z != 0) {
+                        component->getCurrentFrame()++;
+                        if (component->getCurrentFrame() >= component->getNbFrames())
+                            component->getCurrentFrame() = 0;
+                    }
+                } else {
+                    component->getCurrentFrame()++;
+                    if (component->getCurrentFrame() >= component->getNbFrames())
+                        component->getCurrentFrame() = 0;
+                }
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
             std::string result = "Player ";
+            Position pos = {280, 100};
             if (nbr_player == 0) {
-                result = "Draw !";
-            } else if (nbr_player == 1) {
+                result = "AI win!";
+                pos.x += 50;
+            } else if (nbr_player == 1 && nbr_ai == 0) {
                 auto entity = sceneManager.getCurrentScene()[IEntity::Tags::PLAYER][0];
                 auto comp = Component::castComponent<Player>((*entity)[IComponent::Type::PLAYER]);
                 result.append(std::to_string(comp->getId()));
                 result.append(" won !");
             } else
                 return;
-            std::shared_ptr<Entity> entity = createText(result, Position(280, 100), 40);
+            std::shared_ptr<Entity> entity = createText(result, pos, 40);
 
             sceneManager.getScene(SceneManager::SceneType::END)[IEntity::Tags::TEXT].push_back(entity);
             sceneManager.setCurrentScene(SceneManager::SceneType::END);
@@ -468,6 +481,7 @@ namespace indie
                     pos1->x = pos->x - 30;
                     pos1->y = pos->y - 20;
                     nbr_player = _nbr_player;
+                    nbr_ai = 4 - _nbr_player;
                 }
             },
             [](SceneManager &, Vector2 /*mousePosition*/) {},
@@ -743,21 +757,19 @@ namespace indie
         std::shared_ptr<Entity> entity1 = createImage("assets/MainMenu/other_menu.png", Position(0, 0), 800, 600);
         std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/fleche.png", Position(0, 0), 80, 80);
         std::shared_ptr<Entity> entity3 = createText("Number of player", Position(250, 150), 35);
-        std::shared_ptr<Entity> entity4 = createText("1", Position(250, 250), 50);
-        std::shared_ptr<Entity> entity5 = createText("2", Position(350, 250), 50);
-        std::shared_ptr<Entity> entity6 = createText("3", Position(450, 250), 50);
-        std::shared_ptr<Entity> entity7 = createText("4", Position(550, 250), 50);
+        std::shared_ptr<Entity> entity5 = createText("2", Position(300, 250), 50);
+        std::shared_ptr<Entity> entity6 = createText("3", Position(400, 250), 50);
+        std::shared_ptr<Entity> entity7 = createText("4", Position(500, 250), 50);
         std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/play_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity9 = createImage("assets/MainMenu/circle.png", Position(520, 230), 80, 80);
+        std::shared_ptr<Entity> entity9 = createImage("assets/MainMenu/circle.png", Position(470, 230), 80, 80);
 
         createSceneEvent(entity2, SceneManager::SceneType::MAIN_MENU);
-        createNumberEvent(entity4, 1);
         createNumberEvent(entity5, 2);
         createNumberEvent(entity6, 3);
         createNumberEvent(entity7, 4);
         createSceneEvent(entity8, SceneManager::SceneType::GAME);
 
-        scene->addEntities({entity1, entity2, entity3, entity4, entity5, entity6, entity7, entity8, entity9});
+        scene->addEntities({entity1, entity2, entity3 , entity5, entity6, entity7 ,entity8, entity9});
         return scene;
     }
 
@@ -882,7 +894,9 @@ namespace indie
         std::shared_ptr<Position> aiPos = std::make_shared<Position>(pos);
         std::shared_ptr<Velocity> vel = std::make_shared<Velocity>(0, 0);
         std::shared_ptr<Hitbox> hitbox = std::make_shared<Hitbox>(true);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 3.0f);
+        std::shared_ptr<ModelAnim> modelAnim = std::make_shared<ModelAnim>("assets_test/final_anim.iqm", 0);
+        // modelAnim->getNbFrames() += 32;
         std::shared_ptr<AIPlayer> aiComponent = std::make_shared<AIPlayer>(id);
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
@@ -897,7 +911,8 @@ namespace indie
             .addComponent(hitbox)
             .addComponent(model)
             .addComponent(aiComponent)
-            .addComponent(destruct);
+            .addComponent(destruct)
+            .addComponent(modelAnim);
         radar->addComponent(radarBox)
             .addComponent(radarR);
         scene.addEntities({player, radar});
@@ -936,7 +951,9 @@ namespace indie
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
         BoundingBox towerBoundingBox = {{pos.x - 4.2f, pos.y + 0.0f, pos.z - 4.0f}, {pos.x + 4.2f, pos.y + 23.0f, pos.z + 4.0f}};
         std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(towerBoundingBox);
-        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
+        std::shared_ptr<Model3D> model = std::make_shared<Model3D>("assets_test/final.iqm", "assets_test/playerobj.png", 3.0f);
+        std::shared_ptr<ModelAnim> modelAnim = std::make_shared<ModelAnim>("assets_test/final_anim.iqm", 1);
+        // modelAnim->getNbFrames() += 32;
         std::shared_ptr<Player> player = std::make_shared<Player>(id, keyUp, keyDown, keyLeft, keyRight, keyBomb);
         std::shared_ptr<EventListener> playerListener = std::make_shared<EventListener>();
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
@@ -1025,7 +1042,8 @@ namespace indie
             .addComponent(playerListener)
             .addComponent(playerHitbox)
             .addComponent(model)
-            .addComponent(destruct);
+            .addComponent(destruct)
+            .addComponent(modelAnim);
         createPlayerUI(scene, playerEntity);
         scene.addEntity(playerEntity);
     }
@@ -1040,6 +1058,8 @@ namespace indie
         _collideSystem.unloadEntity(entity);
         if (entity->hasComponent(IComponent::Type::PLAYER))
             nbr_player -= 1;
+        else if (entity->hasComponent(IComponent::Type::AI))
+            nbr_ai -= 1;
     }
 
     void GameSystem::changeBindings(SceneManager &sceneManager, int id_player, int button)
