@@ -66,6 +66,8 @@ namespace indie
     void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+        model->setRotation(90.0f);
         _isRight = true;
         move(vel);
     }
@@ -80,7 +82,9 @@ namespace indie
     void Player::moveLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
         _isLeft = true;
+        model->setRotation(270.0f);
         move(vel);
     }
 
@@ -94,6 +98,8 @@ namespace indie
     void Player::moveUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+        model->setRotation(180.0f);
         _isUp = true;
         move(vel);
     }
@@ -120,6 +126,8 @@ namespace indie
     void Player::moveDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+        auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+        model->setRotation(0.0f);
         _isDown = true;
         move(vel);
     }
