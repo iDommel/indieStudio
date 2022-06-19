@@ -8,6 +8,7 @@
 #include "raylib.h"
 
 #include <iostream>
+
 #include "Music.hpp"
 #include "exceptions/MusicError.hpp"
 #include "AudioDevice.hpp"

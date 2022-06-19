@@ -11,7 +11,6 @@
 #include "SceneManager.hpp"
 #include "HitboxComponent.hpp"
 #include "Model.hpp"
-
 #include "ISystem.hpp"
 
 struct BoundingBox;
@@ -216,9 +215,11 @@ namespace indie
          **/
         bool check2DCollision(const Vector2 &center, float radius, const Vector2 &point) const;
 
-    private:
         void preInit(IScene &scene);
 
+        void reloadCollidables3D(SceneManager &sceneManager);
+
+    private:
         std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables3D;
         std::vector<std::pair<std::shared_ptr<IEntity>, std::shared_ptr<Hitbox>>> _collidables2D;
     };

@@ -4,13 +4,12 @@
 ** File description:
 ** GraphicSystem.cpp
 */
-#include <iostream>
 
 #include "raylib.h"
 
-#include "GraphicSystem.hpp"
 #include <iostream>
 
+#include "GraphicSystem.hpp"
 #include "CameraComponent.hpp"
 #include "Cube.hpp"
 #include "Grid.hpp"
@@ -25,6 +24,7 @@
 #include "HitboxComponent.hpp"
 #include "ModelAnim.hpp"
 #include "ModelAnimation.hpp"
+#include "ParticleCloud.hpp"
 
 namespace indie
 {
@@ -34,7 +34,7 @@ namespace indie
     }
     void GraphicSystem::init(SceneManager &sceneManager)
     {
-        std::cout << "GraphicSystem::init" << std::endl;
+        std::cerr << "GraphicSystem::init" << std::endl;
         _window = std::make_unique<Window>(800, 600, FLAG_WINDOW_RESIZABLE, "Indie Studio");
 
         for (auto &scene : sceneManager.getScenes()) {
@@ -49,21 +49,19 @@ namespace indie
 
     void GraphicSystem::update(SceneManager &sceneManager, uint64_t)
     {
-        for (auto &scene : sceneManager.getScenes()) {
+        for (auto &scene : sceneManager.getScenes())
             for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
-        }
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
         }
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
-
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CAMERA]) {
             auto camComponent = (*e)[IComponent::Type::CAMERA];
-
             auto cam = Component::castComponent<CameraComponent>(camComponent);
+
             cam->getCamera().beginDrawScope();
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
                 displayModel(e);
@@ -73,8 +71,10 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
-            // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
-            //     displayCollidable(e);
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
+                displayParticles(e);
+            /* for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+                displayCollidable(e); */
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -86,18 +86,17 @@ namespace indie
 
     void GraphicSystem::destroy()
     {
-        std::cout << "GraphicSystem::destroy" << std::endl;
+        std::cerr << "GraphicSystem::destroy" << std::endl;
     }
 
     void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
-        std::cout << "loadEntity" << std::endl;
         if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
-            std::cout << "loadSprite" << std::endl;
+            std::cerr << "loadSprite" << std::endl;
             loadSprite(entity);
         }
         if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
-            std::cout << "loadModel" << std::endl;
+            std::cerr << "loadModel" << std::endl;
             loadModel(entity);
         }
     }
@@ -106,8 +105,9 @@ namespace indie
     {
         if (entity->hasTag(IEntity::Tags::SPRITE_2D))
             unloadSprite(entity);
-        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D))
+        if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
             unloadModel(entity);
+        }
     }
 
     void GraphicSystem::loadSprite(std::shared_ptr<IEntity> &entity)
@@ -118,9 +118,9 @@ namespace indie
             _textures[sprite->getValue()].second++;
         else
             _textures[sprite->getValue()] = std::make_pair(std::make_unique<Texture>(sprite->getValue()), 1);
-
         if (sprite->getNbFrame() == 0)
             return;
+
         auto spriteRect = Component::castComponent<Rect>((*entity)[IComponent::Type::RECT]);
 
         spriteRect->width = _textures[sprite->getValue()].first->getWidth() / sprite->getNbFrame();
@@ -155,6 +155,19 @@ namespace indie
         }
     }
 
+    void GraphicSystem::displayParticles(std::shared_ptr<IEntity> &entity) const
+    {
+        static auto sphere = Sphere(1, BLUE);
+        auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
+        std::shared_ptr<indie::ParticleCloud> particlesCloud = nullptr;
+
+        if (particlesCloudEntity == nullptr)
+            return;
+        particlesCloud = Component::castComponent<ParticleCloud>(particlesCloudEntity);
+        for (auto &position : particlesCloud->getPos())
+            Shape3D::drawSphere(position, sphere.getRadius(), sphere.getColor());
+    }
+
     void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity)
     {
         auto components = entity->getFilteredComponents({IComponent::Type::MODEL, IComponent::Type::POSITION});
@@ -164,18 +177,22 @@ namespace indie
 
         if ((*entity)[IComponent::Type::ANIMATION] != nullptr) {
             auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
+            Vector3 size = {model->getSize(), model->getSize(), model->getSize()};
             _animations[anim->getAnimPath()].first->updateModelAnimation(*_models[model->getModelPath()].first, anim->getCurrentFrame());
             Vector3 x = {1.0f, 0.0f, 0.0f};
-            Vector3 x2 = {1.0f, 1.0f, 1.0f};
-            _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, x2, WHITE);
-        } else
-            _models.at(model->getModelPath()).first->draw(position, WHITE);
+            _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, size, WHITE);
+        } else {
+            Vector3 x = {0.0f, 1.0f, 0.0f};
+            Vector3 size = {model->getSize(), model->getSize(), model->getSize()};
+            _models.at(model->getModelPath()).first->drawRotate(position, x, model->getRotation(), size, WHITE);
+        }
     }
 
     void GraphicSystem::displayCollidable(std::shared_ptr<IEntity> &entity) const
     {
         auto components = entity->getFilteredComponents({IComponent::Type::HITBOX});
         auto hitbox = Component::castComponent<Hitbox>(components[0]);
+
         if (hitbox->is3D())
             ::DrawBoundingBox(hitbox->getBBox(), RED);
     }
@@ -255,7 +272,7 @@ namespace indie
         auto text = Component::castComponent<String>(components[0]);
         auto pos = Component::castComponent<Position>(components[1]);
 
-        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLUE);
+        _texts.at(text->getValue()).first->draw(pos->x, pos->y, text->getFontSize(), BLACK);
     }
 
     void GraphicSystem::loadText(std::shared_ptr<IEntity> &entity)
@@ -286,7 +303,6 @@ namespace indie
             _animations[anim->getAnimPath()].second++;
         else
             _animations[anim->getAnimPath()] = std::make_pair(std::make_unique<ModelAnimation>(anim->getAnimPath()), 1);
-
         if (anim->getNbFrames() < 0) {
             anim->getNbFrames() = _animations[anim->getAnimPath()].first->getFrameCount();
         }
@@ -296,7 +312,7 @@ namespace indie
     {
         auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
 
-        if (_animations[anim->getAnimPath()].second != 1)
+        if (_animations[anim->getAnimPath()].second < 1)
             _animations[anim->getAnimPath()].second--;
         else
             _animations.erase(anim->getAnimPath());

@@ -16,8 +16,8 @@ namespace indie
     MouseCallbacks::MouseCallbacks(std::function<void(SceneManager &, Vector2)> pressed,
                                    std::function<void(SceneManager &, Vector2)> released,
                                    std::function<void(SceneManager &, Vector2)> down,
-                                   std::function<void(SceneManager &, Vector2)> up)
-        : _pressed(pressed),
+                                   std::function<void(SceneManager &, Vector2)> up):
+    _pressed(pressed),
           _released(released),
           _down(down),
           _up(up)
@@ -27,4 +27,4 @@ namespace indie
     MouseCallbacks::~MouseCallbacks()
     {
     }
-}  // namespace indie
+} 

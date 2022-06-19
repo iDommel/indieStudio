@@ -6,6 +6,7 @@
 */
 
 #include "raylib.h"
+
 #include <iostream>
 
 #include "Sound.hpp"
@@ -16,60 +17,43 @@ namespace indie
 
     Sound::Sound(const std::string &filename)
     {
-        _sound = std::make_unique<::Sound>();
-        *_sound = LoadSound(filename.c_str());
-        if (_sound->frameCount == 0)
+        _soundRaylib = std::make_unique<::Sound>();
+        *_soundRaylib = LoadSound(filename.c_str());
+        if (_soundRaylib->frameCount == 0)
             throw SoundError("Sound file not found");
     }
 
     Sound::~Sound()
     {
-        if (!_sound)
+        if (!_soundRaylib)
             return;
-        UnloadSound(*_sound);
-        delete _sound.release();
+        UnloadSound(*_soundRaylib);
+        delete _soundRaylib.release();
     }
 
     void Sound::play()
     {
-        if (IsSoundPlaying(*_sound) == false)
-            _state = SoundState::STOPPED;
-        PlaySoundMulti(*_sound);
-        _state = SoundState::PLAYING;
+        PlaySoundMulti(*_soundRaylib);
     }
 
     void Sound::stop()
     {
-        if (_state == SoundState::STOPPED)
-            return;
-        StopSound(*_sound);
-        _state = SoundState::STOPPED;
+        StopSound(*_soundRaylib);
     }
 
     void Sound::pause()
     {
-        if (_state == SoundState::PAUSED || _state == SoundState::STOPPED)
-            return;
-        PauseSound(*_sound);
-        _state = SoundState::PAUSED;
+        PauseSound(*_soundRaylib);
     }
 
     void Sound::resume()
     {
-        if (_state != SoundState::PAUSED)
-            return;
-        ResumeSound(*_sound);
-        _state = SoundState::PLAYING;
-    }
-
-    Sound::SoundState Sound::getState() const
-    {
-        return _state;
+        ResumeSound(*_soundRaylib);
     }
 
     void Sound::setVolume(float volume)
     {
-        SetSoundVolume(*_sound, volume);
+        SetSoundVolume(*_soundRaylib, volume);
     }
 
 }

@@ -9,11 +9,11 @@
 
 namespace indie
 {
-    Component::Component(Type type) : _type(type)
+    Component::Component(const Type &type) : _type(type)
     {
     }
 
-    Component::Type Component::getType() const
+    const Component::Type &Component::getType() const
     {
         return _type;
     }

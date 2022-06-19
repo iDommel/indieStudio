@@ -36,6 +36,9 @@ class Bomb: public Component{
         uint64_t getTimer() const;
     protected:
     private:
+        void calculateExplosionRadius(IScene &scene, Vector3 pos);
+        void createExplosion(Vector3 pos, Vector3 size, IScene &scene);
+
         uint64_t _countdown;
         int _blastPower;
 };

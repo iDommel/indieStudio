@@ -10,6 +10,7 @@
 
     #include <iostream>
     #include <memory>
+
     #include "Model.hpp"
 
     struct ModelAnimation;
