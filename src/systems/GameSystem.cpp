@@ -530,7 +530,11 @@ namespace indie
             (*hitbox) += *vel * (float)(dt / 1000.0f);
             (*radarHitbox) += *vel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
+                if (collider->hasTag(IEntity::Tags::BONUS)) {
+                    auto bonusComp = Component::castComponent<Bonus>((*collider)[IComponent::Type::BONUS]);
+                    ai->handleBonus(*bonusComp);
+                    sceneManager.getCurrentScene().removeEntity(collider);
+                } else if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
                     (*pos) = lastPos;
                     (*hitbox) -= *vel * (float)(dt / 1000.0f);
                     (*radarHitbox) -= *vel * (float)(dt / 1000.0f);
@@ -875,8 +879,7 @@ namespace indie
         std::shared_ptr<Destructible> destruct = std::make_shared<Destructible>();
 
 
-        // Vector3 radarSize = {GAME_TILE_SIZE * 5, GAME_TILE_SIZE, GAME_TILE_SIZE * 5};
-        Vector3 radarSize = {0, 0, 0};
+        Vector3 radarSize = {GAME_TILE_SIZE * 5, GAME_TILE_SIZE, GAME_TILE_SIZE * 5};
         Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
         std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
         std::shared_ptr<Entity> radar = std::make_shared<Entity>();
@@ -899,7 +902,7 @@ namespace indie
         std::shared_ptr<Entity> playerEntity = std::make_shared<Entity>();
         std::shared_ptr<Position> playerPos = std::make_shared<Position>(pos);
         std::shared_ptr<Velocity> playerVel = std::make_shared<Velocity>(0, 0);
-        BoundingBox towerBoundingBox = {{pos.x - 4.2, pos.y + 0, pos.z - 4.0}, {pos.x + 4.2,pos.y + 23, pos.z + 4.0}};
+        BoundingBox towerBoundingBox = {{pos.x - 4.2f, pos.y + 0.0f, pos.z - 4.0f}, {pos.x + 4.2f ,pos.y + 23.0f, pos.z + 4.0f}};
         std::shared_ptr<Hitbox> playerHitbox = std::make_shared<Hitbox>(towerBoundingBox);
         std::shared_ptr<Model3D> model = std::make_shared<Model3D>("test_models/turret.obj", "test_models/turret_diffuse.png");
         std::shared_ptr<Player> player = std::make_shared<Player>(id, keyUp, keyDown, keyLeft, keyRight, keyBomb);
