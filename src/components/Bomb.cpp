@@ -47,7 +47,7 @@ uint64_t Bomb::getTimer() const
 
 static void createParticlesHorizontal(SceneManager &sceneManager, Vector3 pos, int blastPower)
 {
-    float range = (((blastPower - 2) * GAME_TILE_SIZE) + (GAME_TILE_SIZE / 2));
+    float range = (((blastPower - 2) * GAME_TILE_SIZE - 2) + (GAME_TILE_SIZE / 2));
 
     pos.z -= (GAME_TILE_SIZE / 2);
     for (int i = GAME_TILE_SIZE; i > 0; i--) {
@@ -65,7 +65,7 @@ static void createParticlesHorizontal(SceneManager &sceneManager, Vector3 pos, i
 
 static void createParticlesVertical(SceneManager &sceneManager, Vector3 pos, int blastPower)
 {
-    float range = (((blastPower - 2) * GAME_TILE_SIZE) + (GAME_TILE_SIZE / 2));
+    float range = (((blastPower - 2) * GAME_TILE_SIZE - 2) + (GAME_TILE_SIZE / 2));
 
     pos.x -= (GAME_TILE_SIZE / 2);
     for (int i = GAME_TILE_SIZE; i > 0; i--) {
