@@ -21,6 +21,7 @@
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
 #include <algorithm>
+#include "Bonus.hpp"
 
 namespace indie
 {
@@ -29,8 +30,14 @@ namespace indie
     {
     }
 
-    void AIPlayer::handleBonus()
+    void AIPlayer::handleBonus(const Bonus &bonus)
     {
+        if (bonus.getBonusType() == Bonus::Type::BOMB)
+            _nbBombMax++;
+        else if (bonus.getBonusType() == Bonus::Type::SPEED)
+            _speed += 20;
+        else if (bonus.getBonusType() == Bonus::Type::POWER)
+            _blastPower++;
     }
 
     void AIPlayer::move(std::shared_ptr<Velocity> vel)

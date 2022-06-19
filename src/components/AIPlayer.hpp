@@ -18,6 +18,7 @@ namespace indie
 {
     class Velocity;
     class Position;
+    class Bonus;
 
     class AIPlayer : public Component
     {
@@ -25,8 +26,11 @@ namespace indie
 
         AIPlayer(int id);
 
-        ///@brief Handle the various bonuses
-        void handleBonus();
+        /**
+         * @brief Handle the various bonuses
+         * @param bonus The Bonus that was given to the player
+         */
+        void handleBonus(const Bonus &bonus);
         /**
          * @brief Generate a bomb and add it to the entities list
          * @param manager The scene manager
