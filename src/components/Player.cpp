@@ -8,9 +8,13 @@
 #include "Player.hpp"
 
 #include <functional>
+#include <algorithm>
 #include <cmath>
 #include <algorithm>
 
+#include "raylib.h"
+
+#include "Player.hpp"
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
 #include "Position.hpp"
@@ -18,28 +22,39 @@
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
 #include "Bomb.hpp"
+#include "SoundComponent.hpp"
+#include "Bonus.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
 
 namespace indie
 {
 
-    Player::Player(int id, std::string _up, std::string _down, std::string _left, std::string _right, std::string _bomb) : Component(Type::PLAYER), _id(id), UP(_up), DOWN(_down), LEFT(_left), RIGHT(_right), BOMB(_bomb)
+    Player::Player(int id, int _up, int _down, int _left, int _right, int _bomb) : Component(Type::PLAYER), _id(id)
     {
+        UP = GameSystem::getBinding(_up);
+        DOWN = GameSystem::getBinding(_down);
+        LEFT = GameSystem::getBinding(_left);
+        RIGHT = GameSystem::getBinding(_right);
+        BOMB = GameSystem::getBinding(_bomb);
+        _nbBomb = _defaultNbBomb;
         _blastPower = _defaultBlastPower;
         _speed = _defaultSpeed;
+        _blastPower = _defaultBlastPower;
     }
 
     Player::~Player()
     {
     }
 
-    void Player::handleBonus(/*bonus*/)
+    void Player::handleBonus(const Bonus &bonus)
     {
-        /*if (bonus == nbBomb)
+        if (bonus.getBonusType() == Bonus::Type::BOMB)
             _nbBomb++;
-        else if (bonus == blastPower)
-            _blastPower++;*/
+        else if (bonus.getBonusType() == Bonus::Type::SPEED)
+            _speed += 20;
+        else if (bonus.getBonusType() == Bonus::Type::POWER)
+            _blastPower++;
     }
 
     void Player::moveRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
@@ -128,21 +143,21 @@ namespace indie
 
     int Player::getNbBomb() const
     {
-        return _nbBombMax;
+        return _nbBomb;
     }
 
     void Player::setNbBomb(int newNbBomb)
     {
-        _nbBombMax = newNbBomb;
+        _nbBomb = newNbBomb;
     }
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
-        std::cout << _bombs.size() << std::endl;
-        if (_bombs.size() >= _nbBombMax)
+        if (_bombs.size() >= _nbBomb)
             return;
 
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+        std::shared_ptr<Entity> timerSound = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
         Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
@@ -152,7 +167,8 @@ namespace indie
             .addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
             .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
         _bombs.push_back(bomb);
-        manager.getCurrentScene().addEntity(bomb);
+        timerSound->addComponent(std::make_shared<SoundComponent>("sound_det"));
+        manager.getCurrentScene().addEntity(bomb).addEntity(timerSound);
     }
 
     void Player::updateBombsVec()
@@ -169,5 +185,89 @@ namespace indie
     int Player::getBlastPower() const
     {
         return _blastPower;
+    }
+    std::string Player::getUp()
+    {
+        return UP;
+    }
+
+    std::string Player::getDown()
+    {
+        return DOWN;
+    }
+
+    std::string Player::getLeft()
+    {
+        return LEFT;
+    }
+
+    std::string Player::getRight()
+    {
+        return RIGHT;
+    }
+
+    std::string Player::getBomb()
+    {
+        return BOMB;
+    }
+
+    int Player::getTagUp()
+    {
+        return GameSystem::getTag(UP);
+    }
+
+    int Player::getTagDown()
+    {
+        return GameSystem::getTag(DOWN);
+    }
+
+    int Player::getTagLeft()
+    {
+        return GameSystem::getTag(LEFT);
+    }
+
+    int Player::getTagRight()
+    {
+        return GameSystem::getTag(RIGHT);
+    }
+
+    int Player::getTagBomb()
+    {
+        return GameSystem::getTag(BOMB);
+    }
+
+    void Player::setUP(std::string _up)
+    {
+        UP = _up;
+    }
+
+    void Player::setDOWN(std::string _down)
+    {
+        DOWN = _down;
+    }
+
+    void Player::setLEFT(std::string _left)
+    {
+        LEFT = _left;
+    }
+
+    void Player::setRIGHT(std::string _right)
+    {
+        RIGHT = _right;
+    }
+
+    void Player::setBOMB(std::string _bomb)
+    {
+        BOMB = _bomb;
+    }
+
+    void Player::kill()
+    {
+        _isDead = true;
+    }
+
+    bool Player::isDead() const
+    {
+        return _isDead;
     }
 }

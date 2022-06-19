@@ -15,6 +15,7 @@
 #include "Window.hpp"
 namespace indie
 {
+    std::map<int, std::vector<std::shared_ptr<EventListener>>> EventSystem::_listeners;
     void EventSystem::init(SceneManager &sceneManager)
     {
         std::cout << "EventSystem init" << std::endl;
@@ -119,7 +120,7 @@ namespace indie
 
     void EventSystem::destroy()
     {
-        std::cout << "EventSystem destroy" << std::endl;
+        std::cerr << "EventSystem destroy" << std::endl;
     }
 
     void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)
@@ -140,5 +141,19 @@ namespace indie
                 currentListeners.erase(it);
             }
         }
+    }
+
+    void EventSystem::reloadScene(SceneManager &manager, SceneManager::SceneType sceneType)
+    {
+        auto newEntities = manager.getScene(sceneType)[IEntity::Tags::CALLABLE];
+        std::vector<std::shared_ptr<EventListener>> newListeners;
+
+        for (auto &e: newEntities) {
+            auto listener = Component::castComponent<EventListener>((*e)[Component::Type::EVT_LISTENER]);
+            if (listener)
+                newListeners.push_back(listener);
+        }
+
+        _listeners[(int)sceneType] = newListeners;
     }
 }

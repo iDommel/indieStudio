@@ -20,6 +20,7 @@ namespace indie
     public:
         enum class Tags {
             RENDERABLE_3D,
+            AESTHETIC,
             SPRITE_2D,
             SPHERE,
             CUBE,
@@ -28,12 +29,15 @@ namespace indie
             COLLIDABLE,
             AUDIBLE,
             CALLABLE,
+            BONUS,
             CAMERA,
             BOMB,
             TIMED,
             DESTRUCTIBLE,
             PLAYER,
-            UI
+            UI,
+            AI,
+            RADAR
         };
 
         virtual ~IEntity() = default;

@@ -35,8 +35,12 @@ namespace indie
          {{IComponent::Type::CAMERA}}},
         {Entity::Tags::CALLABLE,
          {{IComponent::Type::EVT_LISTENER}}},
+        {Entity::Tags::BONUS,
+         {{IComponent::Type::BONUS, IComponent::Type::POSITION}}},
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
+        {Entity::Tags::AESTHETIC,
+         {{IComponent::Type::PARTICLES}}},
         {Entity::Tags::BOMB,
          {{IComponent::Type::BOMB}}},
         {Entity::Tags::TIMED,
@@ -45,7 +49,10 @@ namespace indie
          {{IComponent::Type::DESTRUCTIBLE}}},
         {Entity::Tags::UI,
          {{IComponent::Type::UI}}},
-    };
+        {Entity::Tags::RADAR,
+         {{IComponent::Type::RADAR}}},
+        {Entity::Tags::AI,
+         {{IComponent::Type::VELOCITY, IComponent::Type::AI, IComponent::Type::POSITION}}}};
 
     IEntity &Entity::addComponent(std::shared_ptr<IComponent> component)
     {

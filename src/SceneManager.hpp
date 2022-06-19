@@ -32,7 +32,8 @@ namespace indie
             SOUND,
             NB_SCENES,
             PREGAME,
-            PREVIOUS
+            PREVIOUS,
+            END
         };
 
         /**

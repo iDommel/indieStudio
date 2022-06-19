@@ -48,20 +48,15 @@ namespace indie
 
     void AudioSystem::destroy()
     {
-        std::cout << "AudioSystem::destroy" << std::endl;
+        std::cerr << "AudioSystem::destroy" << std::endl;
     }
 
     void AudioSystem::loadEntity(std::shared_ptr<IEntity>entity)
     {
-        std::cout << "AudioSystem::loadEntity" << std::endl;
-        if (entity->hasTag(IEntity::Tags::AUDIBLE)) {
-            std::cout << "AudioSystem::loadEntity" << std::endl;
-        }
     }
 
     void AudioSystem::unloadEntity(std::shared_ptr<IEntity>)
     {
-        // std::cout << "AudioSystem::unloadEntity" << std::endl;
     }
 
     void AudioSystem::manageMusic(MusicComponent &musicComponent)
@@ -69,7 +64,6 @@ namespace indie
         _musics[musicComponent.getValue()]->updateMusic();
         if (musicComponent.getMusicState() == _musics[musicComponent.getValue()]->getMusic())
             return;
-        std::cout << "AudioSystem::manageMusic" << std::endl;
         if (musicComponent.getMusicState() == Music::MusicState::PLAY) {
             _musics[musicComponent.getValue()]->playMusic();
         } else if (musicComponent.getMusicState() == Music::MusicState::PAUSE)
@@ -83,7 +77,6 @@ namespace indie
     {
          if (soundComponent.getSoundState() == _sounds[soundComponent.getValue()]->getSound())
              return;
-         std::cout << "AudioSystem::manageSound" << std::endl;
          if (soundComponent.getSoundState() == Sound::SoundState::PLAYING)
              _sounds[soundComponent.getValue()]->play();
          else if (soundComponent.getSoundState() == Sound::SoundState::PAUSED)

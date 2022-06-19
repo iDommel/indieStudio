@@ -72,7 +72,7 @@ namespace indie
 
     void CollideSystem::destroy()
     {
-        std::cout << "CollideSystem::destroy" << std::endl;
+        std::cerr << "CollideSystem::destroy" << std::endl;
         _collidables3D.clear();
         _collidables2D.clear();
     }
@@ -240,5 +240,29 @@ namespace indie
     bool CollideSystem::check2DCollision(const Vector2 &center, float radius, const Vector2 &point) const
     {
         return CheckCollisionPointCircle(point, center, radius);
+    }
+
+    void CollideSystem::reloadCollidables3D(SceneManager &sceneManager)
+    {
+        _collidables3D.clear();
+        std::shared_ptr<indie::Hitbox> hitbox = nullptr;
+        std::shared_ptr<indie::IComponent> maybeCollider = nullptr;
+
+        std::cout << "CollideSystem::init" << std::endl;
+        for (auto &scene : sceneManager.getScenes()) {
+            auto collidables = (*scene.second)[IEntity::Tags::COLLIDABLE];
+            if (collidables.empty())
+                return;
+            preInit((*scene.second));
+            for (auto &collidable : collidables) {
+                if (!collidable || (maybeCollider = (*collidable)[IComponent::Type::HITBOX]) == nullptr)
+                    continue;
+                hitbox = Component::castComponent<Hitbox>((*collidable)[IComponent::Type::HITBOX]);
+                if (hitbox->is3D())
+                    _collidables3D.push_back(std::make_pair(collidable, hitbox));
+                else
+                    _collidables2D.push_back(std::make_pair(collidable, hitbox));
+            }
+        }
     }
 }

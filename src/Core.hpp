@@ -28,10 +28,13 @@ namespace indie
         enum class SystemType {
             GAME,
             EVENT,
-            GRAPHIC,
             AUDIO,
+            GRAPHIC,
+            PARTICLE,
             /// sub-system of game system
-            COLLIDE
+            COLLIDE,
+            /// sub-system of game system
+            AI
         };
 
         Core();
