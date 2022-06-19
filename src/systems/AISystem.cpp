@@ -113,17 +113,21 @@ namespace indie
         int x = std::round((bbox.min.x + 1) / GAME_TILE_SIZE) - (px - 2);
         int y = std::round((bbox.min.z + 1) / GAME_TILE_SIZE) - (pz - 2);
 
+        if (x < 0 || y < 0 || x >= 5 || y >= 5)
+            return;
         if (bbox.max.x - bbox.min.x < bbox.max.z - bbox.min.z) {
-            map[y + 1][x] = MAP_BOMB;
+            if (y + 1 < 5)
+                map[y + 1][x] = MAP_BOMB;
             if (map[y][x] == MAP_EMPTY)
                 map[y][x] = MAP_BOMB;
-            if (map[y + 2][x] == MAP_EMPTY)
+            if (y + 2 < 5 && map[y + 2][x] == MAP_EMPTY)
                 map[y + 2][x] = MAP_BOMB;
         } else {
-            map[y][x + 1] = MAP_BOMB;
+            if (x + 1 < 5)
+                map[y][x + 1] = MAP_BOMB;
             if (map[y][x] == MAP_EMPTY)
                 map[y][x] = MAP_BOMB;
-            if (map[y][x + 2] == MAP_EMPTY)
+            if (x + 2 < 5 && map[y][x + 2] == MAP_EMPTY)
                 map[y][x + 2] = MAP_BOMB;
         }
     }
