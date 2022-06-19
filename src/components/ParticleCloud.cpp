@@ -55,9 +55,9 @@ static Vector3 computeBeziers(std::vector<Vector3> curveParams, float percent)
     float chunkSize = 100 / (curveParams.size() / 2);
     int actualChunk = ((int)(percent) / (int)(chunkSize)) * 2;
     int actualPercent = (int)((percent / chunkSize) * 100) % 100;
-    auto p1 = getPt(curveParams[actualChunk], curveParams[actualChunk + 1], actualPercent);
-    auto p2 = getPt(curveParams[actualChunk + 1], curveParams[actualChunk + 2], actualPercent);
-    auto pos = getPt(p1, p2, actualPercent);
+    Vector3 p1 = getPt(curveParams.at(actualChunk), curveParams.at(actualChunk + 1), actualPercent);
+    Vector3 p2 = getPt(curveParams.at(actualChunk + 1), curveParams.at(actualChunk + 2), actualPercent);
+    Vector3 pos = getPt(p1, p2, actualPercent);
 
     return (pos);
 }
