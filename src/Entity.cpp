@@ -47,6 +47,8 @@ namespace indie
          {{IComponent::Type::TIMER}}},
         {Entity::Tags::DESTRUCTIBLE,
          {{IComponent::Type::DESTRUCTIBLE}}},
+        {Entity::Tags::RADAR,
+         {{IComponent::Type::RADAR}}},
         {Entity::Tags::AI,
          {{IComponent::Type::VELOCITY, IComponent::Type::AI, IComponent::Type::POSITION}}}
     };

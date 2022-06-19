@@ -12,9 +12,12 @@
 #include "EventListener.hpp"
 #include "SceneManager.hpp"
 
+struct Vector3;
+
 namespace indie
 {
     class Velocity;
+    class Position;
 
     class AIPlayer : public Component
     {
@@ -27,8 +30,9 @@ namespace indie
         /**
          * @brief Generate a bomb and add it to the entities list
          * @param manager The scene manager
+         * @param pos The position of the player
          */
-        void generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity);
+        void generateBomb(SceneManager &manager, Vector3 &pos);
         void updateBombsVec();
 
         ///@brief gets the player ID
@@ -45,10 +49,34 @@ namespace indie
         void setRadar(std::shared_ptr<IEntity> radar);
         std::shared_ptr<IEntity> getRadar() const;
 
+        /// @brief sets the velocity of the player to its speed value to the right
+        void moveRight(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to 0 to the right
+        void stopRight(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to its speed value to the left
+        void moveLeft(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to 0 to the left
+        void stopLeft(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to its speed value upwards
+        void moveUp(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to 0 upwards
+        void stopUp(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to its speed value downwards
+        void moveDown(std::shared_ptr<IEntity> entity);
+        /// @brief sets the velocity of the player to 0 downwards
+        void stopDown(std::shared_ptr<IEntity> entity);
+
+        bool _isUp = false;
+        bool _isDown = false;
+        bool _isLeft = false;
+        bool _isRight = false;
+        int tileX;
+        int tileY;
+
     protected:
     private:
         void move(std::shared_ptr<Velocity> vel);
-        size_t _nbBombMax = 3;
+        size_t _nbBombMax = 1;
         int _blastPower = 3;
         int _speed = 60;
         int _id;

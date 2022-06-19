@@ -35,7 +35,8 @@ namespace indie
             TIMED,
             DESTRUCTIBLE,
             PLAYER,
-            AI
+            AI,
+            RADAR
         };
 
         virtual ~IEntity() = default;

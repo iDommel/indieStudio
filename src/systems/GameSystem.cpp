@@ -24,6 +24,7 @@
 #include "AudioDevice.hpp"
 #include "Player.hpp"
 #include "AIPlayer.hpp"
+#include "Radar.hpp"
 #include "Position.hpp"
 #include "Rect.hpp"
 #include "Scene.hpp"
@@ -208,6 +209,7 @@ namespace indie
         }
         updatePlayers(sceneManager, dt);
         _aiSystem.update(sceneManager, dt);
+        updateAIs(sceneManager, dt);
         updateBombs(sceneManager, dt);
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
@@ -484,9 +486,8 @@ namespace indie
             // check for collisions on the x axis
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
-            auto colliders = _collideSystem.getColliders(player);
-            for (auto &collider : colliders) {
-                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB)) {
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
                     (*pos).x = lastPos.x;
                     (*hitbox) -= splitVel * (float)(dt / 1000.0f);
                     break;
@@ -496,7 +497,6 @@ namespace indie
             // check for collisions on the z axis
             splitVel.z = (*vel).z;
             splitVel.x = 0;
-            colliders = _collideSystem.getColliders(player);
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
             for (auto &collider : _collideSystem.getColliders(player)) {
@@ -512,6 +512,34 @@ namespace indie
                 }
             }
             playerComp->updateBombsVec();
+        }
+    }
+
+    void GameSystem::updateAIs(SceneManager &sceneManager, uint64_t dt)
+    {
+        auto players = sceneManager.getCurrentScene()[IEntity::Tags::AI];
+
+        for (auto &player : players) {
+            auto pos = Component::castComponent<Position>((*player)[IComponent::Type::POSITION]);
+            auto lastPos = *pos;
+            auto vel = Component::castComponent<Velocity>((*player)[IComponent::Type::VELOCITY]);
+            auto ai = Component::castComponent<AIPlayer>((*player)[IComponent::Type::AI]);
+            auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
+            auto radarHitbox = Component::castComponent<Hitbox>((*ai->getRadar())[IComponent::Type::HITBOX]);
+
+            (*pos) = *pos + (*vel * (float)(dt / 1000.0f));
+            (*hitbox) += *vel * (float)(dt / 1000.0f);
+            (*radarHitbox) += *vel * (float)(dt / 1000.0f);
+            for (auto &collider : _collideSystem.getColliders(player)) {
+                if (!collider->hasTag(IEntity::Tags::TIMED) && !collider->hasTag(IEntity::Tags::BOMB) && !collider->hasTag(IEntity::Tags::RADAR)) {
+                    (*pos) = lastPos;
+                    (*hitbox) -= *vel * (float)(dt / 1000.0f);
+                    (*radarHitbox) -= *vel * (float)(dt / 1000.0f);
+                    std::cout << "stoped" << std::endl;
+                    break;
+                }
+            }
+            ai->updateBombsVec();
         }
     }
 
@@ -541,7 +569,10 @@ namespace indie
 
             for (auto &collider : _collideSystem.getColliders(explosion)) {
                 if (collider->hasTag(IEntity::Tags::DESTRUCTIBLE)) {
-                    if (!collider->hasTag(IEntity::Tags::PLAYER)) {
+                    if (collider->hasTag(IEntity::Tags::AI)) {
+                        auto ai = Component::castComponent<AIPlayer>((*collider)[IComponent::Type::AI]);
+                        sceneManager.getCurrentScene().removeEntity(ai->getRadar());
+                    } else if (!collider->hasTag(IEntity::Tags::PLAYER)) {
                         auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
                         int chance = std::rand() % 4;
                         if (chance == 3)
@@ -836,6 +867,7 @@ namespace indie
         Vector3 radarPos = {pos.x - radarSize.x / 2, pos.y, pos.z - radarSize.z / 2};
         std::shared_ptr<Hitbox> radarBox = std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(radarSize, radarPos));
         std::shared_ptr<Entity> radar = std::make_shared<Entity>();
+        std::shared_ptr<Radar> radarR = std::make_shared<Radar>();
 
         player->addComponent(aiPos)
             .addComponent(vel)
@@ -843,7 +875,8 @@ namespace indie
             .addComponent(model)
             .addComponent(aiComponent)
             .addComponent(destruct);
-        radar->addComponent(radarBox);
+        radar->addComponent(radarBox)
+            .addComponent(radarR);
         scene.addEntities({player, radar});
         aiComponent->setRadar(radar);
     }
