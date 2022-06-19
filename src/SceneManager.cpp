@@ -38,7 +38,6 @@ namespace indie
         getCurrentSceneType() = sceneType;
         if (getPreviousSceneType() == SceneType::GAME && _currentScene != SceneType::PAUSE) {
             GameSystem::setNbrPlayer(4);
-            std::cout << "Nbr player: " << GameSystem::getNbrPlayer() << std::endl;
             auto addEntityCallback = _scenes[SceneType::GAME]->getAddEntityCallback();
             auto removeEntityCallback = _scenes[SceneType::GAME]->getRemoveEntityCallback();
             _scenes[SceneType::GAME] = _scenes[SceneType::GAME]->initScene();
