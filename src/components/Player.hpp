@@ -39,6 +39,7 @@ namespace indie
         /**
          * @brief Generate a bomb and add it to the entities list
          * @param manager The scene manager
+         * @param entity Player
          */
         void generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity);
         void updateBombsVec();

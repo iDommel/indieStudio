@@ -15,13 +15,15 @@ struct Vector3;
 
 namespace indie {
 
+    class CollideSystem;
+
 class Bomb: public Component{
     public:
         Bomb(int blastPower = 1);
         ~Bomb();
 
         ///@brief Explode the bomb after a certain amount of time
-        void explode(SceneManager &sceneManager, Vector3 position);
+        void explode(SceneManager &sceneManager, Vector3 position, CollideSystem &collideSystem);
 
         /**
          * @brief Set the timer of the bomb
@@ -36,6 +38,9 @@ class Bomb: public Component{
         uint64_t getTimer() const;
     protected:
     private:
+        void calculateExplosionRadius(IScene &scene, CollideSystem &collideSystem, Vector3 pos);
+        void createExplosion(Vector3 pos, Vector3 size, IScene &scene);
+
         uint64_t _countdown;
         int _blastPower;
 };
