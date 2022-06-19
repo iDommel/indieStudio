@@ -43,20 +43,14 @@ namespace indie
         /// @brief Resume the sound
         void resume();
 
-        /// @brief Get the state of the sound
-        SoundState getState() const;
-
         /**
          * @brief Set sound volume
          * @param volume Volume value
          */
         void setVolume(float volume);
 
-        SoundState &getSound() { return _state; };
-
     private:
-        SoundState _state = SoundState::PAUSED;
-        std::unique_ptr<::Sound> _sound;
+        std::unique_ptr<::Sound> _soundRaylib;
     };
 
 }
