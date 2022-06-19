@@ -11,7 +11,7 @@
 
 namespace indie {
 ParticleCloud::ParticleCloud(Vector3 start, Vector3 end, double nbParticles,
-int curvature, double dispersion, float lifeTime):
+int curvature, double, float lifeTime):
 Component(Type::PARTICLES), _timeToLive(lifeTime)
 {
     Vector3 pos = {0, 0, 0};
