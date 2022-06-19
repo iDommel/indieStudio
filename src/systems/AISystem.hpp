@@ -40,14 +40,14 @@ namespace indie
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
     private:
-        void loadMap(AIPlayer &ai, std::array<std::array<char, 5>, 5> &map, Position &pos, std::shared_ptr<IEntity> me);
-        void loadExplosionInMap(std::array<std::array<char, 5>, 5> &map, std::shared_ptr<IEntity> &explosion, int px, int pz);
-        void moveAI(std::array<std::array<char, 5>, 5> &map, AIPlayer &ai, std::shared_ptr<IEntity> entity, SceneManager &sceneManager);
-        void changeDir(std::array<std::array<char, 5>, 5> &map, AIPlayer &ai, std::shared_ptr<IEntity> entity);
-        void poseBomb(AIPlayer &ai, SceneManager &sceneManager, std::array<std::array<char, 5>, 5> &map);
-        bool escape(AIPlayer &ai, std::array<std::array<char, 5>, 5> &map, std::shared_ptr<IEntity> entity);
+        void loadMap(AIPlayer &ai, int map[5][5], Position &pos, std::shared_ptr<IEntity> me);
+        void loadExplosionInMap(int map[5][5], std::shared_ptr<IEntity> &explosion, int px, int pz);
+        void moveAI(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> entity, SceneManager &sceneManager);
+        void changeDir(int map[5][5], AIPlayer &ai, std::shared_ptr<IEntity> entity);
+        void poseBomb(AIPlayer &ai, SceneManager &sceneManager, int map[5][5]);
+        bool escape(AIPlayer &ai, int map[5][5], std::shared_ptr<IEntity> entity);
 
-        void displayMap(std::array<std::array<char, 5>, 5> &map);
+        void displayMap(int map[5][5]);
 
         CollideSystem &_collideSystem;
     };
