@@ -185,7 +185,9 @@ namespace indie
             Vector3 x = {1.0f, 0.0f, 0.0f};
             _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, size, WHITE);
         } else {
-                _models.at(model->getModelPath()).first->draw(position, WHITE, model->getSize());
+            Vector3 x = {0.0f, 1.0f, 0.0f};
+            Vector3 size = {model->getSize(), model->getSize(), model->getSize()};
+            _models.at(model->getModelPath()).first->drawRotate(position, x, model->getRotation(), size, WHITE);
         }
     }
 
