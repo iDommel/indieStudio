@@ -100,7 +100,7 @@ namespace indie
                         map[y][x] = MAP_PLAYER;
                     else
                         map[y][x] = MAP_WALL;
-                } else
+                } else if (!collider->hasTag(IEntity::Tags::BONUS))
                     map[y][x] = MAP_INDESTRUCTIBLE_WALL;
             }
         }
