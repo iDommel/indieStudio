@@ -68,10 +68,14 @@ namespace indie
         static void setPlaySupporters(bool play);
         static bool getPlaySupporters();
 
+        /// @brief setter for the supporter animations
         static void setStartTime(std::chrono::time_point<std::chrono::high_resolution_clock>);
+        /// @brief getter for the supporter animations
         static std::chrono::time_point<std::chrono::high_resolution_clock> getStartTime();
 
+        /// @brief setter for the frames of the supporter animations
         static void setNbFrame(int);
+        /// @brief getter for the frames of the supporter animations
         static int getNbFrame();
         static unsigned int getNbrAi() { return nbr_ai; };
 
