@@ -180,12 +180,13 @@ namespace indie
 
         if ((*entity)[IComponent::Type::ANIMATION] != nullptr) {
             auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
+            Vector3 size = {model->getSize(), model->getSize(), model->getSize()};
             _animations[anim->getAnimPath()].first->updateModelAnimation(*_models[model->getModelPath()].first, anim->getCurrentFrame());
             Vector3 x = {1.0f, 0.0f, 0.0f};
-            Vector3 x2 = {1.0f, 1.0f, 1.0f};
-            _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, x2, WHITE);
-        } else
-            _models.at(model->getModelPath()).first->draw(position, WHITE);
+            _models[model->getModelPath()].first->drawRotate(position, x, -90.0f, size, WHITE);
+        } else {
+                _models.at(model->getModelPath()).first->draw(position, WHITE, model->getSize());
+        }
     }
 
     void GraphicSystem::displayCollidable(std::shared_ptr<IEntity> &entity) const
