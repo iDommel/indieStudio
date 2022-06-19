@@ -34,7 +34,7 @@ namespace indie
     class GameSystem : public ISystem
     {
     public:
-        GameSystem() : _aiSystem(_collideSystem) { nbr_player = 4; };
+        GameSystem() : _aiSystem(_collideSystem) { nbr_player = 4; nbr_ai = 0; };
 
         void init(SceneManager &manager) final;
         void update(SceneManager &manager, uint64_t deltaTime) final;
@@ -59,6 +59,10 @@ namespace indie
 
         static void setNbrPlayer(unsigned int nbr) { nbr_player = nbr; };
 
+        static unsigned int getNbrAi() { return nbr_ai; };
+
+        static void setNbrAi(unsigned int nbr) { nbr_ai = nbr; };
+
     private:
         std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createSplashScreen();
@@ -80,6 +84,7 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         static unsigned int nbr_player;
+        static unsigned int nbr_ai;
         int timeElasped = 0;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         void updatePlayerUI(SceneManager &, std::vector<std::shared_ptr<IEntity>> &);
