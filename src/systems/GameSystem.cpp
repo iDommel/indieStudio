@@ -714,12 +714,12 @@ namespace indie
                         auto player = Component::castComponent<Player>((*collider)[IComponent::Type::PLAYER]);
                         player->kill();
                         GameSystem::setPlaySupporters(true);
-                        GameSystem::setStartTime(std::chrono::system_clock::now());
+                        GameSystem::setStartTime(std::chrono::high_resolution_clock::now());
                     } else if (collider->hasTag(IEntity::Tags::AI)) {
                         auto ai = Component::castComponent<AIPlayer>((*collider)[IComponent::Type::AI]);
                         sceneManager.getCurrentScene().removeEntity(ai->getRadar());
                         GameSystem::setPlaySupporters(true);
-                        GameSystem::setStartTime(std::chrono::system_clock::now());
+                        GameSystem::setStartTime(std::chrono::high_resolution_clock::now());
 
                     } else if (!collider->hasTag(IEntity::Tags::PLAYER)) {
                         auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
