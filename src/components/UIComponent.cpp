@@ -7,7 +7,8 @@
 
 #include "raylib.h"
 #include "UIComponent.hpp"
-
+#include "Position.hpp"
+#include "Window.hpp"
 namespace indie
 {
 
@@ -30,8 +31,18 @@ namespace indie
 
     void UIComponent::update()
     {
+        const int offset = 20;
+        const int textWidth = 200;
+        const Position uiPos[4] = {
+            Position(offset, offset),
+            Position(Window::getScreenWidth() - (textWidth + offset), offset),
+            Position(offset, Window::getScreenHeight() - (textWidth + offset)),
+            Position(Window::getScreenWidth() - (textWidth + offset), Window::getScreenHeight() - (textWidth + offset))};
+
         if (_player && _text && !_player->isDead()) {
+            auto textPos = Component::castComponent<Position>((*_textToDestroy)[IComponent::Type::POSITION]);
             int id = _player->getId();
+            *textPos = uiPos[id - 1];
             int nbBombs = _player->getNbBomb();
             int speed = _player->getSpeed();
             int power = _player->getBlastPower();

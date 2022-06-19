@@ -780,7 +780,6 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
-        createPlayer(*scene, KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_END, 0, {-10, 0, -10});
         createMusic(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
@@ -904,19 +903,20 @@ namespace indie
         scene.addEntities({player, radar});
         aiComponent->setRadar(radar);
     }
-
+    static const int offset = 20;
+    static const int textWidth = 200;
     const Position GameSystem::_uiPos[4] = {
-        Position(0, 0),
-        Position(800 - 80, 0),
-        Position(0, 600 - 80),
-        Position(800 - 80, 600 - 80)};
+        Position(offset, 0),
+        Position(800 - (textWidth + offset), 0),
+        Position(0, 600 - (textWidth + offset)),
+        Position(800 - (textWidth + offset), 600 - (textWidth + offset))};
 
     void GameSystem::createPlayerUI(IScene &scene, std::shared_ptr<IEntity> player)
     {
         std::shared_ptr<Player> playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
         int id = playerComp->getId();
         std::shared_ptr<Entity> textEntity = std::make_shared<Entity>();
-        std::shared_ptr<Position> uiPos = std::make_shared<Position>(_uiPos[id]);
+        std::shared_ptr<Position> uiPos = std::make_shared<Position>(_uiPos[id - 1]);
         std::shared_ptr<String> uiText = std::make_shared<String>("", "", 16.0f);
 
         std::shared_ptr<Entity> uiEntity = std::make_shared<Entity>();
