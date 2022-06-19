@@ -241,6 +241,8 @@ namespace indie
                     auto velocity = Component::castComponent<Velocity>((*renderable)[IComponent::Type::VELOCITY]);
                     if (velocity->x != 0 || velocity->z != 0) {
                         component->getCurrentFrame()++;
+                        if (component->getCurrentFrame() >= component->getNbFrames())
+                            component->getCurrentFrame() = 0;
                     }
                 } else {
                     component->getCurrentFrame()++;
