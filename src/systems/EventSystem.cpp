@@ -120,7 +120,7 @@ namespace indie
 
     void EventSystem::destroy()
     {
-        std::cout << "EventSystem destroy" << std::endl;
+        std::cerr << "EventSystem destroy" << std::endl;
     }
 
     void EventSystem::loadEntity(std::shared_ptr<IEntity> entity)

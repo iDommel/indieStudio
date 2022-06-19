@@ -39,6 +39,8 @@ namespace indie
          {{IComponent::Type::BONUS, IComponent::Type::POSITION}}},
         {Entity::Tags::PLAYER,
          {{IComponent::Type::PLAYER}}},
+        {Entity::Tags::AESTHETIC,
+         {{IComponent::Type::PARTICLES}}},
         {Entity::Tags::BOMB,
          {{IComponent::Type::BOMB}}},
         {Entity::Tags::TIMED,

@@ -25,6 +25,7 @@
 #include "HitboxComponent.hpp"
 #include "ModelAnim.hpp"
 #include "ModelAnimation.hpp"
+#include "ParticleCloud.hpp"
 
 namespace indie
 {
@@ -34,7 +35,7 @@ namespace indie
     }
     void GraphicSystem::init(SceneManager &sceneManager)
     {
-        std::cout << "GraphicSystem::init" << std::endl;
+        std::cerr << "GraphicSystem::init" << std::endl;
         _window = std::make_unique<Window>(800, 600, FLAG_WINDOW_RESIZABLE, "Indie Studio");
 
         for (auto &scene : sceneManager.getScenes()) {
@@ -73,8 +74,10 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
-                displayCollidable(e);
+            for (auto&e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
+                displayParticles(e);
+            // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+            //     displayCollidable(e);
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -86,17 +89,17 @@ namespace indie
 
     void GraphicSystem::destroy()
     {
-        std::cout << "GraphicSystem::destroy" << std::endl;
+        std::cerr << "GraphicSystem::destroy" << std::endl;
     }
 
     void GraphicSystem::loadEntity(std::shared_ptr<IEntity> entity)
     {
         if (entity->hasTag(IEntity::Tags::SPRITE_2D)) {
-            std::cout << "loadSprite" << std::endl;
+            std::cerr << "loadSprite" << std::endl;
             loadSprite(entity);
         }
         if (entity->hasTag(IEntity::Tags::RENDERABLE_3D)) {
-            std::cout << "loadModel" << std::endl;
+            std::cerr << "loadModel" << std::endl;
             loadModel(entity);
         }
     }
@@ -155,6 +158,19 @@ namespace indie
         }
     }
 
+    void GraphicSystem::displayParticles(std::shared_ptr<IEntity> &entity) const
+    {
+        static auto sphere = Sphere(1, BLUE);
+        auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
+        std::shared_ptr<indie::ParticleCloud> particlesCloud  = nullptr;
+
+        if (particlesCloudEntity == nullptr)
+            return;
+        particlesCloud = Component::castComponent<ParticleCloud>(particlesCloudEntity);
+        for (auto &position : particlesCloud->getPos())
+            Shape3D::drawSphere(position, sphere.getRadius(), sphere.getColor());
+    }
+
     void GraphicSystem::displayModel(std::shared_ptr<IEntity> &entity)
     {
         auto components = entity->getFilteredComponents({IComponent::Type::MODEL, IComponent::Type::POSITION});
@@ -198,9 +214,6 @@ namespace indie
         if (hitbox->is3D() && !hitbox->isInitialized()) {
             auto box = _models[model->getModelPath()].first->getBoundingBox();
             auto pos = hitbox->getBBox().max;
-            std::cout << "box max : " << box.max.x << " " << box.max.y << " " << box.max.z << std::endl;
-            std::cout << "box min : " << box.min.x << " " << box.min.y << " " << box.min.z << std::endl;
-            std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
             box.max.x += pos.x;
             box.max.y += pos.y;
             box.max.z += pos.z;

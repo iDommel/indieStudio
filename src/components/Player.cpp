@@ -12,6 +12,9 @@
 #include <cmath>
 #include <algorithm>
 
+#include "raylib.h"
+
+#include "Player.hpp"
 #include "ButtonCallbacks.hpp"
 #include "Entity.hpp"
 #include "Position.hpp"
@@ -19,6 +22,7 @@
 #include "Velocity.hpp"
 #include "HitboxComponent.hpp"
 #include "Bomb.hpp"
+#include "SoundComponent.hpp"
 #include "Bonus.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
@@ -153,6 +157,7 @@ namespace indie
             return;
 
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
+        std::shared_ptr<Entity> timerSound = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
         Vector3 size = {GAME_TILE_SIZE, GAME_TILE_SIZE, GAME_TILE_SIZE};
         Vector3 bPos = {std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE - GAME_TILE_SIZE / 2};
@@ -162,7 +167,8 @@ namespace indie
             .addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
             .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
         _bombs.push_back(bomb);
-        manager.getCurrentScene().addEntity(bomb);
+        timerSound->addComponent(std::make_shared<SoundComponent>("sound_det"));
+        manager.getCurrentScene().addEntity(bomb).addEntity(timerSound);
     }
 
     void Player::updateBombsVec()

@@ -72,7 +72,7 @@ namespace indie
 
     void CollideSystem::destroy()
     {
-        std::cout << "CollideSystem::destroy" << std::endl;
+        std::cerr << "CollideSystem::destroy" << std::endl;
         _collidables3D.clear();
         _collidables2D.clear();
     }

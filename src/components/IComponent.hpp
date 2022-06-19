@@ -35,6 +35,7 @@ namespace indie
             CUBE,
             GRID,
             ANIMATION,
+            PARTICLES,
             BOMB,
             TIMER,
             DESTRUCTIBLE,
