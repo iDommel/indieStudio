@@ -79,7 +79,7 @@ namespace indie
         void moveVertical(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
 
         void kill();
-        bool isDead();
+        bool isDead() const;
         std::string getUp();
         std::string getDown();
         std::string getLeft();
