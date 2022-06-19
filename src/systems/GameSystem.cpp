@@ -71,6 +71,7 @@ namespace indie
         {KEY_BACKSPACE, "backspace"},
         {KEY_ESCAPE, "escape"},
         {KEY_END, "end"},
+        {KEY_RIGHT_CONTROL, "right_ctrl"},
         {KEY_A, "A"},
         {KEY_B, "B"},
         {KEY_C, "C"},
@@ -235,20 +236,16 @@ namespace indie
         _collideSystem.update(sceneManager, dt);
         auto renderables = sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D];
         for (auto &renderable : renderables) {
-            if (renderable->hasComponent({IComponent::Type::ANIMATION})) {
+            if (renderable->hasComponent(IComponent::Type::ANIMATION)) {
                 auto component = Component::castComponent<ModelAnim>((*renderable)[IComponent::Type::ANIMATION]);
-                if (renderable->hasComponent({IComponent::Type::VELOCITY}) && renderable->hasComponent({IComponent::Type::PLAYER})) {
-                    auto velocity = Component::castComponent<Velocity>((*renderable)[IComponent::Type::VELOCITY]);
-                    if (velocity->x != 0 || velocity->z != 0) {
-                        component->getCurrentFrame()++;
-                        if (component->getCurrentFrame() >= component->getNbFrames())
-                            component->getCurrentFrame() = 0;
-                    }
-                } else {
-                    component->getCurrentFrame()++;
-                    if (component->getCurrentFrame() >= component->getNbFrames())
-                        component->getCurrentFrame() = 0;
-                }
+                if (component->getNbFrames() == -1)
+                    continue;
+                component->triggerPlay(renderable);
+                if (!component->shouldPlay())
+                    continue;
+                component->getCurrentFrame()++;
+                if (component->getCurrentFrame() >= component->getNbFrames())
+                    component->getCurrentFrame() = 0;
             }
         }
         if (SceneManager::getCurrentSceneType() == SceneManager::SceneType::GAME) {
@@ -465,6 +462,111 @@ namespace indie
         entity->addComponent(eventListener);
     }
 
+    bool GameSystem::_playSupporters = false;
+    int GameSystem::_nbFrame = 0;
+    std::chrono::time_point<std::chrono::high_resolution_clock> GameSystem::_startTime;
+
+    void GameSystem::setPlaySupporters(bool play)
+    {
+        _playSupporters = play;
+    }
+
+    bool GameSystem::getPlaySupporters()
+    {
+        return _playSupporters;
+    }
+
+    void GameSystem::setStartTime(std::chrono::time_point<std::chrono::high_resolution_clock> startTime)
+    {
+        _startTime = startTime;
+    }
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> GameSystem::getStartTime()
+    {
+        return _startTime;
+    }
+
+    void GameSystem::setNbFrame(int nbFrame)
+    {
+        _nbFrame = nbFrame;
+    }
+
+    int GameSystem::getNbFrame()
+    {
+        return _nbFrame;
+    }
+
+    void GameSystem::createSupporter(IScene &scene, Position pos)
+    {
+        std::shared_ptr<Entity> supporterEntity = std::make_shared<Entity>();
+        std::shared_ptr<Position> posComp = std::make_shared<Position>(pos);
+        std::shared_ptr<Model3D> modelCom = std::make_shared<Model3D>("assets_test/guy.iqm", "assets_test/guytex.png");
+        std::shared_ptr<ModelAnim> modelAnimComp = std::make_shared<ModelAnim>("assets_test/guyanim.iqm");
+        modelAnimComp->getNbFrames() = 61;
+        modelAnimComp->setTrigger([](std::shared_ptr<IEntity> e) {
+            auto animComp = Component::castComponent<ModelAnim>((*e)[IComponent::Type::ANIMATION]);
+            auto now = std::chrono::high_resolution_clock::now();
+            auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(now - GameSystem::getStartTime()).count();
+            GameSystem::setNbFrame(animComp->getCurrentFrame());
+
+            if (GameSystem::getPlaySupporters() && delta < 2050) {
+                animComp->setShouldPlay(true);
+            } else if (GameSystem::getPlaySupporters() && GameSystem::getNbFrame() == 1) {
+                GameSystem::setPlaySupporters(false);
+                animComp->setShouldPlay(false);
+            } else {
+                animComp->setShouldPlay(false);
+            }
+        });
+        supporterEntity->addComponent(posComp)
+            .addComponent(modelCom)
+            .addComponent(modelAnimComp);
+        scene.addEntity(supporterEntity);
+    }
+
+    void GameSystem::createSupporters(IScene &scene)
+    {
+        createSupporter(scene, Position(0, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(15, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(11, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(23, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(5, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(20, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(35, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(50, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(55, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(60, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(70, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(65, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(80, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(85, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(69, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(55, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(60, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(130, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(125, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(110, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(115, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(119, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(50, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(515, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(511, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(523, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(55, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(520, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(535, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(550, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(555, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(560, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(570, GAME_TILE_SIZE, -10));
+        createSupporter(scene, Position(565, GAME_TILE_SIZE, -20));
+        createSupporter(scene, Position(580, GAME_TILE_SIZE, -5));
+        createSupporter(scene, Position(585, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(569, GAME_TILE_SIZE, -3));
+        createSupporter(scene, Position(555, GAME_TILE_SIZE, -15));
+        createSupporter(scene, Position(560, GAME_TILE_SIZE, -3));
+    }
+
     void GameSystem::createNumberEvent(std::shared_ptr<Entity> &entity, int _nbr_player)
     {
         MouseCallbacks selector(
@@ -611,9 +713,14 @@ namespace indie
                     if (collider->hasTag(IEntity::Tags::PLAYER)) {
                         auto player = Component::castComponent<Player>((*collider)[IComponent::Type::PLAYER]);
                         player->kill();
+                        GameSystem::setPlaySupporters(true);
+                        GameSystem::setStartTime(std::chrono::high_resolution_clock::now());
                     } else if (collider->hasTag(IEntity::Tags::AI)) {
                         auto ai = Component::castComponent<AIPlayer>((*collider)[IComponent::Type::AI]);
                         sceneManager.getCurrentScene().removeEntity(ai->getRadar());
+                        GameSystem::setPlaySupporters(true);
+                        GameSystem::setStartTime(std::chrono::high_resolution_clock::now());
+
                     } else if (!collider->hasTag(IEntity::Tags::PLAYER)) {
                         auto tempPos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
                         int chance = std::rand() % 4;
@@ -769,7 +876,7 @@ namespace indie
         createNumberEvent(entity7, 4);
         createSceneEvent(entity8, SceneManager::SceneType::GAME);
 
-        scene->addEntities({entity1, entity2, entity3 , entity5, entity6, entity7 ,entity8, entity9});
+        scene->addEntities({entity1, entity2, entity3, entity5, entity6, entity7, entity8, entity9});
         return scene;
     }
 
@@ -792,6 +899,7 @@ namespace indie
         Vector3 camPos = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2 /* / 8 * 5 */, 250.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE};
         Vector3 camTarget = {GAME_MAP_WIDTH * GAME_TILE_SIZE / 2, 0.0f, GAME_MAP_HEIGHT * GAME_TILE_SIZE / 2};
 
+        createSupporters(*scene);
         createMusic(*scene);
         generateMap("assets/maps/map2.txt", *scene);
         scene->addEntities({createCamera(camPos, camTarget), entity2});
