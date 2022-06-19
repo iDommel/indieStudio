@@ -26,6 +26,7 @@
 #include "Bonus.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
+#include "Model3D.hpp"
 
 namespace indie
 {
@@ -169,7 +170,7 @@ namespace indie
 
         bomb->addComponent(std::make_shared<Bomb>(_blastPower))
             .addComponent(std::make_shared<Position>(std::roundf(pos->x / GAME_TILE_SIZE) * GAME_TILE_SIZE, pos->y, std::roundf(pos->z / GAME_TILE_SIZE) * GAME_TILE_SIZE))
-            .addComponent(std::make_shared<Sphere>(GAME_TILE_SIZE / 2, BLUE))
+            .addComponent(std::make_shared<Model3D>("assets/other_asset/water_bomb/water_bomb.obj", "assets/other_asset/water_bomb/water_bomb.png", 2.0f))
             .addComponent(std::make_shared<Hitbox>(CollideSystem::makeBBoxFromSizePos(size, bPos)));
         _bombs.push_back(bomb);
         timerSound->addComponent(std::make_shared<SoundComponent>("sound_det"));

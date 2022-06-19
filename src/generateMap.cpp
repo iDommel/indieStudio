@@ -94,7 +94,7 @@ namespace indie
             createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
             nb++;
         } else if (nb < 4) {
-            createAIPlayer(scene, nb, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
+            createAIPlayer(scene, nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
             nb++;
         } else {
             nb = 0;
