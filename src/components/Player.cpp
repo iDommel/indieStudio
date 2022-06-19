@@ -159,9 +159,9 @@ namespace indie
 
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
-        if (_bombs.size() >= _nbBomb)
+        int bombNb = _bombs.size();
+        if (bombNb >= _nbBomb)
             return;
-
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
         std::shared_ptr<Entity> timerSound = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);
