@@ -85,7 +85,6 @@ class Camera {
         bool _snapMode = false;
         /// @brief _id, used to identify the camera
         int _id;
-
         std::shared_ptr<Camera3D> _camera = nullptr;
 };
 }

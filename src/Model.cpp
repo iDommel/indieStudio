@@ -1,7 +1,15 @@
-#include "Model.hpp"
-#include <iostream>
+/*
+** EPITECH PROJECT, 2022
+** indieStudio
+** File description:
+** Model
+*/
 
 #include "raylib.h"
+
+#include <iostream>
+
+#include "Model.hpp"
 
 namespace indie
 {

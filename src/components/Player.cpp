@@ -5,14 +5,10 @@
 ** Player
 */
 #include "raylib.h"
-#include "Player.hpp"
 
 #include <functional>
-#include <algorithm>
 #include <cmath>
 #include <algorithm>
-
-#include "raylib.h"
 
 #include "Player.hpp"
 #include "ButtonCallbacks.hpp"
@@ -31,7 +27,8 @@
 namespace indie
 {
 
-    Player::Player(int id, int _up, int _down, int _left, int _right, int _bomb) : Component(Type::PLAYER), _id(id)
+    Player::Player(int id, int _up, int _down, int _left, int _right, int _bomb):
+    Component(Type::PLAYER), _id(id)
     {
         UP = GameSystem::getBinding(_up);
         DOWN = GameSystem::getBinding(_down);
@@ -67,6 +64,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+
         model->setRotation(90.0f);
         _isRight = true;
         move(vel);
@@ -75,6 +73,7 @@ namespace indie
     void Player::stopRight(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         _isRight = false;
         move(vel);
     }
@@ -83,6 +82,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+
         _isLeft = true;
         model->setRotation(270.0f);
         move(vel);
@@ -91,6 +91,7 @@ namespace indie
     void Player::stopLeft(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         _isLeft = false;
         move(vel);
     }
@@ -99,6 +100,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+
         model->setRotation(180.0f);
         _isUp = true;
         move(vel);
@@ -107,18 +109,21 @@ namespace indie
     void Player::moveHorizontal(SceneManager &, std::shared_ptr<IEntity> entity, float value)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         vel->x = (_speed * value);
     }
 
     void Player::moveVertical(SceneManager &, std::shared_ptr<IEntity> entity, float value)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         vel->z = (_speed * value);
     }
 
     void Player::stopUp(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         _isUp = false;
         move(vel);
     }
@@ -127,6 +132,7 @@ namespace indie
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
         auto model = Component::castComponent<Model3D>((*entity)[Component::Type::MODEL]);
+
         model->setRotation(0.0f);
         _isDown = true;
         move(vel);
@@ -135,6 +141,7 @@ namespace indie
     void Player::stopDown(SceneManager &, std::shared_ptr<IEntity> entity, float)
     {
         auto vel = Component::castComponent<Velocity>((*entity)[Component::Type::VELOCITY]);
+
         _isDown = false;
         move(vel);
     }
@@ -168,8 +175,10 @@ namespace indie
     void Player::generateBomb(SceneManager &manager, std::shared_ptr<IEntity> entity)
     {
         int bombNb = _bombs.size();
+    
         if (bombNb >= _nbBomb)
             return;
+
         std::shared_ptr<Entity> bomb = std::make_shared<Entity>();
         std::shared_ptr<Entity> timerSound = std::make_shared<Entity>();
         auto pos = Component::castComponent<Position>((*entity)[Component::Type::POSITION]);

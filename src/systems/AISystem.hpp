@@ -47,8 +47,6 @@ namespace indie
         void poseBomb(AIPlayer &ai, SceneManager &sceneManager, std::array<std::array<char, 5>, 5> &map);
         bool escape(AIPlayer &ai, std::array<std::array<char, 5>, 5> &map, std::shared_ptr<IEntity> entity);
 
-        void displayMap(std::array<std::array<char, 5>, 5> &map);
-
         CollideSystem &_collideSystem;
     };
 }

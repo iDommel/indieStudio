@@ -9,11 +9,10 @@
 #define CORE_HPP
 
 #include <map>
+#include <iostream>
 
 #include "systems/ISystem.hpp"
 #include "SceneManager.hpp"
-
-#include <iostream>
 
 #define UPDATE_DELTA 17
 

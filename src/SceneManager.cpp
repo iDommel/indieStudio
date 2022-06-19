@@ -6,12 +6,13 @@
 */
 
 #include "raylib.h"
-#include "GameSystem.hpp"
-#include "SceneManager.hpp"
 
 #include <iostream>
 #include <stdexcept>
 #include <string>
+
+#include "GameSystem.hpp"
+#include "SceneManager.hpp"
 
 namespace indie
 {
@@ -104,12 +105,14 @@ namespace indie
     SceneManager::SceneType &SceneManager::getCurrentSceneType()
     {
         static SceneType currentSceneType = SceneType::NONE;
+
         return currentSceneType;
     }
 
     SceneManager::SceneType &SceneManager::getPreviousSceneType()
     {
         static SceneType previousSceneType = SceneType::NONE;
+
         return previousSceneType;
     }
 
@@ -124,6 +127,7 @@ namespace indie
     std::vector<SceneManager::SceneType> SceneManager::getSceneTypeList()
     {
         std::vector<SceneType> sceneTypeList;
+
         for (auto &scene : _scenes) {
             sceneTypeList.push_back(scene.first);
         }

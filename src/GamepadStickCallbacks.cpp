@@ -14,8 +14,8 @@ namespace indie
     }
     GamepadStickCallbacks::GamepadStickCallbacks(std::function<void(SceneManager &, float)> negative,
                                                  std::function<void(SceneManager &)> null,
-                                                 std::function<void(SceneManager &, float)> positive)
-        : _negative(negative),
+                                                 std::function<void(SceneManager &, float)> positive):
+    _negative(negative),
           _null(null),
           _positive(positive)
     {
@@ -24,4 +24,4 @@ namespace indie
     GamepadStickCallbacks::~GamepadStickCallbacks()
     {
     }
-}  // namespace indie
+} 

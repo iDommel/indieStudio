@@ -7,9 +7,11 @@
 
 #ifndef BUTTONCALLBACKS_HPP_
 #define BUTTONCALLBACKS_HPP_
+
 #include <functional>
 
 #include "SceneManager.hpp"
+
 namespace indie
 {
     /// @brief Class to group all pressed, released and down callbacks for an event
@@ -40,6 +42,6 @@ namespace indie
     protected:
     private:
     };
-}  // namespace indie
+} 
 
 #endif /* !BUTTONCALLBACKS_HPP_ */

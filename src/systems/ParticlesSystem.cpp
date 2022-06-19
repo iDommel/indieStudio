@@ -5,9 +5,9 @@
 ** ParticlesSystem
 */
 
-#include <iostream>
-
 #include "raylib.h"
+
+#include <iostream>
 
 #include "ParticlesSystem.hpp"
 #include "IEntity.hpp"

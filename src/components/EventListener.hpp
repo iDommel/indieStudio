@@ -125,6 +125,6 @@ namespace indie
 
         std::map<int, std::map<int, std::function<void(SceneManager &, float)>>> _gamepadStickMap;
     };
-}  // namespace indie
+}
 
 #endif /* !EVENTLISTENER_HPP_ */

@@ -4,13 +4,12 @@
 ** File description:
 ** GraphicSystem.cpp
 */
-#include <iostream>
 
 #include "raylib.h"
 
-#include "GraphicSystem.hpp"
 #include <iostream>
 
+#include "GraphicSystem.hpp"
 #include "CameraComponent.hpp"
 #include "Cube.hpp"
 #include "Grid.hpp"
@@ -53,18 +52,16 @@ namespace indie
         for (auto &scene : sceneManager.getScenes())
             for (auto &e : (*scene.second)[IEntity::Tags::TEXT])
                 loadText(e);
-
         if (_window->shouldClose()) {
             sceneManager.setShouldClose(true);
             return;
         }
         _window->beginDraw();
         _window->clearBackground(RAYWHITE);
-
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CAMERA]) {
             auto camComponent = (*e)[IComponent::Type::CAMERA];
-
             auto cam = Component::castComponent<CameraComponent>(camComponent);
+
             cam->getCamera().beginDrawScope();
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::RENDERABLE_3D])
                 displayModel(e);
@@ -76,8 +73,8 @@ namespace indie
                 displayCube(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
                 displayParticles(e);
-            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
-                displayCollidable(e);
+            /* for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
+                displayCollidable(e); */
             cam->getCamera().endDrawScope();
         }
         for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::SPRITE_2D])
@@ -121,9 +118,9 @@ namespace indie
             _textures[sprite->getValue()].second++;
         else
             _textures[sprite->getValue()] = std::make_pair(std::make_unique<Texture>(sprite->getValue()), 1);
-
         if (sprite->getNbFrame() == 0)
             return;
+
         auto spriteRect = Component::castComponent<Rect>((*entity)[IComponent::Type::RECT]);
 
         spriteRect->width = _textures[sprite->getValue()].first->getWidth() / sprite->getNbFrame();
@@ -195,6 +192,7 @@ namespace indie
     {
         auto components = entity->getFilteredComponents({IComponent::Type::HITBOX});
         auto hitbox = Component::castComponent<Hitbox>(components[0]);
+
         if (hitbox->is3D())
             ::DrawBoundingBox(hitbox->getBBox(), RED);
     }
@@ -305,7 +303,6 @@ namespace indie
             _animations[anim->getAnimPath()].second++;
         else
             _animations[anim->getAnimPath()] = std::make_pair(std::make_unique<ModelAnimation>(anim->getAnimPath()), 1);
-
         if (anim->getNbFrames() < 0) {
             anim->getNbFrames() = _animations[anim->getAnimPath()].first->getFrameCount();
         }

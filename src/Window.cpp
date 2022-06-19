@@ -4,9 +4,10 @@
 ** File description:
 ** window
 */
-#include "Window.hpp"
 
 #include "raylib.h"
+
+#include "Window.hpp"
 
 namespace indie
 {
@@ -56,6 +57,7 @@ namespace indie
     Vector2 Window::getMousePosition()
     {
         Vector2 mp = {0, 0};
+
         mp = GetMousePosition();
         return (mp);
     }
@@ -184,12 +186,14 @@ namespace indie
     int Window::getScreenWidth()
     {
         int position = GetScreenWidth();
+
         return (position);
     }
 
     int Window::getScreenHeight()
     {
         int position = GetScreenHeight();
+
         return (position);
     }
 }

@@ -8,11 +8,11 @@
 #ifndef PARTICLECLOUD_HPP_
 #define PARTICLECLOUD_HPP_
 
-#include "Component.hpp"
-#include "Position.hpp"
-
 #include <vector>
 #include <random>
+
+#include "Component.hpp"
+#include "Position.hpp"
 
 struct Vector3;
 

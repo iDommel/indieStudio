@@ -5,13 +5,14 @@
 ** generateMap.cpp
 */
 
+#include "raylib.h"
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <array>
-#include "raylib.h"
 
 #include "IScene.hpp"
 #include "Entity.hpp"
@@ -25,7 +26,6 @@
 
 namespace indie
 {
-
     static const std::string tilesFilepath = "assets/ground_asset/sand_asset_basic/basicBeach";
     static const std::string indestructibleBordersFile = "assets/wall asset/plamier_wall/palmier_wall_1";
     static const std::string indestructibleWallFile = "assets/wall asset/plamier_wall/palmier_wall_1";
@@ -68,7 +68,6 @@ namespace indie
             map[y][x] = 'H';
             scene.addEntity(createIndestructibleWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE, indestructibleWallFile));
         }
-
         for (int n = 0; n < GAME_NB_DESTRUCTIBLE_WALL; n++) {
             int x = std::rand() % (GAME_MAP_WIDTH - 2) + 1;
             int y = std::rand() % (GAME_MAP_HEIGHT - 2) + 1;
@@ -79,7 +78,6 @@ namespace indie
             map[y][x] = 'D';
             scene.addEntity(createWall(x * GAME_TILE_SIZE, y * GAME_TILE_SIZE));
         }
-
         return 0;
     }
 
@@ -91,6 +89,7 @@ namespace indie
             {KEY_D, KEY_A, KEY_W, KEY_S, KEY_E},
             {KEY_L, KEY_J, KEY_I, KEY_K, KEY_O},
             {KEY_H, KEY_F, KEY_T, KEY_G, KEY_Y}};
+
         if (nb < nbr_player) {
             createPlayer(scene, keys[nb][0], keys[nb][1], keys[nb][2], keys[nb][3], keys[nb][4], nb + 1, {x * GAME_TILE_SIZE * 1.0f, 0.0f, y * GAME_TILE_SIZE * 1.0f});
             nb++;

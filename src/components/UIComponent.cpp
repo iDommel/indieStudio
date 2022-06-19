@@ -6,9 +6,11 @@
 */
 
 #include "raylib.h"
+
 #include "UIComponent.hpp"
 #include "Position.hpp"
 #include "Window.hpp"
+
 namespace indie
 {
 
@@ -62,4 +64,4 @@ namespace indie
     {
         return _textToDestroy;
     }
-}  // namespace indie
+} 

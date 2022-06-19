@@ -103,30 +103,29 @@ namespace indie
         void createNumberEvent(std::shared_ptr<Entity> &entity, int nbr_player);
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
-        static unsigned int nbr_player;
-        static unsigned int nbr_ai;
-        int timeElasped = 0;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         void updatePlayerUI(SceneManager &, std::vector<std::shared_ptr<IEntity>> &);
         static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         void updateAIs(SceneManager &scene, uint64_t dt);
-        void updateBonuses(SceneManager &scene, uint64_t dt);
         void updateBombs(SceneManager &scene, uint64_t dt);
-        CollideSystem _collideSystem;
-        AISystem _aiSystem;
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
         void createBonus(IScene &scene, const Position &pos);
-        /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
         void generateMap(const std::string &filename, IScene &scene);
         void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
+
+        int timeElasped = 0;
+        static unsigned int nbr_player;
+        static unsigned int nbr_ai;
         static const Position _uiPos[4];
         static const std::map<int, std::string> _bindings;
         static bool _playSupporters;
         static std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
         static int _nbFrame;
+        CollideSystem _collideSystem;
+        AISystem _aiSystem;
     };
 }
 

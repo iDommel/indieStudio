@@ -5,10 +5,10 @@
 ** Entity.cpp
 */
 
-#include "Entity.hpp"
-
 #include <algorithm>
 #include <iostream>
+
+#include "Entity.hpp"
 
 namespace indie
 {
