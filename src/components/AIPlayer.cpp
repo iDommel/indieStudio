@@ -20,6 +20,7 @@
 #include "Bomb.hpp"
 #include "Sphere.hpp"
 #include "GameSystem.hpp"
+#include <algorithm>
 
 namespace indie
 {

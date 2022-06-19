@@ -217,7 +217,7 @@ namespace indie
         else if (dirs[dir] == DIRECTION::RIGHT)
             ai.moveRight(entity);
 
-        std::cout << "DIR: " << (int)dirs[dir] << std::endl << std::endl;
+        // std::cout << "DIR: " << (int)dirs[dir] << std::endl << std::endl;
         return true;
     }
 
@@ -272,7 +272,7 @@ namespace indie
         // (map[y - 1][x + 1] != MAP_EMPTY && !(map[y - 1][x] == MAP_EMPTY || map[y][x + 1] == MAP_EMPTY)))
         //     return;
         ai.generateBomb(sceneManager, posBomb);
-        displayMap(map);
+        // displayMap(map);
     }
 
     void AISystem::displayMap(std::array<std::array<char, 5>, 5> &map)

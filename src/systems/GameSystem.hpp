@@ -27,7 +27,6 @@ struct Vector3;
 
 namespace indie
 {
-
     class IEntity;
     class Scene;
     class Position;
@@ -53,7 +52,13 @@ namespace indie
          */
         void unloadEntity(std::shared_ptr<IEntity> entity) final;
 
-        void changeBindings(SceneManager &SceneManager, int id_player, int button);
+        static const std::string getBinding(int keyboard);
+
+        static int getTag(std::string key);
+
+        static unsigned int getNbrPlayer() { return nbr_player; };
+
+        static void setNbrPlayer(unsigned int nbr) { nbr_player = nbr; };
 
     private:
         std::unique_ptr<IScene> createScene();
@@ -64,6 +69,8 @@ namespace indie
         std::unique_ptr<IScene> createControllerMenu();
         std::unique_ptr<IScene> createPreGameMenu();
         std::unique_ptr<IScene> createPauseMenu();
+        std::unique_ptr<IScene> createEndMenu();
+        void changeBindings(SceneManager &SceneManager, int id_player, int button);
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
         void createSoundEvent(std::shared_ptr<Entity> &sound, std::string value);
         std::shared_ptr<Entity> createImage(std::string path, Position position, int heigh, int width);
@@ -73,7 +80,7 @@ namespace indie
         void replaceTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         void updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText);
         static unsigned int nbr_player;
-        int timeElasped;
+        int timeElasped = 0;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
         static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
@@ -85,12 +92,12 @@ namespace indie
         std::shared_ptr<IEntity> createCamera(Vector3 camPos, Vector3 camTarget);
         void createBonus(IScene &scene, const Position &pos);
         /// @brief Create a map of the game (TODO: trasnform method to none static to avoid forwarding the scene)
-        static void generateMap(const std::string &filename, IScene &scene);
-        static void createSpawn(int x, int y, IScene &scene);
+        void generateMap(const std::string &filename, IScene &scene);
+        void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
+        static const std::map <int, std::string> _bindings;
     };
-
 }
 
 #endif /* GAME_SYSTEM_HPP */
