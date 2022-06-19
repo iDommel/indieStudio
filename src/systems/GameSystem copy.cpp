@@ -134,11 +134,11 @@ namespace indie
             }
             if (players->changeLeft == 2 || players->changeLeft == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 1];
-                auto text = components->getFilteredComponents({IComponent::Type::TEXT});
+                auto text = components->getFilteredComponents({ IComponent::Type::TEXT});
                 auto value = Component::castComponent<String>(text[0]);
                 value->getValue() = players->getLeft();
                 players->changeLeft = 0;
-            }
+            } 
             if (players->changeRight == 2 || players->changeRight == 0) {
                 auto components = sceneManager.getCurrentScene()[IEntity::Tags::TEXT][firstText + 2];
                 auto text = (*components)[IComponent::Type::TEXT];
@@ -162,7 +162,7 @@ namespace indie
             }
         }
     }
-
+    
     void GameSystem::updateTextBindings(indie::SceneManager &sceneManager, std::shared_ptr<Player> players, int firstText)
     {
         if (players->changeUp == 1) {
@@ -221,7 +221,7 @@ namespace indie
                 auto players = Component::castComponent<Player>((*e)[IComponent::Type::PLAYER]);
                 updateTextBindings(sceneManager, players, firstText);
                 replaceTextBindings(sceneManager, players, firstText);
-                firstText += 5;
+                firstText += 4;
             }
         }
         if (sceneManager.getCurrentSceneType() == SceneManager::SceneType::SPLASH) {
@@ -294,7 +294,7 @@ namespace indie
         _collideSystem.destroy();
     }
 
-    std::shared_ptr<Entity> GameSystem::createImage(std::string path, Position position, int heigh, int width)
+    std::shared_ptr<Entity> GameSystem::createButton(std::string path, Position position, int heigh, int width)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
         std::shared_ptr<Sprite> component = std::make_shared<Sprite>(path);
@@ -337,7 +337,7 @@ namespace indie
                         value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
                     } else if (AudioDevice::getMasterVolume() >= 0.1 && value == "-") {
                         AudioDevice::getMasterVolume() -= 0.1;
-                        AudioDevice::setVolume(AudioDevice::getMasterVolume());
+                        AudioDevice::setVolume(AudioDevice::getMasterVolume() );
                         value2->getValue() = std::to_string(int(AudioDevice::getMasterVolume() * 100));
                     }
                 }
@@ -609,7 +609,7 @@ namespace indie
             auto playerComp = Component::castComponent<Player>((*player)[IComponent::Type::PLAYER]);
             auto hitbox = Component::castComponent<Hitbox>((*player)[IComponent::Type::HITBOX]);
             auto splitVel = *vel;
-            
+
             splitVel.z = 0;
             (*pos) = (*pos) + (splitVel * (float)(dt / 1000.0f));
             (*hitbox) += splitVel * (float)(dt / 1000.0f);
@@ -804,15 +804,15 @@ namespace indie
         std::shared_ptr<Entity> entity5 = createText("Player 2", Position(500, 150), 25);
         std::shared_ptr<Entity> entity6 = createText("Player 3", Position(50, 400), 25);
         std::shared_ptr<Entity> entity7 = createText("Player 4", Position(500, 400), 25);
-        std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(10, 200), 20);
-        std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(10, 450), 20);
-        std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(500, 200), 20);
-        std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:\nBOMB:", Position(500, 450), 20);
+        std::shared_ptr<Entity> entity8 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 200), 20);
+        std::shared_ptr<Entity> entity9 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(10, 450), 20);
+        std::shared_ptr<Entity> entity10 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 200), 20);
+        std::shared_ptr<Entity> entity11 = createText("UP:\nLEFT:\nRIGHT:\nDOWN:", Position(500, 450), 20);
+
         std::shared_ptr<Entity> entity12 = createText("", Position(100, 200), 20);
         std::shared_ptr<Entity> entity13 = createText("", Position(100, 230), 20);
         std::shared_ptr<Entity> entity14 = createText("", Position(100, 260), 20);
         std::shared_ptr<Entity> entity15 = createText("", Position(100, 290), 20);
-        std::shared_ptr<Entity> entity16 = createText("", Position(100, 320), 20);
         std::shared_ptr<Entity> entity18 = createText("", Position(600, 200), 20);
         std::shared_ptr<Entity> entity19 = createText("", Position(600, 230), 20);
         std::shared_ptr<Entity> entity20 = createText("", Position(600, 260), 20);
@@ -834,7 +834,6 @@ namespace indie
         createBindingsEvent(entity13, 0, 1);
         createBindingsEvent(entity14, 0, 2);
         createBindingsEvent(entity15, 0, 3);
-        createBindingsEvent(entity16, 0, 4);
         createBindingsEvent(entity18, 1, 0);
         createBindingsEvent(entity19, 1, 1);
         createBindingsEvent(entity20, 1, 2);
@@ -892,17 +891,16 @@ namespace indie
         return scene;
     }
 
-    std::unique_ptr<IScene> GameSystem::createPauseMenu()
+    std::unique_ptr<IScene> GameSystem::createPauseMenu(SceneManager &sceneManager)
     {
         std::unique_ptr<Scene> scene = std::make_unique<Scene>(std::bind(&GameSystem::createPauseMenu, this));
         std::shared_ptr<Entity> entity = createText("Pause", Position(325, 50), 50);
-        std::shared_ptr<Entity> entity2 = createImage("assets/MainMenu/resume_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity3 = createImage("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity4 = createImage("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
-        std::shared_ptr<Entity> entity5 = createImage("assets/MainMenu/help.png", Position(0, 0), 80, 80);
-        std::shared_ptr<Entity> entity6 = createImage("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 800 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity7 = createImage("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 600 / 2 - 18), 120, 28);
-        std::shared_ptr<Entity> entity8 = createImage("assets/MainMenu/pause.png", Position(0, 0), 800, 600);
+        std::shared_ptr<Entity> entity2 = createButton("assets/MainMenu/resume_unpressed.png", Position(800 / 2 - 60, 400 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity3 = createButton("assets/MainMenu/sound.png", Position(800 - 80, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity4 = createButton("assets/MainMenu/controller.png", Position(0, 600 - 80), 80, 80);
+        std::shared_ptr<Entity> entity5 = createButton("assets/MainMenu/help.png", Position(0, 0), 80, 80);
+        std::shared_ptr<Entity> entity6 = createButton("assets/MainMenu/quit_unpressed.png", Position(800 / 2 - 60, 700 / 2 - 18), 120, 28);
+        std::shared_ptr<Entity> entity7 = createButton("assets/MainMenu/mainmenu_unpressed.png", Position(800 / 2 - 60, 550 / 2 - 18), 120, 28);
 
         createSceneEvent(entity2, SceneManager::SceneType::GAME);
         createSceneEvent(entity3, SceneManager::SceneType::SOUND);
@@ -1136,32 +1134,30 @@ namespace indie
         auto player = Component::castComponent<Player>(component);
 
         switch (button) {
-        case 0:
-            player->changeUp = 1;
-            player->changeDown = 0;
-            player->changeLeft = 0;
-            player->changeRight = 0;
-            break;
-        case 1:
-            player->changeLeft = 1;
-            player->changeDown = 0;
-            player->changeRight = 0;
-            player->changeUp = 0;
-            break;
-        case 2:
-            player->changeRight = 1;
-            player->changeDown = 0;
-            player->changeLeft = 0;
-            player->changeUp = 0;
-            break;
-        case 3:
-            player->changeDown = 1;
-            player->changeLeft = 0;
-            player->changeRight = 0;
-            player->changeUp = 0;
-            break;
-        case 4:
-            player->changeBomb = 1;
+            case 0:
+                player->changeUp = 1;
+                player->changeDown = 0;
+                player->changeLeft = 0;
+                player->changeRight = 0;
+                break;
+            case 1:
+                player->changeLeft = 1;
+                player->changeDown = 0;
+                player->changeRight = 0;
+                player->changeUp = 0;
+                break;
+            case 2:
+                player->changeRight = 1;
+                player->changeDown = 0;
+                player->changeLeft = 0;
+                player->changeUp = 0;
+                break;
+            case 3:
+                player->changeDown = 1;
+                player->changeLeft = 0;
+                player->changeRight = 0;
+                player->changeUp = 0;
+                break;
         }
     }
 }
