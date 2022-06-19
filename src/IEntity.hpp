@@ -35,6 +35,7 @@ namespace indie
             TIMED,
             DESTRUCTIBLE,
             PLAYER,
+            UI,
             AI,
             RADAR
         };

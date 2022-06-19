@@ -59,6 +59,7 @@ target_sources(${PROJECT_NAME}
         src/components/Grid.cpp
         src/components/ParticleCloud.cpp
         src/components/Bomb.cpp
+        src/components/UIComponent.cpp
         src/components/AIPlayer.cpp
 
         test_functions/TestAnimations2D.cpp

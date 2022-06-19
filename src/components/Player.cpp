@@ -188,7 +188,11 @@ namespace indie
         }
     }
 
-    std::string Player::getUp() 
+    int Player::getBlastPower() const
+    {
+        return _blastPower;
+    }
+    std::string Player::getUp()
     {
         return UP;
     }
@@ -213,28 +217,28 @@ namespace indie
         return BOMB;
     }
 
-    int Player::getTagUp() 
+    int Player::getTagUp()
     {
-        return GameSystem::getTag(UP); 
+        return GameSystem::getTag(UP);
     }
 
     int Player::getTagDown()
-    { 
-        return GameSystem::getTag(DOWN); 
+    {
+        return GameSystem::getTag(DOWN);
     }
 
     int Player::getTagLeft()
-    { 
-        return GameSystem::getTag(LEFT); 
+    {
+        return GameSystem::getTag(LEFT);
     }
 
-    int Player::getTagRight() 
-    { 
+    int Player::getTagRight()
+    {
         return GameSystem::getTag(RIGHT);
     }
 
     int Player::getTagBomb()
-    { 
+    {
         return GameSystem::getTag(BOMB);
     }
 
@@ -244,22 +248,32 @@ namespace indie
     }
 
     void Player::setDOWN(std::string _down)
-    { 
+    {
         DOWN = _down;
     }
 
     void Player::setLEFT(std::string _left)
-    { 
+    {
         LEFT = _left;
     }
 
     void Player::setRIGHT(std::string _right)
-    { 
+    {
         RIGHT = _right;
     }
-    
+
     void Player::setBOMB(std::string _bomb)
-    { 
+    {
         BOMB = _bomb;
+    }
+
+    void Player::kill()
+    {
+        _isDead = true;
+    }
+
+    bool Player::isDead() const
+    {
+        return _isDead;
     }
 }

@@ -39,6 +39,7 @@ namespace indie
             BOMB,
             TIMER,
             DESTRUCTIBLE,
+            UI,
             AI,
             RADAR,
             TYPE_NB

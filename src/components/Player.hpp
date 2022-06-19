@@ -54,6 +54,9 @@ namespace indie
         ///@brief Sets the current maximum number of bomb a player can drop
         void setNbBomb(int newNbBomb);
 
+        ///@brief gets the current blast power
+        int getBlastPower() const;
+
         /// @brief sets the velocity of the player to its speed value to the right
         void moveRight(SceneManager &manager, std::shared_ptr<IEntity> entity, float dT);
         /// @brief sets the velocity of the player to 0 to the right
@@ -75,6 +78,8 @@ namespace indie
         /// @brief verticcal movement for gamepad sticks
         void moveVertical(SceneManager &manager, std::shared_ptr<IEntity> entity, float value);
 
+        void kill();
+        bool isDead() const;
         std::string getUp();
         std::string getDown();
         std::string getLeft();
@@ -104,6 +109,7 @@ namespace indie
         int _blastPower;
         int _speed;
         int _id;
+        bool _isDead = false;
         bool _isUp = false;
         bool _isDown = false;
         bool _isLeft = false;

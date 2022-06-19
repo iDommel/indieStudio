@@ -34,7 +34,6 @@ namespace indie
     class GameSystem : public ISystem
     {
     public:
-
         GameSystem() : _aiSystem(_collideSystem) { nbr_player = 4; };
 
         void init(SceneManager &manager) final;
@@ -69,6 +68,7 @@ namespace indie
         std::unique_ptr<IScene> createControllerMenu();
         std::unique_ptr<IScene> createPreGameMenu();
         std::unique_ptr<IScene> createPauseMenu();
+        static void createPlayerUI(IScene &, std::shared_ptr<IEntity>);
         std::unique_ptr<IScene> createEndMenu();
         void changeBindings(SceneManager &SceneManager, int id_player, int button);
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
@@ -82,6 +82,7 @@ namespace indie
         static unsigned int nbr_player;
         int timeElasped = 0;
         static void createPlayer(IScene &scene, int keyRight, int keyLeft, int keyUp, int keyDown, int keyBomb, int id, Position pos);
+        void updatePlayerUI(SceneManager &, std::vector<std::shared_ptr<IEntity>> &);
         static void createAIPlayer(IScene &scene, int id, Position pos);
         void updatePlayers(SceneManager &scene, uint64_t dt);
         void updateAIs(SceneManager &scene, uint64_t dt);
@@ -96,7 +97,8 @@ namespace indie
         void createSpawn(int x, int y, IScene &scene);
         static void createMusic(Scene &scene);
         static void createSound(Scene &scene);
-        static const std::map <int, std::string> _bindings;
+        static const Position _uiPos[4];
+        static const std::map<int, std::string> _bindings;
     };
 }
 
