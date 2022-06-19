@@ -593,7 +593,7 @@ namespace indie
             Vector3 vec = {pos->x, pos->y, pos->z};
             comp->setTimer(comp->getTimer() - dt);
             if (comp->getTimer() <= 0) {
-                comp->explode(sceneManager, vec);
+                comp->explode(sceneManager, vec, _collideSystem);
                 sceneManager.getCurrentScene().removeEntity(bomb);
             }
         }
@@ -626,7 +626,7 @@ namespace indie
                     auto pos = Component::castComponent<Position>((*collider)[IComponent::Type::POSITION]);
                     Vector3 vec = {pos->x, pos->y, pos->z};
                     bombComp->setTimer(0);
-                    bombComp->explode(sceneManager, vec);
+                    bombComp->explode(sceneManager, vec, _collideSystem);
                     sceneManager.getCurrentScene().removeEntity(collider);
                 }
             }
