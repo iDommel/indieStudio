@@ -74,7 +74,7 @@ namespace indie
                 displaySphere(e);
             for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::CUBE])
                 displayCube(e);
-            for (auto&e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
+            for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::AESTHETIC])
                 displayParticles(e);
             // for (auto &e : sceneManager.getCurrentScene()[IEntity::Tags::COLLIDABLE])
             //     displayCollidable(e);
@@ -162,7 +162,7 @@ namespace indie
     {
         static auto sphere = Sphere(1, BLUE);
         auto particlesCloudEntity = (*entity)[IComponent::Type::PARTICLES];
-        std::shared_ptr<indie::ParticleCloud> particlesCloud  = nullptr;
+        std::shared_ptr<indie::ParticleCloud> particlesCloud = nullptr;
 
         if (particlesCloudEntity == nullptr)
             return;
@@ -312,7 +312,7 @@ namespace indie
     {
         auto anim = Component::castComponent<ModelAnim>((*entity)[IComponent::Type::ANIMATION]);
 
-        if (_animations[anim->getAnimPath()].second != 1)
+        if (_animations[anim->getAnimPath()].second < 1)
             _animations[anim->getAnimPath()].second--;
         else
             _animations.erase(anim->getAnimPath());

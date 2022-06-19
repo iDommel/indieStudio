@@ -29,6 +29,14 @@ namespace indie
         int &getCurrentFrame() { return _currFrame; };
         /// @brief Get the reference of the animation number of frames
         int &getNbFrames() { return _nbFrames; };
+        void setShouldPlay(bool shouldPlay) { _play = shouldPlay; };
+        bool shouldPlay() const { return _play; };
+        void triggerPlay(std::shared_ptr<IEntity> e)
+        {
+            if (_trigger)
+                _trigger(e);
+        };
+        void setTrigger(std::function<void(std::shared_ptr<IEntity>)> trigger) { _trigger = trigger; };
 
     private:
         std::string _filepath;
@@ -36,6 +44,8 @@ namespace indie
         /// @brief Set at -1 for initialization by the graphic system
         int _nbFrames = -1;
         bool _isInitialized = true;
+        bool _play = false;
+        std::function<void(std::shared_ptr<IEntity>)> _trigger;
     };
 }
 

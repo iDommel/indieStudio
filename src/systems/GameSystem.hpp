@@ -8,6 +8,8 @@
 #ifndef GAME_SYSTEM_HPP
 #define GAME_SYSTEM_HPP
 
+#include <chrono>
+
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
 #include "Scene.hpp"
@@ -59,6 +61,15 @@ namespace indie
 
         static void setNbrPlayer(unsigned int nbr) { nbr_player = nbr; };
 
+        static void setPlaySupporters(bool play);
+        static bool getPlaySupporters();
+
+        static void setStartTime(std::chrono::time_point<std::chrono::high_resolution_clock>);
+        static std::chrono::time_point<std::chrono::high_resolution_clock> getStartTime();
+
+        static void setNbFrame(int);
+        static int getNbFrame();
+
     private:
         std::unique_ptr<IScene> createScene();
         std::unique_ptr<IScene> createSplashScreen();
@@ -69,6 +80,8 @@ namespace indie
         std::unique_ptr<IScene> createPreGameMenu();
         std::unique_ptr<IScene> createPauseMenu();
         static void createPlayerUI(IScene &, std::shared_ptr<IEntity>);
+        void createSupporters(IScene &);
+        void createSupporter(IScene &, Position pos);
         std::unique_ptr<IScene> createEndMenu();
         void changeBindings(SceneManager &SceneManager, int id_player, int button);
         void createSceneEvent(std::shared_ptr<Entity> &scene, SceneManager::SceneType sceneType);
@@ -99,6 +112,9 @@ namespace indie
         static void createSound(Scene &scene);
         static const Position _uiPos[4];
         static const std::map<int, std::string> _bindings;
+        static bool _playSupporters;
+        static std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        static int _nbFrame;
     };
 }
 
